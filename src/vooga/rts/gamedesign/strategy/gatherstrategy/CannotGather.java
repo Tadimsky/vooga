@@ -1,5 +1,6 @@
 package vooga.rts.gamedesign.strategy.gatherstrategy;
 
+import vooga.rts.gamedesign.Interval;
 import vooga.rts.gamedesign.sprite.rtsprite.interactive.IGatherable;
 
 /**
@@ -15,6 +16,19 @@ import vooga.rts.gamedesign.sprite.rtsprite.interactive.IGatherable;
  */
 
 public class CannotGather implements GatherStrategy {
+	
+	Interval interval;
+	public CannotGather(int cooldown) {
+		interval = new Interval(cooldown);
+	}
+	@Override
+	public void gatherResource(IGatherable g) {
+	}
+
+	@Override
+	public Interval getInterval() {
+		return interval;
+	}
 	
 
 }

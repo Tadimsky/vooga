@@ -1,38 +1,40 @@
 package vooga.rts.gamedesign.strategy.gatherstrategy;
 
+import vooga.rts.gamedesign.Interval;
 import vooga.rts.gamedesign.sprite.rtsprite.interactive.IGatherable;
 
 /**
- * This class implements GatherStrategy and is used as an instance in 
+ * This class implements GatherStrategy and is used as an instance in
  * interactives for objects that are able to gather. This class holds the list
- * of resources the interactive gathers. And the gather method
- * will specify how the interactive will gather.
+ * of resources the interactive gathers. And the gather method will specify how
+ * the interactive will gather.
  * 
  * @author Ryan Fishel
  * @author Kevin Oh
  * @author Francesco Agosti
- * @author Wenshun Liu 
- *
+ * @author Wenshun Liu
+ * 
  */
-public class CanGather implements GatherStrategy{
-	
-	private int myDamage;
-	
-	public CanGather(int damage) {
-		myDamage = damage;
+public class CanGather implements GatherStrategy {
+
+	private Interval interval;
+	private int myGatherAmount;
+
+	public CanGather(int cooldown, int gatherAmount) {
+		interval = new Interval(cooldown);
+		myGatherAmount = gatherAmount;
 	}
-	
-	public void gatherResource (IGatherable g) {
-		g.getGathered(myDamage);
-		
+
+	public void gatherResource(IGatherable g) {
+		if (interval.allowAction()) {
+			g.getGathered(myGatherAmount);
+			interval.resetCooldown();
+		}
 	}
-	
-	/**
-	 * Checks if the current resources makes the CanGather object legible for
-	 * certain updates.
-	 */
-	public void goalCheck(){
-		
+
+	@Override
+	public Interval getInterval() {
+		return interval;
 	}
 
 }

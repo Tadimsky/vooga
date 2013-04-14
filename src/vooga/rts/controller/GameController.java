@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Map;
 import vooga.rts.gamedesign.Weapon;
 import vooga.rts.gamedesign.sprite.rtsprite.Projectile;
+import vooga.rts.gamedesign.sprite.rtsprite.Resource;
 import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Soldier;
 import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit;
+import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Worker;
 import vooga.rts.gamedesign.strategy.attackstrategy.CanAttack;
 import vooga.rts.gamedesign.strategy.attackstrategy.CannotAttack;
 import vooga.rts.input.PositionObject;
@@ -21,6 +23,7 @@ import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Location;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
+import vooga.rts.gamedesign.sprite.rtsprite.Resource;
 
 
 public class GameController extends AbstractController {
@@ -29,7 +32,8 @@ public class GameController extends AbstractController {
     private List<Player> myPlayers;
     private GameMap myMap; // This needs a dimension that describes the total size of the map. Not
                            // made for now.
-
+    private Resource r; 
+    
     public GameController () {
         myTeams = new HashMap<Integer, Team>();
         myPlayers = new ArrayList<Player>();
@@ -73,6 +77,10 @@ public class GameController extends AbstractController {
                 if (u2.inRange(u1)) {
                     u1.getAttacked(u2);
                 }
+                if (u1 instanceof Worker)
+                {
+                	((Worker)u1).gather(r);
+                }
             }
         }
     }
@@ -82,6 +90,7 @@ public class GameController extends AbstractController {
         for (Player p : myPlayers) {
             p.paint(pen);
         }
+        r.paint(pen);
     }
 
     @Override
@@ -119,6 +128,7 @@ public class GameController extends AbstractController {
         Player p1 = new HumanPlayer();
         Pixmap p = new Pixmap(ResourceManager.instance().loadFile("images/soldier.png"));
         Dimension s = new Dimension(100, 100);
+        r = new Resource(new Pixmap(ResourceManager.instance().loadFile("images/mineral.gif")), new Location (300,300), new Dimension(100, 100), 0, 80);
         Sound soun = null;// new Sound("/vooga/rts/sounds/pikachu.wav");
         Unit a = null;
         try {
@@ -148,13 +158,15 @@ public class GameController extends AbstractController {
                                new Pixmap(ResourceManager.instance().loadFile("images/bullet.png")),
                                c.getCenter(), new Dimension(30, 30), 1, 10, 1);
         c.setAttackStrategy(new CanAttack());
+        Unit w = new Worker(p, new Location(500, 200), s, soun, 20, 40, 40);
         c.getAttackStrategy().addWeapons(new Weapon(0, proj3, 200, c.getCenter(), 50));
 
         p1.getUnits().addUnit(a);
         p1.getUnits().addUnit(b);
+        p1.getUnits().addUnit(w);
         Player p2 = new HumanPlayer();
         p2.getUnits().addUnit(c);
-
+        
         addPlayer(p1, 1);
         addPlayer(p2, 2);
 

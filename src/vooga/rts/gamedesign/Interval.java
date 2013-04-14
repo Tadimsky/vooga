@@ -41,7 +41,7 @@ public class Interval {
 	 * @return true if the cooldown is at 0 and false if it is above zero.
 	 */
 	public boolean allowAction() {
-		return myCooldown == 0;
+		return myCooldown <= 0;
 	}
 	
 	/**
