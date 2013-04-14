@@ -1,13 +1,21 @@
 package vooga.rts.leveleditor.components;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
 import vooga.rts.leveleditor.gui.MapPanel;
+
+
+/**
+ * the class of a single editable map node. This node has a linked list
+ * to store the information of tiles, terrains and resources.
+ * 
+ * @author Richard Yang
+ *
+ */
 
 public class EditableNode {
 
@@ -22,8 +30,7 @@ public class EditableNode {
     private boolean myOccupied;
     
     private BufferedImage myImage;
-    private Dimension myDimension;
-    private List<Integer> myFeatures;
+    private String myTileType;
     private ResourceBundle myResources = ResourceBundle.getBundle(RELATIVE_PATH + "ImageIndex");
     
     
@@ -36,7 +43,6 @@ public class EditableNode {
         myWidth = width;
         myHeight = height;
         myOccupied = isOccupied;
-        myFeatures = new LinkedList<Integer>();
     }
 
     public int getMyX () {
@@ -46,44 +52,27 @@ public class EditableNode {
     public int getMyY () {
         return myY;
     }
-
-    public Dimension getMyDimension () {
-        return myDimension;
+    
+    public String getTileType() {
+        return myTileType;
+    }
+    
+    public void setTileType(String type) {
+        myTileType = type;
     }
     
     public void setOccupied(boolean b) {
         myOccupied = b;
     }
     
+    public void refreshNodeImage() {
+        
+    }
     
     public boolean getOccupied() {
         return myOccupied;
     }
-    
-    public void addFeature(int index) {
-        myFeatures.add(index);
-    }
-    
-    public void removeFeature(int index) {
-        myFeatures.remove(index);
-    }
-    
-    public void removeFeature(Integer content) {
-        myFeatures.remove(content);
-    }
-    
-    public void clearAllFeatures() {
-        myFeatures.clear();
-    }
-    
-    public int getLayerNumber() {
-        return myFeatures.size();
-    }
-    
-    public int getFeature(int featureIndex) {
-        return myFeatures.get(featureIndex);
-    }
-    
+      
     public double getMyZoomRate() {
         return myZoomRate;
     }
@@ -96,6 +85,23 @@ public class EditableNode {
         myImage = i;
     }
     
+    
+    public int getMyWidth () {
+        return myWidth;
+    }
+    public int getMyHeight () {
+        return myHeight;
+    }
+    public void refreshImage(int i) {
+        String imageName = myResources.getString(i+"");
+        try {
+            myImage = ImageIO.read(new File(System.getProperty("user.dir")+ "./src/vooga/rts/levelEditor/resource/" + imageName));
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     
     public void paint(Graphics pen) throws IOException {
         pen.drawImage(myImage, myX*myWidth, myY*myHeight, myWidth, myHeight,null);
@@ -112,12 +118,7 @@ public class EditableNode {
     }
     public void reset() {
         myOccupied = false;
-        myFeatures.clear();
+        myTileType = "";
     }
-    
-    
-    
-    
-    
-    
+
 }

@@ -1,0 +1,119 @@
+<map>
+   <info>
+      <name>CIEMAS</name>
+      <desc> our RTS is the best one !</desc>
+      <players number = 5>
+         <player ID=0 X=10.0 Y=10.0 />
+         <player ID=1 X=20.0 Y=20.0 />
+         <player ID=2 X=30.0 Y=30.0 />
+         <player ID=3 X=40.0 Y=40.0 />
+         <player ID=4 X=50.0 Y=50.0 />
+      </players>
+   </info>
+   <resources>
+      <info>
+         tilesize width=0 height=0 />
+         tileamount X=10 Y=10 />
+      </info>
+      <tiles>
+         <tiles ID=0 name="null" />
+         <tiles ID=1 name="null" />
+         <tiles ID=2 name="null" />
+         <tiles ID=3 name="null" />
+         <tiles ID=4 name="null" />
+         <tiles ID=5 name="null" />
+         <tiles ID=6 name="null" />
+         <tiles ID=7 name="null" />
+         <tiles ID=8 name="null" />
+         <tiles ID=9 name="null" />
+         <tiles ID=10 name="null" />
+         <tiles ID=11 name="grass" />
+         <tiles ID=12 name="null" />
+         <tiles ID=13 name="null" />
+         <tiles ID=14 name="null" />
+         <tiles ID=15 name="null" />
+         <tiles ID=16 name="null" />
+         <tiles ID=17 name="null" />
+         <tiles ID=18 name="null" />
+         <tiles ID=19 name="null" />
+         <tiles ID=20 name="null" />
+         <tiles ID=21 name="null" />
+         <tiles ID=22 name="sand" />
+         <tiles ID=23 name="null" />
+         <tiles ID=24 name="null" />
+         <tiles ID=25 name="null" />
+         <tiles ID=26 name="null" />
+         <tiles ID=27 name="null" />
+         <tiles ID=28 name="null" />
+         <tiles ID=29 name="null" />
+         <tiles ID=30 name="null" />
+         <tiles ID=31 name="null" />
+         <tiles ID=32 name="null" />
+         <tiles ID=33 name="shit" />
+         <tiles ID=34 name="null" />
+         <tiles ID=35 name="null" />
+         <tiles ID=36 name="null" />
+         <tiles ID=37 name="null" />
+         <tiles ID=38 name="null" />
+         <tiles ID=39 name="null" />
+         <tiles ID=40 name="null" />
+         <tiles ID=41 name="null" />
+         <tiles ID=42 name="null" />
+         <tiles ID=43 name="null" />
+         <tiles ID=44 name="null" />
+         <tiles ID=45 name="null" />
+         <tiles ID=46 name="null" />
+         <tiles ID=47 name="null" />
+         <tiles ID=48 name="null" />
+         <tiles ID=49 name="null" />
+         <tiles ID=50 name="null" />
+         <tiles ID=51 name="null" />
+         <tiles ID=52 name="null" />
+         <tiles ID=53 name="null" />
+         <tiles ID=54 name="null" />
+         <tiles ID=55 name="null" />
+         <tiles ID=56 name="null" />
+         <tiles ID=57 name="null" />
+         <tiles ID=58 name="null" />
+         <tiles ID=59 name="null" />
+         <tiles ID=60 name="null" />
+         <tiles ID=61 name="null" />
+         <tiles ID=62 name="null" />
+         <tiles ID=63 name="null" />
+         <tiles ID=64 name="null" />
+         <tiles ID=65 name="null" />
+         <tiles ID=66 name="null" />
+         <tiles ID=67 name="null" />
+         <tiles ID=68 name="null" />
+         <tiles ID=69 name="null" />
+         <tiles ID=70 name="null" />
+         <tiles ID=71 name="null" />
+         <tiles ID=72 name="null" />
+         <tiles ID=73 name="null" />
+         <tiles ID=74 name="null" />
+         <tiles ID=75 name="null" />
+         <tiles ID=76 name="null" />
+         <tiles ID=77 name="null" />
+         <tiles ID=78 name="null" />
+         <tiles ID=79 name="null" />
+         <tiles ID=80 name="null" />
+         <tiles ID=81 name="null" />
+         <tiles ID=82 name="null" />
+         <tiles ID=83 name="null" />
+         <tiles ID=84 name="null" />
+         <tiles ID=85 name="null" />
+         <tiles ID=86 name="null" />
+         <tiles ID=87 name="null" />
+         <tiles ID=88 name="null" />
+         <tiles ID=89 name="null" />
+         <tiles ID=90 name="null" />
+         <tiles ID=91 name="null" />
+         <tiles ID=92 name="null" />
+         <tiles ID=93 name="null" />
+         <tiles ID=94 name="null" />
+         <tiles ID=95 name="null" />
+         <tiles ID=96 name="null" />
+         <tiles ID=97 name="null" />
+         <tiles ID=98 name="null" />
+         <tiles ID=99 name="null" />
+      </tiles>

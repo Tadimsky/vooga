@@ -15,9 +15,9 @@ import javax.swing.JPanel;
  */
 
 public class ButtonPanel extends JPanel {
-    
+
     private Canvas myCanvas;
-    
+
     /**
      * Constructor for the class
      * 
@@ -51,7 +51,7 @@ public class ButtonPanel extends JPanel {
                 myCanvas.remove(true);
             }
         });
-        
+
         JButton ClearButton = new JButton("ClearAll");
         ClearButton.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent e) {

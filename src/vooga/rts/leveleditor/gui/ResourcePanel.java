@@ -25,7 +25,7 @@ public class ResourcePanel extends JPanel {
     private Canvas myCanvas;
     private JPanel myPanel;
     private BufferedImage myImage;
-    
+
     /**
      * Constructor for this class
      * @param canvas: the canvas which holds this panel;
@@ -38,7 +38,7 @@ public class ResourcePanel extends JPanel {
         add(myPanel, BorderLayout.NORTH);
         addResouceButton();
     }
-    
+
     /**
      * Initialize the ResourceButton on this panel
      */
@@ -53,7 +53,7 @@ public class ResourcePanel extends JPanel {
         myPanel.add(new ResourceButton(new Resource(3,"Grass",myImage),this));
 
     }
-    
+
     /**
      * Set the image of resource according to the path
      * @param path
@@ -66,11 +66,11 @@ public class ResourcePanel extends JPanel {
 
         }
     }
-    
+
     public Canvas getCanvas() {
         return myCanvas;
     }
-    
+
     /**
      * Set the current resource selected by user
      * @param r

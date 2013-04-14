@@ -15,18 +15,18 @@ import javax.swing.JTextField;
  *
  */
 public class MenuManager extends JMenuBar {
-    
+
     public static final String USER_DIR = "user.dir";
     private Canvas myCanvas;
     private JFileChooser myChooser;
-    
+
     public MenuManager(Canvas canvas) {
         myCanvas = canvas;
         myChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
         this.add(createFileMenu());
-        
+
     }
-    
+
     private JMenu createFileMenu() {
         JMenu menu = new JMenu("File");
         createFileMenu(menu);
@@ -48,7 +48,8 @@ public class MenuManager extends JMenuBar {
                 try {
                     int response = myChooser.showSaveDialog(null);
                     if (response == JFileChooser.APPROVE_OPTION) {
-                        //TODO
+
+                        myCanvas.getMapPanel().getMyMap().save(myChooser.getSelectedFile());
                     }
                 }
                 catch (Exception exception) {
@@ -64,7 +65,13 @@ public class MenuManager extends JMenuBar {
                 try {
                     int response = myChooser.showOpenDialog(null);
                     if (response == JFileChooser.APPROVE_OPTION) {
-                        //TODO  
+                        myCanvas.getMapPanel().getMyMap().load(myChooser.getSelectedFile());
+                        myCanvas.getMapPanel().getMyMap().printMatrix();
+                        
+                        myCanvas.getMapPanel().setWidth(myCanvas.getMapPanel().getMyMap().getWidth());
+                        myCanvas.getMapPanel().setHeight(myCanvas.getMapPanel().getMyMap().getHeight());
+                        myCanvas.getMapPanel().setTileWidth(MapPanel.DEFAULT_TILE_WIDTH);
+                        myCanvas.getMapPanel().setTileHeight(MapPanel.DEFAULT_TILE_HEIGHT);
                     }
                 }
                 catch (Exception exception) {

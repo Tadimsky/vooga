@@ -55,8 +55,6 @@ public class Canvas extends JFrame {
         pack();
         setVisible(true);
 
-
-
     }
 
 
@@ -67,24 +65,24 @@ public class Canvas extends JFrame {
     public Resource getCurrentSelectResource() {
         return myCurrentSelectResource;
     }
-    
+
     public void ZoomIn() {
         myMapPanel.ZoomIn();      
     }
-    
+
     public void ZoomOut() {
         myMapPanel.ZoomOut();      
     }
 
     public void clear() {
         myMapPanel.clear();
-        
+
     }
-    
+
     public void remove(boolean b) {
         myMapPanel.setRemoveFlag(b);       
     }
-    
+
     public MapPanel getMapPanel() {
         return myMapPanel;
     }

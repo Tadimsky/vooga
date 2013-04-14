@@ -6,10 +6,12 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JToggleButton;
+import javax.swing.text.Position;
 import vooga.rts.input.AlertObject;
 import vooga.rts.input.Input;
 import vooga.rts.input.InputClassTarget;
 import vooga.rts.input.InputMethodTarget;
+import vooga.rts.input.PositionObject;
 import vooga.rts.leveleditor.components.Resource;
 
 /**
@@ -20,16 +22,16 @@ import vooga.rts.leveleditor.components.Resource;
  *
  */
 
-//@InputClassTarget
-public class ResourceButton extends JToggleButton implements ActionListener {
-    
-    //public static final String INPUT_DIR = "vooga.rts.resources.Input";
+@InputClassTarget
+public class ResourceButton extends JToggleButton {
+
+    public static final String INPUT_DIR = "vooga.rts.resources.Input";
 
     private Resource myResource;
     private ResourcePanel myOwner;
     private BufferedImage myIcon;
     private Input myInput;
-    
+
     /**
      * Constructor for this class
      * 
@@ -40,28 +42,19 @@ public class ResourceButton extends JToggleButton implements ActionListener {
         myResource = r;
         myIcon = r.getImage();
         myOwner = owner;
-        //myInput = new Input(INPUT_DIR, this);
-        //myInput.addListenerTo(this);
-       
+        myInput = new Input(INPUT_DIR, this);
+        myInput.addListenerTo(this);
+
         myIcon.getGraphics().drawImage(myIcon, 0, 0, 32, 32, null);
         setToolTipText(r.getName());
         setIcon(new ImageIcon(myIcon));
         setMargin(new Insets(2,2,2,2));
-        this.addActionListener(this);
     }
-    
-//    @InputMethodTarget(name="onLeftMouseClick")
-//    public void getResource(AlertObject alObj) {
-//        myOwner.getCanvas().remove(false);
-//        myOwner.setCurrentSelectResource(myResource);
-//        System.out.println("test");
-//    }
-    
-    @Override
-    public void actionPerformed(ActionEvent e) {
+
+    @InputMethodTarget(name="onLeftMouseDown")
+    public void getResource(PositionObject p) {
         myOwner.getCanvas().remove(false);
         myOwner.setCurrentSelectResource(myResource);
     }
-
 
 }
