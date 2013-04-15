@@ -1,4 +1,6 @@
-package vooga.rts.gamedesign;
+package vooga.rts.gamedesign.action;
+
+import java.lang.reflect.InvocationTargetException;
 
 import vooga.rts.util.Pixmap;
 /*
@@ -34,7 +36,7 @@ public class Action {
      * This is the method to execute the action. 
      * 
      */
-    public void apply(){
+    public void apply(int playerID) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException{
         
     }
     

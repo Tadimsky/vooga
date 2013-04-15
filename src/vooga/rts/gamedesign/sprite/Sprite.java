@@ -42,36 +42,22 @@ public abstract class Sprite implements IGameLoop {
         myOriginalCenter = new Location(center);
         myView = image; //new Pixmap(image);
         isVisible = true;
-        myCenter = center;
+        myCenter = new Location(center);
     }
     /**
      * Resets shape's center.
      */
-    public void setCenter (double x, double y) {
+    private void setCenter (double x, double y) {
         myCenter.setLocation(x, y);
         resetBounds();
     }
     
-    public Location getCenter() {
+    private Location getCenter() {
     	return myCenter;
     }
     
-    public Location getOriginalCenter() {
+    private Location getOriginalCenter() {
     	return myOriginalCenter;
-    }
-
-    /**
-     * Returns shape's x coordinate in pixels.
-     */
-    public double getX () {
-        return myCenter.getX();
-    }
-
-    /**
-     * Returns shape's y-coordinate in pixels.
-     */
-    public double getY () {
-        return myCenter.getY();
     }
 
     /**
@@ -90,11 +76,11 @@ public abstract class Sprite implements IGameLoop {
     /**
      * Returns rectangle that encloses this shape.
      */
-    public Rectangle getBounds () {
+    private Rectangle getBounds () {
         return myBounds;
     }
     
-    public void setBounds(Rectangle bound){
+    private void setBounds(Rectangle bound){
     	myBounds = bound;
     }
     /*
@@ -102,14 +88,6 @@ public abstract class Sprite implements IGameLoop {
      */
     public Pixmap getImage(){
         return myView;
-    }
-   
-    
-    /**
-     * Returns true if the given point is within a rectangle representing this shape.
-     */
-    public boolean intersects (Point2D pt) {
-        return getBounds().contains(pt);
     }
 
     /**

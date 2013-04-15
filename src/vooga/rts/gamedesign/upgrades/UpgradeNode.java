@@ -32,11 +32,13 @@ public class UpgradeNode {
     private int myID;
 
     public UpgradeNode(){
-        this(0, null, null, 0);
+        this(null, 0, null, null, 0);
     }
 
-    public UpgradeNode(int myID, String upgradeType, String upgradeObject, int upgradeValue){
-        myUpgradeType = upgradeType;
+    public UpgradeNode(UpgradeTree upgradeTree, int id, String upgradeType, String upgradeObject, int upgradeValue){
+        myUpgradeTree = upgradeTree;
+    	myID = id;
+    	myUpgradeType = upgradeType;
         myChildren = new ArrayList<UpgradeNode>();
         myHasBeenUpgraded = false;
         myUpgradeProperty = upgradeObject;
@@ -54,13 +56,20 @@ public class UpgradeNode {
      * @throws NoSuchMethodException 
      * @throws SecurityException 
      */
-    public void apply(List<InteractiveEntity> requester)
+    public void apply(int playerID)
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException, InstantiationException,
 			SecurityException, NoSuchMethodException {
     	return;
 	}
     
+    public void apply(InteractiveEntity requester) //TODO: figure out which one should actually be called under Action
+    		throws IllegalArgumentException, IllegalAccessException,
+    		InvocationTargetException, InstantiationException,
+    		SecurityException, NoSuchMethodException {
+    	return;
+    }
+
     public boolean validUpdate(Player player){
     	//TODO check if play has enough resource to "buy the update"
     	return true;

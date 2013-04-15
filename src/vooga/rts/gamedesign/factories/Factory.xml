@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+
+<GameElements>
+	<Upgrade>
+		<type>
+			<name>Armor</name>
+			<upgradeNode>
+				<id>1</id> 
+				<nodeName>WorstArmor</nodeName>
+				<object>Health</object>
+				<value>50</value>
+			</upgradeNode>
+			<upgradeNode>
+				<id>2</id>
+				<nodeName>BestArmor</nodeName>
+				<object>Damage</object>
+				<value>100</value>
+			</upgradeNode>
+		</type>
+		<type>
+			<name>Health</name>
+			<upgradeNode>
+				<id>1</id> 
+				<nodeName>Boost1</nodeName>
+				<object>Health</object>
+				<value>50</value>
+			</upgradeNode>
+			<upgradeNode>
+				<id>2</id>
+				<nodeName>Boost2</nodeName>
+				<object>Health</object>
+				<value>100</value>
+			</upgradeNode>
+		</type>
+	</Upgrade>
+	<resources src = "vooga.rts.gamedesign.sprite.rtsprite.Resource">
+		<resource>
+			<name>gold</name>
+			<img>gold.png</img>
+			<health>100</health>
+		</resource>
+		<resource>
+			<name>wood</name>
+			<img>wood.jpg</img>
+			<health>100</health>
+		</resource>
+	</resources>
+	<strategies>
+		<attacks>
+			<canattack src = "vooga.rts.gamedesign.strategy.attackstrategy.CanAttack"/>
+			<cannotattack src = "vooga.rts.gamedesign.strategy.attackstrategy.CannotAttack"/>
+		</attacks>
+		<occupys>
+			<canoccupy src = "vooga.rts.gamedesign.strategy.occupystrategy.CanOccupy"/>
+			<cannotoccupy src = "vooga.rts.gamedesign.strategy.occupystrategy.CannotOccupy"/>
+		</occupys>
+		<gathers>
+			<cangather src = "vooga.rts.gamedesign.strategy.gatherstrategy.CanGather"/>
+			<cannotgather src = "vooga.rts.gamedesign.strategy.gatherstrategy.CannotGather"/>
+		</gathers>
+	</strategies>
+	<buildings src = "vooga.rts.gamedesign.sprite.rtsprite.interactive.buildings.Building">
+		<building>
+			<name>home</name>
+			<img>home.jpg</img>
+			<health>1000</health>
+			<buildtime>100</buildtime>
+			<attack>cannotattack</attack>
+			<produce>worker soldier</produce>
+			<cost>
+				<gold>50</gold>
+				<wood>50</wood>
+			</cost>
+		</building>
+	</buildings>
+	<units src = "vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit">
+		<unit>
+			<name>soldier</name>
+			<img>soldier.jpg</img>
+			<health>100</health>
+			<attack>canattack</attack>
+			<gather>cannotgather</gather>
+			<occupy>cannotoccupy</occupy>
+			<produce></produce>
+			<cost>
+				<gold>50</gold>
+			</cost>
+		</unit>
+		<unit>
+			<name>worker</name>
+			<img>worker.jpg</img>
+			<health>100</health>
+			<attack>cannotattack</attack>
+			<gather>cangather</gather>
+			<occupy>cannotoccupy</occupy>
+			<produce>home</produce>
+			<cost>
+				<gold>50</gold>
+			</cost>
+		</unit>
+	</units>
+</GameElements>
+
+

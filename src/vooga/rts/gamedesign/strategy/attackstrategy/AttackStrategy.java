@@ -1,6 +1,10 @@
 package vooga.rts.gamedesign.strategy.attackstrategy;
 
+import java.util.List;
+
+import vooga.rts.gamedesign.Weapon;
 import vooga.rts.gamedesign.sprite.rtsprite.IAttackable;
+import vooga.rts.gamedesign.strategy.Strategy;
 
 
 /**
@@ -22,8 +26,46 @@ import vooga.rts.gamedesign.sprite.rtsprite.IAttackable;
  * 
  * 
  */
-public interface AttackStrategy {
 
-    public boolean canAttack (IAttackable a);
+public interface AttackStrategy {
+	
+	/**
+	 * Attacks the given IAttackable object by first judging whether the Weapon
+	 * is in range for the attack action.
+	 * @param a the IAttackable object being attacked.
+	 * @param distance the distance between this and the IAttackable object.
+	 */
+	public void attack(IAttackable a, double distance);
+	
+	/**
+	 * Returns the list of Weapon stored.
+	 * @return the list of Weapon stored
+	 */
+	public List<Weapon> getWeapons();
+	
+	/**
+	 * Returns the currently activated Weapon.
+	 * @return the currently activated Weapon.
+	 */
+	public Weapon getCurrentWeapon();
+	
+	/**
+	 * Adds a Weapon to the list of Weapons belonged to this AttackStrategy.
+	 * @param weapon the new Weapon to be added into the list.
+	 */
+	public void addWeapons(Weapon weapon);
+	
+	/**
+	 * Returns the index of the Weapon that's currently been activated in the
+	 * list of Weapons belonged to this AttackStrategy.
+	 * @return
+	 */
+	public int getWeaponIndex();
+	
+	/**
+	 * Determines whether this AttackStrategy is able to attack.
+	 * @return Whether this AttackStrategy is able to attack.
+	 */
+	public boolean getCanAttack();
 
 }

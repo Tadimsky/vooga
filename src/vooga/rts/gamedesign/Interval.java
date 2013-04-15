@@ -41,7 +41,7 @@ public class Interval {
 	 * @return true if the cooldown is at 0 and false if it is above zero.
 	 */
 	public boolean allowAction() {
-		return myCooldown == 0;
+		return myCooldown <= 0;
 	}
 	
 	/**
@@ -60,6 +60,10 @@ public class Interval {
 	public void setMaxCooldown(int maxCooldown) {
 		myMaxCooldown = maxCooldown;
 	}
+	/**
+	 * Returns the current cooldown of the interval.
+	 * @return the cooldown of the interval
+	 */
 	public int getCooldown() {
 		return myCooldown;
 	}

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import vooga.rts.gamedesign.sprite.GameEntity;
 import vooga.rts.gamedesign.sprite.InteractiveEntity;
 import vooga.rts.util.Location;
+import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Vector;
 
@@ -22,16 +23,16 @@ import vooga.rts.util.Vector;
  * @author Wenshun Liu 
  *
  */
-public class Projectile extends GameEntity implements Cloneable{
+public class Projectile extends GameEntity{
 
     private int myDamage;
     private InteractiveEntity myTarget;
 
-    public Projectile(Projectile other, Location shootFrom) {
-        this(new Pixmap(other.getImage()), new Location(shootFrom), new Dimension(other.getSize()), other.getTeamID(), other.getDamage(), other.getHealth());
+    public Projectile(Projectile other, Location3D shootFrom) {
+        this(new Pixmap(other.getImage()), new Location3D(shootFrom), new Dimension(other.getSize()), other.getPlayerID(), other.getDamage(), other.getHealth());
     }
-    public Projectile(Pixmap pixmap, Location loc, Dimension size, int teamID, int damage, int health){
-        super(pixmap, loc, size, teamID, health);
+    public Projectile(Pixmap pixmap, Location3D loc, Dimension size, int playerID, int damage, int health){
+        super(pixmap, loc, size, playerID, health);
         myDamage = damage;
     }
     public void setEnemy(InteractiveEntity enemy){
@@ -43,12 +44,10 @@ public class Projectile extends GameEntity implements Cloneable{
     @Override
     public void update(double elapsedTime){
         super.update(elapsedTime);
-        this.move(myTarget.getCenter());
-        if(this.intersects(myTarget.getCenter())){
+        this.move(myTarget.getWorldLocation());
+        if(this.intersects(myTarget.getWorldLocation())){
             attack(myTarget);
             this.die();
-            //lol very bad way 
-            myDamage = 0;
         }
     }
     public void attack(InteractiveEntity interactiveEntity) {

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import vooga.rts.IGameLoop;
 import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit;
+import vooga.rts.util.Location3D;
 
 
 /**
@@ -58,7 +59,7 @@ public class UnitManager implements IGameLoop {
      * 
      * @param loc
      */
-    public void select (Point2D loc) {
+    public void select (Location3D loc) {
         deselectAll();
         for (int i = getAllUnits().size() - 1; i >= 0; i--) {
             Unit u = getAllUnits().get(i);
@@ -77,8 +78,10 @@ public class UnitManager implements IGameLoop {
      */
     public void select (Rectangle2D area) {
         deselectAll();
-        for (Unit u : myUnits) {            
+        for (Unit u : myUnits) {
+        	System.out.println(u.getBounds());
             if (area.intersects(u.getBounds())) {
+            	System.out.println("yolo");
                 select(u);
             }
         }
@@ -136,7 +139,6 @@ public class UnitManager implements IGameLoop {
      * @return The selected units
      */
     public List<Unit> getSelected () {
-        System.out.println("returning selected units");
         return mySelectedUnits;
     }
 

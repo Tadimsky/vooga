@@ -3,7 +3,9 @@ package vooga.rts.gamedesign.sprite.rtsprite.interactive.buildings;
 import java.awt.Dimension;
 import vooga.rts.gamedesign.sprite.InteractiveEntity;
 import vooga.rts.gamedesign.sprite.rtsprite.interactive.IOccupiable;
+import vooga.rts.gamedesign.upgrades.UpgradeTree;
 import vooga.rts.util.Location;
+import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
 import vooga.towerdefense.gameElements.Unit;
@@ -21,16 +23,32 @@ import vooga.towerdefense.gameElements.Unit;
  */
 public abstract class Building extends InteractiveEntity implements IOccupiable {
     public static final int MAXHEALTH = 100;
-
-    // building is lonely :(
+    private static UpgradeTree myUpgradeTree;
+    
     public Building (Pixmap image,
-                     Location center,
+            Location3D center,
+            Dimension size,
+            Sound sound,
+            int playerID,
+            int health) {
+    	super(image, center, size, sound, playerID, health);
+    }
+    
+    public Building (Pixmap image,
+                     Location3D center,
                      Dimension size,
                      Sound sound,
-                     int teamID,
-                     int health) {
-        super(image, center, size, sound, teamID, MAXHEALTH);
-
+                     int playerID,
+                     int health, UpgradeTree upgradeTree) {
+        super(image, center, size, sound, playerID, MAXHEALTH);
+        if (upgradeTree != null) {
+        	myUpgradeTree = upgradeTree;
+        }
+    }
+    
+    @Override
+    public UpgradeTree getUpgradeTree() {
+    	return myUpgradeTree;
     }
 
     public void getOccupied (Unit u) {

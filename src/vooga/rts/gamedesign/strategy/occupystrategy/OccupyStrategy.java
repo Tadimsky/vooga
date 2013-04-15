@@ -2,6 +2,7 @@ package vooga.rts.gamedesign.strategy.occupystrategy;
 
 
 import vooga.rts.gamedesign.sprite.rtsprite.interactive.IOccupiable;
+import vooga.rts.gamedesign.strategy.Strategy;
 
 /**
  * This interface is implemented by the classes CanOccupy and CannotOccupy that
@@ -20,7 +21,7 @@ import vooga.rts.gamedesign.sprite.rtsprite.interactive.IOccupiable;
  * @author Wenshun Liu 
  *
  */
-public interface OccupyStrategy {
+public interface OccupyStrategy extends Strategy{
 
   public boolean canOccupy(IOccupiable o);
 

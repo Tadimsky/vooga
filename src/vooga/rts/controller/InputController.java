@@ -19,7 +19,7 @@ public class InputController {
     }
 
     @InputMethodTarget(name = "onLeftMouseDown")
-    public void onLeftMouseDown (PositionObject o) {        
+    public void onLeftMouseDown (PositionObject o) {
         myActiveController.onLeftMouseDown(o);
     }
 

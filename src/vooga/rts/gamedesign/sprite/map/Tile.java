@@ -4,6 +4,7 @@ import java.awt.Dimension;
 
 import vooga.rts.gamedesign.sprite.GameSprite;
 import vooga.rts.util.Location;
+import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 
 /**
@@ -17,7 +18,7 @@ import vooga.rts.util.Pixmap;
  */
 public class Tile extends GameSprite {
 
-	public Tile(Pixmap image, Location center, Dimension size) {
+	public Tile(Pixmap image, Location3D center, Dimension size) {
 		super(image, center, size);
 	}
 

@@ -146,7 +146,7 @@ public class Camera {
         p.addPoint((int) x, (int) y);
 
         pen.draw(p);
-        System.out.println(myWorldCenter);
+        //System.out.println(myWorldCenter);
         // pen.fill(new Ellipse2D.Double(x - width / 2, y - width / 2, width, height));
     }
 

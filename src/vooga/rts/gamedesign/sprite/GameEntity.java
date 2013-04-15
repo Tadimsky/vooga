@@ -2,7 +2,15 @@ package vooga.rts.gamedesign.sprite;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+
+import vooga.rts.gamedesign.state.AttackingState;
+import vooga.rts.gamedesign.state.EntityState;
+import vooga.rts.gamedesign.state.MovementState;
+import vooga.rts.gamedesign.state.OccupyState;
+import vooga.rts.gamedesign.state.ProducingState;
 import vooga.rts.util.Location;
+import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
 import vooga.rts.util.Vector;
@@ -25,27 +33,28 @@ import vooga.rts.ai.PathFinder;
  * 
  */
 public class GameEntity extends GameSprite {
+
     private Vector myVelocity;
     private GameMap myMap;
     private int myMaxHealth;
     private int myCurrentHealth;
     private PathFinder myFinder;
-    private int myTeamID;
+    private int myPlayerID;
     private Path myPath;
-    private Location myCurrentLocation;
-    private Location myGoal;
+    private Location3D myGoal;
     private Vector myOriginalVelocity;
+    private EntityState myEntityState;
 
-    public GameEntity (Pixmap image, Location center, Dimension size, int teamID, int health) {
+    public GameEntity (Pixmap image, Location3D center, Dimension size, int playerID, int health) {
         super(image, center, size);
         myMaxHealth = health;
         myCurrentHealth = myMaxHealth;
-        myTeamID = teamID;
-        myCurrentLocation = new Location(center);
+        myPlayerID = playerID;
         // ALERT THIS IS JUST FOR TESTING
         myOriginalVelocity = new Vector(0, 0);
         myVelocity = new Vector(0, 0);
-        myGoal = new Location();
+        myGoal = new Location3D();
+        myEntityState = new EntityState();
     }
 
     /**
@@ -69,12 +78,17 @@ public class GameEntity extends GameSprite {
     public void setHealth (int health) {
         myCurrentHealth = health;
     }
-
+    public void addMaxHealth(int health) {
+    	myMaxHealth += health;
+    }
+    public int getMaxHealth() {
+    	return myMaxHealth;
+    }
     /**
      * Returns the teamID the shape belongs to.
      */
-    public int getTeamID () {
-        return myTeamID;
+    public int getPlayerID () {
+        return myPlayerID;
     }
 
     /**
@@ -85,7 +99,10 @@ public class GameEntity extends GameSprite {
     public void turn (double angle) {
         myVelocity.turn(angle);
     }
-
+    
+    public boolean collidesWith(GameEntity gameEntity) {
+    	return getBounds().intersects(gameEntity.getBounds());
+    }
     /**
      * Translates the current center by vector v
      * 
@@ -93,7 +110,7 @@ public class GameEntity extends GameSprite {
      */
     public void translate (Vector v) {
 
-        getCenter().translate(v);
+        getWorldLocation().translate(v);
         resetBounds();
     }
 
@@ -111,22 +128,23 @@ public class GameEntity extends GameSprite {
      * and then its location.
      * Possible design choice error.
      */
-    public void move (Location loc) {
-        myGoal = new Location(loc);
-        Vector v = getCenter().difference(myGoal);
+    public void move (Location3D loc) {
+    	myEntityState.setMovementState(MovementState.MOVING);
+        myGoal = new Location3D(loc);
+        Vector v = getWorldLocation().difference(myGoal.to2D());
         // TODO: not static amount
-        setVelocity(v.getAngle(), 50);
+        setVelocity(v.getAngle(), 120);
     }
 
-    public void move (Location loc, GameMap map) {
-        setPath(loc, map);
+    public void move (Location3D loc, GameMap map) {
+        setPath(loc.to2D(), map);
     }
 
     public void setPath (Location location, GameMap map) {
         myPath =
-                myFinder.calculatePath(map.getNode(getCenter()), map.getNode(location),
+                myFinder.calculatePath(map.getNode(getWorldLocation().to2D()), map.getNode(location),
                                        map.getMap());
-        myGoal = myPath.getNext();
+       // myGoal = myPath.getNext();
     }
 
     /**
@@ -134,18 +152,17 @@ public class GameEntity extends GameSprite {
      */
     // TODO: make Velocity three dimensional...
     public void update (double elapsedTime) {
+        
+        if (this.intersects(myGoal)) {
+            myEntityState.setMovementState(MovementState.STATIONARY);
+        }
+        stopMoving();
         Vector v = new Vector(myVelocity);
         v.scale(elapsedTime);
-        if (this.intersects(myGoal)) {
-            // System.out.println("myGoal reached");
-            setVelocity(0, 0);
-        }
-        else {
-            // System.out.println("Veclocity " + v.getAngle() + " " + v.getMagnitude());
-            // this is kinda messed up right now
-            translate(v);
-        }
+        translate(v);
+        myEntityState.update();
     }
+    
 
     public void changeHealth (int change) {
         myCurrentHealth -= change;
@@ -174,5 +191,14 @@ public class GameEntity extends GameSprite {
             super.paint(pen);
         }
     }
+    public EntityState getEntityState() { 
+    	return myEntityState;
+    }
+    public void stopMoving() {
+    	if(!myEntityState.canMove()) {
+    		setVelocity(getVelocity().getAngle(), 0);
+    	}
+    }
 
+    
 }

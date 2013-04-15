@@ -4,6 +4,7 @@ import java.awt.Dimension;
 
 import vooga.rts.gamedesign.sprite.GameSprite;
 import vooga.rts.util.Location;
+import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 
 /**
@@ -21,7 +22,7 @@ public abstract class Terrain extends GameSprite {
     public int myHeight;
     public int myLevel;
 
-    public Terrain(Pixmap image, Location center, Dimension size) {
+    public Terrain(Pixmap image, Location3D center, Dimension size) {
         super(image, center, size);
     }
 

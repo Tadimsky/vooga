@@ -4,37 +4,32 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import vooga.rts.gamedesign.sprite.GameEntity;
 import vooga.rts.gamedesign.sprite.InteractiveEntity;
 
 public class HealthUpgradeNode extends UpgradeNode {
-	public static final String HEALTH_UPGRADE_METHOD_NAME = "upgradeHealth";
-									//TODO: check method name
-	public static final Class[] HEALTH_UPGRADE_METHOD_PARAM = new Class[] {int.class};
+	
+	public HealthUpgradeNode(UpgradeTree upgradeTree, int id, String upgradeType, String upgradeObject, int upgradeValue){
+		super(upgradeTree, id, upgradeType, upgradeObject, upgradeValue);
+	}
 	
 	@Override
-	public void apply(List<InteractiveEntity> requester)
-			throws IllegalArgumentException, IllegalAccessException,
-			InvocationTargetException, InstantiationException,
-			SecurityException, NoSuchMethodException {
-        for (InteractiveEntity i: requester){
-        	Class thisClass = i.getClass(); //TODO: need to check path (in case in super class)
-            Class[] params = HEALTH_UPGRADE_METHOD_PARAM;
-            Method thisMethod = thisClass.getDeclaredMethod(HEALTH_UPGRADE_METHOD_NAME, params);
-            thisMethod.invoke(i, getUpgradeValue());
-        }
-	}
+	public void apply(int playerID) //TODO: figure out which one should actually be called under Action
+    		throws IllegalArgumentException, IllegalAccessException,
+    		InvocationTargetException, InstantiationException,
+    		SecurityException, NoSuchMethodException {
+		for (InteractiveEntity i: getUpgradeTree().getUsers().get(playerID)){
+	    	apply(i);
+	    }
+    }
 	
-    /**
-	 * Testing purpose.
-	 * @param args
-	 * @throws IllegalArgumentException
-	 * @throws SecurityException
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 * @throws InstantiationException
-	 * @throws NoSuchMethodException
+	/**
+	 * Applies the upgrade to an individual InteractiveEntity by calling
+	 * related method.
 	 */
-	public static void main (String[] args) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
-    	//TEST reading file - build tree - upgrade property
+	@Override
+	public void apply(InteractiveEntity requester) { //TODO: figure out which one should actually be called under Action
+		requester.addMaxHealth(getUpgradeValue());
 	}
+
 }

@@ -5,9 +5,12 @@ import vooga.rts.gamedesign.sprite.rtsprite.IAttackable;
 import vooga.rts.gamedesign.sprite.rtsprite.Projectile;
 import vooga.rts.gamedesign.upgrades.*;
 import vooga.rts.util.Location;
+import vooga.rts.util.Location3D;
+
 import java.awt.geom.Ellipse2D.Double;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -33,7 +36,7 @@ public class Weapon {
     private List<Projectile> myProjectiles;
     private Interval interval;
     private Ellipse2D myRangeCircle;
-    private Location myCenter;
+    private Location3D myCenter;
 
     /**
      * Creates a new weapon with default damage and projectile.
@@ -41,7 +44,7 @@ public class Weapon {
      * @param damage
      * @param projectile
      */
-    public Weapon (int damage, Projectile projectile, int range, Location center, int cooldownTime) {
+    public Weapon (int damage, Projectile projectile, int range, Location3D center, int cooldownTime) {
         myDamage = damage;
         myProjectile = projectile;
         myRange = range;
@@ -51,35 +54,53 @@ public class Weapon {
     }
 
     /**
-     * This method is used by the weapon to attack an RTSprite.
-     * 
+     * This method is used by the weapon to attack an InteractiveEntity.
      * 
      */
     public void fire (InteractiveEntity toBeShot) {
         if(interval.allowAction() && !toBeShot.isDead()){
+        	System.out.println("is shooting");
             Projectile fire = new Projectile(myProjectile, myCenter);
             fire.setEnemy(toBeShot);
-            fire.move(toBeShot.getCenter());
+            fire.move(toBeShot.getWorldLocation());
             myProjectiles.add(fire);
             interval.resetCooldown();
         }
     }
+    
+    public int getDamage() {
+    	return myDamage;
+    }
+    
     /**
-     * This method is used to upgrade a weapon either
+
+     * NOTE: moving this method is gonna break DamageUpgradeNode.
+     * @param damage
+     */
+    public void addDamage(int damage) {
+    	myDamage += damage;
+    }
+    
+    /**
+     * This method is used to upgrade a weapon either.
      * 
-     * @param upgrade
+     * @param upgrade is the upgrade that has been selected for the weapon
      */
 
     //public void upgrade (Upgrade upgrade) {
 
     //}
-
+    
+    /**
+     * Returns the list of projectiles.
+     * @return the list of projectiles that this weapon has
+     */
     public List<Projectile> getProjectiles () {
         return myProjectiles;
     }
 
     /**
-     * This method is used to change the projectile for the weapon
+     * This method is used to change the projectile for the weapon.
      * 
      * @param projectile is the projectile that will be used by the weapon
      */
@@ -97,20 +118,36 @@ public class Weapon {
      */
     public boolean inRange (InteractiveEntity enemy) {
         // add z axis
-        //see if enemy is in adjacent node, better way. 
+        //see if enemy is in adjacent node, better way ? 
         myRangeCircle = new Ellipse2D.Double(myCenter.getX(), myCenter.getY(), myRange, myRange);
-        return myRangeCircle.contains(enemy.getCenter());
+        return myRangeCircle.contains(enemy.getWorldLocation().to2D());
     }
+    /**
+     * Returns the range of the weapon.
+     * @return the range of the weapon
+     */
     public int getRange(){
         return myRange;
     }
-
+    /**
+     * Updates the weapon so that the cooldown between attacks is decremented
+     * and the projectiles are updated.
+     * @param elapsedTime is the time that has elapsed.
+     */
     public void update (double elapsedTime) {
         if(!interval.allowAction()){
             interval.decrementCooldown();
         }
-        for(Projectile p : myProjectiles){
-            p.update(elapsedTime);
+        Iterator<Projectile> it = myProjectiles.iterator();
+        while (it.hasNext()) {
+        	Projectile p = it.next();
+        	if (!p.isDead()) {
+        		p.update(elapsedTime);
+        	}
+        	else {
+        		it.remove();
+        	}
         }
+        
     }
 }
