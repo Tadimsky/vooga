@@ -25,6 +25,7 @@ public class EditableNode {
     private int myY;
     private int myWidth;
     private int myHeight;
+    private int myPlayerIndex;
     
     private double myZoomRate;
     private boolean myOccupied;
@@ -43,6 +44,7 @@ public class EditableNode {
         myWidth = width;
         myHeight = height;
         myOccupied = isOccupied;
+        myPlayerIndex = 0;
     }
 
     public int getMyX () {
@@ -119,6 +121,12 @@ public class EditableNode {
     public void reset() {
         myOccupied = false;
         myTileType = "";
+    }
+    public void setPlayerIndex(int i) {
+        myPlayerIndex = i;        
+    }
+    public int getPlayerIndex() {
+        return myPlayerIndex;
     }
 
 }

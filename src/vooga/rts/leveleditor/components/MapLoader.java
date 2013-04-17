@@ -42,7 +42,7 @@ public void loadMapFile(EditableMap myMap , File resourceFile) throws FileNotFou
             for(int i =0 ; i<x ; i++) {
                 for(int j =0 ; j<y ; j++) {
                     if(Integer.parseInt(line.charAt(j)+"") != 0){
-                        buffer.getMapNode(i, j).addFeature(Integer.parseInt(line.charAt(j)+""));    
+                        //buffer.getMapNode(i, j).addFeature(Integer.parseInt(line.charAt(j)+""));    
                     }
                 }
                 if(myScanner.hasNextLine()) {
@@ -54,13 +54,13 @@ public void loadMapFile(EditableMap myMap , File resourceFile) throws FileNotFou
         }
         
         
-        myMap.myTileIndex = buffer.getMap();
+        //myMap.myTileIndex = buffer.getMap();
         for(Integer i : buffer.getAllPlayers().keySet()) {
             myMap.addPlayer(buffer.getPlayer(i));
         }
         myMap.setMyXSize(x);
         myMap.setMyYSize(y);
-        myMap.refreshLayerNumber();
+       // myMap.refreshLayerNumber();
         
         
         myScanner.close();

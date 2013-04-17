@@ -49,6 +49,7 @@ public class ButtonPanel extends JPanel {
         RemoveButton.addActionListener(new ActionListener() {
             public void actionPerformed (ActionEvent e) {
                 myCanvas.remove(true);
+                myCanvas.setMode(MapPanel.RESOURCEMODE);
             }
         });
 

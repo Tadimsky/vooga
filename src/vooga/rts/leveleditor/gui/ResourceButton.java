@@ -25,7 +25,7 @@ import vooga.rts.leveleditor.components.Resource;
 @InputClassTarget
 public class ResourceButton extends JToggleButton {
 
-    public static final String INPUT_DIR = "vooga.rts.resources.Input";
+    public static final String INPUT_DIR = "vooga.rts.resources.properties.Input";
 
     private Resource myResource;
     private ResourcePanel myOwner;
@@ -55,6 +55,7 @@ public class ResourceButton extends JToggleButton {
     public void getResource(PositionObject p) {
         myOwner.getCanvas().remove(false);
         myOwner.setCurrentSelectResource(myResource);
+        myOwner.getCanvas().setMode(MapPanel.RESOURCEMODE);
     }
 
 }

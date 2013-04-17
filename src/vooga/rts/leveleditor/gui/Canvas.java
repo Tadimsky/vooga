@@ -86,6 +86,11 @@ public class Canvas extends JFrame {
     public MapPanel getMapPanel() {
         return myMapPanel;
     }
+    
+    public void setMode(int mode) {
+       myMapPanel.setMode(mode);       
+    }
+    
     public static void main(String[] argv) {
         new Canvas();
     }

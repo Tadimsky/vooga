@@ -24,13 +24,38 @@ public class MenuManager extends JMenuBar {
         myCanvas = canvas;
         myChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
         this.add(createFileMenu());
+        this.add(createPlayerMenu());
 
+    }
+
+    private JMenu createPlayerMenu() {
+        JMenu menu = new JMenu("Player");
+        createPlayerMenu(menu);
+        return menu;
     }
 
     private JMenu createFileMenu() {
         JMenu menu = new JMenu("File");
         createFileMenu(menu);
         return menu;
+    }
+    
+    private void createPlayerMenu(JMenu menu) {
+        menu.add(new AbstractAction("AddPlayer") {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+               myCanvas.setMode(MapPanel.PLAYERMODE);
+               myCanvas.getMapPanel().setRemoveFlag(false);
+            }
+        });
+
+        menu.add(new AbstractAction("RemovePlayer") {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                myCanvas.setMode(MapPanel.PLAYERMODE);
+                myCanvas.getMapPanel().setRemoveFlag(true);
+            }
+        });
     }
 
     private void createFileMenu(JMenu menu) {

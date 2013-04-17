@@ -8,6 +8,12 @@ import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import vooga.rts.util.Location;
 
+/**
+ * all class of terrains, which is used as a part of map
+ * 
+ * @author Richard Yang
+ *
+ */
 public class Terrain {
    
    private static final String BUNDLE_RELATIVE_PATH = "vooga.rts.leveleditor.resource.";

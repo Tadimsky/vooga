@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import vooga.rts.input.Input;
 import vooga.rts.input.InputClassTarget;
@@ -13,15 +15,19 @@ import vooga.rts.input.InputMethodTarget;
 import vooga.rts.input.PositionObject;
 import vooga.rts.leveleditor.components.EditableMap;
 import vooga.rts.leveleditor.components.EditableNode;
+import vooga.rts.util.Location;
 
 @InputClassTarget
 public class MapPanel extends JComponent {
 
-    public static final String INPUT_DIR = "vooga.rts.resources.Input";
+    public static final String INPUT_DIR = "vooga.rts.resources.properties.Input";
+    public static final String PLAYER_IMAGE_PATH = "/vooga/rts/leveleditor/resource/PlayerSign.gif";
     public static final Dimension DEFAULT_MAP_SIZE  = new Dimension (600,600);
     public static final double ZOOM_RATE = 1.25;
-    public static int DEFAULT_TILE_WIDTH = 50;
-    public static int DEFAULT_TILE_HEIGHT = 50;
+    public static final int DEFAULT_TILE_WIDTH = 50;
+    public static final int DEFAULT_TILE_HEIGHT = 50;
+    public static final int RESOURCEMODE = 1;
+    public static final int PLAYERMODE = 2;
 
     private Canvas myCanvas;
     private EditableMap myMap;
@@ -31,6 +37,8 @@ public class MapPanel extends JComponent {
     private int myTileWidth;
     private int myTileHeight;
     private boolean myRemoveFlag;
+    private int myMode;
+    private BufferedImage myPlayerImage;
 
     public MapPanel(Canvas canvas) {
         myCanvas = canvas;
@@ -41,6 +49,11 @@ public class MapPanel extends JComponent {
         myHeight = 0;
         myTileWidth = DEFAULT_TILE_WIDTH;
         myTileHeight = DEFAULT_TILE_HEIGHT;
+        try {
+            myPlayerImage = ImageIO.read(this.getClass().getResource(PLAYER_IMAGE_PATH));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         setPanelSize();
     }
 
@@ -82,8 +95,11 @@ public class MapPanel extends JComponent {
                 }              
             }
         }
-
-
+        
+        //paint Player
+        for(Location c : myMap.getLocationMap().values()) {
+            g.drawImage(myPlayerImage, (int)(c.getX()), (int)(c.getY()),null);
+        }
     }
 
     public void setWidth(int w) {
@@ -116,7 +132,7 @@ public class MapPanel extends JComponent {
     }
 
     public void ZoomIn() {
-        myMap.ZoomIn();
+        myMap.zoomIn();
         myTileWidth = (int) (myTileWidth * ZOOM_RATE);
         myTileHeight = (int) (myTileHeight * ZOOM_RATE);
         setPanelSize();
@@ -124,7 +140,7 @@ public class MapPanel extends JComponent {
     }
 
     public void ZoomOut() {
-        myMap.ZoomOut();
+        myMap.zoomOut();
         myTileWidth = (int) (myTileWidth / ZOOM_RATE);
         myTileHeight = (int) (myTileHeight / ZOOM_RATE);
         setPanelSize();
@@ -137,7 +153,7 @@ public class MapPanel extends JComponent {
         if(x>=0 && x<myWidth && y>=0 && y<myHeight){
             EditableNode n = myMap.getMapNode(x, y);
             if(!myRemoveFlag){
-                n.addFeature(myCanvas.getCurrentSelectResource().getID());
+                n.setTileType(myCanvas.getCurrentSelectResource().getName());
                 n.setImage(myCanvas.getCurrentSelectResource().getImage());
                 n.setOccupied(true);
             } else {
@@ -146,8 +162,22 @@ public class MapPanel extends JComponent {
             repaint();
         }
     }
+
+    public void placePlayer(int x, int y) {
+        int nodex=x/myTileWidth;
+        int nodey=y/myTileHeight;
+        EditableNode n = myMap.getMapNode(nodex, nodey);
+        if(!myRemoveFlag){
+            myMap.addPlayer(x, y);
+            n.setPlayerIndex(myMap.getMyPlayerNumber());
+        } else {
+            myMap.removePlayer(n.getPlayerIndex());
+        }
+        repaint();
+    }
+    
     public void clear() {
-        myMap.clear();
+        myMap.clearMap();
         repaint();
     }
 
@@ -158,17 +188,33 @@ public class MapPanel extends JComponent {
     public EditableMap getMyMap() {
         return myMap;
     }
-
+    
+    public void setMode(int mode) {
+        myMode = mode;       
+    }
+    
     @InputMethodTarget(name="onLeftMouseDown")
     public void testClick (PositionObject p) {
-        placeResource((int)(p.getX()), (int)(p.getY()));
+        switch (myMode) {
+            case RESOURCEMODE:
+                placeResource((int)(p.getX()), (int)(p.getY()));
+                break;
+            case PLAYERMODE:
+                placePlayer((int)(p.getX()), (int)(p.getY()));
+                break;
+            default: break;  
+        }
     }
+
 
 
     @InputMethodTarget(name="onMouseDrag")
     public void testDrag (PositionObject p) {
-        placeResource((int)(p.getX()), (int)(p.getY()));
+        if(myMode == RESOURCEMODE) {
+            placeResource((int)(p.getX()), (int)(p.getY()));
+        }
     }
+
 
 
 }
