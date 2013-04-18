@@ -13,7 +13,6 @@ import vooga.rts.Game;
 import vooga.rts.gui.Window;
 import vooga.rts.input.Input;
 import vooga.rts.resourcemanager.ImageLoader;
-import vooga.rts.resourcemanager.ResourceLoader;
 import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.resourcemanager.SoundLoader;
 import vooga.rts.util.FrameCounter;

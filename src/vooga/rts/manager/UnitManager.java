@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import vooga.rts.IGameLoop;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.util.Location3D;
 
 

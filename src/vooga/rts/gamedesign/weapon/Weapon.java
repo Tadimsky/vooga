@@ -1,13 +1,10 @@
-package vooga.rts.gamedesign;
+package vooga.rts.gamedesign.weapon;
 
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.rtsprite.IAttackable;
-import vooga.rts.gamedesign.sprite.rtsprite.Projectile;
+import vooga.rts.gamedesign.Interval;
+import vooga.rts.gamedesign.sprite.gamesprites.Projectile;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.upgrades.*;
-import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
-
-import java.awt.geom.Ellipse2D.Double;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,10 +25,10 @@ import java.util.List;
  * 
  */
 public class Weapon {
-//TODO: remove damage from weapon? 
-    private int myDamage;
+	public static int DEFAULT_RANGE = 500;
+	public static int DEFAULT_COOLDOWN_TIME = 175;
+	
     private Projectile myProjectile;
-    private UpgradeTree myUpgradeTree;
     private int myRange;
     private List<Projectile> myProjectiles;
     private Interval interval;
@@ -44,8 +41,7 @@ public class Weapon {
      * @param damage
      * @param projectile
      */
-    public Weapon (int damage, Projectile projectile, int range, Location3D center, int cooldownTime) {
-        myDamage = damage;
+    public Weapon (Projectile projectile, int range, Location3D center, int cooldownTime) {
         myProjectile = projectile;
         myRange = range;
         interval = new Interval(cooldownTime);
@@ -59,16 +55,12 @@ public class Weapon {
      */
     public void fire (InteractiveEntity toBeShot) {
         if(interval.allowAction() && !toBeShot.isDead()){
-            Projectile fire = myProjectile.copy(myProjectile, myCenter);
-            fire.setEnemy(toBeShot);
-            fire.move(toBeShot.getWorldLocation());
-            myProjectiles.add(fire);
+            Projectile firingProjectile = myProjectile.copy(myProjectile, myCenter);
+            firingProjectile.setEnemy(toBeShot);
+            firingProjectile.move(toBeShot.getWorldLocation());
+            myProjectiles.add(firingProjectile);
             interval.resetCooldown();
         }
-    }
-    
-    public int getDamage() {
-    	return myDamage;
     }
     
     /**
@@ -77,18 +69,8 @@ public class Weapon {
      * @param damage
      */
     public void addDamage(int damage) {
-    	myDamage += damage;
+    	myProjectile.addDamage(damage);
     }
-    
-    /**
-     * This method is used to upgrade a weapon either.
-     * 
-     * @param upgrade is the upgrade that has been selected for the weapon
-     */
-
-    //public void upgrade (Upgrade upgrade) {
-
-    //}
     
     /**
      * Returns the list of projectiles.
@@ -128,6 +110,15 @@ public class Weapon {
     public int getRange(){
         return myRange;
     }
+    
+    /**
+     * Increases the range of the weapon
+     * @param range the amount of range to be increased
+     */
+    public void addRange(int range) {
+    	myRange += range;
+    }
+    
     /**
      * Updates the weapon so that the cooldown between attacks is decremented
      * and the projectiles are updated.

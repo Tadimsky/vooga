@@ -18,15 +18,15 @@ import org.xml.sax.SAXException;
 
 
 import vooga.rts.gamedesign.sprite.Sprite;
-import vooga.rts.gamedesign.sprite.rtsprite.Resource;
+import vooga.rts.gamedesign.sprite.gamesprites.Resource;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.UpgradeBuilding;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.gamedesign.strategy.attackstrategy.AttackStrategy;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
 import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
 import vooga.rts.gamedesign.action.Action;
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.buildings.UpgradeBuilding;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit;
 import vooga.rts.gamedesign.strategy.attackstrategy.CanAttack;
 import vooga.rts.gamedesign.upgrades.UpgradeNode;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
@@ -43,9 +43,11 @@ import vooga.rts.gamedesign.upgrades.UpgradeTree;
  */
 
 public class Factory {
-	//BUGBUG: the file path will break code! :/ (two places: here and in main())
-
 	public static final String DECODER_MATCHING_FILE = "DecodeMatchUp";
+	public static final String DECODER_MATCHING_PAIR_TAG = "pair";
+	public static final String DECODER_MATCHING_DECODETYPE_TAG = "type";
+	public static final String DECODER_MATCHING_PATH_TAG = "decoderPath";
+	
 	Map<String, Decoder> myDecoders = new HashMap<String, Decoder>();
 	Map<String, Sprite> mySprites;
 	Map<String, Strategy> myStrategies;
@@ -109,16 +111,16 @@ public class Factory {
 		Document doc = db.parse(file);
 		doc.getDocumentElement().normalize();
 		
-		NodeList nodeLst = doc.getElementsByTagName("pair");
+		NodeList nodeLst = doc.getElementsByTagName(DECODER_MATCHING_PAIR_TAG);
 		
 		for (int i = 0; i < nodeLst.getLength(); i++) {
 			Element pairElmnt = (Element) nodeLst.item(i);
 			
-			Element typeElmnt = (Element)pairElmnt.getElementsByTagName("type").item(0);
+			Element typeElmnt = (Element)pairElmnt.getElementsByTagName(DECODER_MATCHING_DECODETYPE_TAG).item(0);
 			NodeList typeList = typeElmnt.getChildNodes();
 			String type = ((Node) typeList.item(0)).getNodeValue();
 			
-			Element pathElmnt = (Element)pairElmnt.getElementsByTagName("decoderPath").item(0);
+			Element pathElmnt = (Element)pairElmnt.getElementsByTagName(DECODER_MATCHING_PATH_TAG).item(0);
 			NodeList pathList = pathElmnt.getChildNodes();
 			String path = ((Node) pathList.item(0)).getNodeValue();
 			
@@ -137,8 +139,7 @@ public class Factory {
 	 * @param fileName the name of the XML file that provides class information
 	 * and to be loaded
 	 */
-	public <T extends Object> T loadXMLFile(String fileName) {
-		Object result = new Object();
+	public void loadXMLFile(String fileName) {
 		try {
 			File file = new File(getClass().getResource(fileName).getFile());
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -146,40 +147,22 @@ public class Factory {
 			Document doc = db.parse(file);
 			doc.getDocumentElement().normalize();
 			System.out.println(doc.getDocumentElement().getNodeName());
-			result = myDecoders.get(doc.getDocumentElement().getNodeName()).create(doc);
+			myDecoders.get(doc.getDocumentElement().getNodeName()).create(doc);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		printTree((UpgradeTree) result);
-		return (T) result;
-	}
-	
-	/**
-	 * TESTING PURPOSE. PRINTS TREE.
-	 * @param upgradeTree
-	 */
-	private void printTree(UpgradeTree upgradeTree) {
-		for (UpgradeNode u: upgradeTree.getHead().getChildren()) {
-			UpgradeNode current = u;
-			while (!current.getChildren().isEmpty()) {
-				System.out.println("Type: " + current.getChildren().get(0).getUpgradeType() +
-						" Parent ID " + current.getID() + " ID " + 
-						current.getChildren().get(0).getID());
-				current = current.getChildren().get(0);
-			}
 		}
 	}
 	
 	/**
 	 * TESTING PURPOSE
 	 */
-	/**public static void main(String[] args) throws IllegalArgumentException, SecurityException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ParserConfigurationException, SAXException, IOException {
+	public static void main(String[] args) throws IllegalArgumentException, SecurityException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ParserConfigurationException, SAXException, IOException {
 		//loads Upgrade XML - creates tree - updates activate state
 		Factory factory = new Factory();
 
-		factory.loadXMLFile("src/vooga/rts/gamedesign/factories/Factory.xml");
+		factory.loadXMLFile("XML_Sample");
 
-		//creates an UpgradeBuilding
+		/**creates an UpgradeBuilding
 		UpgradeBuilding upgradeBuilding = new UpgradeBuilding();
 		
 		//creates two Units - adds upgrade Actions to the UpgradeBuilding
@@ -200,6 +183,6 @@ public class Factory {
 		Action WorstArmorAction = upgradeBuilding.findAction("Boost1");
 		//WorstArmorAction.apply();
 		System.out.println(oneUnit.getMaxHealth());
-		System.out.println(twoUnit.getMaxHealth());
-	}*/
+		System.out.println(twoUnit.getMaxHealth());*/
+	}
 }

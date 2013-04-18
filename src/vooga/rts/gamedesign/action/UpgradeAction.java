@@ -1,6 +1,6 @@
 package vooga.rts.gamedesign.action;
 
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.util.Pixmap;
 
 public class UpgradeAction extends Action {

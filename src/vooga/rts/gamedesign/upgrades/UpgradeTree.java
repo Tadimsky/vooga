@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.UpgradeBuilding;
 
 
 /**
@@ -29,16 +30,12 @@ import vooga.rts.gamedesign.sprite.InteractiveEntity;
 public class UpgradeTree {
     private UpgradeNode myHead;
     private List<UpgradeNode> myCurrentUpgrades;
-    private List<UpgradeNode> myNextUpgrades;
     private Map<Integer, List<InteractiveEntity>> myUsers;
-    //private List<InteractiveEntity> myUsers;
 
     public UpgradeTree () {
         myHead = new UpgradeNode();
         myCurrentUpgrades = new ArrayList<UpgradeNode>();
-        myNextUpgrades = new ArrayList<UpgradeNode>();
         myUsers = new HashMap<Integer, List<InteractiveEntity>>();
-        //myUsers = new ArrayList<InteractiveEntity>();
     }
 
     /**
@@ -48,10 +45,11 @@ public class UpgradeTree {
      * @param u
      */
     public void activateNode (UpgradeNode u) {
-        myCurrentUpgrades.add(u);
+        myCurrentUpgrades.remove(u);
         if (!u.getChildren().isEmpty()) {
-        	 UpgradeNode nextUpgrade = u.getChildren().get(0);
-             myNextUpgrades.add(nextUpgrade);
+        	for (UpgradeNode node: u.getChildren()) {
+        		myCurrentUpgrades.add(node);
+        	}
         }
     }
 
@@ -68,29 +66,39 @@ public class UpgradeTree {
         	if (!current.getChildren().isEmpty()) {
         		current = current.getChildren().get(0);
         		myCurrentUpgrades.add(current);
-        		if (!current.getChildren().isEmpty()) {
-        			myNextUpgrades.add(current.getChildren().get(0));
-        		}
         	}
         }
     }
 
-    public UpgradeNode addBranch (int ID, String branchName) {
-        UpgradeNode branch = new UpgradeNode(this, ID, branchName, null, 0);
+    public void addBranch (String branchName) {
+        UpgradeNode branch = new UpgradeNode(this, branchName, 0, 0);
         myHead.addChild(branch);
-        return branch;
     }
 
+    public UpgradeNode findNode(String upgradeName) {
+    	UpgradeNode current = myHead;
+    	while (!current.getChildren().isEmpty()) {
+    		for (UpgradeNode u: current.getChildren()) {
+    			if (u.getUpgradeName().equals(upgradeName)) {
+    				return u;
+    			} else {
+    				current = u;
+    			}
+    		}
+    	}
+    	return null;
+    }
+    
     /**
      * Finds the most advanced upgrade has been made in the giving upgrade type.
      * 
      * @param upgradeType
      * @return
      */
-    public UpgradeNode findCurrent (String upgradeType) {
+    public UpgradeNode findCurrent(String upgradeType) {
         UpgradeNode current = new UpgradeNode();
         for (UpgradeNode n : myHead.getChildren()) {
-            if (n.getUpgradeType().equals(upgradeType)) {
+            if (n.getUpgradeName().equals(upgradeType)) {
                 current = n;
             }
         }
@@ -130,10 +138,6 @@ public class UpgradeTree {
 
     public List<UpgradeNode> getCurrentUpgrades() {
         return myCurrentUpgrades;
-    }
-    
-    public List<UpgradeNode> getNextUpgrades() {
-    	return myNextUpgrades;
     }
     
     public UpgradeNode getHead() {

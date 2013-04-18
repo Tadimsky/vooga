@@ -43,38 +43,38 @@ public class EntityState {
 	/**
 	 * This method is used to set the attacking state (either attacking or
 	 * not attacking) for the game entity.
-	 * @param as is the attacking state that the game entity will be set to
+	 * @param attackingState is the attacking state that the game entity will be set to
 	 * 
 	 */
-	public void setAttackingState(AttackingState as) {
-		myAttackingState = as;
+	public void setAttackingState(AttackingState attackingState) {
+		myAttackingState = attackingState;
 	}
 	
 	/**
 	 * This method is used to set the occupying state (either occupying
 	 * or not occupying) for the game entity.
-	 * @param os is the occupying state that the game entity will be set to
+	 * @param occupyState is the occupying state that the game entity will be set to
 	 */
-	public void setOccupyState(OccupyState os) {
-		myOccupyState = os;
+	public void setOccupyState(OccupyState occupyState) {
+		myOccupyState = occupyState;
 	}
 	
 	/**
 	 * This method is used to set the producing state (either producing or
 	 * not producing) for the game entity.
-	 * @param ps is the producing state that the game entity will be set to
+	 * @param producingState is the producing state that the game entity will be set to
 	 */
-	public void setProducingState(ProducingState ps) {
-		myProducingState = ps;
+	public void setProducingState(ProducingState producingState) {
+		myProducingState = producingState;
 	}
 	
 	/**
 	 * This method is used to set the movement state (either moving or 
 	 * stationary) for the game entity.
-	 * @param ms is the movement state that the game entity will be set to
+	 * @param movementState is the movement state that the game entity will be set to
 	 */
-	public void setMovementState(MovementState ms) {
-		myMovementState = ms;
+	public void setMovementState(MovementState movementState) {
+		myMovementState = movementState;
 	}
 	
 	/**

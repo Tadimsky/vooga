@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.util.Observable;
 import java.util.Observer;
 import vooga.rts.IGameLoop;
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.manager.*;
 import vooga.rts.map.GameMap;
 

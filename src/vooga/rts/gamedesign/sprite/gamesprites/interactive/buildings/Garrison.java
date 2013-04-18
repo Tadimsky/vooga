@@ -1,6 +1,6 @@
-package vooga.rts.gamedesign.sprite.rtsprite.interactive.buildings;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.IOccupiable;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit;
+package vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.IOccupiable;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 
 import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
@@ -25,7 +25,7 @@ public class Garrison extends Building implements IOccupiable {
     }
 
     @Override
-    public void getOccupied (Unit u) {
+    public void getOccupied (Unit unit) {
         // TODO Auto-generated method stub
 
     }

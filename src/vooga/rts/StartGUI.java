@@ -17,7 +17,6 @@ public class StartGUI {
             ResourceManager.getInstance().queueFile("got5.jpg");
         }
         catch (FileNotSupportedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

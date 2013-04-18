@@ -1,6 +1,9 @@
 package vooga.rts.gamedesign.factories;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -10,7 +13,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.upgrades.DamageUpgradeNode;
 import vooga.rts.gamedesign.upgrades.HealthUpgradeNode;
 import vooga.rts.gamedesign.upgrades.UpgradeNode;
@@ -30,20 +33,24 @@ public class UpgradeDecoder extends Decoder {
 	public static final String UPGRADE_CATEGORY_TAG = "type";
 	public static final String CATEGORY_NAME_TAG = "name";
 	public static final String INDIVIDUAL_UPGRADE_TAG = "upgradeNode";
-	public static final String ID_TAG = "id";
+	public static final String PARENT_UPGRADE_TAG = "parent";
 	public static final String TITLE_TAG = "nodeName";
 	public static final String AFFECTING_OBJECT_TAG = "object";
 	public static final String AFFECTING_VALUE_TAG = "value";
+	public static final String COSTING_RESOURCE_TYPE_TAG = "resourceCostType";
+	public static final String COSTING_RESOURCE_AMOUNT_TAG = "resourceAmount";
 	
 	private Factory myFactory;
-	private InteractiveEntity myInteractiveEntity;
+	private Map<String, String> myUpgradeNodeType;
 	
 	public UpgradeDecoder(Factory factory){
 		myFactory = factory;
-	}
-	
-	public void addInteractiveEntity(InteractiveEntity i) {
-		myInteractiveEntity = i;
+		myUpgradeNodeType = new HashMap<String, String>();
+		//TODO: close this.
+		myUpgradeNodeType.put("Health", "vooga.rts.gamedesign.upgrades.HealthUpgradeNode");
+		myUpgradeNodeType.put("Damage", "vooga.rts.gamedesign.upgrades.DamageUpgradeNode");
+		myUpgradeNodeType.put("AttackStrategy", "vooga.rts.gamedesign.upgrades.AttackUpgradeNode");
+		myUpgradeNodeType.put("Range", "vooga.rts.gamedesign.upgrades.RangeUpgradeNode");
 	}
 	
 	/**
@@ -52,11 +59,18 @@ public class UpgradeDecoder extends Decoder {
 	 * UpgradeTree
 	 * 
 	 * @param doc the Document passed in from Factory
+	 * @throws ClassNotFoundException 
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws SecurityException 
+	 * @throws IllegalArgumentException 
+	 * @throws NumberFormatException 
 	 * 
 	 */
 
-	public UpgradeTree create(Document doc) {
-
+	public void create(Document doc) throws ClassNotFoundException, NumberFormatException, IllegalArgumentException, SecurityException, InstantiationException, IllegalAccessException, InvocationTargetException {
+		//TODO: get all upgradeTrees into a same file. Return all results into a map
 		UpgradeTree upgradeTree = new UpgradeTree();
 		
 		NodeList nodeLst = doc.getElementsByTagName(UPGRADE_CATEGORY_TAG);
@@ -64,44 +78,37 @@ public class UpgradeDecoder extends Decoder {
 		for (int i = 0; i < nodeLst.getLength(); i++) {
 
 			Element typeElmnt = (Element) nodeLst.item(i);
-			NodeList nameElmntLst = typeElmnt.getElementsByTagName(CATEGORY_NAME_TAG);
-			Element nameElmnt = (Element) nameElmntLst.item(0);
+			Element nameElmnt = (Element) typeElmnt.getElementsByTagName(CATEGORY_NAME_TAG).item(0);
 			NodeList name = nameElmnt.getChildNodes();
-			UpgradeNode branchHead = upgradeTree.addBranch(i+1, ((Node) name.item(0)).getNodeValue());
-			UpgradeNode current = branchHead;
+			upgradeTree.addBranch(((Node) name.item(0)).getNodeValue());
 			
 			NodeList upgradeNodeList = typeElmnt.getElementsByTagName(INDIVIDUAL_UPGRADE_TAG);
 			for (int j=0; j<upgradeNodeList.getLength(); ++j) {
 				Element upgradeNodeElement = (Element) upgradeNodeList.item(j);
 				
-				NodeList idNodeElmntLst = upgradeNodeElement.getElementsByTagName(ID_TAG);
-				Element idNodeElmnt = (Element) idNodeElmntLst.item(0);
-				String id = ((Node)idNodeElmnt.getChildNodes().item(0)).getNodeValue();
+				String parent = loadSingleLine(upgradeNodeElement, PARENT_UPGRADE_TAG);
+				String nodeName = loadSingleLine(upgradeNodeElement, TITLE_TAG);
+				String object = loadSingleLine(upgradeNodeElement, AFFECTING_OBJECT_TAG);
+				String value = loadSingleLine(upgradeNodeElement, AFFECTING_VALUE_TAG);
+				String costedResource = loadSingleLine(upgradeNodeElement, COSTING_RESOURCE_TYPE_TAG);
+				String costedResourceAmount = loadSingleLine(upgradeNodeElement, COSTING_RESOURCE_AMOUNT_TAG);
 				
-				NodeList nodeNameElmntLst = upgradeNodeElement.getElementsByTagName(TITLE_TAG);
-				Element nodeNameElmnt = (Element) nodeNameElmntLst.item(0);
-				String nodeName = ((Node)nodeNameElmnt.getChildNodes().item(0)).getNodeValue();
-				
-				NodeList objectElmntLst = upgradeNodeElement.getElementsByTagName(AFFECTING_OBJECT_TAG);
-				Element objectElmnt = (Element) objectElmntLst.item(0);
-				String object = ((Node)objectElmnt.getChildNodes().item(0)).getNodeValue();
-				
-				NodeList valueElmntLst = upgradeNodeElement.getElementsByTagName(AFFECTING_VALUE_TAG);
-				Element valueElmnt = (Element) valueElmntLst.item(0);
-				String value = ((Node)valueElmnt.getChildNodes().item(0)).getNodeValue();
-				
-				if (object.equals("Health")) { //SO BAD!!
-					UpgradeNode newLeaf = current.addChild(new HealthUpgradeNode(upgradeTree, Integer.parseInt(id), nodeName, object, Integer.parseInt(value)));
-					current = newLeaf;
-				} else if (object.equals("Damage")) {
-					UpgradeNode newLeaf = current.addChild(new DamageUpgradeNode(upgradeTree, Integer.parseInt(id), nodeName, object, Integer.parseInt(value)));
-					current = newLeaf;
-				}
+				Class<?> headClass = Class.forName(myUpgradeNodeType.get(object));
+				UpgradeNode newUpgrade = (UpgradeNode) headClass.
+						getConstructors()[0].newInstance(upgradeTree, nodeName, Integer.parseInt(value), Integer.parseInt(costedResourceAmount));	
+				UpgradeNode current = upgradeTree.findNode(parent);
+				current.addChild(newUpgrade);
 			}
 		}
 		upgradeTree.updateTreeStatus();
 		printTree(upgradeTree);
-		return upgradeTree;
+	}
+	
+	private String loadSingleLine(Element element, String tag) {
+		NodeList nodeElmntLst = element.getElementsByTagName(tag);
+		Element nodeElmnt = (Element) nodeElmntLst.item(0);
+		String result = ((Node)nodeElmnt.getChildNodes().item(0)).getNodeValue();
+		return result;
 	}
 	
 	/**
@@ -112,17 +119,16 @@ public class UpgradeDecoder extends Decoder {
 		for (UpgradeNode u: upgradeTree.getHead().getChildren()) {
 			UpgradeNode current = u;
 			while (!current.getChildren().isEmpty()) {
-				System.out.println("Type: " + current.getChildren().get(0).getUpgradeType() +
-						" Parent ID " + current.getID() + " ID " + 
-						current.getChildren().get(0).getID());
-				current = current.getChildren().get(0);
+				for (UpgradeNode node: current.getChildren()) {
+					System.out.println("Name: " + node.getUpgradeName() +
+							" Parent Name " + current.getUpgradeName());
+				}
+				current = current.getChildren().get(1);
+						//should recurse if really want to print the whole tree
 			}
 		}
 		for (UpgradeNode u: upgradeTree.getCurrentUpgrades()) {
-			System.out.println("Current Upgradss: " + u.getID());
-		}
-		for (UpgradeNode u: upgradeTree.getNextUpgrades()) {
-			System.out.println("Next Upgrades: " + u.getID());
+			System.out.println("Current Upgradss: " + u.getUpgradeName());
 		}
 	}
 }

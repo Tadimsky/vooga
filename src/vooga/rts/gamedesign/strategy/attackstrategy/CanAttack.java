@@ -3,9 +3,12 @@ package vooga.rts.gamedesign.strategy.attackstrategy;
 import java.util.ArrayList;
 import java.util.List;
 
-import vooga.rts.gamedesign.Weapon;
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.rtsprite.IAttackable;
+import vooga.rts.gamedesign.sprite.gamesprites.IAttackable;
+import vooga.rts.gamedesign.sprite.gamesprites.Projectile;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.weapon.Weapon;
+import vooga.rts.util.Location;
+import vooga.rts.util.Location3D;
 
 
 /**
@@ -20,12 +23,17 @@ import vooga.rts.gamedesign.sprite.rtsprite.IAttackable;
  * 
  */
 public class CanAttack implements AttackStrategy {
-    private List<Weapon> myWeapons;
+	
+	private List<Weapon> myWeapons;
     private int myWeaponIndex;
     private boolean myCanAttack = true;
 
-	public CanAttack() {
+	public CanAttack(Location3D worldLocation, int PlayerID) {
 		 myWeapons = new ArrayList<Weapon>();
+		 Weapon defaultWeapon = new Weapon(new Projectile(Projectile.DEFAULT_PIC,
+				 worldLocation, Projectile.DEFAULT_DIMENSION, PlayerID, Projectile.DEFAULT_DAMAGE, Projectile.DEFAULT_HEALTH),
+				 Weapon.DEFAULT_RANGE, worldLocation, Weapon.DEFAULT_COOLDOWN_TIME);
+		 myWeapons.add(defaultWeapon);
 		 myWeaponIndex = 0;
 	}
 

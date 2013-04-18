@@ -1,6 +1,6 @@
 package vooga.rts.gamedesign.strategy.occupystrategy;
 
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.IOccupiable;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.IOccupiable;
 
 
 /**
@@ -17,7 +17,7 @@ import vooga.rts.gamedesign.sprite.rtsprite.interactive.IOccupiable;
 public class CannotOccupy implements OccupyStrategy{
 
 	@Override
-	public boolean canOccupy(IOccupiable o){
+	public boolean canOccupy(IOccupiable occupiable){
 		return false;
 	}
 

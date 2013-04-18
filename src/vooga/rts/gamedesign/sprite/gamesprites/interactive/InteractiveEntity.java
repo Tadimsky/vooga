@@ -1,4 +1,4 @@
-package vooga.rts.gamedesign.sprite;
+package vooga.rts.gamedesign.sprite.gamesprites.interactive;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -6,8 +6,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import vooga.rts.gamedesign.action.Action;
-import vooga.rts.gamedesign.sprite.rtsprite.IAttackable;
-import vooga.rts.gamedesign.sprite.rtsprite.Projectile;
+import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.IAttackable;
+import vooga.rts.gamedesign.sprite.gamesprites.Projectile;
 import vooga.rts.gamedesign.strategy.attackstrategy.AttackStrategy;
 import vooga.rts.gamedesign.strategy.attackstrategy.CannotAttack;
 import vooga.rts.gamedesign.upgrades.UpgradeNode;
@@ -81,11 +82,11 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 	/**
 	 * This method specifies that the interactive entity is getting attacked
 	 * so it calls the attack method of the interactive entity on itself.
-	 * @param a is the interactive entity that is attacking this interactive
+	 * @param interactiveEntity is the interactive entity that is attacking this interactive
 	 * entity
 	 */
-	public void getAttacked(InteractiveEntity a) {
-		a.attack(this);
+	public void getAttacked(InteractiveEntity interactiveEntity) {
+		interactiveEntity.attack(this);
 	}
 	/**
 	 * Returns the sound that the interactive entity makes.
@@ -99,8 +100,8 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 	/**
      * Sets the isSelected boolean to the passed in bool value. 
      */
-    public void select(boolean bool) {
-        isSelected = bool;
+    public void select(boolean selected) {
+        isSelected = selected;
     }
 
     public List<Action> getActions() {
@@ -112,10 +113,10 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 	 * sets the state of the interactive entity to attacking, and then it
 	 * attacks the IAttackable if the state of the interactive entity lets it
 	 * attack. 
-	 * @param a is the IAttackable that is being attacked.
+	 * @param attackable is the IAttackable that is being attacked.
 	 */
-	public void attack(IAttackable a) {
-		double distance = Math.sqrt(Math.pow(getWorldLocation().getX() - ((InteractiveEntity) a).getWorldLocation().getX(), 2) + Math.pow(getWorldLocation().getY() - ((InteractiveEntity) a).getWorldLocation().getY(), 2)); 
+	public void attack(IAttackable attackable) {
+		double distance = Math.sqrt(Math.pow(getWorldLocation().getX() - ((InteractiveEntity) attackable).getWorldLocation().getX(), 2) + Math.pow(getWorldLocation().getY() - ((InteractiveEntity) attackable).getWorldLocation().getY(), 2)); 
 		if(!this.isDead()) {
 			//getEntityState().setAttackingState(AttackingState.ATTACKING);
 			getEntityState().attack();
@@ -123,21 +124,11 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 			//getGameState().setMovementState(MovementState.STATIONARY);
 			if(getEntityState().canAttack()) {
 			
-				myAttackStrategy.attack(a, distance);
+				myAttackStrategy.attack(attackable, distance);
 				
 			}
 		}    
 	} 
-	//TODO: THIS IS DUPLICATED CODE AS IN ATTACK STRATEGY!!! SHOULD DELETE IT!
-	public boolean inRange(InteractiveEntity enemy) {
-		//ellipse thing doesnt seem to be working very well. 
-		double distance = Math.sqrt(Math.pow(getWorldLocation().getX() - enemy.getWorldLocation().getX(), 2) + Math.pow(this.getWorldLocation().getY() - enemy.getWorldLocation().getY(), 2)); 
-		if(getAttackStrategy().getCanAttack() && !getAttackStrategy().getWeapons().isEmpty() && distance < getAttackStrategy().getWeapons().get(getAttackStrategy().getWeaponIndex()).getRange()){
-			return true;
-		}
-		//buggy :( myWeapons.get(myWeaponIndex).inRange(enemy)
-		return false;
-	}
 
 	/**
 	 * Sets the attack strategy for an interactive. Can set the interactive

@@ -1,14 +1,12 @@
-package vooga.rts.gamedesign.sprite.rtsprite.interactive.units;
+package vooga.rts.gamedesign.sprite.gamesprites.interactive.units;
 
 import java.awt.Dimension;
 
-import vooga.rts.gamedesign.Interval;
-import vooga.rts.gamedesign.sprite.GameEntity;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.IGatherable;
+import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
 import vooga.rts.gamedesign.strategy.gatherstrategy.CanGather;
 import vooga.rts.gamedesign.strategy.gatherstrategy.CannotGather;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
-import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
@@ -25,7 +23,6 @@ public class Worker extends Unit {
 	private GatherStrategy myGatherStrategy;
 	private static final int DEFUALT_GATHER_INTERVAL = 75;
 	private int myGatherAmount;
-	//TODO: find best place for interval
 	
 	/**
 	 * Creates a new worker
@@ -39,7 +36,6 @@ public class Worker extends Unit {
 	public Worker(Pixmap image, Location3D center, Dimension size, Sound sound,
 			int playerID, int health, int gatherAmount) {
 		super(image, center, size, sound, playerID, health);
-		//interval = new Interval(DEFUALT_GATHER_INTERVAL);
 		myGatherAmount = gatherAmount;
 		myGatherStrategy = new CanGather(DEFUALT_GATHER_INTERVAL, gatherAmount);
 	
@@ -54,15 +50,19 @@ public class Worker extends Unit {
 	/**
 	 * The worker gathers the resource if it can and then resets its gather
 	 * cooldown.
-	 * @param g is the resource being gathered.
+	 * @param gatherable is the resource being gathered.
 	 */
-	public void gather(IGatherable g) {
+	public void gather(IGatherable gatherable) {
 		
-		if(this.collidesWith((GameEntity)g)) {
-			myGatherStrategy.gatherResource(g);
+		if(this.collidesWith((GameEntity)gatherable)) {
+			myGatherStrategy.gatherResource(gatherable);
 		}
 	}
 	
+	/**
+	 * Sets the amount that the worker can gather at a time.
+	 * @param gatherAmount is the amount that the worker can gather
+	 */
 	public void setGatherAmount(int gatherAmount) {
 		myGatherAmount = gatherAmount;
 		myGatherStrategy = new CanGather(DEFUALT_GATHER_INTERVAL, myGatherAmount);

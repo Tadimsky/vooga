@@ -1,14 +1,14 @@
-package vooga.rts.gamedesign.sprite.rtsprite.interactive.units;
+package vooga.rts.gamedesign.sprite.gamesprites.interactive.units;
 
 import java.awt.Dimension;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import vooga.rts.gamedesign.action.Action;
-import vooga.rts.gamedesign.sprite.GameSprite;
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.IGatherable;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.IOccupiable;
+import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.IOccupiable;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.strategy.gatherstrategy.CannotGather;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
 import vooga.rts.gamedesign.strategy.occupystrategy.CannotOccupy;
@@ -99,11 +99,11 @@ public class Unit extends InteractiveEntity {
     /**
      * Occupies an IOccupiable object specified by occupy strategy.
      * 
-     * @param o
+     * @param occupiable
      */
-    public void occupy (IOccupiable o) {
-        if (myOccupyStrategy.canOccupy(o)) {
-            o.getOccupied(this);
+    public void occupy (IOccupiable occupiable) {
+        if (myOccupyStrategy.canOccupy(occupiable)) {
+            occupiable.getOccupied(this);
         }
     }
 

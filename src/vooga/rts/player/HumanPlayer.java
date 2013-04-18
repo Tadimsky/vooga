@@ -3,7 +3,8 @@ package vooga.rts.player;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.Observable;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit;
+
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 

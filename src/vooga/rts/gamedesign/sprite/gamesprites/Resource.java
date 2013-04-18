@@ -1,11 +1,8 @@
-package vooga.rts.gamedesign.sprite.rtsprite;
+package vooga.rts.gamedesign.sprite.gamesprites;
 
 import java.awt.Dimension;
 
-import vooga.rts.gamedesign.sprite.GameEntity;
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.IGatherable;
-import vooga.rts.util.Location;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 

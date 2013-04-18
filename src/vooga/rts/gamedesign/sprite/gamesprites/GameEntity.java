@@ -1,4 +1,4 @@
-package vooga.rts.gamedesign.sprite;
+package vooga.rts.gamedesign.sprite.gamesprites;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -107,11 +107,11 @@ public class GameEntity extends GameSprite {
     /**
      * Translates the current center by vector v
      * 
-     * @param v
+     * @param vector
      */
-    public void translate (Vector v) {
+    public void translate (Vector vector) {
 
-        getWorldLocation().translate(v);
+        getWorldLocation().translate(vector);
         resetBounds();
     }
 
@@ -194,9 +194,18 @@ public class GameEntity extends GameSprite {
             super.paint(pen);
         }
     }
+    
+    /**
+     * Returns the state of the entity such as its attacking state or movement
+     * state.
+     * @return the state of the entity.
+     */
     public EntityState getEntityState() { 
     	return myEntityState;
     }
+    /**
+     * If the entity is in a stationary state, it stops moving.
+     */
     public void stopMoving() {
     	if(!myEntityState.canMove()) {
     		setVelocity(getVelocity().getAngle(), 0);

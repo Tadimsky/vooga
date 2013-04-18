@@ -2,9 +2,9 @@ package vooga.rts.gamedesign.strategy.attackstrategy;
 
 import java.util.List;
 
-import vooga.rts.gamedesign.Weapon;
-import vooga.rts.gamedesign.sprite.rtsprite.IAttackable;
+import vooga.rts.gamedesign.sprite.gamesprites.IAttackable;
 import vooga.rts.gamedesign.strategy.Strategy;
+import vooga.rts.gamedesign.weapon.Weapon;
 
 
 /**
@@ -32,10 +32,10 @@ public interface AttackStrategy {
 	/**
 	 * Attacks the given IAttackable object by first judging whether the Weapon
 	 * is in range for the attack action.
-	 * @param a the IAttackable object being attacked.
+	 * @param attackable the IAttackable object being attacked.
 	 * @param distance the distance between this and the IAttackable object.
 	 */
-	public void attack(IAttackable a, double distance);
+	public void attack(IAttackable attackable, double distance);
 	
 	/**
 	 * Returns the list of Weapon stored.

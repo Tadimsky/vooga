@@ -1,6 +1,6 @@
-package vooga.rts.gamedesign.sprite.rtsprite.interactive.buildings;
+package vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings;
 
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
@@ -24,7 +24,7 @@ public class AttackTower extends Building {
 	}
 
     @Override
-    public void getOccupied (Unit u) {
+    public void getOccupied (Unit unit) {
         // TODO Auto-generated method stub
         
     }

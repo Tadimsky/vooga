@@ -1,12 +1,12 @@
-package vooga.rts.gamedesign.sprite.rtsprite.interactive.buildings;
+package vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings;
 
 import java.awt.Dimension;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import vooga.rts.gamedesign.action.Action;
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.upgrades.UpgradeNode;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
 import vooga.rts.util.Location;
@@ -14,6 +14,13 @@ import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
 
+/**
+ * This class is the extension of Building class and represents a building that
+ * is in charge of upgrades. 
+ * 
+ * @author Wenshun Liu
+ *
+ */
 public class UpgradeBuilding extends Building{
 	public int PRODUCE_TIME = 90;
 	
@@ -26,18 +33,23 @@ public class UpgradeBuilding extends Building{
      * Adds the list of available upgrades into the list of available actions.
      */
     public void addUpgradeActions(UpgradeTree upgradeTree){
-        List<UpgradeNode> currentUpgrades = upgradeTree.getCurrentUpgrades();
-    	for (final UpgradeNode u: currentUpgrades) {
-    		 getActions().add(new Action(u.getUpgradeType(), null, "An upgrade action for soldier"){
-    	            @Override
-    	            public void apply(int playerID) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException{
-    	                u.apply(playerID);
-    	                for (InteractiveEntity i: u.getUpgradeTree().getUsers().get(1)) {
-    	                	System.out.println("Health: " + i.getMaxHealth());
-    	                }
-    	            }
-    	        });
-    	}
+    	List<UpgradeNode> initialUpgrades = upgradeTree.getCurrentUpgrades();
+    	addUpgradeActions(initialUpgrades);
+    }
+    
+    public void addUpgradeActions(List<UpgradeNode> nodeList) {
+    	for (final UpgradeNode u: nodeList) {
+   		 getActions().add(new Action(u.getUpgradeName(), null, "An upgrade action"){
+   	            @Override
+   	            public void apply(int playerID) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException{
+   	                u.apply(playerID);
+   	                getActions().remove(this);
+   	                if (!u.getChildren().isEmpty()) {
+   	                	addUpgradeActions(u.getChildren());
+   	                }
+   	            }
+   	        });
+   	}
     }
 
 	@Override
@@ -47,6 +59,7 @@ public class UpgradeBuilding extends Building{
 	}
 
 	/**
+	 * TESTING PURPOSE.
 	 * Mimics player's click on action. Now invoke action after certain time. 
 	 */
 	@Override

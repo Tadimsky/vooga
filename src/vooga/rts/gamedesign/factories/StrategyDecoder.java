@@ -69,7 +69,7 @@ public class StrategyDecoder extends Decoder{
 	 * which runs through the lists and makes the strategies. 
 	 */
 	@Override
-	public <T extends Object> T create(Document doc) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void create(Document doc) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		NodeList attackLst = doc.getElementsByTagName(ATTACK_TAG).item(0).getChildNodes();
 		NodeList occupyLst = doc.getElementsByTagName(OCCUPY_TAG).item(0).getChildNodes();
 		NodeList gatherLst = doc.getElementsByTagName(GATHER_TAG).item(0).getChildNodes();
@@ -77,8 +77,6 @@ public class StrategyDecoder extends Decoder{
 		getSources(attackLst);
 		getSources(occupyLst);
 		getSources(gatherLst);
-		
-		return null;
 	}
 
 }

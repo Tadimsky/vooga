@@ -1,10 +1,11 @@
-package vooga.rts.gamedesign.sprite.rtsprite.interactive.buildings;
+package vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings;
 
 import java.awt.Dimension;
 import java.util.List;
 import java.util.ArrayList;
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit;
+
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
@@ -31,7 +32,7 @@ public class ProductionBuilding extends Building {
     }
 
     @Override
-    public void getOccupied (Unit u) {
+    public void getOccupied (Unit unit) {
         // does nothing if building isnt occupied. 
     }
     

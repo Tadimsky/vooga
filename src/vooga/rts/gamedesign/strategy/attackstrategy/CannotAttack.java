@@ -3,9 +3,9 @@ package vooga.rts.gamedesign.strategy.attackstrategy;
 import java.util.ArrayList;
 import java.util.List;
 
-import vooga.rts.gamedesign.Weapon;
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.rtsprite.IAttackable;
+import vooga.rts.gamedesign.sprite.gamesprites.IAttackable;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.weapon.Weapon;
 
 
 /**
@@ -34,7 +34,7 @@ public class CannotAttack implements AttackStrategy {
 	 * Attacks the given IAttackbleable object. In the state of CannotAttack
 	 * does nothing to the IAttackable object.
 	 */
-	public void attack(IAttackable a, double distance) {
+	public void attack(IAttackable attackable, double distance) {
 		return;
 	}
 

@@ -17,5 +17,5 @@ import org.w3c.dom.Document;
 public abstract class Decoder {
 	Factory myFactory;
 	
-	public abstract <T extends Object> T create(Document doc) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException;
+	public abstract void create(Document doc) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException;
 }

@@ -1,4 +1,4 @@
-package vooga.rts.gamedesign.sprite.rtsprite.interactive.units;
+package vooga.rts.gamedesign.sprite.gamesprites.interactive.units;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;

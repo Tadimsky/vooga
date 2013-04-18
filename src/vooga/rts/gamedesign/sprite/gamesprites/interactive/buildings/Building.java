@@ -1,8 +1,9 @@
-package vooga.rts.gamedesign.sprite.rtsprite.interactive.buildings;
+package vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings;
 
 import java.awt.Dimension;
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.IOccupiable;
+
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.IOccupiable;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
 import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
@@ -51,7 +52,7 @@ public abstract class Building extends InteractiveEntity implements IOccupiable 
     	return myUpgradeTree;
     }
 
-    public void getOccupied (Unit u) {
+    public void getOccupied (Unit unit) {
         //u.occupy(this);
     }
 }

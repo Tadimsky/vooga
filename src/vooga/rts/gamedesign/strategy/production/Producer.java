@@ -1,7 +1,8 @@
 package vooga.rts.gamedesign.strategy.production;
 
 import vooga.rts.gamedesign.factories.Factory;
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+
 import java.util.List;
 
 

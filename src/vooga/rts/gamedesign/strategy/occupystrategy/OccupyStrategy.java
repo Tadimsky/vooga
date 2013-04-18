@@ -1,7 +1,7 @@
 package vooga.rts.gamedesign.strategy.occupystrategy;
 
 
-import vooga.rts.gamedesign.sprite.rtsprite.interactive.IOccupiable;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.IOccupiable;
 import vooga.rts.gamedesign.strategy.Strategy;
 
 /**
@@ -23,6 +23,6 @@ import vooga.rts.gamedesign.strategy.Strategy;
  */
 public interface OccupyStrategy extends Strategy{
 
-  public boolean canOccupy(IOccupiable o);
+  public boolean canOccupy(IOccupiable occupiable);
 
 }

@@ -1,13 +1,12 @@
 package vooga.rts.gamedesign.upgrades;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import vooga.rts.gamedesign.sprite.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.rtsprite.Resource;
+import vooga.rts.gamedesign.sprite.gamesprites.Resource;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.player.Player;
 
 /**
@@ -23,29 +22,25 @@ import vooga.rts.player.Player;
 public class UpgradeNode {
 
 	private UpgradeTree myUpgradeTree;
-	private Map<Resource, Integer> myCost;
-    private String myUpgradeType;
-    private String myUpgradeProperty;
+	private Map<String, Integer> myCost;
+    private String myUpgradeName;
     private int myUpgradeValue;
     private boolean myHasBeenUpgraded;
     private List<UpgradeNode> myChildren; //set to list for the Head.
-    private int myID;
 
     public UpgradeNode(){
-        this(null, 0, null, null, 0);
+        this(null, null, 0, 0);
     }
 
-    public UpgradeNode(UpgradeTree upgradeTree, int id, String upgradeType, String upgradeObject, int upgradeValue){
+    public UpgradeNode(UpgradeTree upgradeTree, String upgradeName, int upgradeValue, int costedResourceAmount){
         myUpgradeTree = upgradeTree;
-    	myID = id;
-    	myUpgradeType = upgradeType;
+    	myUpgradeName = upgradeName;
         myChildren = new ArrayList<UpgradeNode>();
         myHasBeenUpgraded = false;
-        myUpgradeProperty = upgradeObject;
         myUpgradeValue = upgradeValue;
+        myCost.put("resource", costedResourceAmount); //TODO: get different types of Resource
     }
-
-    //TODO: can refactor some subclass methods to here!
+    
     /**
      * Applies the effect of this Upgrade type to the given interactive.
      * @param interactive
@@ -60,10 +55,13 @@ public class UpgradeNode {
 			throws IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException, InstantiationException,
 			SecurityException, NoSuchMethodException {
-    	return;
+    	for (InteractiveEntity i: getUpgradeTree().getUsers().get(playerID)){
+	    	apply(i);
+	    	myUpgradeTree.activateNode(this);
+	    }
 	}
     
-    public void apply(InteractiveEntity requester) //TODO: figure out which one should actually be called under Action
+    public void apply(InteractiveEntity requester) 
     		throws IllegalArgumentException, IllegalAccessException,
     		InvocationTargetException, InstantiationException,
     		SecurityException, NoSuchMethodException {
@@ -71,7 +69,11 @@ public class UpgradeNode {
     }
 
     public boolean validUpdate(Player player){
-    	//TODO check if play has enough resource to "buy the update"
+    	for (String resourceType: myCost.keySet()){
+    		if (player.getResourceManager().getAmount(resourceType) < myCost.get(resourceType)) {
+    			return false;
+    		}
+    	}
     	return true;
     }
 
@@ -79,32 +81,27 @@ public class UpgradeNode {
         return myChildren;
     }
     
-    public UpgradeNode addChild(UpgradeNode upgrade) {
+    public void addChild(UpgradeNode upgrade) {
 		myChildren.add(upgrade);
-		return upgrade;
 	}
 
     public UpgradeTree getUpgradeTree() {
     	return myUpgradeTree;
     }
     
-    public String getUpgradeType(){
-        return myUpgradeType;
+    public String getUpgradeName(){
+        return myUpgradeName;
     }
 
     public boolean getHasBeenUpgraded(){
         return myHasBeenUpgraded;
     }
 
-    public String getUpgradeObject(){
-        return myUpgradeProperty;
-    }
-
     public int getUpgradeValue(){
         return myUpgradeValue;
     }
     
-    public int getID(){
-    	return myID;
+    public Map<String, Integer> getCost() {
+    	return myCost;
     }
 }
