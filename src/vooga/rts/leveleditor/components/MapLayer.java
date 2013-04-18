@@ -34,7 +34,9 @@ public class MapLayer {
         
     }
     
-    
+    public List<Terrain> getTerrainSet() {
+        return myTerrains;
+    }
     
     
 }

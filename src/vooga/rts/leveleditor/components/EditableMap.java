@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import vooga.rts.leveleditor.gui.MapPanel;
 import vooga.rts.util.Location;
@@ -22,14 +24,16 @@ import vooga.rts.util.Location;
 public class EditableMap implements Serializable {
 
     /**
-     * 
+     * serial version UID
      */
     private static final long serialVersionUID = 5848819056578981375L;
     private int myXSize;
-    private int myYSize;
-
-    private Map<Integer, MapLayer> myLayers;
-
+    private int myYSize; 
+    
+    private Map<Integer , MapLayer> myLayers;
+    
+    private List<Resource> myResource;
+    
     private String myMapName = "CIEMAS";
     private String myDescription = " our RTS is the best one !";
 
@@ -68,7 +72,10 @@ public class EditableMap implements Serializable {
 
         myPlayerLocations = new HashMap<Integer, Location>();
         myPlayerNumber = 0;
-        myLayers = new HashMap<Integer, MapLayer>();
+        myLayers = new HashMap<Integer , MapLayer>();
+        myResource = new ArrayList<Resource>();
+
+
         try {
             mySaver = new MapSaver(this);
         }
@@ -76,7 +83,6 @@ public class EditableMap implements Serializable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        myLoader = new MapLoader();
 
     }
 
@@ -116,10 +122,11 @@ public class EditableMap implements Serializable {
         System.out.println("printmatrix executed");
         System.out.println("X Size : " + myXSize);
         System.out.println("Y Size : " + myYSize);
+        
+        for(int i =0 ; i<myXSize ; i++) {
+            for(int j =0 ; j<myYSize ; j++) {
+                System.out.println(myNodeMatrix[i][j].getMyTile().getMyID());
 
-        for (int i = 0; i < myXSize; i++) {
-            for (int j = 0; j < myYSize; j++) {
-                System.out.println(myNodeMatrix[i][j].getTileType());
             }
             System.out.print("\n");
         }
@@ -131,7 +138,7 @@ public class EditableMap implements Serializable {
 
     public void load (File resourceFile) {
         try {
-            myLoader.loadMapFile(this, resourceFile);
+            myLoader.loadMapFile(resourceFile);
         }
         catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -169,11 +176,34 @@ public class EditableMap implements Serializable {
             myLayers.put(layerIndex, bufferLayer);
         }
     }
-
-    public void addTile (int x, int y, String tileType) {
-        myNodeMatrix[x][y].setTileType(tileType);
+    
+    public void addTile(int x , int y , int id) {
+        myNodeMatrix[x][y].getMyTile().setType(id);
     }
-
+    
+    
+    
+    public void addResource(int x, int y , int resourceID) {
+        Resource buffer = new Resource(x,y,resourceID);
+        myResource.add(buffer);
+    }
+    
+    public int getLayerNumber() {
+        return myLayers.size();
+    }
+    
+    public Map<Integer , MapLayer> getLayerMap() {
+        return myLayers;
+    }
+    
+    public MapLayer getLayer(int index) {
+        return myLayers.get(index);
+    } 
+    
+    public List<Resource> getResourceSet() {
+        return myResource;
+    }
+    
     public String getMyMapName () {
         return myMapName;
     }
@@ -261,13 +291,21 @@ public class EditableMap implements Serializable {
         }
 
     }
-
-    public static void main (String[] args) {
-        EditableMap test = new EditableMap(10, 10);
-        test.addTile(1, 1, "grass");
-        test.addTile(2, 2, "sand");
-        test.addTile(3, 3, "shit");
-        test.save(System.getProperty("user.dir") + "./src/test.xml");
+    
+    public static void main(String[] args) {
+        EditableMap test = new EditableMap(10,10);
+        test.addPlayer(1,2);
+        test.addPlayer(2,3);
+        test.addPlayer(3,4);
+        test.addPlayer(5,7);
+        test.addTile(1, 1, 1);
+        test.addTile(2, 2, 2);
+        test.addTile(3, 3, 3);
+        test.addTerrain(3, new Terrain(2,2,1));
+        test.addTerrain(2, new Terrain(3,3,2));
+        test.addTerrain(1, new Terrain(4,4,3));
+        test.addResource(7, 7, 1);
+        test.addResource(8, 8, 2);
+        test.addResource(9, 9, 3);
     }
-
 }

@@ -15,6 +15,9 @@ import vooga.rts.input.InputMethodTarget;
 import vooga.rts.input.PositionObject;
 import vooga.rts.leveleditor.components.EditableMap;
 import vooga.rts.leveleditor.components.EditableNode;
+import vooga.rts.leveleditor.components.MapLayer;
+import vooga.rts.leveleditor.components.Resource;
+import vooga.rts.leveleditor.components.Terrain;
 import vooga.rts.util.Location;
 
 @InputClassTarget
@@ -28,6 +31,8 @@ public class MapPanel extends JComponent {
     public static final int DEFAULT_TILE_HEIGHT = 50;
     public static final int RESOURCEMODE = 1;
     public static final int PLAYERMODE = 2;
+    public static final int TERRAINMODE = 3;
+    public static final int TILEMODE = 4;
 
     private Canvas myCanvas;
     private EditableMap myMap;
@@ -36,6 +41,7 @@ public class MapPanel extends JComponent {
     private int myHeight;
     private int myTileWidth;
     private int myTileHeight;
+    private int myCurrentLayer;
     private boolean myRemoveFlag;
     private int myMode;
     private BufferedImage myPlayerImage;
@@ -47,6 +53,7 @@ public class MapPanel extends JComponent {
         myInput.addListenerTo(this);
         myWidth = 0;
         myHeight = 0;
+        myCurrentLayer = 0;
         myTileWidth = DEFAULT_TILE_WIDTH;
         myTileHeight = DEFAULT_TILE_HEIGHT;
         try {
@@ -100,6 +107,18 @@ public class MapPanel extends JComponent {
         for(Location c : myMap.getLocationMap().values()) {
             g.drawImage(myPlayerImage, (int)(c.getX()), (int)(c.getY()),null);
         }
+
+        //paint Terrain
+        for(MapLayer m : myMap.getLayerMap().values()) {
+            for(Terrain t : m.getTerrainSet()) {
+                g.drawImage(t.getMyImage(),(int)(t.getMyLocation().getX()),(int)(t.getMyLocation().getY()),null);
+            }
+        }
+
+        //paint Resource
+        for(Resource r : myMap.getResourceSet()) {
+            g.drawImage(r.getMyImage(),r.getMyX(),r.getMyY(),null);
+        }
     }
 
     public void setWidth(int w) {
@@ -148,19 +167,30 @@ public class MapPanel extends JComponent {
     }
 
     public void placeResource(int x, int y) {
+        myMap.addResource(x, y, myCanvas.getCurrentSelectResource().getMyID());
+        repaint();
+    }
+    
+    public void placeTerrain(int x, int y) {
+        Terrain t = new Terrain(new Location(x,y),myCanvas.getCurrentSelectTerrain().getMyID());
+        myMap.addTerrain(myCurrentLayer, t);
+        repaint();
+    }
+    
+    private void placeTile(int x, int y) {
         x=x/myTileWidth;
         y=y/myTileHeight;
         if(x>=0 && x<myWidth && y>=0 && y<myHeight){
             EditableNode n = myMap.getMapNode(x, y);
             if(!myRemoveFlag){
-                n.setTileType(myCanvas.getCurrentSelectResource().getName());
-                n.setImage(myCanvas.getCurrentSelectResource().getImage());
+                n.setTile(myCanvas.getCurrentSelectTile().getMyID());
                 n.setOccupied(true);
             } else {
                 n.reset();
             }
             repaint();
         }
+        
     }
 
     public void placePlayer(int x, int y) {
@@ -178,6 +208,8 @@ public class MapPanel extends JComponent {
     
     public void clear() {
         myMap.clearMap();
+        myMap.getLayerMap().clear();
+        myMap.getResourceSet().clear();
         repaint();
     }
 
@@ -202,6 +234,12 @@ public class MapPanel extends JComponent {
             case PLAYERMODE:
                 placePlayer((int)(p.getX()), (int)(p.getY()));
                 break;
+            case TERRAINMODE:
+                placeTerrain((int)(p.getX()), (int)(p.getY()));
+                break;
+            case TILEMODE:
+                placeTile((int)(p.getX()), (int)(p.getY()));
+                break;
             default: break;  
         }
     }
@@ -210,8 +248,8 @@ public class MapPanel extends JComponent {
 
     @InputMethodTarget(name="onMouseDrag")
     public void testDrag (PositionObject p) {
-        if(myMode == RESOURCEMODE) {
-            placeResource((int)(p.getX()), (int)(p.getY()));
+        if(myMode == TILEMODE) {
+            placeTile((int)(p.getX()), (int)(p.getY()));
         }
     }
 

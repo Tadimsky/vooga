@@ -1,18 +1,26 @@
 package vooga.rts.leveleditor.components;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
+import vooga.rts.util.Location;
 /**
  * This class represents the available resource types the designer can choose from
  * 
  * @author Ziqiang Huang
+ * @author Yang Yang
  *
  */
 
-public class Resource {
+public class Resource extends MapComponent{
     
-    private int myID;
-    private String myName;
-    private BufferedImage myImage;
+    private static final String BUNDLE_NAME = "ResourceIndex";
+    
+    private Location myLocation;
+    //further extension required
+    private int myAmount;
     
     /**
      * Constructor for this class
@@ -21,23 +29,46 @@ public class Resource {
      * @param name
      * @param image
      */
-    public Resource(int id, String name, BufferedImage image) {
-        
-        myID = id;
-        myName = name;
-        myImage = image;
-        
+    public Resource(Location loc, int id) {
+        super(BUNDLE_NAME);
+        setType(id);
+        myLocation = loc;}
+    
+    public Resource(int x , int y, int id ) {
+        this( new Location(x,y), id);
     }
     
-    public String getName() {
-        return myName;
+    public Resource(int id) {
+        this(0,0,id);
     }
     
-    public int getID() {
-        return myID;
+    @Override
+    public void setType(int id) {
+        super.setType(id);
+        try {
+         refreshImage();
+     }
+     catch (IOException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+     }
     }
-
-    public BufferedImage getImage() {
-        return myImage;
+    
+    public void refreshImage() throws IOException {
+        if(myResource.containsKey(myID+"")) {
+            String content = myResource.getString(myID+"");
+            String[] buffer = content.split("&");
+            myName = buffer[0];
+            myImageName = buffer[1];
+            myImage = ImageIO.read(new File(System.getProperty("user.dir") + IMAGE_PATH + myImageName));            
+        }
+    }
+    
+    public int getMyX() {
+        return (int) myLocation.getX();
+    }
+    
+    public int getMyY() {
+        return (int) myLocation.getY();
     }
 }

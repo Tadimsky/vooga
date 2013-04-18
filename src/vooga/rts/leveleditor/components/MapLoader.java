@@ -2,6 +2,8 @@ package vooga.rts.leveleditor.components;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -12,57 +14,81 @@ import java.util.Scanner;
  */
 
 public class MapLoader {
-public void loadMapFile(EditableMap myMap , File resourceFile) throws FileNotFoundException {
+    
+    private Scanner myScanner;
+    private EditableMap myMap;
+    private Map<Integer, String> myTileInformation;
+    private Map<Integer, String> myTerrainInformation;
+    private XMLParser myXMLParser;
+   
+    
+    public MapLoader() {
+        myMap = new EditableMap();
+        myTileInformation = new HashMap<Integer, String>();
+        myTerrainInformation = new HashMap<Integer, String>();
+        myXMLParser = new XMLParser();
+    }
+    
+    public void loadMapFile(File resourceFile) throws FileNotFoundException {
         
         Scanner myScanner = new Scanner(resourceFile);
+        
+        loadTitle();
+        loadPlayers();
+        loadSize();
+        loadTileIndex();
+        loadTerrainIndex();
+        loadTiles();
+        loadTerrains();
+        loadResources();
+        
+        myScanner.close(); 
+
+    }
+    
+    private void loadTitle() {
         String line = myScanner.nextLine();
-        
-        String[] sizeBuffer = line.split("\\*");
-        int x = Integer.parseInt(sizeBuffer[0]);
-        int y = Integer.parseInt(sizeBuffer[1]);
-        int layerCount = Integer.parseInt(sizeBuffer[2]);
-        
-        EditableMap buffer = new EditableMap(x,y);
-       
-        
         line = myScanner.nextLine();
+        line = myScanner.nextLine();
+    }
+    
+    
+    
+    private void loadPlayers() {
         
-        while(line.contains("Player")) {
-            String[] playerBuffer = line.split(" ");
-            buffer.addPlayer(Integer.parseInt(playerBuffer[2]), Integer.parseInt(playerBuffer[3]));
-            System.out.println("player added");
-            line = myScanner.nextLine();
-            
-        }
+    }
+    
+    
+    
+    private void loadSize() {
+    
+    }
+    
+    
+    
+    private void loadTileIndex() {
+    
+    }
+    
+    
+    
+    private void loadTerrainIndex() {
+    
+    }
+    
+    
+    
+    private void loadTiles() {
+    
+    }
+    
+    
+
+    private void loadTerrains() {
+    
+    }
+    
+    private void loadResources() {
         
-        for(int l = 0 ; l<layerCount ; l++) {
-            if(line.contains("*")) {
-                line = myScanner.nextLine();
-            }
-            for(int i =0 ; i<x ; i++) {
-                for(int j =0 ; j<y ; j++) {
-                    if(Integer.parseInt(line.charAt(j)+"") != 0){
-                        //buffer.getMapNode(i, j).addFeature(Integer.parseInt(line.charAt(j)+""));    
-                    }
-                }
-                if(myScanner.hasNextLine()) {
-                    line = myScanner.nextLine();
-                } else {
-                    break;
-                }
-            }
-        }
-        
-        
-        //myMap.myTileIndex = buffer.getMap();
-        for(Integer i : buffer.getAllPlayers().keySet()) {
-            myMap.addPlayer(buffer.getPlayer(i));
-        }
-        myMap.setMyXSize(x);
-        myMap.setMyYSize(y);
-       // myMap.refreshLayerNumber();
-        
-        
-        myScanner.close();
     }
 }
