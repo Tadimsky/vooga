@@ -9,7 +9,7 @@
 			<nodeName>Boost1</nodeName>
 			<object>Health</object>
 			<value>50</value>
-			<resourceCost>Resource</resourceCost>
+			<resourceCostType>Resource</resourceCostType>
 			<resourceAmount>30</resourceAmount>
 		</upgradeNode>
 		<upgradeNode>
@@ -28,7 +28,7 @@
 			<nodeName>CanAttack</nodeName>
 			<object>AttackStrategy</object>
 			<value>0</value>
-			<resourceCost>Resource</resourceCost>
+			<resourceCostType>Resource</resourceCostType>
 			<resourceAmount>30</resourceAmount>
 		</upgradeNode>
 		<upgradeNode>
@@ -36,7 +36,7 @@
 			<nodeName>RangeBoost1</nodeName>
 			<object>Range</object>
 			<value>100</value>
-			<resourceCost>Resource</resourceCost>
+			<resourceCostType>Resource</resourceCostType>
 			<resourceAmount>30</resourceAmount>
 		</upgradeNode>
 		<upgradeNode>
@@ -44,7 +44,7 @@
 			<nodeName>DamageBoost1</nodeName>
 			<object>Damage</object>
 			<value>100</value>
-			<resourceCost>Resource</resourceCost>
+			<resourceCostType>Resource</resourceCostType>
 			<resourceAmount>30</resourceAmount>
 		</upgradeNode>
 	</type>

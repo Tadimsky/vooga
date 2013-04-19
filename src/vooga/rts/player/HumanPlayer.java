@@ -30,8 +30,4 @@ public class HumanPlayer extends Player {
 		getUnits().select(new Location3D(x, y,0));
 	}
 
-	@Override
-	public void update(Observable o, Object arg) {
-	}
-
 }

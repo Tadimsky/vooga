@@ -1,16 +1,19 @@
 package vooga.rts.player;
 
 import java.awt.Graphics2D;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import vooga.rts.IGameLoop;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.manager.*;
 import vooga.rts.map.GameMap;
 
-public abstract class Player implements IGameLoop, Observer {    
-
-    private ResourceManager myResourceManager;
+public abstract class Player implements IGameLoop, IProductionObserver {    
+	
+	private IndividualResourceManager myResourceManager;
     private UnitManager myUnitManager;
     private BuildingManager myBuildingManager;
     private int myTeamID;
@@ -18,22 +21,28 @@ public abstract class Player implements IGameLoop, Observer {
     
     
     public Player() {
-        myResourceManager = new ResourceManager();
+        myResourceManager = new IndividualResourceManager();
         myUnitManager= new UnitManager();
+        
     }
     
     public Player(GameMap map) {
         this();
         myMap = map;
     }
-
-    public ResourceManager getResourceManager () {
-        return myResourceManager;
+    
+    public void addProduction(Unit newProduction) {
+    	myUnitManager.addUnit(newProduction);
+    	System.out.println("player adds new unit!");
+    }
+    
+    public void updateResource(HashMap<String, Integer> updatedResources) {
+    	myResourceManager.setResources(updatedResources);
+    	System.out.println("player gets resource!");
     }
 
-    public ResourceManager removeResources (InteractiveEntity i) {
+    public IndividualResourceManager getIndividualResourceManager () {
         return myResourceManager;
-
     }
 
     public UnitManager getUnits () {

@@ -27,7 +27,7 @@ public interface GatherStrategy extends Strategy{
 	 * Allows a worker to gather a resource
 	 * @param gatherable is the resource being gathered
 	 */
-	public void gatherResource (IGatherable gatherable);
+	public void gatherResource (int playerID, IGatherable gatherable);
 	
 	/**
 	 * Returns the gather delay interval

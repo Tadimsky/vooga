@@ -63,7 +63,7 @@ public class Worker extends Unit {
 	public void gather(IGatherable gatherable) {
 		//shouldnt the cast be to a type Resource? 
 		if(this.collidesWith((GameEntity)gatherable)) {
-			myGatherStrategy.gatherResource(gatherable);
+			myGatherStrategy.gatherResource(getPlayerID(),gatherable);
 		}
 	}
 	

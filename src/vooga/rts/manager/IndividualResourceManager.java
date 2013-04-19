@@ -12,11 +12,11 @@ import java.util.Map;
  * @author Jonathan Schmidt
  * 
  */
-public class ResourceManager {
+public class IndividualResourceManager {
     
     private Map<String, Integer> myResources;
     
-    public ResourceManager() {
+    public IndividualResourceManager() {
         myResources = new HashMap<String, Integer>();        
     }
     
@@ -25,5 +25,9 @@ public class ResourceManager {
             return myResources.get(resource);
         }
         return 0;
+    }
+    
+    public void setResources (HashMap<String, Integer> resources) {
+    	myResources = resources;
     }
 }

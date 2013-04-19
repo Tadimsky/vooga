@@ -2,6 +2,7 @@ package vooga.rts.gamedesign.upgrades;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,8 @@ public class UpgradeNode {
     }
 
     public UpgradeNode(UpgradeTree upgradeTree, String upgradeName, int upgradeValue, int costedResourceAmount){
-        myUpgradeTree = upgradeTree;
+        myCost = new HashMap<String, Integer>();
+    	myUpgradeTree = upgradeTree;
     	myUpgradeName = upgradeName;
         myChildren = new ArrayList<UpgradeNode>();
         myHasBeenUpgraded = false;
@@ -70,7 +72,7 @@ public class UpgradeNode {
 
     public boolean validUpdate(Player player){
     	for (String resourceType: myCost.keySet()){
-    		if (player.getResourceManager().getAmount(resourceType) < myCost.get(resourceType)) {
+    		if (player.getIndividualResourceManager().getAmount(resourceType) < myCost.get(resourceType)) {
     			return false;
     		}
     	}

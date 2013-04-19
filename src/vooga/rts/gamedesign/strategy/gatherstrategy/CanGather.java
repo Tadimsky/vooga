@@ -17,24 +17,24 @@ import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
  */
 public class CanGather implements GatherStrategy {
 
-	private Interval interval;
+	private Interval myInterval;
 	private int myGatherAmount;
 
 	public CanGather(int cooldown, int gatherAmount) {
-		interval = new Interval(cooldown);
+		myInterval = new Interval(cooldown);
 		myGatherAmount = gatherAmount;
 	}
 
-	public void gatherResource(IGatherable gatherable) {
-		if (interval.allowAction()) {
-			gatherable.getGathered(myGatherAmount);
-			interval.resetCooldown();
+	public void gatherResource(int playerID, IGatherable gatherable) {
+		if (myInterval.allowAction()) {
+			gatherable.getGathered(playerID, myGatherAmount);
+			myInterval.resetCooldown();
 		}
 	}
 
 	@Override
 	public Interval getInterval() {
-		return interval;
+		return myInterval;
 	}
 
 }

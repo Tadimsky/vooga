@@ -95,6 +95,10 @@ public class GameEntity extends GameSprite {
     public int getPlayerID () {
         return myPlayerID;
     }
+    
+    public void setPlayerID(int playerID) {
+    	myPlayerID = playerID;
+    }
 
     /**
      * Rotates the Unit by the given angle.
