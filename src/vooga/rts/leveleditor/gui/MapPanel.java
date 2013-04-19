@@ -24,7 +24,7 @@ import vooga.rts.util.Location;
 public class MapPanel extends JComponent {
 
     public static final String INPUT_DIR = "vooga.rts.resources.properties.Input";
-    public static final String PLAYER_IMAGE_PATH = "/vooga/rts/leveleditor/resource/PlayerSign.gif";
+    public static final String PLAYER_IMAGE_PATH = "/vooga/rts/leveleditor/resource/Player1.png";
     public static final Dimension DEFAULT_MAP_SIZE  = new Dimension (600,600);
     public static final double ZOOM_RATE = 1.25;
     public static final int DEFAULT_TILE_WIDTH = 50;
@@ -225,6 +225,24 @@ public class MapPanel extends JComponent {
         myMode = mode;       
     }
     
+    public void setCurrentLayer(int n) {
+        myCurrentLayer = n;
+        
+    }
+    
+    public int getCurrentLayer () {
+        return myCurrentLayer;
+    }
+    
+    public void addLayer() {
+        myCurrentLayer++;       
+    }
+    
+    public void removeLayer() {
+        myCurrentLayer--;
+        
+    }
+    
     @InputMethodTarget(name="onLeftMouseDown")
     public void testClick (PositionObject p) {
         switch (myMode) {
@@ -252,6 +270,7 @@ public class MapPanel extends JComponent {
             placeTile((int)(p.getX()), (int)(p.getY()));
         }
     }
+
 
 
 

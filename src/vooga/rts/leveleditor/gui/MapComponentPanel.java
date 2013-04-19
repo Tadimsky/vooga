@@ -1,12 +1,14 @@
 package vooga.rts.leveleditor.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ResourceBundle;
 import javax.swing.JPanel;
 
 public abstract class MapComponentPanel extends JPanel {
     
+    public static final Dimension DEFAULT_DIMENSION = new Dimension(250, 250);
     public static final String RELATIVE_PATH = "vooga.rts.leveleditor.resource.";
 
     protected Canvas myCanvas;
@@ -18,6 +20,7 @@ public abstract class MapComponentPanel extends JPanel {
         myPanel = new JPanel();
         myPanel.setLayout(new GridLayout(0,4));
         add(myPanel, BorderLayout.NORTH);
+        this.setPreferredSize(DEFAULT_DIMENSION);
         setResourceBundle();
         addButton();
     }

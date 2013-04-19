@@ -63,7 +63,7 @@ public class MapSaver {
 
     private void writePlayers() throws IOException {
         Map<Integer , Location> buffer = mySavingMap.getAllPlayers();
-        myFileWriter.write("      <players number = "+ buffer.size() +">\r\n");
+        myFileWriter.write("      <players number="+ buffer.size() +">\r\n");
         for(Integer i : buffer.keySet()) {
             Location loc = buffer.get(i);
             myFileWriter.write("         <player ID="+ i +" X=" + (int)loc.getX() + " Y=" + (int)loc.getY() + " />\r\n");
@@ -80,8 +80,8 @@ public class MapSaver {
         
         myFileWriter.write("   <resources>\r\n");
         myFileWriter.write("      <info>\r\n");
-        myFileWriter.write("         tilesize width=" + width + " height=" + height + " />\r\n");
-        myFileWriter.write("         tileamount X=" + x + " Y=" + y + " />\r\n");
+        myFileWriter.write("         <tilesize width=" + width + " height=" + height + " />\r\n");
+        myFileWriter.write("         <tileamount X=" + x + " Y=" + y + " />\r\n");
         myFileWriter.write("      </info>\r\n");
     }
     
@@ -92,7 +92,7 @@ public class MapSaver {
             String[] buffer = content.split("&");
             String name = buffer[0];
             String imageName = "tiles/" + buffer[1];
-            myFileWriter.write("         <terrain ID=" + str + " image=\"" + imageName+"\""+  " name=\"" + name  + "\" />\r\n");
+            myFileWriter.write("         <tile ID=" + str + " image=\"" + imageName+"\""+  " name=\"" + name  + "\" />\r\n");
         }
         
         myFileWriter.write("      </tiles>\r\n");
@@ -109,7 +109,7 @@ public class MapSaver {
             String name = buffer[0];
             String imageName = "terrain/" + buffer[1];
             int walkability = Integer.parseInt(buffer[2]);
-            myFileWriter.write("         <terrain ID=" + str  + " image=\"" + imageName + "\""+ " name=\"" + name + "\"" + " walkability =" + walkability + " />\r\n");
+            myFileWriter.write("         <terrain ID=" + str  + " image=\"" + imageName + "\""+ " name=\"" + name + "\"" + " walkability=" + walkability + " />\r\n");
         }
         myFileWriter.write("      </terraintype>\r\n");
         myFileWriter.write("   </resources>\r\n");
@@ -123,8 +123,9 @@ public class MapSaver {
             myFileWriter.write("      ");
             for(int j = 0 ; j < y ; j++) {
                 EditableNode node = mySavingMap.getMapNode(i, j);
-                char c = (char)(node.getMyTile().getMyID());
-                myFileWriter.write(c);
+                
+                myFileWriter.write(node.getMyTile().getMyID()+"");
+                myFileWriter.write(" ");
             }
             myFileWriter.write("\r\n");
             
@@ -139,7 +140,7 @@ public class MapSaver {
         for(int i = 1 ; i < layers + 1 ; i++) {
             MapLayer bufferLayer = mySavingMap.getLayer(i);
             
-            myFileWriter.write("      <layer level = " + i +">\r\n");
+            myFileWriter.write("      <layer level=" + i +">\r\n");
             for(Terrain ter : bufferLayer.getTerrainSet()) {
                 int ID = ter.getMyID();
                 int x = (int)ter.getMyLocation().getX();

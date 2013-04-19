@@ -25,8 +25,16 @@ public class MenuManager extends JMenuBar {
         myChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
         this.add(createFileMenu());
         this.add(createPlayerMenu());
+        this.add(createLayerMenu());
 
     }
+
+    private JMenu createLayerMenu() {
+        JMenu menu = new JMenu("Layer");
+        createLayerMenu(menu);
+        return menu;
+    }
+
 
     private JMenu createPlayerMenu() {
         JMenu menu = new JMenu("Player");
@@ -38,6 +46,23 @@ public class MenuManager extends JMenuBar {
         JMenu menu = new JMenu("File");
         createFileMenu(menu);
         return menu;
+    }
+
+    private void createLayerMenu(JMenu menu) {
+        menu.add(new AbstractAction("AddLayer") {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                myCanvas.addLayer();
+            }
+        });
+        
+        menu.add(new AbstractAction("Remove") {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                myCanvas.removeLayer();
+            }
+        });
+
     }
     
     private void createPlayerMenu(JMenu menu) {

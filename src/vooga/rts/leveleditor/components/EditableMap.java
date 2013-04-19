@@ -311,5 +311,6 @@ public class EditableMap implements Serializable {
         test.addResource(7, 7, 1);
         test.addResource(8, 8, 2);
         test.addResource(9, 9, 3);
+        test.save(System.getProperty("user.dir")+"./src/test.xml");
     }
 }

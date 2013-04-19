@@ -1,7 +1,6 @@
 package vooga.rts.leveleditor.components;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ResourceBundle;
 
 public abstract class MapComponent {
@@ -23,10 +22,24 @@ public abstract class MapComponent {
         
     }
 
-    public void setType(int id) {
+    public void setID(int id) {
         myID = id;
     }
     
+    
+    
+    public void setMyName (String myName) {
+        this.myName = myName;
+    }
+
+    public void setMyImageName (String myImageName) {
+        this.myImageName = myImageName;
+    }
+
+    public void setMyImage (BufferedImage myImage) {
+        this.myImage = myImage;
+    }
+
     public int getMyID () {
         return myID;
     }

@@ -29,7 +29,7 @@ public class Tile extends MapComponent {
     }
     
     public void setType(int id) {
-        super.setType(id);
+        super.setID(id);
         try {
             refreshImage();
         }
@@ -38,5 +38,6 @@ public class Tile extends MapComponent {
             e.printStackTrace();
         }
     }
+   
     
 }
