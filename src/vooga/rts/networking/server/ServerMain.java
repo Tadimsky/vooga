@@ -6,9 +6,9 @@ package vooga.rts.networking.server;
  * @author David Winegar
  * 
  */
-public class Main {
+public class ServerMain {
 
-    private Main () {
+    private ServerMain () {
         // does not make sense to construct this class
     }
 
