@@ -23,6 +23,7 @@ import vooga.rts.util.Location;
 
 public class EditableMap implements Serializable {
 
+
     /**
      * serial version UID
      */
@@ -54,6 +55,7 @@ public class EditableMap implements Serializable {
     }
 
     public EditableMap (int x, int y) {
+
         this(x, y, MapPanel.DEFAULT_TILE_WIDTH, MapPanel.DEFAULT_TILE_HEIGHT);
     }
 
@@ -63,13 +65,11 @@ public class EditableMap implements Serializable {
 
     public void initializeMap (int width, int height) {
         myNodeMatrix = new EditableNode[myXSize][myYSize];
-
         for (int i = 0; i < myXSize; i++) {
             for (int j = 0; j < myYSize; j++) {
                 myNodeMatrix[i][j] = new EditableNode(i, j, width, height, false);
             }
         }
-
         myPlayerLocations = new HashMap<Integer, Location>();
         myPlayerNumber = 0;
         myLayers = new HashMap<Integer , MapLayer>();
@@ -91,6 +91,7 @@ public class EditableMap implements Serializable {
     }
 
     public void addPlayer (int x, int y) {
+
         addPlayer(new Location(x, y));
     }
 
@@ -103,6 +104,7 @@ public class EditableMap implements Serializable {
         myPlayerLocations.remove(index);
         myPlayerNumber--;
     }
+
 
     public HashMap<Integer, Location> getLocationMap () {
         return (HashMap<Integer, Location>) myPlayerLocations;
@@ -122,6 +124,7 @@ public class EditableMap implements Serializable {
         System.out.println("printmatrix executed");
         System.out.println("X Size : " + myXSize);
         System.out.println("Y Size : " + myYSize);
+
         
         for(int i =0 ; i<myXSize ; i++) {
             for(int j =0 ; j<myYSize ; j++) {
@@ -203,8 +206,7 @@ public class EditableMap implements Serializable {
     public List<Resource> getResourceSet() {
         return myResource;
     }
-    
-    public String getMyMapName () {
+        public String getMyMapName () {
         return myMapName;
     }
 
@@ -283,6 +285,7 @@ public class EditableMap implements Serializable {
 
     }
 
+
     public void zoomOut () {
         for (int i = 0; i < myXSize; i++) {
             for (int j = 0; j < myYSize; j++) {
@@ -291,6 +294,7 @@ public class EditableMap implements Serializable {
         }
 
     }
+
     
     public static void main(String[] args) {
         EditableMap test = new EditableMap(10,10);

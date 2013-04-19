@@ -4,8 +4,7 @@ import java.util.regex.Pattern;
 import vooga.rts.leveleditor.Exceptions.MapNotMatchException;
 
 public class XMLParser {
-   
-    ;
+
     private Pattern myBracketPattern ;
     private Pattern mySpacePattern ;
     private Pattern myEqualPattern ;
@@ -85,4 +84,5 @@ public class XMLParser {
     public Pattern getMyNumPattern() {
         return myNumPattern;
     }
+
 }

@@ -2,6 +2,7 @@ package vooga.rts.gamedesign.sprite.gamesprites.interactive;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
@@ -235,12 +236,15 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 		//pen.rotate(getVelocity().getAngle());
 
 		//should probably use the getBottom, getHeight etc...implement them
-		Point2D selectLocation = Camera.instance().worldToView(getWorldLocation());
+		Point2D selectLocation = Camera.instance().worldToView(getWorldLocation());		
+		
 		pen.drawRect((int)selectLocation.getX()-LOCATION_OFFSET, (int)(selectLocation.getY()-5*LOCATION_OFFSET), 50, 5);
 		Rectangle2D healthBar = new Rectangle2D.Double((int)selectLocation.getX()-LOCATION_OFFSET, (int)(selectLocation.getY()-5*LOCATION_OFFSET), 50 * getHealth()/getMaxHealth(), 5);
-		pen.setColor(Color.GREEN);
+		float width = (float)(healthBar.getWidth() * (getHealth() / getMaxHealth()));
+		pen.setPaint(new GradientPaint((float)healthBar.getX() - width, (float)healthBar.getMaxY(), Color.RED, (float)healthBar.getMaxX(), (float)healthBar.getMaxY(), Color.GREEN));
 		pen.fill(healthBar);
 		pen.setColor(Color.black);
+		
 		if(isSelected) { 
 			Ellipse2D.Double selectedCircle = new Ellipse2D.Double(selectLocation.getX()-LOCATION_OFFSET, selectLocation.getY()+LOCATION_OFFSET , 50, 30);
 			pen.fill(selectedCircle);

@@ -6,9 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
-
 import javax.swing.Timer;
-
 import vooga.rts.Game;
 import vooga.rts.gui.Window;
 import vooga.rts.input.Input;
@@ -18,122 +16,127 @@ import vooga.rts.resourcemanager.SoundLoader;
 import vooga.rts.util.FrameCounter;
 import vooga.rts.util.Location;
 
+
+
 public class MainController extends AbstractController implements Observer {
 
-	private final static String DEFAULT_INPUT_LOCATION = "vooga.rts.resources.properties.Input";	
-	private GameController myGameController;
-	private LoadingController myLoadingController;
-	private MenuController myMenuController;
+    private final static String DEFAULT_INPUT_LOCATION = "vooga.rts.resources.properties.Input";
+    private GameController myGameController;
+    private LoadingController myLoadingController;
+    private MenuController myMenuController;
 
-	private InputController myInputController;
+    private InputController myInputController;
 
-	private AbstractController myActiveController;
+    private AbstractController myActiveController;
 
-	private Window myWindow;
+    private Window myWindow;
 
-	private Timer myTimer;
+    private Timer myTimer;
 
-	private FrameCounter myFrames;
+    private FrameCounter myFrames;
 
-	private MainState myGameState;
+    private MainState myGameState;
 
-	private Input myInput;
+    private Input myInput;
 
-	public MainController() {
+    public MainController () {
 
-		myWindow = new Window();
+        myWindow = new Window();
 
-		myGameController = new GameController();
-		myGameController.addObserver(this);
+        myGameController = new GameController();
+        myGameController.addObserver(this);
 
-		myLoadingController = new LoadingController();
-		myLoadingController.addObserver(this);
+        myLoadingController = new LoadingController();
+        myLoadingController.addObserver(this);
 
-		myMenuController = new MenuController();
-		myMenuController.addObserver(this);
+        myMenuController = new MenuController();
+        myMenuController.addObserver(this);
 
-		myInputController = new InputController(this);
-		myInput = new Input(DEFAULT_INPUT_LOCATION, myWindow.getCanvas());
-		myInput.addListenerTo(myInputController);
+        myInputController = new InputController(this);
+        myInput = new Input(DEFAULT_INPUT_LOCATION, myWindow.getCanvas());
+        myInput.addListenerTo(myInputController);
 
-		myWindow.setFullscreen(true);
+        myWindow.setFullscreen(true);
 
-		setActiveController(myLoadingController);
+        setActiveController(myLoadingController);
 
-		myFrames = new FrameCounter(new Location(100, 50));
+        myFrames = new FrameCounter(new Location(100, 50));
 
-		myTimer = new Timer((int) Game.TIME_PER_FRAME(), new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				update(Game.TIME_PER_FRAME());
-				render();
-			}
-		});
-		myTimer.start();
-	}
+        myTimer = new Timer((int) Game.TIME_PER_FRAME(), new ActionListener() {
+            @Override
+            public void actionPerformed (ActionEvent e) {
+                update(Game.TIME_PER_FRAME());
 
-	public void update(double elapsedTime) {
-		myActiveController.update(elapsedTime);
-		myFrames.update(elapsedTime);
-	}
+                if (myWindow.hasFocus()) {
+                    render();
+                }
+            }
+        });
+        myTimer.start();
+    }
 
-	public void paint(Graphics2D pen) {
-		myActiveController.paint(pen);
-		myFrames.paint(pen);
-	}
+    public void update (double elapsedTime) {
+        myActiveController.update(elapsedTime);
+        myFrames.update(elapsedTime);
+    }
 
-	private void render() {
-		// Get graphics and clear frame
-		Graphics2D graphics = myWindow.getCanvas().getGraphics();
-		graphics.setColor(Color.WHITE);
-		graphics.fillRect(0, 0, myWindow.getCanvas().getWidth(), myWindow
-				.getCanvas().getHeight());
-		graphics.setColor(Color.BLACK);
+    public void paint (Graphics2D pen) {
+        myActiveController.paint(pen);
+        myFrames.paint(pen);
+    }
 
-		// Paint stuff
-		paint(graphics);
+    private void render () {
+        // Get graphics and clear frame
+        Graphics2D graphics = myWindow.getCanvas().getGraphics();
+        graphics.setColor(Color.WHITE);
 
-		// Now, render the window
-		myWindow.getCanvas().render();
-	}
+        graphics.fillRect(0, 0, myWindow.getCanvas().getWidth(), myWindow.getCanvas().getHeight());
+        graphics.setColor(Color.BLACK);
 
-	public AbstractController getActiveController() {
-		return myActiveController;
-	}
+        // Paint stuff
+        paint(graphics);
 
-	public void setActiveController(AbstractController myController) {
-		myActiveController = myController;
-		myGameState = myActiveController.getGameState();
-		myActiveController.activate();
-		myInputController.setActiveController(myController);
-	}
+        // Now, render the window
+        myWindow.getCanvas().render();
+    }
 
-	@Override
-	public void update(Observable myObservable, Object myObject) {
-		switch (myGameState) {
-		case Starting:
-			break;
-		case Loading:
-			setActiveController(myMenuController);
-			break;
-		case Splash:
-			setActiveController(myLoadingController);
-			break;
-		case Menu:
-			setActiveController(myGameController);
-			break;
-		case Game:
-			setActiveController(myGameController);
-			break;
-		default:
-			break;
-		}
-	}
+    public AbstractController getActiveController () {
+        return myActiveController;
+    }
 
-	public void activate() {
-	}
+    public void setActiveController (AbstractController myController) {
+        myActiveController = myController;
+        myGameState = myActiveController.getGameState();
+        myActiveController.activate();
+        myInputController.setActiveController(myController);
+    }
 
-	public MainState getGameState() {
-		return MainState.Main;
-	}
+    @Override
+    public void update (Observable myObservable, Object myObject) {
+        switch (myGameState) {
+            case Starting:
+                break;
+            case Loading:
+                setActiveController(myMenuController);
+                break;
+            case Splash:
+                setActiveController(myLoadingController);
+                break;
+            case Menu:
+                setActiveController(myGameController);
+                break;
+            case Game:
+                setActiveController(myGameController);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void activate () {
+    }
+
+    public MainState getGameState () {
+        return MainState.Main;
+    }
 }

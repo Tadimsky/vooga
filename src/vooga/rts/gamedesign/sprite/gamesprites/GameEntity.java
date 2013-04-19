@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-
 import vooga.rts.gamedesign.state.AttackingState;
 import vooga.rts.gamedesign.state.EntityState;
 import vooga.rts.gamedesign.state.MovementState;
@@ -35,8 +34,8 @@ import vooga.rts.ai.PathFinder;
  * 
  */
 public class GameEntity extends GameSprite {
-	//Default velocity magnitude
-	public static int DEFAULT_SPEED = 0; 
+    // Default velocity magnitude
+    public static int DEFAULT_SPEED = 0;
     private Vector myVelocity;
     private GameMap myMap;
     private int myMaxHealth;
@@ -81,12 +80,15 @@ public class GameEntity extends GameSprite {
     public void setHealth (int health) {
         myCurrentHealth = health;
     }
-    public void addMaxHealth(int health) {
-    	myMaxHealth += health;
+
+    public void addMaxHealth (int health) {
+        myMaxHealth += health;
     }
-    public int getMaxHealth() {
-    	return myMaxHealth;
+
+    public int getMaxHealth () {
+        return myMaxHealth;
     }
+
     /**
      * Returns the teamID the shape belongs to.
      */
@@ -102,10 +104,11 @@ public class GameEntity extends GameSprite {
     public void turn (double angle) {
         myVelocity.turn(angle);
     }
-    
-    public boolean collidesWith(GameEntity gameEntity) {
-    	return getBounds().intersects(gameEntity.getBounds());
+
+    public boolean collidesWith (GameEntity gameEntity) {
+        return getBounds().intersects(gameEntity.getBounds());
     }
+
     /**
      * Translates the current center by vector v
      * 
@@ -132,24 +135,26 @@ public class GameEntity extends GameSprite {
      * Possible design choice error.
      */
     public void move (Location3D loc) {
-    	myEntityState.setMovementState(MovementState.MOVING);
+        myEntityState.setMovementState(MovementState.MOVING);
         myGoal = new Location3D(loc);
         Vector v = getWorldLocation().difference(myGoal.to2D());
         // TODO: not static amount
         setVelocity(v.getAngle(), getSpeed());
     }
-    public int getSpeed() {
-    	return DEFAULT_SPEED;
+
+    public int getSpeed () {
+        return DEFAULT_SPEED;
     }
+
     public void move (Location3D loc, GameMap map) {
         setPath(loc.to2D(), map);
     }
 
     public void setPath (Location location, GameMap map) {
         myPath =
-                myFinder.calculatePath(map.getNode(getWorldLocation().to2D()), map.getNode(location),
-                                       map.getMap());
-       // myGoal = myPath.getNext();
+                myFinder.calculatePath(map.getNode(getWorldLocation().to2D()),
+                                       map.getNode(location), map.getMap());
+        // myGoal = myPath.getNext();
     }
 
     /**
@@ -157,17 +162,20 @@ public class GameEntity extends GameSprite {
      */
     // TODO: make Velocity three dimensional...
     public void update (double elapsedTime) {
-        
-        if (this.intersects(myGoal)) {
+
+        if (getWorldLocation().near(myGoal)) {
             myEntityState.setMovementState(MovementState.STATIONARY);
+            
         }
+        //move(myGoal);
+        
         stopMoving();
+        
         Vector v = new Vector(myVelocity);
         v.scale(elapsedTime);
         translate(v);
         myEntityState.update();
     }
-    
 
     public void changeHealth (int change) {
         myCurrentHealth -= change;
@@ -196,23 +204,24 @@ public class GameEntity extends GameSprite {
             super.paint(pen);
         }
     }
-    
+
     /**
      * Returns the state of the entity such as its attacking state or movement
      * state.
+     * 
      * @return the state of the entity.
      */
-    public EntityState getEntityState() { 
-    	return myEntityState;
+    public EntityState getEntityState () {
+        return myEntityState;
     }
+
     /**
      * If the entity is in a stationary state, it stops moving.
      */
-    public void stopMoving() {
-    	if(!myEntityState.canMove()) {
-    		setVelocity(getVelocity().getAngle(), 0);
-    	}
+    public void stopMoving () {
+        if (!myEntityState.canMove()) {
+            setVelocity(getVelocity().getAngle(), 0);
+        }
     }
 
-    
 }

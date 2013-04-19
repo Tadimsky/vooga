@@ -13,6 +13,7 @@ import java.awt.geom.Point2D;
  */
 public class Location3D {
 
+    private static final double APPROX_EQUAL = 1;
     private double myX;
     private double myY;
     private double myZ;
@@ -164,5 +165,18 @@ public class Location3D {
     
     public Location to2D() {
         return new Location(getX(), getY());
+    }
+
+    /**
+     * Returns whether a location is 'near' another Location.
+     * The amount that constitutes whether it is near or not is 
+     * the APPROX_EQUAL constant. 
+     * @param goal
+     * @return
+     */
+    public boolean near (Location3D goal) {
+        return (Math.abs(getX() - goal.getX()) < APPROX_EQUAL && 
+                Math.abs(getY() - goal.getY()) < APPROX_EQUAL && 
+                Math.abs(getZ() - goal.getZ()) < APPROX_EQUAL);        
     }
 }

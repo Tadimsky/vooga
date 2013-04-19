@@ -114,7 +114,11 @@ public class Window {
         return myCanvas;
     }
 
-    public JFrame getJFrame () {
+    public JFrame getJFrame () {        
         return myFrame;
+    }
+    
+    public boolean hasFocus() {
+        return myFrame.hasFocus();
     }
 }

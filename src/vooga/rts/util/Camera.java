@@ -193,10 +193,10 @@ public class Camera {
         if (myMapSize == null) {
             return;
         }
-        if (temp.getX() < VISION || temp.getX() > myMapSize.getWidth() - VISION) {
+        if (temp.getX() < VISION || temp.getX() > myMapSize.getWidth() * ISO_HEIGHT - VISION) {
             tochange.add(-tochange.getX(), 0, 0);
         }
-        if (temp.getY() < VISION || temp.getY() > myMapSize.getHeight() - VISION) {
+        if (temp.getY() < VISION || temp.getY() > myMapSize.getHeight() * ISO_HEIGHT - VISION) {
             tochange.add(0, -tochange.getY(), 0);
         }
         myWorldCenter.add(tochange);

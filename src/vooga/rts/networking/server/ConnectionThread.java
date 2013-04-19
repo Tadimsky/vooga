@@ -29,10 +29,12 @@ public class ConnectionThread extends Thread {
      * Represents a thread that communicates to a client
      * 
      * @param socket socket used for establishing the connection
+     * @param id number of connection
      */
-    ConnectionThread (Socket socket, IMessageReceiver server, int ID) {
+    ConnectionThread (Socket socket, IMessageReceiver server, int id) {
         mySocket = socket;
         myMessageServer = server;
+        myID = id;
 
         try {
             myInput = new ObjectInputStream(mySocket.getInputStream());
@@ -41,10 +43,14 @@ public class ConnectionThread extends Thread {
         catch (IOException e) {
             // TODO add logger
             e.printStackTrace();
-
         }
     }
 
+    /**
+     * Switches which IMessageReceiver to send messages to.
+     * 
+     * @param server to switch to
+     */
     public void switchMessageServer (IMessageReceiver server) {
         myMessageServer = server;
     }
@@ -56,24 +62,25 @@ public class ConnectionThread extends Thread {
     public void run () {
         myConnectionActive = true;
         try {
-            Object obj;
-            
-            // Checks to see if first class passed is initial connection mesage
-            // TODO repeated/bad code
-            if ((obj = myInput.readObject()) != null && obj instanceof InitialConnectionMessage) {
-                Message message = (Message) obj;
-                myMessageServer.receiveMessageFromClient(message, this);
-            } else {
+            Object obj = myInput.readObject();
+
+            // Checks to see if first object passed is initial connection message
+            if (obj instanceof InitialConnectionMessage) {
+                sendToMessageServer(obj);
+            }
+            else {
+                // first object is not initial connection message
                 myConnectionActive = false;
                 myMessageServer.removeConnection(this);
                 return;
             }
-        while (myConnectionActive) {
-                if ((obj = myInput.readObject()) != null && obj instanceof Message) {
-                    Message message = (Message) obj;
-                    myMessageServer.receiveMessageFromClient(message, this);
+
+            while (myConnectionActive) {
+                obj = myInput.readObject();
+                if (obj instanceof Message) {
+                    sendToMessageServer(obj);
                 }
-            }  
+            }
         }
         catch (IOException e) {
             // TODO add logger
@@ -88,6 +95,14 @@ public class ConnectionThread extends Thread {
     }
 
     /**
+     * sends object to message server
+     */
+    private void sendToMessageServer (Object obj) {
+        Message message = (Message) obj;
+        myMessageServer.receiveMessageFromClient(message, this);
+    }
+
+    /**
      * Closes streams and socket of this thread
      * TODO catch exceptions
      */
@@ -97,23 +112,16 @@ public class ConnectionThread extends Thread {
             if (myOutput != null) {
                 myOutput.close();
             }
-        }
-        catch (Exception e) {
-        }
-        try {
             if (myInput != null) {
                 myInput.close();
             }
-        }
-        catch (Exception e) {
-        }
-        ;
-        try {
             if (mySocket != null) {
                 mySocket.close();
             }
         }
-        catch (Exception e) {
+        catch (IOException e) {
+            // TODO logger
+            e.printStackTrace();
         }
     }
 
@@ -136,20 +144,33 @@ public class ConnectionThread extends Thread {
         }
     }
 
+    /**
+     * gets the ID for the connection thread
+     * @return id
+     */
     public int getID () {
         return myID;
     }
-    
+
+    /**
+     * Gets the user name for the connection thread.
+     * @return username
+     */
     public String getUserName () {
         return myUserName;
     }
-    
+
+    /**
+     * Gets the name of the game the user is playing.
+     * @return game name
+     */
     public String getGameName () {
         return myGameName;
     }
-    
+
     /**
      * Sets the user name - can only be set once.
+     * 
      * @param userName name to set
      */
     public void setUserName (String userName) {
@@ -157,9 +178,10 @@ public class ConnectionThread extends Thread {
             myUserName = userName;
         }
     }
-    
+
     /**
      * Sets the game name - can only be set once.
+     * 
      * @param gameName name to set
      */
     public void setGameName (String gameName) {

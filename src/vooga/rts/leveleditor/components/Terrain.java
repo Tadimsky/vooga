@@ -6,12 +6,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import vooga.rts.util.Location;
 
+
 /**
  * all class of terrains, which is used as a part of map
  * 
  * @author Richard Yang
- *
+ * 
  */
+
 public class Terrain extends MapComponent{
    
    private static final String BUNDLE_NAME = "TerrainIndex";
@@ -43,51 +45,42 @@ public class Terrain extends MapComponent{
    public void setType(int id) {
        super.setID(id);
        try {
-        refreshImage();
-    }
-    catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    }
-   } 
-   
-   public void refreshImage() throws IOException {
-       if(myResource.containsKey(myID+"")) {
-           String content = myResource.getString(myID+"");
-           String[] buffer = content.split("&");
-           myName = buffer[0];
-           myImageName = buffer[1];
-           myWalkAbility = Integer.parseInt(buffer[2]);
-           myImage = ImageIO.read(new File(System.getProperty("user.dir") + IMAGE_PATH + myImageName));            
+          refreshImage();
+       }catch (Exception e) {
+          e.printStackTrace();
        }
-   }
+    }
 
+    public void refreshImage () throws IOException {
+        if (myResource.containsKey(myID + "")) {
+            String content = myResource.getString(myID + "");
+            String[] buffer = content.split("&");
+            myName = buffer[0];
+            myImageName = buffer[1];
+            myWalkAbility = Integer.parseInt(buffer[2]);
+            myImage =
+                    ImageIO.read(new File(System.getProperty("user.dir") + IMAGE_PATH + myImageName));
+        }
+    }
 
-   public int getMyWalkAbility () {
-    return myWalkAbility;
-   }
-   
-   
-   public Location getMyLocation() {
-       return myLocation;
-   }
-   
-   public int getMyX() {
-       return (int)myLocation.getX();
-   }
-   
-   public int getMyY() {
-       return (int)myLocation.getY();
-   }
-   
-   public void paint(Graphics pen) {
-       pen.drawImage(myImage, (int)myLocation.getX(), (int)myLocation.getY(), null);
-   }
+    public int getMyWalkAbility () {
+        return myWalkAbility;
+    }
 
-   
+    public Location getMyLocation () {
+        return myLocation;
+    }
 
-   
-   
-   
-   
+    public int getMyX () {
+        return (int) myLocation.getX();
+    }
+
+    public int getMyY () {
+        return (int) myLocation.getY();
+    }
+
+    public void paint (Graphics pen) {
+        pen.drawImage(myImage, (int) myLocation.getX(), (int) myLocation.getY(), null);
+    }
+
 }

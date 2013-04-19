@@ -57,7 +57,8 @@ public class MenuController extends AbstractController implements Observer {
      * @see vooga.rts.controller.AbstractController#onLeftMouseUp(vooga.rts.input.PositionObject)
      */
     @Override
-    public void onLeftMouseUp (PositionObject o) {
+
+    public void onLeftMouseUp (PositionObject o) {        
         getCurrentMenu().handleMouseDown((int) o.getX(), (int) o.getY());
     }
 

@@ -24,7 +24,7 @@ public class InputController {
     }
 
     @InputMethodTarget(name = "onLeftMouseUp")
-    public void onLeftMouseUp (PositionObject o) {        
+    public void onLeftMouseUp (PositionObject o) {
         myActiveController.onLeftMouseUp(o);
     }
 
@@ -39,14 +39,13 @@ public class InputController {
     }
 
     @InputMethodTarget(name = "onMouseDrag")
-    public void onMouseDrag (PositionObject o) {        
+    public void onMouseDrag (PositionObject o) {
         myActiveController.onMouseDrag(o);
     }
-    
+
     @InputMethodTarget(name = "onMouseMove")
-    public void onMouseMove (PositionObject o) {        
+    public void onMouseMove (PositionObject o) {
         myActiveController.onMouseMove(o);
     }
-
 
 }

@@ -1,5 +1,6 @@
 package vooga.rts.networking.server;
 
+import vooga.rts.networking.communications.GameMessage;
 import vooga.rts.networking.communications.Message;
 
 
@@ -15,13 +16,27 @@ import vooga.rts.networking.communications.Message;
  */
 public class GameServer extends Room {
 
-    public GameServer (GameContainer container) {
-        super(container);
+    /**
+     * Instantiates the gameServer with all the connections passed in by a lobby.
+     * @param id id of the gameserver
+     * @param container gamecontainer of the gameserver
+     * @param lobby lobby to get connections from
+     */
+    public GameServer (int id, GameContainer container, Lobby lobby) {
+        super(id, container, lobby);
     }
 
     @Override
     public void receiveMessageFromClient (Message message, ConnectionThread thread) {
-        sendMessageToAllConnections(message);
+        super.receiveMessageFromClient(message, thread);
+        if (message instanceof GameMessage) {
+            sendMessageToAllConnections(message);
+        }
+    }
+    
+    @Override
+    public void stampMessage (Message message) {
+        // TODO timer
     }
 
 }

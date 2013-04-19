@@ -23,7 +23,7 @@ public class Canvas extends JPanel{
         super.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
     }
     
-    public Graphics2D getGraphics() {    
+    public Graphics2D getGraphics() {        
         myGraphics = (Graphics2D)myStrategy.getDrawGraphics();
         myGraphics.draw(new Rectangle());
         return myGraphics;

@@ -223,6 +223,7 @@ public class GameController extends AbstractController {
             System.out.println("Player ID for a: " + a.getPlayerID());
             // a.setUpgradeTree(resultTree,a.getPlayerID());
             // upgradeBuilding.addUpgradeActions(resultTree);
+
             a.setAttackStrategy(new CanAttack(a.getWorldLocation(), a.getPlayerID()));
 
             Unit b = new Soldier(p, new Location3D(300, 150, 0), s, soun, 1, 100);
@@ -247,6 +248,7 @@ public class GameController extends AbstractController {
             addPlayer(p2, 2);
 
             building =
+
                     new Barracks(new Pixmap(ResourceManager.getInstance()
                             .<BufferedImage> getFile("images/factory.png", BufferedImage.class)),
                                  new Location3D(800, 500, 0), new Dimension(368, 224), null, 1, 300);
@@ -259,6 +261,7 @@ public class GameController extends AbstractController {
         }
 
     }
+
 
     private void checkCameraMouse (double elapsedtime) {
         Point p = MouseInfo.getPointerInfo().getLocation();
@@ -286,10 +289,10 @@ public class GameController extends AbstractController {
             setY = Window.SCREEN_SIZE.getHeight() - 1;
         }
         if (x != 0 || y != 0) {
+
             y *= elapsedtime;
             x *= elapsedtime;
             Camera.instance().moveCamera(new Location(x, y));
-
             myMouseMover.mouseMove((int) setX, (int) setY);
         }
     }

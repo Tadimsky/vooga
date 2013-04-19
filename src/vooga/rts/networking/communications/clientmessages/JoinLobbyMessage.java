@@ -11,15 +11,15 @@ import vooga.rts.networking.server.IThreadContainer;
 public class JoinLobbyMessage extends ClientInfoMessage {
 
     private static final long serialVersionUID = -874567492715054864L;
-    String myLobbyName;
+    private int myLobbyNumber;
     
-    public JoinLobbyMessage (String serverName) {
-        myLobbyName = serverName;
+    public JoinLobbyMessage (int lobbyNumber) {
+        myLobbyNumber = lobbyNumber;
     }
     
     @Override
-    public void execute (ConnectionThread thread, IThreadContainer server) {
-        server.joinLobby(thread, myLobbyName);
+    public void affectServer (ConnectionThread thread, IThreadContainer server) {
+        server.joinLobby(thread, myLobbyNumber);
     }
 
 }

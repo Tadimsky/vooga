@@ -20,7 +20,7 @@ public class RequestServerListMessage extends ClientInfoMessage {
     }
 
     @Override
-    public void execute (ConnectionThread thread, IThreadContainer server) {
+    public void affectServer (ConnectionThread thread, IThreadContainer server) {
         server.requestLobbies(thread, myStartNumber, myEndNumber);
     }
 
