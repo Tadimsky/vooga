@@ -46,4 +46,9 @@ public class LayerPanel extends JPanel {
         myLayers.setListData(myLayerVector);
     }
 
+    public void clear() {
+        myLayerVector.clear();
+        myLayers.setListData(myLayerVector);
+    }
+
 }

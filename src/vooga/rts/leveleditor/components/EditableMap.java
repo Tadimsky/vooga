@@ -139,8 +139,8 @@ public class EditableMap implements Serializable {
         
         for(int i =0 ; i<myXSize ; i++) {
             for(int j =0 ; j<myYSize ; j++) {
-                System.out.println(myNodeMatrix[i][j].getMyTile().getMyID());
-
+                System.out.print(myNodeMatrix[i][j].getMyTile().getMyID());
+                System.out.print(" ");
             }
             System.out.print("\n");
         }

@@ -85,7 +85,7 @@ public class EditableNode {
     }
     
     public void paint(Graphics pen) throws IOException {
-        pen.drawImage(myTile.getMyImage(), myX*myWidth, myY*myHeight, myWidth, myHeight,null);
+        pen.drawImage(myTile.getMyImage(), myY*myWidth, myX*myHeight, myWidth, myHeight,null);
     }
 
     public void ZoomIn() {
