@@ -140,7 +140,7 @@ public class Canvas extends JFrame {
     }
 
     
-    public static void main(String[] argv) {
+    public static void main(String[] args) {
         ResourceManager.getInstance().registerResourceLoader(new ImageLoader());
         ResourceManager.getInstance().setResourceBase("/vooga/rts/leveleditor/resource/");
         

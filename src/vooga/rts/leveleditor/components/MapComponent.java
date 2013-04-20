@@ -18,7 +18,14 @@ public abstract class MapComponent {
     }
     
     public MapComponent(String bundleName, int id) {
-        
+        this(bundleName);
+        setID(id);
+    }
+    
+    public MapComponent(int id , String name , String imageName) {
+        myID = id;
+        myName = name;
+        myImageName = imageName;
     }
 
     public void setID(int id) {

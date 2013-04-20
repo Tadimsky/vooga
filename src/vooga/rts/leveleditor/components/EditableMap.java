@@ -1,13 +1,15 @@
 package vooga.rts.leveleditor.components;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import org.xml.sax.SAXException;
 import vooga.rts.leveleditor.gui.MapPanel;
 import vooga.rts.util.Location;
 
@@ -43,8 +45,8 @@ public class EditableMap implements Serializable {
     private Map<Integer, Location> myPlayerLocations;
     private int myPlayerNumber;
 
-    private MapSaver mySaver;
-    private MapLoader myLoader;
+    private BetterMapSaver mySaver;
+    private BetterMapLoader myLoader;
 
     public EditableMap (int x, int y, int nodeX, int nodeY) {
 
@@ -76,16 +78,14 @@ public class EditableMap implements Serializable {
         myLayers.put(1,new MapLayer());
         myResource = new ArrayList<Resource>();
 
-
         try {
-            mySaver = new MapSaver(this);
-            myLoader = new MapLoader(this);
-        }
-        catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
+                mySaver = new BetterMapSaver(this);
+                myLoader = new BetterMapLoader(this);
+            }
+            catch (ParserConfigurationException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
     }
 
     public void initializeMap () {
@@ -151,15 +151,21 @@ public class EditableMap implements Serializable {
     }
 
     public void load (File resourceFile) {
+        
         try {
             System.out.println("LOAD MAP IN THE FILE");
             myLoader.loadMapFile(resourceFile);
             
         }
-        catch (FileNotFoundException e) {
+        catch (SAXException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        catch (IOException e) {
+           // TODO Auto-generated catch block
+           e.printStackTrace();
+        }
+          
     }
 
     public void load (String filePath) {
@@ -171,10 +177,15 @@ public class EditableMap implements Serializable {
         try {
             mySaver.generateMapFile(objectiveFile);
         }
+        catch (TransformerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
     }
 
     public void save (String filePath) {
@@ -324,6 +335,25 @@ public class EditableMap implements Serializable {
         test.addResource(7, 7, 1);
         test.addResource(8, 8, 2);
         test.addResource(9, 9, 3);
-        test.save(System.getProperty("user.dir")+"./src/test.xml");
+        BetterMapSaver saver = null;
+        try {
+            saver = new BetterMapSaver(test);
+        }
+        catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            saver.generateMapFile(new File(System.getProperty("user.dir") + "./src/test.xml"));
+        }
+        catch (TransformerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    
     }
 }

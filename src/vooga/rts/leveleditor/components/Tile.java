@@ -2,9 +2,7 @@ package vooga.rts.leveleditor.components;
 
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import vooga.rts.resourcemanager.ResourceManager;
 
 public class Tile extends MapComponent {
@@ -18,6 +16,10 @@ public class Tile extends MapComponent {
     public Tile(int index) {
         this();
         setType(index);
+    }
+    
+    public Tile(int ID, String name, String imageName) {
+        super(ID,name,imageName);
     }
     
     public void refreshImage() throws IOException {

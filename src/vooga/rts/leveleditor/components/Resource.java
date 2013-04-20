@@ -1,9 +1,7 @@
 package vooga.rts.leveleditor.components;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Location;
 /**
@@ -40,6 +38,11 @@ public class Resource extends MapComponent{
     
     public Resource(int id) {
         this(0,0,id);
+    }
+    
+    public Resource(int x, int y , int ID, String name, String imageName) {
+        super(ID,name,imageName);
+        myLocation = new Location(x,y);
     }
     
     public void setType(int id) {
