@@ -14,15 +14,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import vooga.rts.action.Action;
+import vooga.rts.action.InteractiveAction;
 import vooga.rts.action.IActOn;
 import vooga.rts.commands.Command;
 import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.IAttackable;
 import vooga.rts.gamedesign.sprite.gamesprites.Projectile;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.state.AttackingState;
 import vooga.rts.gamedesign.strategy.attackstrategy.AttackStrategy;
 import vooga.rts.gamedesign.strategy.attackstrategy.CannotAttack;
+import vooga.rts.gamedesign.strategy.occupystrategy.CannotBeOccupied;
+import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
 import vooga.rts.gamedesign.strategy.production.CannotProduce;
 import vooga.rts.gamedesign.strategy.production.ProductionStrategy;
 import vooga.rts.gamedesign.upgrades.UpgradeNode;
@@ -54,6 +58,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     private Sound mySound;
     private AttackStrategy myAttackStrategy;
     private ProductionStrategy myProductionStrategy;
+    private OccupyStrategy myOccupyStrategy;
     private int myArmor;
     private Map<String, Action> myActions;
     private List<DelayedTask> myTasks;
@@ -92,6 +97,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
         isSelected = false;
         myTasks = new ArrayList<DelayedTask>();
         myBuildTime = buildTime;
+        myOccupyStrategy = new CannotBeOccupied();
     }
 
     public void addAction (String command, Action action) {
@@ -149,10 +155,19 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     public abstract InteractiveEntity copy ();
 
     public Action getAction (Command command) {
-        System.out.println("getting");
         return myActions.get(command.getMethodName());
     }
 
+	public void getOccupied(Unit occupier) {
+		if (occupier.collidesWith(this)) {
+			//TODO: this if check is because action is not initialized in Occupy Strategy.
+			if (this.getAction(new Command("be occupied!")) != null) {
+				((InteractiveAction)this.getAction(new Command("be occupied!"))).apply(occupier);
+				//getOccupyStrategy().getOccupied(this, occupier);
+			}
+		}
+	}
+    
     /**
      * This method specifies that the interactive entity is getting attacked so
      * it calls the attack method of the interactive entity on itself.
@@ -386,6 +401,16 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 
     public void setChanged () {
         super.setChanged();
+    }
+    
+
+    
+    public OccupyStrategy getOccupyStrategy() {
+    	return myOccupyStrategy;
+    }
+    
+    public void setOccupyStrategy(OccupyStrategy occupyStrategy) {
+    	myOccupyStrategy = occupyStrategy;
     }
     
     /**

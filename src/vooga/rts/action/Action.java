@@ -1,6 +1,7 @@
 package vooga.rts.action;
 
 import vooga.rts.commands.Command;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 
 
 /*
@@ -13,7 +14,7 @@ public interface Action {
      * defined for the apply method in any concrete classes.
      */
     public void apply ();
-
+    
     /**
      * Updates the action with the command that created the action.
      * This lets the apply method take in parameters or other things

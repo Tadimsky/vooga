@@ -21,6 +21,7 @@ public class EntityState {
 	private OccupyState myOccupyState;
 	private ProducingState myProducingState;
 	private MovementState myMovementState;
+	private DetectableState myDetectableState;
 
 	private double myAttackingCooldown;
 	private DelayedTask myAttackingDelay;
@@ -37,6 +38,7 @@ public class EntityState {
 		myOccupyState = OccupyState.NOT_OCCUPYING;
 		myProducingState = ProducingState.NOT_PRODUCING;
 		myMovementState = MovementState.STATIONARY;
+		myDetectableState = DetectableState.DETECTABLE;
 		myAttackingCooldown = DEFAULT_ATTAKING_INTERVAL;
 	}
 	
@@ -76,6 +78,27 @@ public class EntityState {
 	 */
 	public void setProducingState (ProducingState producingState) {
 		myProducingState = producingState;
+	}
+	
+	/**
+	 * This method returns the detectable state (either detectable or not
+	 * detectable) of the game entity.
+	 * 
+	 * @return the detectable state of the game entity
+	 */
+	public DetectableState getDetectableState(){
+		return myDetectableState;
+	}
+	
+	/**
+	 * This method is used to set the detectable state (either detectable or not
+	 * detectable) for the game entity.
+	 * 
+	 * @param detectableState
+	 *        is the detectable state that the game entity will be set to
+	 */
+	public void setDetectableState (DetectableState detectableState) {
+		myDetectableState = detectableState;
 	}
 
 	/**

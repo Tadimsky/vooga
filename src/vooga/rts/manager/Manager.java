@@ -14,8 +14,8 @@ import java.util.Queue;
 import vooga.rts.action.Action;
 import vooga.rts.action.IActOn;
 import vooga.rts.commands.Command;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.IObserver;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.state.DetectableState;
 import vooga.rts.manager.actions.DragSelectAction;
 import vooga.rts.manager.actions.LeftClickAction;
 import vooga.rts.manager.actions.RightClickAction;
@@ -54,7 +54,6 @@ public class Manager implements State, IActOn, Observer {
         myActions = new HashMap<String, Action>();
         myAddQueue = new LinkedList<InteractiveEntity>();
         addActions();
-
     }
 
     @Override
@@ -178,6 +177,10 @@ public class Manager implements State, IActOn, Observer {
     public List<InteractiveEntity> getAllEntities () {
         return myEntities;
     }
+    
+    public void setAllEntities(List<InteractiveEntity> entityList) {
+    	myEntities = entityList;
+    }
 
     /**
      * Returns the list of selected entities.
@@ -277,6 +280,20 @@ public class Manager implements State, IActOn, Observer {
             mySelectedEntities = new ArrayList<InteractiveEntity>(myGroups.get(groupID));
         }
     }
+    
+    /**
+     * Finds the InteractiveEntity in myEntities based on its hash code.
+     * @param hashCode the hash code of the entity that is looking for
+     * @return the index of the entity with the hashCode
+     */
+    private int findEntityWithHashCode(int hashCode) {
+    	for (int i = 0; i<myEntities.size(); ++i) {
+    		if (myEntities.get(i).hashCode() == hashCode) {
+    			return i;
+    		}
+    	}
+    	return -1;
+    }
 
     @Override
     public void update (Observable entity, Object state) {
@@ -289,9 +306,20 @@ public class Manager implements State, IActOn, Observer {
 
         // While Shepherds watch their flocks by night.
         if (state instanceof InteractiveEntity) {
-            add((InteractiveEntity) state);
+            int index = myEntities.indexOf(state);
+            
+        	if (((InteractiveEntity) state).getEntityState().
+            		getDetectableState().equals(DetectableState.
+            				DETECTABLE)) {
+        		myEntities.get(index).setVisible(false);
+            	myEntities.get(index).getEntityState().setDetectableState(DetectableState.NOTDETECTABLE);
+            }
         }
-
+        else if (state instanceof Integer) {
+        	int index = findEntityWithHashCode((Integer)state);
+        	myEntities.get(index).getEntityState().setDetectableState(DetectableState.DETECTABLE);
+        	myEntities.get(index).setVisible(true);
+        	myEntities.get(index).setWorldLocation(new Location3D());
+        }
     }
-
 }

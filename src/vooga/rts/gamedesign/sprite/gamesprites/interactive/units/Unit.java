@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+
 import vooga.rts.commands.ClickCommand;
 import vooga.rts.commands.Command;
 import vooga.rts.commands.DragCommand;
@@ -12,11 +13,10 @@ import vooga.rts.action.Action;
 import vooga.rts.action.InteractiveAction;
 import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.IOccupiable;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
 import vooga.rts.gamedesign.strategy.gatherstrategy.CannotGather;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
-import vooga.rts.gamedesign.strategy.occupystrategy.CannotOccupy;
 import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
 import vooga.rts.gamedesign.upgrades.UpgradeNode;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
@@ -78,21 +78,12 @@ public class Unit extends InteractiveEntity {
 		super(image, center, size, sound, playerID, health, buildTime);
 		// myPather = new PathingHelper();
 		System.out.println(playerID + " " + health);
-		myOccupyStrategy = new CannotOccupy();
-		if (myUpgradeTree != null) {
-			if (myUpgradeTree.getUsers().get(playerID) == null) {
-				List<InteractiveEntity> entityGroup = new ArrayList<InteractiveEntity>();
-				entityGroup.add(this);
-				myUpgradeTree.getUsers().put(playerID, entityGroup);
-			} else {
-				List<InteractiveEntity> entityGroup = myUpgradeTree.getUsers()
-						.get(playerID);
-				entityGroup.add(this);
-				myUpgradeTree.getUsers().put(playerID, entityGroup);
-			}
-		}
-		addActions();
-	}
+		System.out.println(playerID + " " + health);
+        if (myUpgradeTree != null){
+        	addUserToUpgradeTree(playerID);
+        }
+        addActions();
+        }
 
 	@Override
 	public void addActions() {
@@ -110,6 +101,27 @@ public class Unit extends InteractiveEntity {
 				myLocation = Camera.instance().viewtoWorld(click.getPosition());
 			}
 		});
+		addOccupyAction(this);
+	}
+	
+	private void addOccupyAction(final Unit u) {
+		put("occupy", new InteractiveAction(this) {
+
+			@Override
+			public void apply() {
+				return;
+			}
+
+			@Override
+			public void update(Command command) {
+				return;
+			}
+			
+			public void apply(InteractiveEntity i) {
+				//((InteractiveAction)i.getAction(new Command("be occupied!"))).apply(u);
+				i.getOccupied(u);
+			}
+		});
 	}
 
 	@Override
@@ -117,35 +129,27 @@ public class Unit extends InteractiveEntity {
 		return new Unit(getImage(), getWorldLocation(), getSize(), getSound(),
 				getPlayerID(), getHealth(), getBuildTime());
 	}
-
-	@Override
-	public UpgradeTree getUpgradeTree() {
-		return myUpgradeTree;
-	}
-
-	/**
-	 * Occupies an IOccupiable object specified by occupy strategy.
-	 * 
-	 * @param occupiable
-	 */
-	public void occupy(IOccupiable occupiable) {
-		if (myOccupyStrategy.canOccupy(occupiable)) {
-			occupiable.getOccupied(this);
-		}
-	}
-
-	@Override
-	public void setUpgradeTree(UpgradeTree upgradeTree, int playerID) {
-		myUpgradeTree = upgradeTree;
-		if (myUpgradeTree.getUsers().get(playerID) == null) {
-			List<InteractiveEntity> entityGroup = new ArrayList<InteractiveEntity>();
-			entityGroup.add(this);
-			myUpgradeTree.getUsers().put(playerID, entityGroup);
-		} else {
-			List<InteractiveEntity> entityGroup = myUpgradeTree.getUsers().get(
-					playerID);
-			entityGroup.add(this);
-			myUpgradeTree.getUsers().put(playerID, entityGroup);
-		}
-	}
+    
+    @Override
+    public UpgradeTree getUpgradeTree() {
+    	return myUpgradeTree;
+    }
+    
+    @Override
+    public void setUpgradeTree(UpgradeTree upgradeTree, int playerID) {
+    	myUpgradeTree = upgradeTree;
+    	addUserToUpgradeTree(playerID);
+    }
+    
+    private void addUserToUpgradeTree(int playerID) {
+    	if (myUpgradeTree.getUsers().get(playerID) == null) {
+    		List<InteractiveEntity> entityGroup = new ArrayList<InteractiveEntity>();
+    		entityGroup.add(this);
+    		myUpgradeTree.getUsers().put(playerID, entityGroup);
+    	} else {
+    		List<InteractiveEntity> entityGroup = myUpgradeTree.getUsers().get(playerID);
+    		entityGroup.add(this);
+    		myUpgradeTree.getUsers().put(playerID, entityGroup);
+    	}
+    }
 }

@@ -142,6 +142,14 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 	public void setVisible(boolean visible) {
 		myVisible = visible;
 	}
+	
+	/**
+	 * Returns the visibility of the sprite.
+	 * @return
+	 */
+	public boolean getVisible() {
+		return myVisible;
+	}
 
 	/**
 	 * Returns rectangle that encloses this shape.

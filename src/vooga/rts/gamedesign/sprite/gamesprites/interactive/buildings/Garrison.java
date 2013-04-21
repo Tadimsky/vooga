@@ -1,7 +1,8 @@
 package vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings;
+
 import java.awt.Dimension;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.IOccupiable;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
+
+import vooga.rts.gamedesign.strategy.occupystrategy.CanBeOccupied;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
@@ -14,25 +15,11 @@ import vooga.rts.util.Sound;
  * @author Wenshun Liu 
  *
  */
-public class Garrison extends Building implements IOccupiable {
+public class Garrison extends Building {
 
     public Garrison(Pixmap image, Location3D center, Dimension size, Sound sound,
                     int playerID, int health, double buildTime) {
         super(image, center, size, sound, playerID, health, buildTime);
-        // TODO Auto-generated constructor stub
+        setOccupyStrategy(new CanBeOccupied());
     }
-
-    @Override
-    public void getOccupied (Unit unit) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void addActions () {
-        // TODO Auto-generated method stub
-        
-    }
-
-
 }

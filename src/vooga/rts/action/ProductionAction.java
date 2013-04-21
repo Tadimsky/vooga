@@ -1,8 +1,10 @@
-package vooga.rts.gamedesign.action;
+package vooga.rts.action;
 
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Location;
+import vooga.rts.action.Action;
+import vooga.rts.commands.Command;
 
 
 /**
@@ -13,11 +15,11 @@ import vooga.rts.util.Location;
  * @author Junho Oh
  * 
  */
-public class ProductionAction extends Action {
+public class ProductionAction implements Action {
     private Location3D toProduceFrom;
 
     public ProductionAction (String name, Pixmap image, String description, Location3D from) {
-        super(name, image, description);
+        super();
         toProduceFrom = new Location3D(from);
     }
 
@@ -29,5 +31,17 @@ public class ProductionAction extends Action {
     public Location3D getProducedFrom () {
         return toProduceFrom;
     }
+
+	@Override
+	public void apply() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Command command) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

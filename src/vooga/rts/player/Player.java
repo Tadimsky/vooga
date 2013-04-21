@@ -7,7 +7,6 @@ import vooga.rts.controller.Controller;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.manager.Manager;
 
-
 public class Player implements Controller, IGameLoop {
 
     private Manager myManager;
@@ -21,7 +20,6 @@ public class Player implements Controller, IGameLoop {
     @Override
     public void sendCommand (Command command) {
         // TODO Auto-generated method stub
-
     }
 
     public Manager getManager () {

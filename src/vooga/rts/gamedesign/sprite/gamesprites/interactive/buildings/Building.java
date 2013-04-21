@@ -2,15 +2,12 @@ package vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings;
 
 import java.awt.Dimension;
 
-import vooga.rts.gamedesign.Interval;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.IOccupiable;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
 import vooga.rts.manager.GameBuildingManager;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
-import vooga.towerdefense.gameElements.Unit;
 
 
 /**
@@ -23,11 +20,9 @@ import vooga.towerdefense.gameElements.Unit;
  * @author Wenshun Liu
  * 
  */
-public class Building extends InteractiveEntity implements IOccupiable {
+public class Building extends InteractiveEntity {
     public static final int MAXHEALTH = 100;
     private static UpgradeTree myUpgradeTree;
-    //TODO: probably shouldn't be stored in Building. Should try Observer pattern later?
-    private static GameBuildingManager myGameBuildingManager;
     
     public Building (Pixmap image,
             Location3D center,
@@ -36,7 +31,7 @@ public class Building extends InteractiveEntity implements IOccupiable {
             int playerID,
             int health,
             double buildTime) {
-    	super(image, center, size, sound, playerID, health, buildTime);
+    	this(image, center, size, sound, playerID, health, null, buildTime);
     	}
     
     public Building (Pixmap image,
@@ -56,21 +51,6 @@ public class Building extends InteractiveEntity implements IOccupiable {
 		return new Building(getImage(), getWorldLocation(), getSize(), getSound(),
 				getPlayerID(), getHealth(), getBuildTime());
 	}
-	
-    public void setGameBuildingManager(GameBuildingManager gameBuildingManager) {
-    	myGameBuildingManager = gameBuildingManager;
-    }
-    
-    public GameBuildingManager getGameBuildingManager() {
-    	return myGameBuildingManager;
-    }
-    
-    @Override
-	public void getOccupied(
-			vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit unit) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void addActions() {
@@ -88,9 +68,4 @@ public class Building extends InteractiveEntity implements IOccupiable {
     public UpgradeTree getUpgradeTree() {
     	return myUpgradeTree;
     }
-
-    public void getOccupied (Unit unit) {
-        //u.occupy(this);
-    }
-
 }
