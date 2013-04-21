@@ -20,7 +20,7 @@ import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
  * @author Wenshun Liu 
  *
  */
-public interface IProducer {
+public interface ProductionStrategy {
 
   /** 
    *  requires a timer for cooldown for production 

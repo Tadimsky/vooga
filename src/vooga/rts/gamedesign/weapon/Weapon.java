@@ -38,7 +38,7 @@ public class Weapon {
     // private Interval interval;
     private Ellipse2D myRangeCircle;
     private Location3D myCenter;
-    private AttackingState attackingState;
+    private AttackingState attackingState;    
 
     private DelayedTask cooldownTime;
 
@@ -165,6 +165,12 @@ public class Weapon {
                 it.remove();
             }
         }
-
+    }
+    
+    /**
+     * @param center the center to set
+     */
+    public void setCenter (Location3D center) {
+        myCenter = center;
     }
 }

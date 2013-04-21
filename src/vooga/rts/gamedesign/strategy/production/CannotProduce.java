@@ -12,7 +12,7 @@ import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
  * @author Wenshun Liu 
  *
  */
-public class CannotProduce implements IProducer{
+public class CannotProduce implements ProductionStrategy{
 
     @Override
     public void createProductionActions (InteractiveEntity producer) {
