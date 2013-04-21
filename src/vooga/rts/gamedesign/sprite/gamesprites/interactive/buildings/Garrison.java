@@ -17,8 +17,8 @@ import vooga.rts.util.Sound;
 public class Garrison extends Building implements IOccupiable {
 
     public Garrison(Pixmap image, Location3D center, Dimension size, Sound sound,
-                    int playerID, int health) {
-        super(image, center, size, sound, playerID, health);
+                    int playerID, int health, double buildTime) {
+        super(image, center, size, sound, playerID, health, buildTime);
         // TODO Auto-generated constructor stub
     }
 

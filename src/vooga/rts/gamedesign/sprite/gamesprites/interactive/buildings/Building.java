@@ -34,8 +34,9 @@ public class Building extends InteractiveEntity implements IOccupiable {
             Dimension size,
             Sound sound,
             int playerID,
-            int health) {
-    	super(image, center, size, sound, playerID, health);
+            int health,
+            double buildTime) {
+    	super(image, center, size, sound, playerID, health, buildTime);
     	}
     
     public Building (Pixmap image,
@@ -43,8 +44,8 @@ public class Building extends InteractiveEntity implements IOccupiable {
                      Dimension size,
                      Sound sound,
                      int playerID,
-                     int health, UpgradeTree upgradeTree) {
-        super(image, center, size, sound, playerID, MAXHEALTH);
+                     int health, UpgradeTree upgradeTree, double buildTime) {
+        super(image, center, size, sound, playerID, MAXHEALTH, buildTime);
         if (upgradeTree != null) {
         	myUpgradeTree = upgradeTree;
         }
@@ -53,7 +54,7 @@ public class Building extends InteractiveEntity implements IOccupiable {
 	@Override
 	public InteractiveEntity copy() {
 		return new Building(getImage(), getWorldLocation(), getSize(), getSound(),
-				getPlayerID(), getHealth());
+				getPlayerID(), getHealth(), getBuildTime());
 	}
 	
     public void setGameBuildingManager(GameBuildingManager gameBuildingManager) {

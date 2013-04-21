@@ -57,7 +57,9 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     private int myArmor;
     private Map<String, Action> myActions;
     private List<DelayedTask> myTasks;
+    private double myBuildTime;
 
+    public static final double DEFAULT_BUILD_TIME = 5;
     /**
      * Creates a new interactive entity.
      * 
@@ -79,7 +81,8 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
                               Dimension size,
                               Sound sound,
                               int playerID,
-                              int health) {
+                              int health,
+                              double buildTime) {
         super(image, center, size, playerID, health);
         // myMakers = new HashMap<String, Factory>(); //WHERE SHOULD THIS GO?
         mySound = sound;
@@ -88,6 +91,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
         myActions = new HashMap<String, Action>();
         isSelected = false;
         myTasks = new ArrayList<DelayedTask>();
+        myBuildTime = buildTime;
     }
 
     public void addAction (String command, Action action) {
@@ -382,6 +386,22 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 
     public void setChanged () {
         super.setChanged();
+    }
+    
+    /**
+     * Returns the time it takes to create the entity.
+     * @return how long it takes to make the entity
+     */
+    public double getBuildTime() {
+    	return myBuildTime;
+    }
+    
+    /**
+     * Sets how long the build time is for the entity.
+     * @param time is the amount of time it will take to create the entity
+     */
+    public void setBuildTime(double time) {
+    	myBuildTime = time;
     }
 
 }

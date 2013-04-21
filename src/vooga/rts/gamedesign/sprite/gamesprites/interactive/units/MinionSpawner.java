@@ -19,8 +19,8 @@ import vooga.rts.util.Sound;
 public class MinionSpawner extends Unit {
 
   public MinionSpawner(Pixmap image, Location3D center, Dimension size,
-			Sound sound, int playerID, int health) {
-		super(image, center, size, sound, playerID, health);
+			Sound sound, int playerID, int health, double buildTime) {
+		super(image, center, size, sound, playerID, health, buildTime);
 		// TODO Auto-generated constructor stub
 	}
 

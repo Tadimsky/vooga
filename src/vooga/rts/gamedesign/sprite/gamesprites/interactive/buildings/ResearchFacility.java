@@ -22,8 +22,9 @@ public class ResearchFacility extends Building {
                              Dimension size,
                              Sound sound,
                              int playerID,
-                             int health) {
-        super(image, center, size, sound, playerID, health);
+                             int health,
+                             double buildTime) {
+        super(image, center, size, sound, playerID, health, buildTime);
     }
 
     @Override

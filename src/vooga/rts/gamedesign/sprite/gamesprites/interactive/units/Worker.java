@@ -7,7 +7,6 @@ import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
 import vooga.rts.gamedesign.strategy.gatherstrategy.CanGather;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
-import vooga.rts.gamedesign.strategy.production.IProducer;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
@@ -23,7 +22,6 @@ import vooga.rts.util.Sound;
 public class Worker extends Unit {
 
 	private GatherStrategy myGatherStrategy;
-	private IProducer myProducer;
 	private static final int DEFUALT_GATHER_INTERVAL = 75;
 	private int myGatherAmount;
 
@@ -44,8 +42,8 @@ public class Worker extends Unit {
 	 *            is the health of the worker
 	 */
 	public Worker(Pixmap image, Location3D center, Dimension size, Sound sound,
-			int playerID, int health, int gatherAmount) {
-		super(image, center, size, sound, playerID, health);
+			int playerID, int health, int gatherAmount, double buildTime) {
+		super(image, center, size, sound, playerID, health, buildTime);
 		myGatherAmount = gatherAmount;
 		myGatherStrategy = new CanGather(DEFUALT_GATHER_INTERVAL, gatherAmount);
 

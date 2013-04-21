@@ -53,7 +53,7 @@ public class Unit extends InteractiveEntity {
 	private OccupyStrategy myOccupyStrategy;
 
 	public Unit() {
-		this(null, new Location3D(), new Dimension(0, 0), null, 0, 100);
+		this(null, new Location3D(), new Dimension(0, 0), null, 0, 100, InteractiveEntity.DEFAULT_BUILD_TIME);
 	}
 
 	/**
@@ -74,8 +74,8 @@ public class Unit extends InteractiveEntity {
 	 *            is the max health of the unit
 	 */
 	public Unit(Pixmap image, Location3D center, Dimension size, Sound sound,
-			int playerID, int health) {
-		super(image, center, size, sound, playerID, health);
+			int playerID, int health, double buildTime) {
+		super(image, center, size, sound, playerID, health, buildTime);
 		// myPather = new PathingHelper();
 		System.out.println(playerID + " " + health);
 		myOccupyStrategy = new CannotOccupy();
@@ -115,7 +115,7 @@ public class Unit extends InteractiveEntity {
 	@Override
 	public InteractiveEntity copy() {
 		return new Unit(getImage(), getWorldLocation(), getSize(), getSound(),
-				getPlayerID(), getHealth());
+				getPlayerID(), getHealth(), getBuildTime());
 	}
 
 	@Override
