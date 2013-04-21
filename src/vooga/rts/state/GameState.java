@@ -3,6 +3,7 @@ package vooga.rts.state;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,17 +12,22 @@ import java.util.Observer;
 import vooga.rts.commands.Command;
 import vooga.rts.commands.DragCommand;
 import vooga.rts.controller.Controller;
+import vooga.rts.gamedesign.sprite.gamesprites.Projectile;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Soldier;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Worker;
+import vooga.rts.gamedesign.weapon.Weapon;
 import vooga.rts.map.GameMap;
 import vooga.rts.player.HumanPlayer;
 import vooga.rts.player.Player;
 import vooga.rts.player.Team;
+import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Camera;
 import vooga.rts.util.FrameCounter;
 import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
+import vooga.rts.util.Pixmap;
 import vooga.rts.util.PointTester;
 
 
@@ -208,14 +214,20 @@ public class GameState extends SubState implements Controller {
 
     public void setupGame () {
         addPlayer(1);
-        myHumanPlayer.add(new Soldier());
+        Unit a = new Soldier();
+        Projectile proj =
+        	    new Projectile(new Pixmap(ResourceManager.getInstance()
+        	     .<BufferedImage> getFile("images/bullet.png", BufferedImage.class)),
+        	     a.getWorldLocation(), new Dimension(30, 30), 2, 10, 6);
+        a.getAttackStrategy().addWeapons(new Weapon(proj, 400, a.getWorldLocation(), 1));
+        myHumanPlayer.add(a); 
         addPlayer(2);
-        myPlayers.get(1).add(new Soldier(new Location3D(200, 200, 0)));
+        myPlayers.get(1).add(new Soldier(new Location3D(200, 200, 0), 2));
         myMap = new GameMap(8, new Dimension(512, 512));
     }
 
     private void yuckyUnitUpdate (double elapsedTime) {
-        List<InteractiveEntity> p1 = myTeams.get(1).getUnits();
+		List<InteractiveEntity> p1 = myTeams.get(1).getUnits();
         List<InteractiveEntity> p2 = myTeams.get(2).getUnits();
         for (InteractiveEntity u1 : p1) {
             for (InteractiveEntity u2 : p2) {

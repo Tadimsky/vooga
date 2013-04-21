@@ -58,7 +58,11 @@ public class Resource extends GameEntity implements IGatherable {
             myGameResourceManager.assignResoure(this, playerID);
         }
     }
-
+    
+    /**
+     * Returns the type of resource.
+     * @return the type of resource
+     */
     public String getType () {
         return myType;
     }

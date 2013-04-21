@@ -72,19 +72,35 @@ public class GameEntity extends GameSprite {
     public void setVelocity (double angle, double magnitude) {
         myVelocity = new Vector(angle, magnitude);
     }
-
+    
+    /**
+     * Returns the current health of the entity.
+     * @return the current health of the entity
+     */
     public int getHealth () {
         return myCurrentHealth;
     }
 
+    /**
+     * Sets the health of the entity.
+     * @param health is the amount of health the entity will have
+     */
     public void setHealth (int health) {
         myCurrentHealth = health;
     }
 
+    /**
+     * Increases the max health of the entity.
+     * @param health is the amount of additional health the entity will get
+     */
     public void addMaxHealth (int health) {
         myMaxHealth += health;
     }
 
+    /**
+     * Returns the max health of the entity.
+     * @return the max health of the entity
+     */
     public int getMaxHealth () {
         return myMaxHealth;
     }
@@ -96,6 +112,10 @@ public class GameEntity extends GameSprite {
         return myPlayerID;
     }
     
+    /**
+     * Sets which team the entity will be on.
+     * @param playerID is the ID for the team that the entity is on
+     */
     public void setPlayerID(int playerID) {
     	myPlayerID = playerID;
     }
@@ -109,6 +129,12 @@ public class GameEntity extends GameSprite {
         myVelocity.turn(angle);
     }
 
+    /**
+     * Specifies whether or not two entities collide.
+     * @param gameEntity is the entity that is being checked for a collision
+     * @return true if the bounds of the two entites intersect and false if 
+     * the bounds of the entities do not interesct
+     */
     public boolean collidesWith (GameEntity gameEntity) {
         return getBounds().intersects(gameEntity.getBounds());
     }
@@ -146,14 +172,28 @@ public class GameEntity extends GameSprite {
         setVelocity(v.getAngle(), getSpeed());
     }
     
+    /**
+     * Returns the speed of the entity.
+     * @return the speed of the entity
+     */
     public int getSpeed () {
         return DEFAULT_SPEED;
     }
 
+    /**
+     * This method is called to move the entity to a certain location.
+     * @param loc is the location where the entity will move to
+     * @param map is the map that the game is being played on
+     */
     public void move (Location3D loc, GameMap map) {
         setPath(loc.to2D(), map);
     }
 
+    /**
+     * Sets the path that the entity will move on.
+     * @param location is the location where the entity will move to
+     * @param map is the map that the game is being played on
+     */
     public void setPath (Location location, GameMap map) {
         myPath =
                 myFinder.calculatePath(map.getNode(getWorldLocation().to2D()),
@@ -178,7 +218,7 @@ public class GameEntity extends GameSprite {
         Vector v = new Vector(myVelocity);
         v.scale(elapsedTime);
         translate(v);
-        myEntityState.update();
+        myEntityState.update(elapsedTime);
         super.update(elapsedTime);
     }
 

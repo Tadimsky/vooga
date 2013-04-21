@@ -45,7 +45,7 @@ public class CanAttack implements AttackStrategy {
 	 */
 	public void attack(IAttackable enemy, double distance) {
 		if(inWeaponRange((InteractiveEntity) enemy, distance)) {
-            myWeapons.get(myWeaponIndex).fire((InteractiveEntity) enemy);
+			myWeapons.get(myWeaponIndex).fire((InteractiveEntity) enemy);
         }    
 	}
 	
@@ -115,7 +115,7 @@ public class CanAttack implements AttackStrategy {
 	public boolean getCanAttack() {
 		return myCanAttack;
 	}
-
+	
 	public Weapon getCurrentWeapon() {
 		return myWeapons.get(myWeaponIndex);
 	}
