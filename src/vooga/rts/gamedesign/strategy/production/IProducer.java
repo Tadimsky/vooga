@@ -1,5 +1,7 @@
 package vooga.rts.gamedesign.strategy.production;
 
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+
 /**
  * 
  * This interface is implemented by the classes Producer and Cannotproduce that
@@ -23,6 +25,6 @@ public interface IProducer {
   /** 
    *  requires a timer for cooldown for production 
    */
-  public void produce(String str);
+  public void createProductionActions(InteractiveEntity producer);
 
 }

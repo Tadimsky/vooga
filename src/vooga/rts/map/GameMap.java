@@ -101,6 +101,7 @@ public class GameMap implements IGameLoop {
     }
 
     private void randomGenMap () {
+
         int tilesX = 512;
         int tilesY = 512;
         int tileWidthX = 60;

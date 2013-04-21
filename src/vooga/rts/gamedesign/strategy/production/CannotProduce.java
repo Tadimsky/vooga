@@ -1,5 +1,7 @@
 package vooga.rts.gamedesign.strategy.production;
 
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+
 /**
  * This class implements ProductionStrategy and is used as an instance in 
  * interactives for objects that are not able to produce other interactives.  
@@ -12,10 +14,10 @@ package vooga.rts.gamedesign.strategy.production;
  */
 public class CannotProduce implements IProducer{
 
-	@Override
-	public void produce(String str) {
-		// TODO Auto-generated method stub
-		
-	}
+
+    @Override
+    public void createProductionActions (InteractiveEntity producer) {
+        //this will do nothing. 
+    }
 
 }

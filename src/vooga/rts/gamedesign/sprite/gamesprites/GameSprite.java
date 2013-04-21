@@ -30,8 +30,8 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 
     public GameSprite (Pixmap image, Location3D center, Dimension size) {
         myPixmap = new Pixmap(image);
-        mySize = size;
-        myOriginalSize = size;
+        mySize = new Dimension(size);
+        myOriginalSize = mySize;
         myWorldLocation = new Location3D(center);
         resetBounds();
         myVisible = true;

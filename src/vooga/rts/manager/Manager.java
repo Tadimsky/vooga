@@ -12,6 +12,7 @@ import java.util.Observer;
 import vooga.rts.action.Action;
 import vooga.rts.action.IActOn;
 import vooga.rts.commands.Command;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.IObserver;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.manager.actions.DragSelectAction;
 import vooga.rts.manager.actions.LeftClickAction;
@@ -30,6 +31,7 @@ import vooga.rts.util.Location3D;
  * @author Challen Herzberg-Brovold
  * 
  */
+
 public class Manager implements State, IActOn, Observer {
 
     private List<InteractiveEntity> myEntities;
@@ -37,6 +39,8 @@ public class Manager implements State, IActOn, Observer {
     private Map<Integer, List<InteractiveEntity>> myGroups;
     private boolean myMultiSelect;
     private Map<String, Action> myActions;
+
+    Iterator<InteractiveEntity> myUpdateIterator;
 
     public Manager () {
         myEntities = new ArrayList<InteractiveEntity>();
@@ -56,9 +60,12 @@ public class Manager implements State, IActOn, Observer {
 
     @Override
     public void update (double elapsedTime) {
-        for (InteractiveEntity u : myEntities) {
+        myUpdateIterator = myEntities.iterator();
+        while (myUpdateIterator.hasNext()) {
+            InteractiveEntity u = myUpdateIterator.next();
             u.update(elapsedTime);
         }
+        myUpdateIterator = null;
     }
 
     @Override
@@ -104,8 +111,13 @@ public class Manager implements State, IActOn, Observer {
     }
 
     public void remove (InteractiveEntity entity) {
+        if (myUpdateIterator != null) {
+            myUpdateIterator.remove();
+        }
+        else {
+            myEntities.remove(entity);
+        }
         entity.deleteObserver(this);
-        myEntities.remove(entity);
         mySelectedEntities.remove(entity);
     }
 
@@ -264,6 +276,7 @@ public class Manager implements State, IActOn, Observer {
         if (state instanceof InteractiveEntity) {
             add((InteractiveEntity) state);
         }
+
     }
 
 }
