@@ -13,7 +13,7 @@ import java.awt.geom.Point2D;
  */
 public class Location3D {
 
-    private static final double APPROX_EQUAL = 1;
+    public static final double APPROX_EQUAL = 1;
     private double myX;
     private double myY;
     private double myZ;

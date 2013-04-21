@@ -19,7 +19,6 @@ import vooga.rts.map.GameMap;
 import vooga.rts.ai.Path;
 import vooga.rts.ai.PathFinder;
 
-
 /**
  * This class encompasses all classes that can affect the game directly through
  * specific behavior. This class has the health behavior (can “die”) and
@@ -34,252 +33,265 @@ import vooga.rts.ai.PathFinder;
  * 
  */
 public class GameEntity extends GameSprite {
-    // Default velocity magnitude
-    public static int DEFAULT_SPEED = 0;
-    private Vector myVelocity;
-    private GameMap myMap;
-    private int myMaxHealth;
-    private int myCurrentHealth;
-    private PathFinder myFinder;
-    private int myPlayerID;
-    private Path myPath;
-    private Location3D myGoal;
-    private Vector myOriginalVelocity;
-    private EntityState myEntityState;
+	// Default velocity magnitude
+	public static int DEFAULT_SPEED = 0;
+	private Vector myVelocity;
+	private GameMap myMap;
+	private int myMaxHealth;
+	private int myCurrentHealth;
+	private PathFinder myFinder;
+	private int myPlayerID;
+	private Path myPath;
+	private Location3D myGoal;
+	private Vector myOriginalVelocity;
+	private EntityState myEntityState;
 
-    public GameEntity (Pixmap image, Location3D center, Dimension size, int playerID, int health) {
-        super(image, center, size);
-        myMaxHealth = health;
-        myCurrentHealth = myMaxHealth;
-        myPlayerID = playerID;
-        // ALERT THIS IS JUST FOR TESTING
-        myOriginalVelocity = new Vector(0, 0);
-        myVelocity = new Vector(0, 0);
-        myGoal = new Location3D();
-        myEntityState = new EntityState();
-    }
+	public GameEntity(Pixmap image, Location3D center, Dimension size,
+			int playerID, int health) {
+		super(image, center, size);
+		myMaxHealth = health;
+		myCurrentHealth = myMaxHealth;
+		myPlayerID = playerID;
+		// ALERT THIS IS JUST FOR TESTING
+		myOriginalVelocity = new Vector(0, 0);
+		myVelocity = new Vector(0, 0);
+		myGoal = new Location3D(getWorldLocation());
+		myEntityState = new EntityState();
+	}
 
-    /**
-     * Returns shape's velocity.
-     */
-    public Vector getVelocity () {
-        return myVelocity;
-    }
+	/**
+	 * Returns shape's velocity.
+	 */
+	public Vector getVelocity() {
+		return myVelocity;
+	}
 
-    /**
-     * Resets shape's velocity.
-     */
-    public void setVelocity (double angle, double magnitude) {
-        myVelocity = new Vector(angle, magnitude);
-    }
+	/**
+	 * Resets shape's velocity.
+	 */
+	public void setVelocity(double angle, double magnitude) {
+		myVelocity = new Vector(angle, magnitude);
+	}
 
-    /**
-     * Returns the current health of the entity.
-     * 
-     * @return the current health of the entity
-     */
-    public int getHealth () {
-        return myCurrentHealth;
-    }
+	/**
+	 * Returns the current health of the entity.
+	 * 
+	 * @return the current health of the entity
+	 */
+	public int getHealth() {
+		return myCurrentHealth;
+	}
 
-    public EntityState getState () {
-        return myEntityState;
-    }
+	public EntityState getState() {
+		return myEntityState;
+	}
 
-    /**
-     * Sets the health of the entity.
-     * 
-     * @param health is the amount of health the entity will have
-     */
-    public void setHealth (int health) {
-        myCurrentHealth = health;
-    }
+	/**
+	 * Sets the health of the entity.
+	 * 
+	 * @param health
+	 *            is the amount of health the entity will have
+	 */
+	public void setHealth(int health) {
+		myCurrentHealth = health;
+	}
 
-    /**
-     * Increases the max health of the entity.
-     * 
-     * @param health is the amount of additional health the entity will get
-     */
-    public void addMaxHealth (int health) {
-        myMaxHealth += health;
-    }
+	/**
+	 * Increases the max health of the entity.
+	 * 
+	 * @param health
+	 *            is the amount of additional health the entity will get
+	 */
+	public void addMaxHealth(int health) {
+		myMaxHealth += health;
+	}
 
-    /**
-     * Returns the max health of the entity.
-     * 
-     * @return the max health of the entity
-     */
-    public int getMaxHealth () {
-        return myMaxHealth;
-    }
+	/**
+	 * Returns the max health of the entity.
+	 * 
+	 * @return the max health of the entity
+	 */
+	public int getMaxHealth() {
+		return myMaxHealth;
+	}
 
-    /**
-     * Returns the teamID the shape belongs to.
-     */
-    public int getPlayerID () {
-        return myPlayerID;
-    }
+	/**
+	 * Returns the teamID the shape belongs to.
+	 */
+	public int getPlayerID() {
+		return myPlayerID;
+	}
 
-    /**
-     * Sets which team the entity will be on.
-     * 
-     * @param playerID is the ID for the team that the entity is on
-     */
-    public void setPlayerID (int playerID) {
-        myPlayerID = playerID;
-    }
+	/**
+	 * Sets which team the entity will be on.
+	 * 
+	 * @param playerID
+	 *            is the ID for the team that the entity is on
+	 */
+	public void setPlayerID(int playerID) {
+		myPlayerID = playerID;
+	}
 
-    /**
-     * Rotates the Unit by the given angle.
-     * 
-     * @param angle
-     */
-    public void turn (double angle) {
-        myVelocity.turn(angle);
-    }
+	/**
+	 * Rotates the Unit by the given angle.
+	 * 
+	 * @param angle
+	 */
+	public void turn(double angle) {
+		myVelocity.turn(angle);
+	}
 
-    /**
-     * Specifies whether or not two entities collide.
-     * 
-     * @param gameEntity is the entity that is being checked for a collision
-     * @return true if the bounds of the two entites intersect and false if
-     *         the bounds of the entities do not interesct
-     */
-    public boolean collidesWith (GameEntity gameEntity) {
-        return getBounds().intersects(gameEntity.getBounds());
-    }
+	/**
+	 * Specifies whether or not two entities collide.
+	 * 
+	 * @param gameEntity
+	 *            is the entity that is being checked for a collision
+	 * @return true if the bounds of the two entites intersect and false if the
+	 *         bounds of the entities do not interesct
+	 */
+	public boolean collidesWith(GameEntity gameEntity) {
+		return getBounds().intersects(gameEntity.getBounds());
+	}
 
-    /**
-     * Translates the current center by vector v
-     * 
-     * @param vector
-     */
-    public void translate (Vector vector) {
+	/**
+	 * Translates the current center by vector v
+	 * 
+	 * @param vector
+	 */
+	public void translate(Vector vector) {
 
-        getWorldLocation().translate(vector);
-        resetBounds();
-    }
+		getWorldLocation().translate(vector);
+		resetBounds();
+	}
 
-    /**
-     * Reset shape back to its original values.
-     */
-    @Override
-    public void reset () {
-        super.reset();
-        myVelocity = myOriginalVelocity;
-    }
+	/**
+	 * Reset shape back to its original values.
+	 */
+	@Override
+	public void reset() {
+		super.reset();
+		myVelocity = myOriginalVelocity;
+	}
 
-    /**
-     * Moves the Unit only. Updates first the angle the Unit is facing,
-     * and then its location.
-     * Possible design choice error.
-     */
-    public void move (Location3D loc) {
-        myEntityState.setMovementState(MovementState.MOVING);
-        myGoal = new Location3D(loc);
-        Vector v = getWorldLocation().difference(myGoal.to2D());
-        // TODO: not static amount
-        setVelocity(v.getAngle(), getSpeed());
-    }
+	/**
+	 * Moves the Unit only. Updates first the angle the Unit is facing, and then
+	 * its location. Possible design choice error.
+	 */
+	public void move(Location3D loc) {
 
-    /**
-     * Returns the speed of the entity.
-     * 
-     * @return the speed of the entity
-     */
-    public int getSpeed () {
-        return DEFAULT_SPEED;
-    }
+		myEntityState.setMovementState(MovementState.MOVING);
+		myGoal = new Location3D(loc);
+		Vector v = getWorldLocation().difference(myGoal.to2D());
+		// magic numero
+		if (v.getMagnitude() < Location3D.APPROX_EQUAL) {
+			setVelocity(v.getAngle(), 0);
+		} else {
+			setVelocity(v.getAngle(), getSpeed());
+		}
+	}
 
-    /**
-     * This method is called to move the entity to a certain location.
-     * 
-     * @param loc is the location where the entity will move to
-     * @param map is the map that the game is being played on
-     */
-    public void move (Location3D loc, GameMap map) {
-        setPath(loc.to2D(), map);
-    }
+	/**
+	 * Returns the speed of the entity.
+	 * 
+	 * @return the speed of the entity
+	 */
+	public int getSpeed() {
+		return DEFAULT_SPEED;
+	}
 
-    /**
-     * Sets the path that the entity will move on.
-     * 
-     * @param location is the location where the entity will move to
-     * @param map is the map that the game is being played on
-     */
-    public void setPath (Location location, GameMap map) {
-        myPath =
-                myFinder.calculatePath(map.getNode(getWorldLocation().to2D()),
-                                       map.getNode(location), map.getMap());
-        // myGoal = myPath.getNext();
-    }
+	/**
+	 * This method is called to move the entity to a certain location.
+	 * 
+	 * @param loc
+	 *            is the location where the entity will move to
+	 * @param map
+	 *            is the map that the game is being played on
+	 */
+	public void move(Location3D loc, GameMap map) {
+		setPath(loc.to2D(), map);
+	}
 
-    /**
-     * Updates the shape's location.
-     */
-    // TODO: make Velocity three dimensional...
-    public void update (double elapsedTime) {
+	/**
+	 * Sets the path that the entity will move on.
+	 * 
+	 * @param location
+	 *            is the location where the entity will move to
+	 * @param map
+	 *            is the map that the game is being played on
+	 */
+	public void setPath(Location location, GameMap map) {
+		myPath = myFinder.calculatePath(map.getNode(getWorldLocation().to2D()),
+				map.getNode(location), map.getMap());
+		// myGoal = myPath.getNext();
+	}
 
-        if (getWorldLocation().near(myGoal)) {
-            myEntityState.setMovementState(MovementState.STATIONARY);
+	/**
+	 * Updates the shape's location.
+	 */
+	// TODO: make Velocity three dimensional...
+	public void update(double elapsedTime) {
 
-        }
-        // move(myGoal);
+		if (getWorldLocation().near(myGoal)) {
+			myEntityState.setMovementState(MovementState.STATIONARY);
 
-        stopMoving();
+		}
+		move(myGoal);
 
-        Vector v = new Vector(myVelocity);
-        v.scale(elapsedTime);
-        translate(v);
-        myEntityState.update(elapsedTime);
-        super.update(elapsedTime);
-    }
+		stopMoving();
 
-    public void changeHealth (int change) {
-        myCurrentHealth -= change;
-    }
+		Vector v = new Vector(myVelocity);
+		v.scale(elapsedTime);
+		translate(v);
+		myEntityState.update(elapsedTime);
+		super.update(elapsedTime);
+	}
 
-    /**
-     * Checks to see if an GameEntity is dead.
-     * 
-     * @return true if the GameEntity has been killed and false if the GameEntity
-     *         is still alive.
-     */
-    public boolean isDead () {
-        return myCurrentHealth <= 0;
-    }
+	public void changeHealth(int change) {
+		myCurrentHealth -= change;
+	}
 
-    /**
-     * Kills the GameEntity by setting its current health value to zero.
-     */
-    public void die () {
-        myCurrentHealth = 0;
-    }
+	/**
+	 * Checks to see if an GameEntity is dead.
+	 * 
+	 * @return true if the GameEntity has been killed and false if the
+	 *         GameEntity is still alive.
+	 */
+	public boolean isDead() {
+		return myCurrentHealth <= 0;
+	}
 
-    @Override
-    public void paint (Graphics2D pen) {
-        if (!isDead()) {
-            super.paint(pen);
-        }
-    }
+	/**
+	 * Kills the GameEntity by setting its current health value to zero.
+	 */
+	public void die() {
+		myCurrentHealth = 0;
+	}
 
-    /**
-     * Returns the state of the entity such as its attacking state or movement
-     * state.
-     * 
-     * @return the state of the entity.
-     */
-    public EntityState getEntityState () {
-        return myEntityState;
-    }
+	@Override
+	public void paint(Graphics2D pen) {
+		if (!isDead()) {
+			super.paint(pen);
+		}
+	}
 
-    /**
-     * If the entity is in a stationary state, it stops moving.
-     */
-    public void stopMoving () {
-        if (!myEntityState.canMove()) {
-            setVelocity(getVelocity().getAngle(), 0);
-        }
-    }
+	/**
+	 * Returns the state of the entity such as its attacking state or movement
+	 * state.
+	 * 
+	 * @return the state of the entity.
+	 */
+	public EntityState getEntityState() {
+		return myEntityState;
+	}
+
+	/**
+	 * If the entity is in a stationary state, it stops moving.
+	 */
+	public void stopMoving() {
+		if (!myEntityState.canMove()) {
+			// setVelocity(getVelocity().getAngle(), 0);
+			setVelocity(0, 0);
+		}
+	}
 
 }

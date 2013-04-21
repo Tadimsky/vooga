@@ -34,6 +34,7 @@ public class Barracks extends ProductionBuilding {
         super(image, center, size, sound, playerID, health, buildTime);
         myInteractiveEntities = new ArrayList<InteractiveEntity>();
         initProducables();
+
         setRallyPoint(new Location3D(300, 400, 0));
         //myProductionStrategy = new CanProduce(this);
     }
@@ -44,6 +45,27 @@ public class Barracks extends ProductionBuilding {
     private void initProducables () {
         addProducable(new Soldier());
     }
+
+    //public void addProductionActions (ProductionBuilding productionBuilding) {
+        /*
+         * getActions().add(new ProductionAction("soldier",null,"I maketh un soldier",
+         * productionBuilding.getWorldLocation()){
+         * 
+         * @Override
+         * public void apply(int playerID) {
+         * Unit newProduction = (Unit) getProducables().get(0).copy();
+         * Location3D newProductionLoc = new Location3D(getProducedFrom());
+         * newProduction.setWorldLocation(newProductionLoc.getX(), newProductionLoc.getY(), 0);
+         * //these below are for testing purposes
+         * newProduction.move(getRallyPoint());
+         * //this part below will not be in actual implementation as I will notify player/unit
+         * manager that a new unit should be added to the player
+         * myInteractiveEntities.add(newProduction);
+         * getGameBuildingManager().distributeProduct(newProduction, playerID);
+         * //notifyProductionObserver(newProduction);
+         * }
+         * });
+         */
 
     @Override
     public void addActions () {

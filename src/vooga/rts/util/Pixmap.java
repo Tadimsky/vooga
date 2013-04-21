@@ -79,8 +79,10 @@ public class Pixmap {
         // rotate area about this shape
         pen.rotate(angle);
         // draw as usual (i.e., rotated)
-        pen.drawImage(myImage, -size.width / 2, -size.height / 2, size.width, size.height, null);
+        //pen.drawImage(myImage, -size.width / 2, -size.height / 2, size.width, size.height, null);
+        pen.drawImage(myImage, 0, 0, size.width, size.height, null);
         // restore graphics area to its old state, so our changes have no lasting effects
         pen.setTransform(old);
     }
+    //public void paint ()
 }
