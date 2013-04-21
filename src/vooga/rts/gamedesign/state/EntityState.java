@@ -180,7 +180,7 @@ public class EntityState {
                 myAttackingDelay.restart();
             }
             else {
-                System.out.println("Not Moving!");
+               // System.out.println("Not Moving!");
                 myAttackingDelay.update(elapsedTime);
             }
         }

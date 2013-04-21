@@ -138,7 +138,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
             if (getEntityState().canAttack()) {
                 myAttackStrategy.attack(attackable, distance);
                 
-                System.out.println("Can Attack?");
+                //System.out.println("Can Attack?");
             }
         }
     }

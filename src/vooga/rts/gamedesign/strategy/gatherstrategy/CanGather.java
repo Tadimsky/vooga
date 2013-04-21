@@ -1,7 +1,9 @@
 package vooga.rts.gamedesign.strategy.gatherstrategy;
 
 import vooga.rts.gamedesign.Interval;
+import vooga.rts.gamedesign.sprite.gamesprites.Resource;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
+import vooga.rts.gamedesign.state.GatherState;
 import vooga.rts.util.DelayedTask;
 
 /**
@@ -21,28 +23,40 @@ public class CanGather implements GatherStrategy {
 	private DelayedTask myGatherDelay;
 	private double myCooldown;
 	private int myGatherAmount;
+	private GatherState myGatherState;
 
 	public CanGather(double cooldown, int gatherAmount) {
 		myCooldown = cooldown;
 		myGatherAmount = gatherAmount;
+		myGatherState = GatherState.WAITING;
 	}
 
 	public void gatherResource(int playerID, IGatherable gatherable) {
+		if(((Resource)gatherable).isDead()) {
+			return;
+		}
 		final IGatherable toBeGathered = gatherable;
 		final int id = playerID;
-		myGatherDelay = new DelayedTask(myCooldown, new Runnable() {
+		if(myGatherState == GatherState.WAITING) {
+			myGatherState = GatherState.GATHERING;
+			System.out.println("I gathered!!!");
+			myGatherDelay = new DelayedTask(myCooldown, new Runnable() {
 
-			@Override
-			public void run() {
-				toBeGathered.getGathered(id, myGatherAmount);
-			}
-		});
+				@Override
+				public void run() {
+					toBeGathered.getGathered(id, myGatherAmount);
+					myGatherState = GatherState.WAITING;
+				}
+			});
+		}
 
 	}
 
 	@Override
 	public void update(double elapsedTime) {
-		myGatherDelay.update(elapsedTime);
+		if(myGatherDelay != null) {
+			myGatherDelay.update(elapsedTime);
+		}
 	}
 
 }

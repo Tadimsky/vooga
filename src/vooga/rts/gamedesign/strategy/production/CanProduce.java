@@ -51,7 +51,7 @@ public class CanProduce implements ProductionStrategy {
 					DelayedTask dt = new DelayedTask(1, new Runnable() {
 						@Override
 						public void run() {
-							System.out.println("Creating");
+							//System.out.println("Creating");
 							InteractiveEntity f = ((InteractiveEntity) unit)
 									.copy();
 							f.setWorldLocation(producer.getWorldLocation());

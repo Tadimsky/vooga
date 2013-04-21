@@ -22,7 +22,7 @@ import vooga.rts.util.Sound;
 public class Worker extends Unit {
 
 	private GatherStrategy myGatherStrategy;
-	private static final int DEFUALT_GATHER_INTERVAL = 75;
+	private static final int DEFUALT_GATHER_INTERVAL = 5;
 	private int myGatherAmount;
 
 	/**

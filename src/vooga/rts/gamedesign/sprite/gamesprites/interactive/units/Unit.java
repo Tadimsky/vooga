@@ -83,8 +83,8 @@ public class Unit extends InteractiveEntity {
                  double buildTime) {
         super(image, center, size, sound, playerID, health, buildTime);
         // myPather = new PathingHelper();
-        System.out.println(playerID + " " + health);
-        System.out.println(playerID + " " + health);
+       // System.out.println(playerID + " " + health);
+        //System.out.println(playerID + " " + health);
         if (myUpgradeTree != null) {
             addUserToUpgradeTree(playerID);
         }
