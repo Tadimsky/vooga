@@ -33,9 +33,17 @@ public class GameBuildingManager {
         myPlayers.add(player);
         myPlayerBuildings.put(playerID, new ArrayList<Building>());
     }
-
-    public void addUnassignedBuilding (Building building) {
-        myUnassignedBuildings.add(building);
+    
+    public void addBuilding(Building building) {
+    	if (building.getPlayerID() == 0) {
+    		addUnassignedBuilding(building);
+    	} else {
+    		addBuildingToPlayer(building);
+    	}
+    }
+    
+    private void addUnassignedBuilding(Building building){
+    	myUnassignedBuildings.add(building);
     }
 
     public List<Building> getUnassignedBuilding () {
@@ -62,5 +70,11 @@ public class GameBuildingManager {
     public void distributeProduct (Unit newProduction, int playerID) {
         System.out.println("Player ID " + playerID + " will get new unit!");
         //myPlayers.get(playerID - 1).addProduction(newProduction);
+    }
+    
+    private void addBuildingToPlayer(Building building) {
+    	ArrayList<Building> oldBuildingList = myPlayerBuildings.get(building.getPlayerID());
+		oldBuildingList.add(building);
+		myPlayerBuildings.put(building.getPlayerID(), oldBuildingList);
     }
 }

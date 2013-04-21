@@ -4,17 +4,22 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.state.AttackingState;
 import vooga.rts.gamedesign.state.EntityState;
 import vooga.rts.gamedesign.state.MovementState;
 import vooga.rts.gamedesign.state.OccupyState;
 import vooga.rts.gamedesign.state.ProducingState;
+import vooga.rts.gamedesign.strategy.occupystrategy.CannotBeOccupied;
+import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
 import vooga.rts.util.Camera;
 import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
 import vooga.rts.util.Vector;
+import vooga.rts.manager.GameUnitManager;
 import vooga.rts.map.GameMap;
 import vooga.rts.ai.Path;
 import vooga.rts.ai.PathFinder;
@@ -33,30 +38,39 @@ import vooga.rts.ai.PathFinder;
  * 
  */
 public class GameEntity extends GameSprite {
-	// Default velocity magnitude
-	public static int DEFAULT_SPEED = 0;
-	private Vector myVelocity;
-	private GameMap myMap;
-	private int myMaxHealth;
-	private int myCurrentHealth;
-	private PathFinder myFinder;
-	private int myPlayerID;
-	private Path myPath;
-	private Location3D myGoal;
-	private Vector myOriginalVelocity;
-	private EntityState myEntityState;
+    // Default velocity magnitude
+    public static int DEFAULT_SPEED = 0;
+    private Vector myVelocity;
+    private GameMap myMap;
+    private int myMaxHealth;
+    private int myCurrentHealth;
+    private PathFinder myFinder;
+    private int myPlayerID;
+    private Path myPath;
+    private Location3D myGoal;
+    private Vector myOriginalVelocity;
+    private EntityState myEntityState;
+    private static GameUnitManager myGameUnitManager;
 
-	public GameEntity(Pixmap image, Location3D center, Dimension size,
-			int playerID, int health) {
-		super(image, center, size);
-		myMaxHealth = health;
-		myCurrentHealth = myMaxHealth;
-		myPlayerID = playerID;
-		// ALERT THIS IS JUST FOR TESTING
-		myOriginalVelocity = new Vector(0, 0);
-		myVelocity = new Vector(0, 0);
-		myGoal = new Location3D(getWorldLocation());
-		myEntityState = new EntityState();
+    public GameEntity (Pixmap image, Location3D center, Dimension size, int playerID, int health) {
+        super(image, center, size);
+        myMaxHealth = health;
+        myCurrentHealth = myMaxHealth;
+        myPlayerID = playerID;
+        // ALERT THIS IS JUST FOR TESTING
+        myOriginalVelocity = new Vector(0, 0);
+        myVelocity = new Vector(0, 0);
+        myGoal = new Location3D();
+        myEntityState = new EntityState();
+    }
+
+    
+	public void setGameUnitManager(GameUnitManager gameUnitManager) {
+		myGameUnitManager = gameUnitManager;
+	}
+	
+	public GameUnitManager getGameUnitManager() {
+		return myGameUnitManager;
 	}
 
 	/**
@@ -283,7 +297,7 @@ public class GameEntity extends GameSprite {
 	public EntityState getEntityState() {
 		return myEntityState;
 	}
-
+	
 	/**
 	 * If the entity is in a stationary state, it stops moving.
 	 */

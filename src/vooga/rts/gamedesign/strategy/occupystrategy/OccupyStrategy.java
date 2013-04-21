@@ -1,19 +1,20 @@
 package vooga.rts.gamedesign.strategy.occupystrategy;
 
+import java.util.ArrayList;
+import java.util.List;
 
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.IOccupiable;
+import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.strategy.Strategy;
 
 /**
- * This interface is implemented by the classes CanOccupy and CannotOccupy that
- * are then used as instance variables in the classes that could possibly
- * occupy IOccupiables.  If the unit currently can occupy, it will have an 
- * instance of CanOccupy, otherwise it will have an instance of CannotOccupy.  
- * Using the strategy pattern like this, interactives ability to occupy can be
- * dynamically changed.  For example, a unit may be implemented such that 
- * it can not occupy an IOccupiable until an upgrade is bought.  The unit will 
- * initially have an instance of CannotOccupy but once the upgrade is bought 
- * it will switch to have an instance of CanOccupy.
+ * This interface is implemented by the classes CanBeOccupied and 
+ * CannotBeOccupied that are then used as instance variables in the classes
+ * that could possibly be occupied by Units. If the unit currently can be 
+ * occupied, it will have an instance of CanBeOccupied, otherwise it will have
+ * an instance of CannotBeOccupied. In this way, occupying specific features
+ * can be refactored out of the Sprite hierarchy.
  * 
  * @author Ryan Fishel
  * @author Kevin Oh
@@ -22,7 +23,18 @@ import vooga.rts.gamedesign.strategy.Strategy;
  *
  */
 public interface OccupyStrategy extends Strategy{
-
-  public boolean canOccupy(IOccupiable occupiable);
+	public void getOccupied(GameEntity entity, Unit u);
+	
+	public void addValidClassType(Unit u);
+	
+	public void setOccupierID(int id);
+	
+	public List<Unit> getOccupiers();
+	
+	public void setOccupiers(ArrayList<Unit> u);
+	
+	public int getMaxOccupiers();
+	
+	public int getOccupierID();
 
 }

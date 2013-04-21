@@ -178,6 +178,10 @@ public class Manager implements State, IActOn, Observer {
     public List<InteractiveEntity> getAllEntities () {
         return myEntities;
     }
+    
+    public void setAllEntities(List<InteractiveEntity> entityList) {
+    	myEntities = entityList;
+    }
 
     /**
      * Returns the list of selected entities.
