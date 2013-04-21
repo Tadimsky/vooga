@@ -17,6 +17,15 @@ public class Interval {
 	private int myCooldown;
 	
 	/**
+	 * Creates a default interval that has a very large value so that an 
+	 * action using this interval will never be allowed.
+	 */
+	public Interval() {
+		myMaxCooldown = Integer.MAX_VALUE;
+		myCooldown = myMaxCooldown;
+	}
+	
+	/**
 	 * Creates a new interval with a max cooldown.
 	 * @param cooldown is the initial max cooldwon of the interval
 	 */
@@ -67,5 +76,13 @@ public class Interval {
 	 */
 	public int getCooldown() {
 		return myCooldown;
+	}
+	
+	/**
+	 * Returns the percentage of the cooldown time remaining.
+	 * @return the percentage of the cooldown to the max cooldown remaining
+	 */
+	public int getPercentageCooldownRemaining() {
+		return (myCooldown/myMaxCooldown) * 100;
 	}
 }

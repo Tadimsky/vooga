@@ -4,8 +4,10 @@ import java.awt.Dimension;
 import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.Resource;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
 import vooga.rts.gamedesign.strategy.gatherstrategy.CanGather;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
+import vooga.rts.gamedesign.strategy.production.IProducer;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
@@ -21,6 +23,7 @@ import vooga.rts.util.Sound;
 public class Worker extends Unit {
 
 	private GatherStrategy myGatherStrategy;
+	private IProducer myProducer;
 	private static final int DEFUALT_GATHER_INTERVAL = 75;
 	private int myGatherAmount;
 
@@ -89,3 +92,4 @@ public class Worker extends Unit {
 	}
 
 }
+

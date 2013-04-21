@@ -1,6 +1,8 @@
 package vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings;
 
 import java.awt.Dimension;
+
+import vooga.rts.gamedesign.Interval;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.IOccupiable;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
@@ -34,7 +36,7 @@ public class Building extends InteractiveEntity implements IOccupiable {
             int playerID,
             int health) {
     	super(image, center, size, sound, playerID, health);
-    }
+    	}
     
     public Building (Pixmap image,
                      Location3D center,
@@ -63,15 +65,6 @@ public class Building extends InteractiveEntity implements IOccupiable {
     }
     
     @Override
-    public UpgradeTree getUpgradeTree() {
-    	return myUpgradeTree;
-    }
-
-    public void getOccupied (Unit unit) {
-        //u.occupy(this);
-    }
-
-	@Override
 	public void getOccupied(
 			vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit unit) {
 		// TODO Auto-generated method stub
@@ -83,4 +76,20 @@ public class Building extends InteractiveEntity implements IOccupiable {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public int getSpeed() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+    public UpgradeTree getUpgradeTree() {
+    	return myUpgradeTree;
+    }
+
+    public void getOccupied (Unit unit) {
+        //u.occupy(this);
+    }
+
 }
