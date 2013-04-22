@@ -2,7 +2,9 @@ package vooga.rts.leveleditor.components;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 import vooga.rts.leveleditor.gui.MapPanel;
 import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Location;
@@ -36,7 +38,7 @@ public class Terrain extends MapComponent {
         this(new Location(x, y), ID);
     }
     
-    public Terrain(int x, int y , int ID, String name, String imageName) {
+    public Terrain(int x, int y , int ID, String name, String imageName, int myWalkAbility) {
         super(ID,name,imageName);
         myLocation = new Location(x,y);
     }
@@ -62,11 +64,14 @@ public class Terrain extends MapComponent {
             myName = buffer[0];
             myImageName = buffer[1];
             myWalkAbility = Integer.parseInt(buffer[2]);
-            myImage =
-                    ResourceManager.getInstance().<BufferedImage> getFile(myImageName,
-                                                                          BufferedImage.class);
-            myImageWidth = myImage.getWidth();
-            myImageHeight = myImage.getHeight();
+            //myImage = ResourceManager.getInstance().<BufferedImage> getFile(myImageName,BufferedImage.class);
+            myImage = ImageIO.read(new File(System.getProperty("user.dir")+"./src/vooga/rts/leveleditor/resource/"+myImageName));
+            
+//            myImage =
+//                    ResourceManager.getInstance().<BufferedImage> getFile(myImageName,
+//                                                                          BufferedImage.class);
+//            myImageWidth = myImage.getWidth();
+//            myImageHeight = myImage.getHeight();
         }
     }
 

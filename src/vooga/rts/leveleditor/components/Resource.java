@@ -2,7 +2,9 @@ package vooga.rts.leveleditor.components;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 import vooga.rts.leveleditor.gui.MapPanel;
 import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Location;
@@ -66,9 +68,13 @@ public class Resource extends MapComponent{
             String[] buffer = content.split("&");
             myName = buffer[0];
             myImageName = buffer[1];
-            myImage = ResourceManager.getInstance().<BufferedImage>getFile(myImageName, BufferedImage.class); 
-            myImageWidth = myImage.getWidth();
-            myImageHeight = myImage.getHeight();
+            //myImage = ResourceManager.getInstance().<BufferedImage>getFile(myImageName, BufferedImage.class);            
+            myImage = ImageIO.read(new File(System.getProperty("user.dir")+"./src/vooga/rts/leveleditor/resource/"+myImageName));
+            
+
+//            myImage = ResourceManager.getInstance().<BufferedImage>getFile(myImageName, BufferedImage.class); 
+//            myImageWidth = myImage.getWidth();
+//            myImageHeight = myImage.getHeight();
         }
     }
     

@@ -45,8 +45,8 @@ public class EditableMap implements Serializable {
     private Map<Integer, Location> myPlayerLocations;
     private int myPlayerNumber;
 
-    private BetterMapSaver mySaver;
-    private BetterMapLoader myLoader;
+    private MapSaver mySaver;
+    private MapLoader myLoader;
 
     public EditableMap (String name, String desc, int x, int y, int nodeX, int nodeY) {
         myMapName = name;
@@ -74,8 +74,8 @@ public class EditableMap implements Serializable {
         myResource = new ArrayList<Resource>();
 
         try {
-                mySaver = new BetterMapSaver(this);
-                myLoader = new BetterMapLoader(this);
+                mySaver = new MapSaver(this);
+                myLoader = new MapLoader(this);
             }
             catch (ParserConfigurationException e) {
                 // TODO Auto-generated catch block
@@ -346,20 +346,18 @@ public class EditableMap implements Serializable {
         test.addTile(3, 3, 3);
         test.addTerrain(3, new Terrain(2,2,1));
         test.addTerrain(2, new Terrain(3,3,2));
-        test.addTerrain(1, new Terrain(4,4,3));
         test.addResource(7, 7, 1);
         test.addResource(8, 8, 2);
-        test.addResource(9, 9, 3);
-        BetterMapSaver saver = null;
+        MapSaver saver = null;
         try {
-            saver = new BetterMapSaver(test);
+            saver = new MapSaver(test);
         }
         catch (ParserConfigurationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         try {
-            saver.generateMapFile(new File(System.getProperty("user.dir") + "./src/test.xml"));
+            saver.generateMapFile(new File(System.getProperty("user.dir") + "./turtleRock"));
         }
         catch (TransformerException e) {
             // TODO Auto-generated catch block

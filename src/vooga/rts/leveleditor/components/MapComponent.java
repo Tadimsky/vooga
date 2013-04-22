@@ -54,6 +54,10 @@ public abstract class MapComponent {
         return myName;
     }
 
+    public String getMyImageName() {
+        return myImageName;
+    }
+    
     public BufferedImage getMyImage () {
         return myImage;
     }
