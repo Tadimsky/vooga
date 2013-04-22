@@ -106,27 +106,10 @@ public class Unit extends InteractiveEntity {
                 myLocation = Camera.instance().viewtoWorld(click.getPosition());
             }
         });
-        addOccupyAction(this);
     }
 
-    private void addOccupyAction (final Unit u) {
-        put("occupy", new InteractiveAction(this) {
-
-            @Override
-            public void apply () {
-                return;
-            }
-
-            @Override
-            public void update (Command command) {
-                return;
-            }
-
-            public void apply (InteractiveEntity i) {
-                // ((InteractiveAction)i.getAction(new Command("be occupied!"))).apply(u);
-                i.getOccupied(u);
-            }
-        });
+    public void occupy(InteractiveEntity i) {
+    	i.getOccupied(this);
     }
 
     @Override

@@ -141,7 +141,6 @@ public class Building extends InteractiveEntity {
             }
             PRODUCE_TIME = 90;
         }
-
     }
 
 

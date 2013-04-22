@@ -111,6 +111,16 @@ public class EntityState {
     public void setMovementState (MovementState movementState) {
         myMovementState = movementState;
     }
+    
+    /**
+     * This method returns the movement state (either moving or stationary) of
+     * the game entity.
+     * 
+     * @return the movement state of the game entity
+     */
+    public MovementState getMovementState() {
+    	return myMovementState;
+    }
 
     /**
      * Returns whether the entity is currently in the move state.

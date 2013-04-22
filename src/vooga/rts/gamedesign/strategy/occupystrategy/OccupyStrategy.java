@@ -23,6 +23,8 @@ import vooga.rts.gamedesign.strategy.Strategy;
  *
  */
 public interface OccupyStrategy extends Strategy{
+	public void getOccupied(InteractiveEntity entity, Unit u);
+	
 	public void createOccupyActions(final InteractiveEntity entity);
 	//public void getOccupied(InteractiveEntity entity, Unit u);
 	

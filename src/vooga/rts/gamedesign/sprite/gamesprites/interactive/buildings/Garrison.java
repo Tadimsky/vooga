@@ -17,40 +17,15 @@ import vooga.rts.util.Sound;
  */
 public class Garrison extends Building {
 
-    public Garrison(Pixmap image, Location3D center, Dimension size, Sound sound,
-                    int playerID, int health, double buildTime) {
+    public Garrison (Pixmap image,
+                     Location3D center,
+                     Dimension size,
+                     Sound sound,
+                     int playerID,
+                     int health,
+                     double buildTime) {
         super(image, center, size, sound, playerID, health, buildTime);
-    }
-    /*
-     * public void addOccupyActions(final Building building) {
-     * getActions().add(new OccupyAction("puke",null,"I puke out all I have"){
-     * 
-     * @Override
-     * public void apply(int playerID) {
-     * getGameUnitManager().removeEntityUnit(building);
-     * getOccupyStrategy().setOccupierID(0);
-     * getOccupyStrategy().setOccupiers(new ArrayList<Unit>());
-     * }
-     * });
-     * }
-     */
-
-    /**
-     * TESTING PURPOSE
-     */
-    @Override
-    public void update (double elapsedTime) {
-        super.update(elapsedTime);
-        /*
-         * if (getOccupyStrategy().getOccupiers().size() == 5) {
-         * try {
-         * // getActions().get(0).apply(getOccupyStrategy().getOccupierID());
-         * }
-         * catch (Exception e) {
-         * e.printStackTrace();
-         * }
-         * }
-         */
+        setOccupyStrategy(new CanBeOccupied());
     }
 
     @Override

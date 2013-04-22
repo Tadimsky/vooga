@@ -239,7 +239,6 @@ public class GameEntity extends GameSprite {
 
         if (getWorldLocation().near(myGoal)) {
             myEntityState.setMovementState(MovementState.STATIONARY);
-
         }
         move(myGoal);
         stopMoving();

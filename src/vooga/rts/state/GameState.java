@@ -17,6 +17,7 @@ import vooga.rts.gamedesign.sprite.gamesprites.Projectile;
 import vooga.rts.gamedesign.sprite.gamesprites.Resource;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Garrison;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Soldier;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Worker;
@@ -180,14 +181,14 @@ public class GameState extends SubState implements Controller {
         ((CanProduce) b.getProductionStrategy()).setRallyPoint(new Location3D(600, 500, 0));
         myHumanPlayer.add(b);
 
-        // Garrison garrison =
-        // new Garrison((new Pixmap(ResourceManager.getInstance()
-        // .<BufferedImage> getFile("images/factory.png", BufferedImage.class))),
-        // new Location3D(300, 300, 0), new Dimension(100, 100), null, 1, 300,
-        // InteractiveEntity.DEFAULT_BUILD_TIME);
-        // garrison.getOccupyStrategy().addValidClassType(new Soldier());
-        // garrison.getOccupyStrategy().createOccupyActions(garrison);
-        // myHumanPlayer.add(garrison);
+        Garrison garrison =
+                new Garrison((new Pixmap(ResourceManager.getInstance()
+                        .<BufferedImage> getFile("images/factory.png", BufferedImage.class))),
+                             new Location3D(300, 300, 0), new Dimension(100, 100), null, 1, 300,
+                             InteractiveEntity.DEFAULT_BUILD_TIME);
+        garrison.getOccupyStrategy().addValidClassType(new Soldier());
+        garrison.getOccupyStrategy().createOccupyActions(garrison);
+        myHumanPlayer.add(garrison);
 
         myMap = new GameMap(8, new Dimension(512, 512));
 
@@ -204,22 +205,22 @@ public class GameState extends SubState implements Controller {
                 test.restart();
             }
         });
-
-        // final Garrison testGarrison = garrison;
-        // occupyPukingTest = new DelayedTask(1, new Runnable() {
-        // @Override
-        // public void run () {
-        // if (testGarrison.getOccupyStrategy().getOccupiers().size() > 5) {
-        // System.out.println("will puke!");
-        // testGarrison.getAction(new Command("puke all I have")).apply();
-        // }
-        // occupyPukingTest.restart();
-        // }
-        // });
+        
+        final Garrison testGarrison = garrison;
+        occupyPukingTest = new DelayedTask(1, new Runnable() {
+            @Override
+            public void run () {
+                if (testGarrison.getOccupyStrategy().getOccupiers().size() > 0) {
+                    System.out.println("will puke!");
+                    testGarrison.getAction(new Command("deoccupy")).apply();
+                }
+                occupyPukingTest.restart();
+            }
+        });
     }
 
     private void yuckyUnitUpdate (double elapsedTime) {
-        List<InteractiveEntity> p1 = myTeams.get(1).getUnits();  // getDetectableUnits(myTeams.get(1).getUnits());
+        List<InteractiveEntity> p1 = getDetectableUnits(myTeams.get(1).getUnits());
         List<InteractiveEntity> p2 = myTeams.get(2).getUnits();
         for (InteractiveEntity u1 : p1) {
             if (u1 instanceof Worker && r != null) {
@@ -230,21 +231,18 @@ public class GameState extends SubState implements Controller {
                 u1.getAttacked(u2);
             }
         }
-        // if(r != null) {
         r.update(elapsedTime);
         // }
         test.update(elapsedTime);
         // now even yuckier
         for (int i = 0; i < p1.size(); ++i) {
-            for (int j = i + 1; j < p1.size(); ++j) {
-                if (p1.get(i) instanceof Unit) {
-                    // ((InteractiveAction)p1.get(i).getAction(new
-                    // Command("occupy"))).apply(p1.get(j));
+        	if (p1.get(i) instanceof Unit) {
+        		for (int j = i + 1; j < p1.size(); ++j) {
+                    ((Unit)p1.get(i)).occupy(p1.get(j));
                 }
             }
         }
-        // test.update(elapsedTime);
-        // occupyPukingTest.update(elapsedTime);
+        occupyPukingTest.update(elapsedTime);
     }
 
     private List<InteractiveEntity> getDetectableUnits (List<InteractiveEntity> list) {

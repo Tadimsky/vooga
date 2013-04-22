@@ -8,7 +8,8 @@ import vooga.rts.resourcemanager.exceptions.FileNotSupportedException;
 import vooga.rts.state.MainState;
 
 
-public class StartGUI {
+public class StartGUI 
+{
 
     private final static String DEFAULT_RESOURCE_LOCATION = "/vooga/rts/resources/";
 

@@ -52,21 +52,12 @@ public class CannotBeOccupied implements OccupyStrategy{
 
 	@Override
 	public void createOccupyActions(InteractiveEntity entity) {
-		entity.addAction("be occupied!", new InteractiveAction(entity) {
-			@Override
-			public void update(Command command) {
-				return;
-			}
-			
-			public void apply(Unit u) {
-				return;
-			}
+		
+	}
 
-			@Override
-			public void apply() {
-				return;
-			}
-		});
+	@Override
+	public void getOccupied(InteractiveEntity entity, Unit u) {
+		// TODO Auto-generated method stub
 		
 	}
 
