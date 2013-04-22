@@ -63,6 +63,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     private Map<String, Action> myActions;
     private List<DelayedTask> myTasks;
     private double myBuildTime;
+    private List<InteractiveEntity> myProducables;
 
     public static final double DEFAULT_BUILD_TIME = 5;
 
@@ -99,6 +100,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
         myTasks = new ArrayList<DelayedTask>();
         myBuildTime = buildTime;
         myOccupyStrategy = new CannotBeOccupied();
+        myProducables = new ArrayList<InteractiveEntity>();
     }
 
     public void addAction (String command, Action action) {
@@ -110,7 +112,15 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     public void addTask (DelayedTask dt) {
         myTasks.add(dt);
     }
+    
+    /**
+     * returns the list of producables
+     */
+    public List<InteractiveEntity> getProducables () {
+        return myProducables;
+    }
 
+    
     /**
      * This method specifies that the interactive entity is attacking an
      * IAttackable. It checks to see if the IAttackable is in its range, it sets
@@ -401,6 +411,19 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
         notifyObservers();
     }
 
+    
+
+    /*
+     * Test method to add an interactive entity to
+     */
+    public void addProducable (InteractiveEntity i) {
+        myProducables.add(i);
+    }
+    
+ 
+
+
+    
     @Override
     public void updateAction (Command command) {
         if (myActions.containsKey(command.getMethodName())) {

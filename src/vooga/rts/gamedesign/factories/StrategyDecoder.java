@@ -12,6 +12,7 @@ import vooga.rts.gamedesign.strategy.attackstrategy.AttackStrategy;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
 import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
 import vooga.rts.util.Location3D;
+import vooga.rts.util.ReflectionHelper;
 
 /**
  * Decodes all the strategies defined in the game element XML file, initializes them,
@@ -50,15 +51,9 @@ public class StrategyDecoder extends Decoder{
 			if(Node.getNodeType() == Node.ELEMENT_NODE){
 				String path = Node.getAttributes().item(0).getTextContent();
 				String key = Node.getNodeName();
-				Class<?> strategy = null;
-				try {
-					strategy = Class.forName(path);
-					
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
+				
 				//This class needs to change because strategy constructors have changed. 
-				//Strategy strat = (Strategy) strategy.getConstructor(Location3D.class, int.class).newInstance(new Location);
+				Strategy strat = (Strategy) ReflectionHelper.makeInstance(path);
 				myFactory.put(key, strat);
 				
 			}
@@ -75,9 +70,7 @@ public class StrategyDecoder extends Decoder{
 		NodeList occupyLst = doc.getElementsByTagName(OCCUPY_TAG).item(0).getChildNodes();
 		NodeList gatherLst = doc.getElementsByTagName(GATHER_TAG).item(0).getChildNodes();
 			
-		getSources(attackLst);
 		getSources(occupyLst);
-		getSources(gatherLst);
 	}
 
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,6 +17,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
 import vooga.rts.gamedesign.sprite.gamesprites.Resource;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.gamedesign.strategy.attackstrategy.AttackStrategy;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
@@ -39,42 +41,107 @@ public class Factory {
 	public static final String DECODER_MATCHING_PATH_TAG = "decoderPath";
 	
 	Map<String, Decoder> myDecoders = new HashMap<String, Decoder>();
-	Map<String, GameSprite> mySprites;
+	Map<String, InteractiveEntity> mySprites;
+	Map<String, Resource> myResources;
 	Map<String, Strategy> myStrategies;
+	Map<String, String[]> myProductionDependencies;
+	Map<String, String[]> myStrategyDependencies;
 	
 	
 	public Factory() throws IllegalArgumentException, SecurityException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ParserConfigurationException, SAXException, IOException {
 		myDecoders = new HashMap<String, Decoder>();
 		loadDecoder(DECODER_MATCHING_FILE);
-		mySprites = new HashMap<String, GameSprite>();
+		mySprites = new HashMap<String, InteractiveEntity>();
+		myResources = new HashMap<String, Resource>();
 		myStrategies = new HashMap<String, Strategy>();
+		myProductionDependencies = new HashMap<String, String[]>();
+		myStrategyDependencies = new HashMap<String, String[]>();
 	}
 	
-	
-	public void put(String name, GameSprite value){
+	/**
+	 * all put methods add a key, game element pair to the appropriate Map instance variable. 
+	 * (The method is overloaded a few times since there are several maps).
+	 * @param name
+	 * @param value
+	 */
+	public void put(String name, InteractiveEntity value){
 		mySprites.put(name, value);
+	}
+	
+	public void put(String name, Resource resource){
+		myResources.put(name, resource);
 	}
 	
 	public void put(String name, Strategy value){
 		myStrategies.put(name, value);
 	}
 	
+	/**
+	 * Returns an Attack Strategy from a map of strategies. 
+	 * (this format is used so that you do not have to cast later on). 
+	 * @param key
+	 * @return AttackStrategy
+	 */
 	public AttackStrategy getAttackStrategy(String key){
 		return (AttackStrategy) myStrategies.get(key);
 	}
 	
+	/**
+	 * Returns a Gather Strategy from a map of strategies. 
+	 * @param key
+	 * @return GatherStrategy
+	 */
 	public GatherStrategy getGatherStrategy(String key){
 		return (GatherStrategy) myStrategies.get(key);
 	}
 	
+	/**
+	 * Returns an Occupy Strategy from a map of strategies. 
+	 * @param key
+	 * @return OccupyStrategy
+	 */
 	public OccupyStrategy getOccupyStrategy(String key){
 		return (OccupyStrategy) myStrategies.get(key);
 	}
 	
-	public GameSprite getSprite(String key){
+	/**
+	 * Returns an Interactive Entity from a map of InteractiveEntities
+	 * @param key
+	 * @return InteractiveEntity
+	 */
+	public InteractiveEntity getInteractiveEntity(String key){
 		return mySprites.get(key);
 	}
 	
+	/**
+	 * Returns an Resource from a map of Resources
+	 * @param key
+	 * @return InteractiveEntity
+	 */
+	public Resource getResource(String key){
+		return myResources.get(key);
+	}
+	
+	/**
+	 * Puts a production dependency (tells the factory what "name" can produce) in
+	 * a dependency map. 
+	 * 
+	 * @param name
+	 * @param itProduces
+	 */
+	public void putProductionDependency(String name, String[] itProduces){
+		myProductionDependencies.put(name, itProduces);
+	}
+	
+	/**
+	 * Puts a strategy dependency (tells the factory what strategies "name" uses) in
+	 * a dependency map. 
+	 * @param name
+	 * @param strategies
+	 */
+	public void putStrategyDependency(String name, String[] strategies){
+		myStrategyDependencies.put(name, strategies);
+	}
 	
 	/**
 	 * Creates decoders by loading the input file that specifies the path of
@@ -154,6 +221,37 @@ public class Factory {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		initializeProducables();
+		initializeStrategies();
+	}
+	
+	/**
+	 * Once instances of game elements are loaded into their maps this method adds the
+	 * producables (specified from the XML file) to their respective entities. 
+	 */
+	private void initializeProducables(){
+		for(String key :myProductionDependencies.keySet()){
+			InteractiveEntity father;
+			String[] produces = myProductionDependencies.get(key);
+			for(String baby: produces){
+				father = mySprites.get(key);
+				InteractiveEntity producable = mySprites.get(baby);
+				father.addProducable(producable);
+			}
+		}
+	}
+	/**
+	 * Once strategies defined by the XML file are loaded into their maps this method uses
+	 * the strategy dependency map
+	 * 
+	 */
+	private void initializeStrategies(){
+		for(String key: myStrategyDependencies.keySet()){
+			String[] strategies = myStrategyDependencies.get(key);
+			//Do the same for other strategies
+			OccupyStrategy occupy = (OccupyStrategy) myStrategies.get(strategies[1]);
+			mySprites.get(key).setOccupyStrategy(occupy);
+		}
 	}
 	
 	/**
@@ -162,8 +260,9 @@ public class Factory {
 	public static void main(String[] args) throws IllegalArgumentException, SecurityException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ParserConfigurationException, SAXException, IOException {
 		//loads Upgrade XML - creates tree - updates activate state
 		Factory factory = new Factory();
-
+		
 		factory.loadXMLFile("Factory.xml");
+		
 
 		/**creates an UpgradeBuilding
 		UpgradeBuilding upgradeBuilding = new UpgradeBuilding();

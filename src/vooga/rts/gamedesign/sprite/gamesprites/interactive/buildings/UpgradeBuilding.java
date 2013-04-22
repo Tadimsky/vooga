@@ -26,7 +26,7 @@ public class UpgradeBuilding extends Building{
 	
 	public UpgradeBuilding(Pixmap image, Location3D center, Dimension size,
 			Sound sound, int playerID, int health) {
-		super(image, center, size, sound, playerID, health, PRODUCE_TIME, null);
+		super(image, center, size, sound, playerID, health, PRODUCE_TIME);
 	}
 	
 	/**

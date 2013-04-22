@@ -12,7 +12,7 @@ import vooga.rts.util.Sound;
 /**
  * A custom implementation of building. Instead of specifying type in XML, you can
  * specify type with default values here. 
- * @author agostif
+ * @author Francesco Agosti
  *
  */
 public class Tower extends Building {
@@ -22,12 +22,11 @@ public class Tower extends Building {
 	private static Dimension DEFAULTSIZE = new Dimension(50,50);
 	private static Sound DEFAULTSOUND = new Sound("squirtle.wav");
 	private static int DEFAULTHEALTH = 100;
-	private static UpgradeTree DEFAULTTREE = null;
 	private static int DEFAULTBUILDTIME = 10;
 	private static int NOTEAM = 0;
 	
 	public Tower(int playerID) {
-		super(DEFAULTPIX, DEFAULTLOC, DEFAULTSIZE, DEFAULTSOUND, playerID, DEFAULTHEALTH, DEFAULTBUILDTIME, DEFAULTTREE );
+		super(DEFAULTPIX, DEFAULTLOC, DEFAULTSIZE, DEFAULTSOUND, playerID, DEFAULTHEALTH, DEFAULTBUILDTIME);
 		
 	}
 	

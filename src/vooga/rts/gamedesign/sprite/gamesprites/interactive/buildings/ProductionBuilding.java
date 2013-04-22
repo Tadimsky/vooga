@@ -28,7 +28,7 @@ public class ProductionBuilding extends Building {
                                int playerID,
                                int health,
                                double buildTime) {
-        super(image, center, size, sound, playerID, health, buildTime, null);
+        super(image, center, size, sound, playerID, health, buildTime);
         myRallyPoint = new Location3D(getWorldLocation().getX(), getWorldLocation().getY() + 50, 0);
         myProducables = new ArrayList<Unit>();
     }
@@ -38,12 +38,6 @@ public class ProductionBuilding extends Building {
         // does nothing if building isnt occupied.
     }
 
-    /*
-     * returns the list of producables
-     */
-    public List<Unit> getProducables () {
-        return myProducables;
-    }
 
     /**
      * Returns the rally point of the production building.

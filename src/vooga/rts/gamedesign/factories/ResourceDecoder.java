@@ -24,7 +24,7 @@ import vooga.rts.util.ReflectionHelper;
  * Decodes an XML file that contains resource information and instantiates those reasources. 
  * Once the resources and instantiated it puts them in the Sprite map that is found in the factory. 
  * The resource "name" is used as the key. 
- * @author agostif
+ * @author Francesco Agosti
  *
  */
 public class ResourceDecoder extends Decoder{
@@ -61,12 +61,6 @@ public class ResourceDecoder extends Decoder{
 	 */
 	public void create(Document doc) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		String path = doc.getElementsByTagName(HEAD_TAG).item(0).getAttributes().getNamedItem(SOURCE_TAG).getTextContent();
-		Class<?> headClass = null;
-		try {
-			headClass = Class.forName(path);
-		} catch (ClassNotFoundException e) {
-			//ERRR
-		}
 		NodeList nodeLst = doc.getElementsByTagName(TYPE_TAG);
 		
 		for(int i = 0 ; i < nodeLst.getLength() ; i++){
@@ -76,11 +70,12 @@ public class ResourceDecoder extends Decoder{
 			int health = Integer.parseInt((nElement.getElementsByTagName(HEALTH_TAG).item(0).getTextContent()));
 			
 			
-			Resource resource = (Resource) ReflectionHelper.makeInstance(headClass, new Pixmap(img),
+			Resource resource = (Resource) ReflectionHelper.makeInstance(path, new Pixmap(img),
 																		new Location3D(0,0,0),
 																		RESOURCE_SIZE,
 																		0,
-																		health);
+																		health,
+																		name);
 					
 																
 			myFactory.put(name, resource);

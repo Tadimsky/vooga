@@ -16,6 +16,14 @@ import vooga.rts.util.Pixmap;
 import vooga.rts.util.ReflectionHelper;
 import vooga.rts.util.Sound;
 
+
+/**
+ * This class takes care of parsing the XML file for custom Building information and 
+ * instantiating this custom building. 
+ * 
+ * @author Francesco Agosti
+ *
+ */
 public class BuildingDecoder extends Decoder{
 	
 	private static final String HEAD_TAG = "buildings";
@@ -28,9 +36,11 @@ public class BuildingDecoder extends Decoder{
 	private static final String SOUND_TAG = "sound";
 	private static final String HEALTH_TAG = "health";
 	private static final String ATTACK_TAG = "attack";
+	private static final String OCCUPY_TAG = "occupy";
 	private static final String PRODUCE_TAG = "produce";
 	private static final String SOURCE_TAG = "src";
 	
+	private int DEFAULTTEAM = 0;
 	
 	private Factory myFactory;
 
@@ -41,15 +51,7 @@ public class BuildingDecoder extends Decoder{
 	@Override
 	public void create(Document doc) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		//there is some duplicate code between decoders that should be factored out. 
-		String path = doc.getElementsByTagName(HEAD_TAG).item(0).getAttributes().getNamedItem(SOURCE_TAG).getTextContent();
-		Class<?> headClass = null;
-	
-		try {
-			headClass = Class.forName(path);			
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
+		String path = doc.getElementsByTagName(HEAD_TAG).item(0).getAttributes().getNamedItem(SOURCE_TAG).getTextContent();	
 		
 		NodeList nodeLst = doc.getElementsByTagName(TYPE_TAG);
 		for(int i = 0 ; i < nodeLst.getLength() ; i++){
@@ -58,18 +60,30 @@ public class BuildingDecoder extends Decoder{
 			String img = nElement.getElementsByTagName(IMAGE_TAG).item(0).getTextContent();
 			String sound = nElement.getElementsByTagName(SOUND_TAG).item(0).getTextContent();
 			int health = Integer.parseInt(nElement.getElementsByTagName(HEALTH_TAG).item(0).getTextContent());
-			int buildTime = Integer.parseInt(nElement.getElementsByTagName(TIME_TAG).item(0).getTextContent());
-			Building building = (Building) ReflectionHelper.makeInstance(headClass, new Pixmap(img),
+			double buildTime = Double.parseDouble(nElement.getElementsByTagName(TIME_TAG).item(0).getTextContent());
+			Building building = (Building) ReflectionHelper.makeInstance(path, 
+																			new Pixmap(img),
 																  			new Location3D(0,0,0),
 																			  new Dimension(50,50),
 																			  new Sound(sound),
-																			  0,
+																			  DEFAULTTEAM,
 																			  health,
-																			  buildTime,
-																			  null);
+																			  buildTime);
 			
 			myFactory.put(name, building);
+			//Load Production Dependencies now
+			String [] nameCanProduce = nElement.getElementsByTagName(PRODUCE_TAG).item(0).getTextContent().split("\\s+");
+			if(nameCanProduce[0] != ""){
+				myFactory.putProductionDependency(name, nameCanProduce);
+			}
+			//Load Strategy Dependencies now
+			String[] strategies = new String[3];
+			strategies[1] = nElement.getElementsByTagName(OCCUPY_TAG).item(0).getTextContent();
+			myFactory.putStrategyDependency(name, strategies);
+			
+			
 		}
+		
 		
 	}
 }

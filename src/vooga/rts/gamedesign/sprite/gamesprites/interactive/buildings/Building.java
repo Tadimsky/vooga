@@ -31,7 +31,6 @@ public class Building extends InteractiveEntity {
     private static UpgradeTree myUpgradeTree;
 
     private Location3D myRallyPoint;
-    private List<Unit> myProducables;
     private List<InteractiveEntity> myInteractiveEntities;
     
     private int myBuildingID;
@@ -53,22 +52,18 @@ public class Building extends InteractiveEntity {
                      Sound sound,
                      int playerID,
                      int health,
-                     double buildTime,
-                     UpgradeTree upgradeTree) {
+                     double buildTime) {
         super(image, center, size, sound, playerID, MAXHEALTH, buildTime);
         myRallyPoint = new Location3D(getWorldLocation().getX(), getWorldLocation().getY() + 50, 0);
-        myProducables = new ArrayList<Unit>();
-        myInteractiveEntities = new ArrayList<InteractiveEntity>();
         
-        if (upgradeTree != null) {
-            myUpgradeTree = upgradeTree;
-        }
+        myInteractiveEntities = new ArrayList<InteractiveEntity>();
+
     }
 
     @Override
     public InteractiveEntity copy () {
         return new Building(getImage(), getWorldLocation(), getSize(), getSound(), getPlayerID(),
-                            getHealth(), getBuildTime(), getUpgradeTree());
+                            getHealth(), getBuildTime());
     }
 
     @Override
@@ -113,13 +108,6 @@ public class Building extends InteractiveEntity {
          */
     }
 
-    /**
-     * returns the list of producables.
-     * @return a list of producables
-     **/
-    public List<Unit> getProducables () {
-        return myProducables;
-    }
 
     /**
      * Returns the rally point of the production building.
@@ -132,12 +120,6 @@ public class Building extends InteractiveEntity {
         return myRallyPoint;
     }
 
-    /*
-     * Test method to add an interactive entity to
-     */
-    public void addProducable (Unit i) {
-        myProducables.add(i);
-    }
 
     /**
      * Sets the rally point of the production building
@@ -171,13 +153,15 @@ public class Building extends InteractiveEntity {
 
     }
 
-    @Override
-    public void addActions () {
 
-    }
-    
     @Override
     public int getSpeed() {
     	return 0;
     }
+
+	@Override
+	public void addActions() {
+		// TODO Auto-generated method stub
+		
+	}
 }

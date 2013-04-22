@@ -175,7 +175,7 @@ public class GameState extends SubState implements Controller {
                 new Building((new Pixmap(ResourceManager.getInstance()
                         .<BufferedImage> getFile("images/factory.png", BufferedImage.class))),
                              new Location3D(700, 700, 0), new Dimension(100, 100), null, 1, 300,
-                             InteractiveEntity.DEFAULT_BUILD_TIME, null);
+                             InteractiveEntity.DEFAULT_BUILD_TIME);
         b.setProductionStrategy(new CanProduce());
         ((CanProduce) b.getProductionStrategy()).addProducable(new Soldier());
         ((CanProduce) b.getProductionStrategy()).createProductionActions(b);
