@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vooga.rts.gamedesign.sprite.gamesprites.IAttackable;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.weapon.Weapon;
 
 
@@ -24,7 +23,10 @@ public class CannotAttack implements AttackStrategy {
 	private List<Weapon> myWeapons; //TODO: probably won't need these
 	private int myWeaponIndex;
 	private boolean myCanAttack = false;
-
+	
+	/**
+	 * Creates a new attack strategy that represents an entity that cannot attack.
+	 */
 	public CannotAttack() {
 		 myWeapons = new ArrayList<Weapon>();
 		 myWeaponIndex = 0;

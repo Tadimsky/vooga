@@ -151,17 +151,20 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
         return myActions.containsKey(command.getMethodName());
     }
 
-    /*
-     * Ze clone method
-     */
-    // TODO: Make abstract
-
+    /**
+     * Creates a copy of an interactive entity. 
+     **/
     public abstract InteractiveEntity copy ();
-
+    
+    /**
+     * Returns the action that corresponds to a command.
+     * @param command is a command that was entered by the player
+     * @return the action the is mapped to the command
+     */
     public Action getAction (Command command) {
         return myActions.get(command.getMethodName());
     }
-
+    
     public void getOccupied (Unit occupier) {
         if (occupier.collidesWith(this)) {
             // TODO: this if check is because action is not initialized in Occupy Strategy.
@@ -206,15 +209,30 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     public int getSpeed () {
         return DEFAULT_INTERACTIVEENTITY_SPEED;
     }
-
+    
+    /**
+     * Returns the upgrade tree of the entity.
+     * @return the entities upgrade tree
+     */
     public UpgradeTree getTree () {
         return myUpgradeTree;
     }
-
+    
+    /**
+     * Returns the strategy the entity has for producing (CanProduce or
+     * CannotProduce).
+     * @return the production strategy of the entity
+     */
     public ProductionStrategy getProductionStrategy () {
         return myProductionStrategy;
     }
 
+    /**
+     * Sets the production strategy of the entity to CanProduce or 
+     * CannotProduce.
+     * @param productionStrategy is the production strategy the entity will
+     * have
+     */
     public void setProductionStrategy (ProductionStrategy productionStrategy) {
         myProductionStrategy = productionStrategy;
     }
@@ -336,7 +354,13 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     public void setAttackStrategy (AttackStrategy newStrategy) {
         myAttackStrategy = newStrategy;
     }
-
+    
+    /**
+     * Sets the upgrade tree of the entity for a specific team based on an 
+     * upgrade tree and player ID that are passed in.
+     * @param upgradeTree is the new upgrade tree that the entity will have
+     * @param playerID is the team that the upgrade is for
+     */
     public void setUpgradeTree (UpgradeTree upgradeTree, int playerID) {
         myUpgradeTree = upgradeTree;
     }
@@ -403,15 +427,29 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
                                                  NoSuchMethodException {
         // upgradeNode.apply(upgradeNode.getUpgradeTree().getUsers());
     }
-
+    
+    /**
+     * Sets the object to be in the changed state for the observer pattern.
+     */
     public void setChanged () {
         super.setChanged();
     }
-
+    
+    /**
+     * Gets the occupy strategy of the entity (either CanBeOccupied or 
+     * CannotBeOccupied).
+     * @return
+     */
     public OccupyStrategy getOccupyStrategy () {
         return myOccupyStrategy;
     }
-
+    
+    /**
+     * Sets the occupy strategy for the entity to be CanBeOccupied or 
+     * CannotBeOccupied.
+     * @param occupyStrategy is the occupy strategy that the entity is being
+     * set to
+     */
     public void setOccupyStrategy (OccupyStrategy occupyStrategy) {
         myOccupyStrategy = occupyStrategy;
     }

@@ -1,8 +1,6 @@
 package vooga.rts.gamedesign.strategy.gatherstrategy;
 
-import vooga.rts.gamedesign.Interval;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
-import vooga.rts.util.DelayedTask;
 
 /**
  * 
@@ -18,6 +16,10 @@ import vooga.rts.util.DelayedTask;
 
 public class CannotGather implements GatherStrategy {
 	
+	/**
+	 * Creates a new gather strategy that represents a unit that cannot 
+	 * gather resources.
+	 */
 	public CannotGather() {
 		
 	}

@@ -35,7 +35,18 @@ public class Building extends InteractiveEntity {
     private List<InteractiveEntity> myInteractiveEntities;
     
     private int myBuildingID;
-
+    /**
+     * Creates a new building with a rally point, a list of what can be 
+     * produced, a list of what can observe the building, and an upgrade tree.
+     * @param image is the picture of the building
+     * @param center is the location of the building
+     * @param size is the dimensions of the building
+     * @param sound is the sound that the building makes
+     * @param playerID is the team that the building is on
+     * @param health is how much health the building has
+     * @param buildTime is the time it takes to create a building
+     * @param upgradeTree is the upgrade tree for the building
+     */
     public Building (Pixmap image,
                      Location3D center,
                      Dimension size,
@@ -102,9 +113,10 @@ public class Building extends InteractiveEntity {
          */
     }
 
-    /*
-     * returns the list of producables
-     */
+    /**
+     * returns the list of producables.
+     * @return a list of producables
+     **/
     public List<Unit> getProducables () {
         return myProducables;
     }

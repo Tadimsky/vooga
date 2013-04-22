@@ -1,6 +1,5 @@
 package vooga.rts.gamedesign.strategy.gatherstrategy;
 
-import vooga.rts.gamedesign.Interval;
 import vooga.rts.gamedesign.sprite.gamesprites.Resource;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
 import vooga.rts.gamedesign.state.GatherState;
@@ -24,7 +23,15 @@ public class CanGather implements GatherStrategy {
 	private double myCooldown;
 	private int myGatherAmount;
 	private GatherState myGatherState;
-
+	
+	/**
+	 * Creates a new gather strategy that represents a unit that can gather 
+	 * resources.  This strategy is created with a cooldown time between 
+	 * gathers, how many resources it can gather at a time and is set
+	 * to be waiting to gather (as its state).
+	 * @param cooldown is the cooldown time between gathers
+	 * @param gatherAmount is the amount that can be gathered at a time
+	 */
 	public CanGather(double cooldown, int gatherAmount) {
 		myCooldown = cooldown;
 		myGatherAmount = gatherAmount;

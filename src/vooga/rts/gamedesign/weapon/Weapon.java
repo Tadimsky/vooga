@@ -1,6 +1,5 @@
 package vooga.rts.gamedesign.weapon;
 
-import vooga.rts.gamedesign.Interval;
 import vooga.rts.gamedesign.sprite.gamesprites.Projectile;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.state.AttackingState;

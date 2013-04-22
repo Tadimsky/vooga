@@ -6,7 +6,6 @@ import vooga.rts.gamedesign.sprite.gamesprites.IAttackable;
 import vooga.rts.gamedesign.sprite.gamesprites.Projectile;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.weapon.Weapon;
-import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 
 
@@ -26,7 +25,15 @@ public class CanAttack implements AttackStrategy {
     private List<Weapon> myWeapons;
     private int myWeaponIndex;
     private boolean myCanAttack = true;
-
+    
+    /**
+     * Creates a new attack strategy that represents an entity that can attack.
+     * This strategy is created with a weapon so that the entity will be able 
+     * to attack.
+     * @param worldLocation is the location of the entity that has this 
+     * strategy (it is needed for the position of the weapon)
+     * @param PlayerID is the team that the entity with this strategy is on
+     */
     public CanAttack (Location3D worldLocation, int PlayerID) {
         myWeapons = new ArrayList<Weapon>();
         Weapon defaultWeapon =

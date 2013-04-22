@@ -3,7 +3,6 @@ package vooga.rts.gamedesign.strategy.occupystrategy;
 import java.util.ArrayList;
 import java.util.List;
 
-import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;

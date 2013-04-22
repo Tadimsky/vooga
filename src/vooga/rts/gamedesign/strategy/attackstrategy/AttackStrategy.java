@@ -3,7 +3,6 @@ package vooga.rts.gamedesign.strategy.attackstrategy;
 import java.util.List;
 
 import vooga.rts.gamedesign.sprite.gamesprites.IAttackable;
-import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.gamedesign.weapon.Weapon;
 
 

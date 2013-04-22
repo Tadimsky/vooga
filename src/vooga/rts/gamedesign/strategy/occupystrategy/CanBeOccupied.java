@@ -6,7 +6,6 @@ import vooga.rts.action.InteractiveAction;
 import vooga.rts.commands.Command;
 import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Soldier;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.state.DetectableState;
@@ -28,7 +27,13 @@ public class CanBeOccupied implements OccupyStrategy {
     private List<String> myValidOccupierType;
     private int myMaxOccupiers;
     private int myOccupierID;
-
+    
+    /**
+     * Creates a new occupy strategy that represents an entity that can be 
+     * occupied.  It is created with a list of what entities can occupy it,
+     * what entities are occupying it, and the max number of entities that can
+     * occupy it.
+     */
     public CanBeOccupied () {
         myOccupierHashCodes = new ArrayList<Integer>();
         myValidOccupierType = new ArrayList<String>();
