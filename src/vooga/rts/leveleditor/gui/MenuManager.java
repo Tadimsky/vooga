@@ -130,22 +130,32 @@ public class MenuManager extends JMenuBar {
 
 
     protected void showCustomizeMapDialog() {
+        JTextField MapName = new JTextField();
+        JTextField MapDesc = new JTextField();
+        JTextField TileWidth = new JTextField();
+        JTextField TileHeight = new JTextField();
         JTextField MapWidth = new JTextField();
         JTextField MapHeight = new JTextField();
 
-        Object[] message = {"MapWidth", MapWidth, "MapHeight", MapHeight};
+        Object[] message = {"MapName", MapName, "MapDescription", MapDesc, 
+                            "MapWidth", MapWidth, "MapHeight", MapHeight,
+                            "TileWidth", TileWidth, "TileHeight", TileHeight};
 
-        int option = JOptionPane.showConfirmDialog(null, message,"Set Map Size",JOptionPane.OK_CANCEL_OPTION);
+        int option = JOptionPane.showConfirmDialog(null, message,"Customize your map",JOptionPane.OK_CANCEL_OPTION);
 
         if (option == JOptionPane.OK_OPTION) {
             try {
-                int w = Integer.parseInt(MapWidth.getText());
-                int h = Integer.parseInt(MapHeight.getText());
-                myCanvas.getMapPanel().setWidth(w);
-                myCanvas.getMapPanel().setHeight(h);
-                myCanvas.getMapPanel().setTileWidth(MapPanel.DEFAULT_TILE_WIDTH);
-                myCanvas.getMapPanel().setTileHeight(MapPanel.DEFAULT_TILE_HEIGHT);
-                myCanvas.getMapPanel().initializeMap(w,h);
+                String name = MapName.getText();
+                String desc = MapDesc.getText();
+                int width = Integer.parseInt(MapWidth.getText());
+                int height = Integer.parseInt(MapHeight.getText());
+                int tileWidth = Integer.parseInt(TileWidth.getText());
+                int tileHeight = Integer.parseInt(TileHeight.getText());
+                myCanvas.getMapPanel().setWidth(width);
+                myCanvas.getMapPanel().setHeight(height);
+                myCanvas.getMapPanel().setTileWidth(tileWidth);
+                myCanvas.getMapPanel().setTileHeight(tileHeight);
+                myCanvas.getMapPanel().initializeMap(name,desc,width,height,tileWidth,tileHeight);
             }
             catch (Exception e1) {
                 //TODO

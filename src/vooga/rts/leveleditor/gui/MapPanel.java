@@ -146,9 +146,8 @@ public class MapPanel extends JComponent {
         repaint();
     }
 
-    public void initializeMap (int w, int h) {
-        myMap = new EditableMap(w, h);
-
+    public void initializeMap (String name, String desc, int width, int height, int tileWidth, int tileHeight) {
+        myMap = new EditableMap(name,desc,width, height, tileWidth, tileHeight);
     }
 
     public void ZoomIn () {

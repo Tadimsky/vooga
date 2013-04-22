@@ -48,21 +48,16 @@ public class EditableMap implements Serializable {
     private BetterMapSaver mySaver;
     private BetterMapLoader myLoader;
 
-    public EditableMap (int x, int y, int nodeX, int nodeY) {
-
+    public EditableMap (String name, String desc, int x, int y, int nodeX, int nodeY) {
+        myMapName = name;
+        myDescription =desc;
         myXSize = x;
         myYSize = y;
-
         initializeMap(nodeX, nodeY);
     }
 
-    public EditableMap (int x, int y) {
-
-        this(x, y, MapPanel.DEFAULT_TILE_WIDTH, MapPanel.DEFAULT_TILE_HEIGHT);
-    }
-
     public EditableMap () {
-        this(0, 0);
+        this("", "", 0, 0, 0, 0);
     }
 
     public void initializeMap (int width, int height) {
@@ -341,7 +336,7 @@ public class EditableMap implements Serializable {
 
     
     public static void main(String[] args) {
-        EditableMap test = new EditableMap(10,10);
+        EditableMap test = new EditableMap("TestMap","This is a test map",10,10,50,50);
         test.addPlayer(1,2);
         test.addPlayer(2,3);
         test.addPlayer(3,4);
