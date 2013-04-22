@@ -24,7 +24,7 @@ public class TerrainPanel extends MapComponentPanel {
 
     public void setCurrentSelectTerrain (Terrain t) {
         myCanvas.setCurrentSelectTerrain(t);
-
+        
     }
 
 }

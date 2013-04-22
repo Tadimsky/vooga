@@ -306,6 +306,16 @@ public class EditableMap implements Serializable {
                 myNodeMatrix[i][j].ZoomIn();
             }
         }
+        
+        for(Resource r : myResource) {
+            r.zoomIn();
+        }
+        
+        for(MapLayer l : myLayers.values()) {
+            for(Terrain t : l.getTerrainSet()) {
+                t.zoomIn();
+            }
+        }
 
     }
 
@@ -314,6 +324,16 @@ public class EditableMap implements Serializable {
         for (int i = 0; i < myXSize; i++) {
             for (int j = 0; j < myYSize; j++) {
                 myNodeMatrix[i][j].ZoomOut();
+            }
+        }
+        
+        for(Resource r : myResource) {
+            r.zoomOut();
+        }
+        
+        for(MapLayer l : myLayers.values()) {
+            for(Terrain t : l.getTerrainSet()) {
+                t.zoomOut();
             }
         }
 

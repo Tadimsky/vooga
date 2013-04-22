@@ -22,6 +22,12 @@ public class Tile extends MapComponent {
         super(ID,name,imageName);
     }
     
+    //test
+    public Tile(int ID, String name, BufferedImage image) {
+        super(ID,name,"");
+        myImage = image;
+    }
+    
     public void refreshImage() throws IOException {
         if(myResource.containsKey(myID+"")) {
             String content = myResource.getString(myID+"");

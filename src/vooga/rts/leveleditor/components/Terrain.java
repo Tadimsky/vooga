@@ -3,6 +3,7 @@ package vooga.rts.leveleditor.components;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import vooga.rts.leveleditor.gui.MapPanel;
 import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Location;
 
@@ -21,6 +22,8 @@ public class Terrain extends MapComponent {
     protected Location myLocation;
 
     private int myWalkAbility;
+    private int myImageWidth;
+    private int myImageHeight;
 
     public Terrain (Location loc, int ID) {
         super(BUNDLE_NAME);
@@ -51,17 +54,6 @@ public class Terrain extends MapComponent {
         }
     }
 
-    /*
-     * @Override
-     * public void setType (int id) {
-     * super.setType(id);
-     * try {
-     * refreshImage();
-     * }
-     * catch (Exception e) {
-     * }
-     * }
-     */
 
     public void refreshImage () throws IOException {
         if (myResource.containsKey(myID + "")) {
@@ -73,6 +65,8 @@ public class Terrain extends MapComponent {
             myImage =
                     ResourceManager.getInstance().<BufferedImage> getFile(myImageName,
                                                                           BufferedImage.class);
+            myImageWidth = myImage.getWidth();
+            myImageHeight = myImage.getHeight();
         }
     }
 
@@ -91,9 +85,29 @@ public class Terrain extends MapComponent {
     public int getMyY () {
         return (int) myLocation.getY();
     }
+    
+    public int getImageWidth() {
+        return myImageWidth;
+    }
+    
+    public int getImageHeight() {
+        return myImageHeight;
+    }
+
+    public void zoomIn() {
+        myLocation = new Location(myLocation.getX()*MapPanel.ZOOM_RATE,myLocation.getY()*MapPanel.ZOOM_RATE);
+        myImageWidth = (int)(myImageWidth*MapPanel.ZOOM_RATE);
+        myImageHeight = (int)(myImageHeight*MapPanel.ZOOM_RATE);
+    }
+    
+    public void zoomOut() {
+        myLocation = new Location(myLocation.getX()/MapPanel.ZOOM_RATE,myLocation.getY()/MapPanel.ZOOM_RATE);
+        myImageWidth = (int)(myImageWidth/MapPanel.ZOOM_RATE);
+        myImageHeight = (int)(myImageHeight/MapPanel.ZOOM_RATE);     
+    }
 
     public void paint (Graphics pen) {
-        pen.drawImage(myImage, (int) myLocation.getX(), (int) myLocation.getY(), null);
+        pen.drawImage(myImage, getMyX(), getMyY(), myImageWidth,myImageHeight,null);
     }
 
 }
