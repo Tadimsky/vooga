@@ -30,7 +30,11 @@ public interface GatherStrategy extends Strategy {
 	 * @param gatherable
 	 *            is the resource being gathered
 	 */
-	public void gatherResource(int playerID, IGatherable gatherable);
+
+	public void gatherResource (int playerID, IGatherable gatherable);
+	
+
+	
 
 	/**
 	 * Updates the gather strategies so that the CanGather can update its 

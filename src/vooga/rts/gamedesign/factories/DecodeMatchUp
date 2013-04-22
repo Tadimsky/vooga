@@ -18,4 +18,8 @@
 		<type>strategies</type>
 		<decoderPath>vooga.rts.gamedesign.factories.StrategyDecoder</decoderPath>
 	</pair>
+	<pair>
+		<type>units</type>
+		<decoderPath>vooga.rts.gamedesign.factories.UnitDecoder</decoderPath>
+	</pair>
 </XMLMatchUp>

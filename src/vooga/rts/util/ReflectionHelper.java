@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  * It has a few methods that return the information that is needed.
  * 
  * @author Jonathan Schmidt
- * 
+ * @modified Francesco Agosti
  */
 public class ReflectionHelper {
 
@@ -35,6 +35,21 @@ public class ReflectionHelper {
             }
         }
         return null;
+    }
+    
+    /**
+     * Retuns a new instance of your class given your parameters. 
+     * @param c
+     * @param params
+     * @return
+     */
+    public static Object makeInstance(Class<?> c, Object ... params){
+    	try {
+			return findConstructor(c,params).newInstance(params);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
     }
 
     /**

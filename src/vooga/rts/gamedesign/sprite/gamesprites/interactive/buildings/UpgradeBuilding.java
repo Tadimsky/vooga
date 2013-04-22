@@ -21,6 +21,19 @@ import vooga.rts.util.Sound;
  * 
  */
 
+public class UpgradeBuilding extends Building{
+	private static int PRODUCE_TIME = 90;
+	
+	public UpgradeBuilding(Pixmap image, Location3D center, Dimension size,
+			Sound sound, int playerID, int health) {
+		super(image, center, size, sound, playerID, health, PRODUCE_TIME, null);
+	}
+	
+	/**
+=======
+=======
+
+>>>>>>> 4cbb067614e6ce56f50798db664e30c5bf6a75f7
 public class UpgradeBuilding extends Building {
     public int PRODUCE_TIME = 90;
 
@@ -35,6 +48,7 @@ public class UpgradeBuilding extends Building {
     }
 
     /**
+>>>>>>> master
      * Adds the list of available upgrades into the list of available actions.
      */
     public void addUpgradeActions (UpgradeTree upgradeTree) {

@@ -31,7 +31,7 @@ public class ProductionBuilding extends Building implements IObservable {
 			int playerID,
 			int health,
 			double buildTime) {
-		super(image, center, size, sound, playerID, health, buildTime);
+		super(image, center, size, sound, playerID, health, buildTime,null);
 		myRallyPoint = new Location3D(getWorldLocation().getX(), getWorldLocation().getY() + 50, 0);
 		myProducables = new ArrayList<Unit>();
 		myObservers = new ArrayList<IObserver>();

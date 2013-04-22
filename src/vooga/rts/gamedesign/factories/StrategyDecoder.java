@@ -11,6 +11,7 @@ import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.gamedesign.strategy.attackstrategy.AttackStrategy;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
 import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
+import vooga.rts.util.Location3D;
 
 /**
  * Decodes all the strategies defined in the game element XML file, initializes them,
@@ -54,10 +55,10 @@ public class StrategyDecoder extends Decoder{
 					strategy = Class.forName(path);
 					
 				} catch (ClassNotFoundException e) {
-					System.out.println("MERRR");
+					e.printStackTrace();
 				}
-				
-				Strategy strat = (Strategy) strategy.getConstructor().newInstance();
+				//This class needs to change because strategy constructors have changed. 
+				//Strategy strat = (Strategy) strategy.getConstructor(Location3D.class, int.class).newInstance(new Location);
 				myFactory.put(key, strat);
 				
 			}

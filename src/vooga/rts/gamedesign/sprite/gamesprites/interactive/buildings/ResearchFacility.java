@@ -24,7 +24,7 @@ public class ResearchFacility extends Building {
                              int playerID,
                              int health,
                              double buildTime) {
-        super(image, center, size, sound, playerID, health, buildTime);
+        super(image, center, size, sound, playerID, health, buildTime,null);
     }
 
     @Override

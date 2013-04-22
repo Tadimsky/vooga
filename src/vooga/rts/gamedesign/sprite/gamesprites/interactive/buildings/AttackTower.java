@@ -19,7 +19,7 @@ public class AttackTower extends Building {
 
 	public AttackTower(Pixmap image, Location3D center, Dimension size,
 			Sound sound, int playerID, int health, double buildTime) {
-		super(image, center, size, sound, playerID, health, buildTime);
+		super(image, center, size, sound, playerID, health, buildTime, null);
 		// TODO Auto-generated constructor stub
 	}
 

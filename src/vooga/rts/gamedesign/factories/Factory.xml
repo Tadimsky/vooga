@@ -2,39 +2,55 @@
 
 
 <GameElements>
-	<Upgrade>
-		<type>
-			<name>Armor</name>
-			<upgradeNode>
-				<id>1</id> 
-				<nodeName>WorstArmor</nodeName>
-				<object>Health</object>
-				<value>50</value>
-			</upgradeNode>
-			<upgradeNode>
-				<id>2</id>
-				<nodeName>BestArmor</nodeName>
-				<object>Damage</object>
-				<value>100</value>
-			</upgradeNode>
-		</type>
-		<type>
-			<name>Health</name>
-			<upgradeNode>
-				<id>1</id> 
-				<nodeName>Boost1</nodeName>
-				<object>Health</object>
-				<value>50</value>
-			</upgradeNode>
-			<upgradeNode>
-				<id>2</id>
-				<nodeName>Boost2</nodeName>
-				<object>Health</object>
-				<value>100</value>
-			</upgradeNode>
-		</type>
-	</Upgrade>
-	<resources src = "vooga.rts.gamedesign.sprite.rtsprite.Resource">
+<Upgrade>
+	<type>
+		<name>Health</name>
+		<upgradeNode>
+			<parent>Health</parent>
+			<nodeName>Boost1</nodeName>
+			<object>Health</object>
+			<value>50</value>
+			<resourceCostType>Resource</resourceCostType>
+			<resourceAmount>30</resourceAmount>
+		</upgradeNode>
+		<upgradeNode>
+			<parent>Health</parent>
+			<nodeName>Boost2</nodeName>
+			<object>Health</object>
+			<value>100</value>
+			<resourceCostType>Resource</resourceCostType>
+			<resourceAmount>30</resourceAmount>
+		</upgradeNode>
+	</type>
+	<type>
+		<name>Attack</name>
+		<upgradeNode>
+			<parent>Attack</parent>
+			<nodeName>CanAttack</nodeName>
+			<object>AttackStrategy</object>
+			<value>0</value>
+			<resourceCostType>Resource</resourceCostType>
+			<resourceAmount>30</resourceAmount>
+		</upgradeNode>
+		<upgradeNode>
+			<parent>Attack</parent>
+			<nodeName>RangeBoost1</nodeName>
+			<object>Range</object>
+			<value>100</value>
+			<resourceCostType>Resource</resourceCostType>
+			<resourceAmount>30</resourceAmount>
+		</upgradeNode>
+		<upgradeNode>
+			<parent>Attack</parent>
+			<nodeName>DamageBoost1</nodeName>
+			<object>Damage</object>
+			<value>100</value>
+			<resourceCostType>Resource</resourceCostType>
+			<resourceAmount>30</resourceAmount>
+		</upgradeNode>
+	</type>
+</Upgrade>
+	<resources src = "vooga.rts.gamedesign.sprite.gamesprites.Resource">
 		<resource>
 			<name>gold</name>
 			<img>gold.png</img>
@@ -46,6 +62,7 @@
 			<health>100</health>
 		</resource>
 	</resources>
+	<!--
 	<strategies>
 		<attacks>
 			<canattack src = "vooga.rts.gamedesign.strategy.attackstrategy.CanAttack"/>
@@ -60,19 +77,20 @@
 			<cannotgather src = "vooga.rts.gamedesign.strategy.gatherstrategy.CannotGather"/>
 		</gathers>
 	</strategies>
-	<buildings src = "vooga.rts.gamedesign.sprite.rtsprite.interactive.buildings.Building">
+	-->
+	<buildings src = "vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building">
 		<building>
 			<name>home</name>
-			<img>home.jpg</img>
+			<img>home.png</img>
+			<sound>pikachu.wav</sound>
 			<health>1000</health>
 			<buildtime>100</buildtime>
 			<attack>cannotattack</attack>
 			<produce>worker soldier</produce>
-			<cost>
-				<gold>50</gold>
-				<wood>50</wood>
-			</cost>
 		</building>
+		<custom src = "vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Tower">
+			<name>tower</name>
+		</custom>
 	</buildings>
 	<units src = "vooga.rts.gamedesign.sprite.rtsprite.interactive.units.Unit">
 		<unit>
@@ -83,9 +101,6 @@
 			<gather>cannotgather</gather>
 			<occupy>cannotoccupy</occupy>
 			<produce></produce>
-			<cost>
-				<gold>50</gold>
-			</cost>
 		</unit>
 		<unit>
 			<name>worker</name>
@@ -95,9 +110,6 @@
 			<gather>cangather</gather>
 			<occupy>cannotoccupy</occupy>
 			<produce>home</produce>
-			<cost>
-				<gold>50</gold>
-			</cost>
 		</unit>
 	</units>
 </GameElements>

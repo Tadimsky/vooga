@@ -17,10 +17,15 @@ import vooga.rts.util.DelayedTask;
  */
 
 public class CannotGather implements GatherStrategy {
+	
+	public CannotGather() {
+		
+	}
 
 	@Override
 	public void gatherResource(int playerID, IGatherable gatherable) {
 	}
+
 
 	@Override
 	public void update(double elapsedTime) {
