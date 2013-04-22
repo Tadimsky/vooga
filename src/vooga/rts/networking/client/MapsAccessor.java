@@ -1,30 +1,32 @@
 package vooga.rts.networking.client;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import vooga.rts.networking.server.GameContainer;
 
 public class MapsAccessor {
-    private static final String DEFAULT_RESOURCE_PACKAGE = "vooga.rts.networking.resources.";
-    private ResourceBundle myMapResources;
-    private Map<String, GameMap> myMaps;
+    private static final String DEFAULT_PACKAGE = "vooga.rts.";
+    private static final String DEFAULT_RESOURCE = ".resources.maps";
     
-    public MapsAccessor() {
-        myMapResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "maps");
-        for(String map : myMapResources.keySet()) {
-            String values = myMapResources.getString(map);
-            String [] vals = values.split(", "); 
-            String nameOfMap = vals[0];
-            int maxNumOfPlayers = Integer.parseInt(vals[1]);//TODO: could cause error if not an int, write metho to abstract this with try catch
-            int playersPerTeam = Integer.parseInt(vals[2]);//same situation
-           
-            myMaps.put(nameOfMap, new GameMap(nameOfMap, getPathOfMap(nameOfMap), playersPerTeam, maxNumOfPlayers));
-        }
+    private MapsAccessor() {    
     }
     
-    
-    private String getPathOfMap(String localName) {
-        return "map directory path" + localName;//TODO: establish default maps directory location in reference to user.dir
+    /**
+     * 
+     * @param gameName name of the game as in the package path
+     * @return map containing game specific information
+     */
+    public static Map<String, Integer> getMaps(String gameName){
+    	String path = DEFAULT_PACKAGE + gameName + DEFAULT_RESOURCE;
+    	ResourceBundle resource = ResourceBundle.getBundle(path);
+    	Map<String,Integer> mapInfo = new HashMap<String,Integer>();
+    	for (String s : resource.keySet()){	
+    		String info = resource.getString(s);
+    		String[] infoArray = info.split(",\\s+");
+    		mapInfo.put(infoArray[0], Integer.parseInt(infoArray[1]));	
+    	}
+    	return mapInfo;
     }
 }

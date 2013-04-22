@@ -2,6 +2,7 @@ package vooga.rts.networking.server;
 
 import java.util.HashMap;
 import java.util.Map;
+import vooga.rts.networking.communications.LobbyInfo;
 
 
 /**
@@ -15,6 +16,8 @@ import java.util.Map;
 public class GameContainer extends AbstractThreadContainer {
 
     private Map<Integer, Room> myRooms = new HashMap<Integer, Room>();
+    private Map<Integer, LobbyInfo> myLobbyInfos = new HashMap<Integer, LobbyInfo>();
+    private int myRoomNumber = 0;
 
     /**
      * Removes the room from the game container.
@@ -41,6 +44,18 @@ public class GameContainer extends AbstractThreadContainer {
             removeConnection(thread);
             myRooms.get(lobbyNumber).addConnection(thread);
         }
+    }
+    
+    @Override
+    public void startLobby (ConnectionThread thread, LobbyInfo lobbyInfo) {
+        Room lobby = new Lobby(myRoomNumber, this, lobbyInfo);
+        myRoomNumber++;
+        lobby.addConnection(thread);
+    }
+    
+    @Override
+    public void requestLobbies (ConnectionThread thread) {
+        
     }
 
 }

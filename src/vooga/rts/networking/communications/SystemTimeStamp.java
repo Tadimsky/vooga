@@ -30,7 +30,9 @@ public class SystemTimeStamp extends TimeStamp {
     }
 
     /**
-     * Stamps as initial time plus .
+     * Stamps as initial time plus time passed in.
+     * 
+     * @param time to add to stamp
      */
     @Override
     public long stamp (long time) {

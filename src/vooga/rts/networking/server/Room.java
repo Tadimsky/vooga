@@ -1,5 +1,9 @@
 package vooga.rts.networking.server;
 
+import vooga.rts.networking.communications.ExpandedLobbyInfo;
+import vooga.rts.networking.communications.LobbyInfo;
+
+
 /**
  * This is the superclass for Lobby and GameServer. It represents a small
  * 
@@ -9,15 +13,18 @@ package vooga.rts.networking.server;
 public class Room extends AbstractThreadContainer {
     private GameContainer myGameContainer;
     private int myID;
+    private ExpandedLobbyInfo myLobbyModel;
 
     /**
      * Creates a room with ID and GameContainer.
      * 
      * @param id room number
      * @param container GameContainer
+     * @param lobbyInfo lobby info
      */
-    public Room (int id, GameContainer container) {
+    public Room (int id, GameContainer container, LobbyInfo lobbyInfo) {
         setIDandContainer(id, container);
+        myLobbyModel = new ExpandedLobbyInfo(lobbyInfo, id);
     }
 
     /**
@@ -32,6 +39,7 @@ public class Room extends AbstractThreadContainer {
     public Room (int id, GameContainer container, Room room) {
         super(room);
         setIDandContainer(id, container);
+        myLobbyModel = room.getLobbyModel();
         room.removeAllConnections();
         container.removeRoom(room);
         container.addRoom(this);
@@ -48,6 +56,10 @@ public class Room extends AbstractThreadContainer {
 
     protected int getID () {
         return myID;
+    }
+
+    protected ExpandedLobbyInfo getLobbyModel () {
+        return myLobbyModel;
     }
 
 }

@@ -52,6 +52,7 @@ public class NetworkLogger {
         mySetup = new LoggerSetup();
         LOGGER.setUseParentHandlers(false);
         LOGGER.setLevel(Level.ALL);
+        addHandler(FORMAT_CONSOLE);
     }
 
     /**
@@ -107,7 +108,7 @@ public class NetworkLogger {
      * 
      * @param level
      */
-    public void setLevel (Level level) {
+    public static void setLevel (Level level) {
         LOGGER.setLevel(level);
         for (Handler h : LOGGER.getHandlers()) {
             h.setLevel(level);
@@ -119,7 +120,7 @@ public class NetworkLogger {
      * 
      * @param message
      */
-    public void logMessage (String message) {
+    public static void logMessage (String message) {
         LOGGER.log(LOGGER.getLevel(), message);
     }
 
@@ -128,7 +129,7 @@ public class NetworkLogger {
      * @param level Constant representing the level of the message
      * @param message String containing the message to be logged
      */
-    public void logMessage (Level level, String message) {
+    public static void logMessage (Level level, String message) {
         LOGGER.log(level, message);
     }
     

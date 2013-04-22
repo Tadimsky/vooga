@@ -16,30 +16,34 @@ public class UserTimeStamp extends TimeStamp {
 
     /**
      * Starts at passed in time.
-     * @param startTime
+     * 
+     * @param startTime time to start
      */
     public UserTimeStamp (Long startTime) {
         myStartTime = startTime;
         resetStamp();
     }
-    
+
+    /**
+     * Instantiates a timestamp with starting time 0.
+     */
     public UserTimeStamp () {
         resetStamp();
     }
-    
+
     /**
      * Resets time stamp to default value passed in.
      */
     @Override
     public void resetStamp () {
-       setInitialTime(myStartTime);
-       setFinalTime(DEFAULT_VALUE);
-       mySystemStartTime = System.currentTimeMillis();
+        setInitialTime(myStartTime);
+        setFinalTime(DEFAULT_VALUE);
+        mySystemStartTime = System.currentTimeMillis();
     }
 
     @Override
     public long getDifference () {
-        if(getFinalTime() == DEFAULT_VALUE) 
+        if (getFinalTime() == DEFAULT_VALUE)
             setFinalTime(System.currentTimeMillis() - mySystemStartTime);
         return getFinalTime() - getInitialTime();
     }

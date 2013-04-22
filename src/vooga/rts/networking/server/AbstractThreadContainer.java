@@ -2,6 +2,7 @@ package vooga.rts.networking.server;
 
 import java.util.HashMap;
 import java.util.Map;
+import vooga.rts.networking.communications.LobbyInfo;
 import vooga.rts.networking.communications.Message;
 import vooga.rts.networking.communications.clientmessages.ClientInfoMessage;
 
@@ -21,7 +22,7 @@ public abstract class AbstractThreadContainer implements IThreadContainer, IMess
             new HashMap<Integer, ConnectionThread>();
 
     /**
-     * Default empty constructor.
+     * Default empty constructor, initializes state.
      */
     public AbstractThreadContainer () {
     }
@@ -52,7 +53,11 @@ public abstract class AbstractThreadContainer implements IThreadContainer, IMess
     }
 
     @Override
-    public void requestLobbies (ConnectionThread thread, int startNumber, int endNumber) {
+    public void requestLobbies (ConnectionThread thread) {
+    }
+
+    @Override
+    public void startLobby (ConnectionThread thread, LobbyInfo lobbyInfo) {
     }
 
     @Override

@@ -2,7 +2,6 @@ package vooga.rts.networking.server;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 
 /**
@@ -14,16 +13,13 @@ import java.util.ResourceBundle;
  * 
  */
 public class MatchmakerServer extends AbstractThreadContainer {
-    private static final String DEFAULT_RESOURCE_PACKAGE = "vooga.rts.networking.resources.";
     private Map<String, GameContainer> myGameContainers = new HashMap<String, GameContainer>();
     private ConnectionServer myConnectionServer = new ConnectionServer(this);
-    private ResourceBundle myGamesBundle;
 
     /**
-     * Initializes overall server hierarchy, reads in game names and creates containers.
+     * Initializes overall server hierarchy.
      */
     public MatchmakerServer () {
-        initializeGameContainers();
     }
 
     /**
@@ -33,19 +29,17 @@ public class MatchmakerServer extends AbstractThreadContainer {
         myConnectionServer.start();
     }
 
-    private void initializeGameContainers () {
-        myGamesBundle = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "games");
-        for (String game : myGamesBundle.keySet()) {
-            myGameContainers.put(game, new GameContainer());
-        }
-    }
-
     @Override
     public void joinGameContainer (ConnectionThread thread, String gameName) {
+        GameContainer container;
         if (myGameContainers.containsKey(gameName)) {
-            myGameContainers.get(gameName).addConnection(thread);
-            removeConnection(thread);
+            container = myGameContainers.get(gameName);
+        } else {
+            container = new GameContainer();
+            myGameContainers.put(gameName, container);
         }
+        container.addConnection(thread);
+        removeConnection(thread);
     }
 
 }

@@ -1,25 +1,24 @@
 package vooga.rts.networking.client.GUI;
 
+import java.awt.Dimension;
 import javax.swing.JFrame;
-import vooga.rts.networking.communications.clientmessages.HostDescriptionMessage;
 
+/**
+ * Test Main for GUI package.
+ * @author David Winegar
+ *
+ */
 public class TestMain {
 
-    private String[] imageFileNames = { "Scroll.png", "Scroll1.jpg",
-                                        "Scroll2.jpg", "Scroll3.jpg","Scroll.png", "Scroll1.jpg",
-                                        "Scroll2.jpg", "Scroll3.jpg"};
-
-    public static void main(String[] args) {
-        ServerBrowser s = new ServerBrowser();
-        String[] imageFileNames = { "Scroll.png", "Scroll1.jpg",
-                                            "Scroll2.jpg", "Scroll3.jpg","Scroll.png", "Scroll1.jpg",
-                                            "Scroll2.jpg", "Scroll3.jpg"};
-        for (int i = 0 ; i< imageFileNames.length; i++) {
-            HostDescriptionMessage m = new HostDescriptionMessage("user "+i,"map "+i,
-                                                                  "host "+i,"server "+i, 
-                                                                  "../../resources/" + imageFileNames[i]);
-            s.addConnection(m);
-        }
-        
+    public static void main (String[] args) {
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setPreferredSize(new Dimension(600, 500));
+        ViewContainerPanel panel = new ViewContainerPanel("test");
+        frame.add(panel);
+        //panel.changeView(new ServerBrowserView(new ServerBrowserTableAdapter()), " server browser");
+        panel.changeView(new CreateLobbyView(), " lobby view");
+        frame.setVisible(true);
+        frame.pack();
     }
 }

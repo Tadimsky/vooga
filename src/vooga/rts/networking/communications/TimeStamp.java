@@ -11,8 +11,8 @@ import java.io.Serializable;
  * 
  */
 public abstract class TimeStamp implements Serializable, Comparable<TimeStamp> {
-    private static final long serialVersionUID = -2759543981020260696L;
     protected static final int DEFAULT_VALUE = -1;
+    private static final long serialVersionUID = -2759543981020260696L;
     private long myInitialTime = DEFAULT_VALUE;
     private long myFinalTime = DEFAULT_VALUE;
 
@@ -55,6 +55,7 @@ public abstract class TimeStamp implements Serializable, Comparable<TimeStamp> {
     /**
      * sets the received message time for this stamp
      * 
+     * @param time time to stamp
      * @return difference in elapsed time since this stamp was created
      */
     public abstract long stamp (long time);
@@ -83,7 +84,7 @@ public abstract class TimeStamp implements Serializable, Comparable<TimeStamp> {
         if (object == null) { return false; }
         if (!(object instanceof SystemTimeStamp)) { return false; }
         SystemTimeStamp message = (SystemTimeStamp) object;
-        return (getInitialTime() != message.getInitialTime());
+        return getInitialTime() != message.getInitialTime();
     }
 
     @Override

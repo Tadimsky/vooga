@@ -29,9 +29,19 @@ public class ServerLogger {
 
     private static ServerLogger instance = null;
 
-    public static ServerLogger getInstance () throws SecurityException, IOException {
+    public static ServerLogger getInstance ()  {
         if (instance == null) {
-            prepareLogger();
+            //Cannot possibly add handling, as we are unable to log the error if the logger fails!
+            try {
+                prepareLogger();
+            }
+            catch (SecurityException e) {
+                // 
+                e.printStackTrace();
+            }
+            catch (IOException e) {                
+                e.printStackTrace();
+            }
             instance = new ServerLogger();
         }
         return instance;

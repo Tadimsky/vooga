@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W4C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+</head>
+<body bgcolor="white">
+<p>
+This package is part of the CompSci 308 VOOGA Game Engine Project.
+
+<p>
+<h1>Description</h1>
+This package is the logger package. It contains a NetworkLogger that 
+serves as a wrapper for a Java.util.Logger instance. It also contains
+IHandlerFormat that serves as a way to get various Handlers to the 
+NetworkLogger.
+</p>
+
+<p>
+<h2> Specifics </h2>
+Network Logger is a class that handles a logger. It makes use of the singleton pattern
+to guarantee the use of a single logger in the program
+This class does not propagate LogRecords to parent Loggers, so if the
+user wants the log printed on the console, he should manually call addHandler
+with FORMAT_CONSOLE as input
+By default, the logger starts at ALL level so any type of message is logged 
+Note that the user does not need to use any other class in this package 
+except this one to manage the logger
+</p>
+
+<h4>Class hierarchy</h4>
+<p> HandlerConsole, HandlerSocket, HandlerStream, HandlerTxt, and HandlerXML
+all extend IHandlerFormat.
+
+<h4>Workflow</h4>
+<p> Create a NetworkLogger through its singleton method, and then
+use log() to log something or addHandler() to add a new handler.
+
+<h4>Opportunities for extension</h4>
+<p> Obviously more IHandlerFormats could be added to allow for more ways
+to write messages.
+
+<!-- Put @see and @since tags down here. -->
+
+</body>
+</html>

@@ -14,11 +14,17 @@ public interface IClient {
      * Sends this message to the server.
      * @param message to send
      */
-    public abstract void sendData (Message message);
+    public void sendData (Message message);
 
     /**
      * Sets this as the message receiver. 
      * @param messageReceiver
      */
-    public abstract void setMessageReceiver(IMessageReceiver messageReceiver);
+    public void setMessageReceiver (IMessageReceiver messageReceiver);
+    
+    /**
+     * Closes the connection with the server.
+     */
+    public void closeConnection ();
+    
 }

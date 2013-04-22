@@ -13,6 +13,10 @@ public class JoinLobbyMessage extends ClientInfoMessage {
     private static final long serialVersionUID = -874567492715054864L;
     private int myLobbyNumber;
     
+    /**
+     * Joins the lobby.
+     * @param lobbyNumber number of the lobby
+     */
     public JoinLobbyMessage (int lobbyNumber) {
         myLobbyNumber = lobbyNumber;
     }

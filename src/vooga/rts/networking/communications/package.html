@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W4C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+</head>
+<body bgcolor="white">
+<p>
+This package is part of the CompSci 308 VOOGA Game Engine Project.
+
+<p>
+This package contains the LobbyInfo classes, the default Message classes, and 
+the TimeStamp classes.
+
+<h4>Class hierarchy</h4>
+<p> 
+ExpandedLobbyInfo extends LobbyInfo, Message is a superclass used in subpackages,
+ and SystemTimeStamp
+and UserTimeStamp extend TimeStamp.
+
+<p>
+TimeStamp is the class used to work with recording times messages are sent and received.
+They can be based on system time (SystemTimeStamp) or arbitrary user-defined time 
+(UserTimeStamp).
+
+<p>
+Message is the base class used to send info back and forth between the server and client. 
+It contains methods dealing with comparison based on time and ways to track when the message
+was sent and received.
+In this package, there is also GameMessage which
+is an empty subclass used by game genres to subclass for their purposes. 
+
+<p>
+LobbyInfo is a lightweight class used for communicating between server and client 
+about lobbies that only need a few parameters.
+ExpandedLobbyInfo contains much more information and is used when a client is inside the
+lobby to get all the information about that lobby.
+Both of these classes are intended to be attached to messages in order to be sent.
+
+<h4>Workflow</h4>
+<p> 
+Messages are the basic class that is sent back and forth by the client and server.
+TimeStamps can be used with Timers on client and Server with the UserTimeStamp or 
+just with system time.
+LobbyInfo is sent from server to client for the server browser and from client to server
+for creating a new server. ExpandedLobbyInfo is used when a client is inside a lobby for
+updating state about that lobby.
+
+<h4>Opportunities for extension</h4>
+<p>
+Obviously Message is a class ripe for extension - it can be easily extended for any
+type of client-server communication needed. GameMessage is intended to be extended by 
+all genres (in this case, only the RTS is using networking, so there will only be one RTS message).
+The TimeStamp classes can be extended for further differing behavior based on other times.
+The LobbyInfo could be extended if one needed more info about the lobby not contained in
+these classes.
+
+<!-- Put @see and @since tags down here. -->
+
+</body>
+</html>

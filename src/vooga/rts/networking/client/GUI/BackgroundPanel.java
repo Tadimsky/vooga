@@ -6,15 +6,15 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Panel containing a background image
+ * @author Henrique Moraes, Ellango Jothimurugesan
+ *
+ */
 public class BackgroundPanel extends JPanel{
     Image myImage;
     JPanel myInnerPanel;
@@ -23,7 +23,10 @@ public class BackgroundPanel extends JPanel{
     private static final String IMAGE_PATH = "../../resources/Scroll1.jpg";
     private String myPath;
     
-   
+   /**
+    * Constructor
+    * @param path image path for the image to set on the background
+    */
     public BackgroundPanel(String path) {
         myPath = path;
         ImageIcon icon = new ImageIcon(this.getClass().getResource(myPath));
@@ -33,22 +36,36 @@ public class BackgroundPanel extends JPanel{
         repaint();            
     }
     
+    /**
+     * Sets the background of this panel with a default image
+     */
     public BackgroundPanel() {
         this(IMAGE_PATH);                 
     }
     
+    /**
+     * 
+     * @param img Image to set on the background
+     */
     public void setBackgroundImage(Image img){
         myImage = img;
+        repaint();
     }
     
+    /**
+     * 
+     * @param img Image Icon to set on the background
+     */
     public void setBackgroundImage(ImageIcon img){
-        myImage = img.getImage();
+        setBackgroundImage(img.getImage());
     }
     
-    public JPanel getWorkingPanel() {
-        return myInnerPanel;
-    }
-    
+    /**
+     * Defines the margin spacing between this panel and the component inside
+     * it
+     * @param hgap horizontal gap
+     * @param vgap vertical gap
+     */
     public void defineMargin(int hgap, int vgap) {
         setBorder(new EmptyBorder(vgap, hgap, vgap, hgap));
     }

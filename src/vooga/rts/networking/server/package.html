@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W4C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+</head>
+<body bgcolor="white">
+<p>
+This package is part of the CompSci 308 VOOGA Game Engine Project.
+
+<p>
+This package contains all the exclusively server-side code. 
+
+<h4>Class hierarchy</h4>
+<p>
+MatchmakerServer, GameContainer, Room, Lobby, and GameServer all subclass
+from AbstractThreadContainer. This was intended to abstract out common
+functionality among classes. 
+
+<p>
+A MatchmakerServer contains multiple GameContainers. A GameContainer contains
+multiple Rooms, which can be Lobbies or GameServers. All of these contain
+ConnectionThreads.
+
+<h4>Workflow</h4>
+<p>
+The ConnectionServer listens for connections on the port. Once is receives
+one, it starts a new ConectionThread and passes that to the MatchmakerServer. 
+The client must then send an InitialConnectionMessage as its first 
+message. If this is received the ConnectionThread is moved to a 
+GameContainer corresponding to its game name. The client can then send
+requests to the GameContainer which it will send back with information. The
+client can ask to join a Room, which will, in this case, be a Lobby. Once in the
+Lobby, the client can change settings until the game is ready to launch,
+at which point the GameServer is instantiated and starts passing GameMessages back and
+forth.
+
+<h4>Opportunities for extension</h4>
+<p> 
+More levels could be added by extending AbstractThreadContainer. A designer
+could also decide they wanted another state in between gameServer and Lobby and extend
+Room to create one.
+
+<!-- Put @see and @since tags down here. -->
+
+</body>
+</html>
