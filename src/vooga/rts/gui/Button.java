@@ -39,11 +39,9 @@ public abstract class Button extends Observable implements IGameLoop {
         }
     }
 
-    public void processClick () {
-    }
+    public abstract void processClick ();
 
-    public void processHover () {
-    }
+    public abstract void processHover ();
 
     public boolean checkWithinBounds (int x, int y) {
         return (x > myPos.x && y > myPos.y && x < (myPos.x + mySize.width) && y < (myPos.y + mySize.height));

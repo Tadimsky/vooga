@@ -6,7 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import vooga.rts.gui.Menu;
-import vooga.rts.gui.buttons.ScreenButton;
+import vooga.rts.gui.Window;
+import vooga.rts.gui.buttons.MainMenuButton;
 import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Location;
 
@@ -19,33 +20,49 @@ public class MainMenu extends Menu {
 
     private Location myDefaultButtonLocation = new Location(678, 500);
 
+    private int ySpacing = 160;
+
     private double myX;
     private double myY;
 
-    private ScreenButton myStartButton;
+    private MainMenuButton mySingleButton;
+    private MainMenuButton myMultiButton;
 
     public MainMenu () {
         super();
 
-        myBGImage = ResourceManager.getInstance().<BufferedImage>getFile(DEFAULT_BGIMAGE_LOCATION, BufferedImage.class);
-        setImage(myBGImage);
+        myBGImage =
+                ResourceManager.getInstance().<BufferedImage> getFile(DEFAULT_BGIMAGE_LOCATION,
+                                                                      BufferedImage.class);
+        setBGImage(myBGImage);
 
-        myStartButton =
-                new ScreenButton("Start Game", myDefaultButtonDimension, myDefaultButtonLocation);
+        mySingleButton =
+                new MainMenuButton("Single Player", myDefaultButtonDimension,
+                                   myDefaultButtonLocation);
+        setScaledButton(mySingleButton);
 
-        addButton(myStartButton);
+        addButton(mySingleButton);
+
+        myMultiButton =
+                new MainMenuButton("Multi Player", myDefaultButtonDimension,
+                                   new Location(myDefaultButtonLocation.getX(),
+                                                (myDefaultButtonLocation.getY() + ySpacing)));
+
+        setScaledButton(myMultiButton);
+
+        addButton(myMultiButton);
     }
 
-    public void setScaledButton (Graphics2D pen, ScreenButton b) {
-        myX = pen.getDeviceConfiguration().getBounds().getWidth();
-        myY = pen.getDeviceConfiguration().getBounds().getHeight();
+    public void setScaledButton (MainMenuButton b) {
+        myX = Window.SCREEN_SIZE.getWidth();
+        myY = Window.SCREEN_SIZE.getHeight();
         double xFactor = myX / myBGImage.getWidth();
         double yFactor = myY / myBGImage.getHeight();
-        b.setSize(new Dimension((int) (myDefaultButtonDimension.getWidth() * xFactor),
-                                (int) (myDefaultButtonDimension.getHeight() * yFactor)));
+        b.setSize(new Dimension((int) (b.getSize().getWidth() * xFactor),
+                                (int) (b.getSize().getHeight() * yFactor)));
 
-        b.setPos(new Location((int) (myDefaultButtonLocation.getX() * xFactor),
-                              (int) (myDefaultButtonLocation.getY() * yFactor)));
+        b.setPos(new Location((int) (b.getPos().getX() * xFactor),
+                              (int) (b.getPos().getY() * yFactor)));
     }
 
     @Override
@@ -57,6 +74,5 @@ public class MainMenu extends Menu {
         pen.setColor(Color.white);
         pen.drawString("The Vooga RTS Game", 150, 150);
 
-        setScaledButton(pen, myStartButton);
     }
 }

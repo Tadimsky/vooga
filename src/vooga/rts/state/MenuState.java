@@ -11,6 +11,8 @@ import vooga.rts.commands.Command;
 import vooga.rts.commands.PositionCommand;
 import vooga.rts.gui.Menu;
 import vooga.rts.gui.menus.MainMenu;
+import vooga.rts.gui.menus.MultiMenu;
+import vooga.rts.gui.menus.SetupMenu;
 
 
 /**
@@ -28,6 +30,8 @@ public class MenuState extends SubState implements Observer {
         super(observer);
         myMenus = new HashMap<Integer, Menu>();
         addMenu(0, new MainMenu());
+        addMenu(1, new MultiMenu());
+        addMenu(2, new SetupMenu());
     }
 
     public void addMenu (int index, Menu menu) {

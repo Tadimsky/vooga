@@ -4,28 +4,25 @@ import java.awt.Dimension;
 import vooga.rts.gui.Button;
 import vooga.rts.util.Location;
 
-public class USButton extends Button {
+public class ImageButton extends Button {
 
-    public USButton (String image, Dimension size, Location pos) {
+    public ImageButton (String image, Dimension size, Location pos) {
         super(image, size, pos);
     }
 
     @Override
-    public void update (double elapsedTime) {        
+    public void update (double elapsedTime) {
         setChanged();
-        
+        notifyObservers();
     }
 
     @Override
     public void processClick () {
-        // TODO Auto-generated method stub
-        
+        update(0);
     }
 
     @Override
     public void processHover () {
         // TODO Auto-generated method stub
-        
     }
-
 }

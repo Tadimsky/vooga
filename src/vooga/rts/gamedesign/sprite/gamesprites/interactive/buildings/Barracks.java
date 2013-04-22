@@ -37,7 +37,7 @@ public class Barracks extends Building {
         initProducables();
 
         setRallyPoint(new Location3D(300, 400, 0));
-        //myProductionStrategy = new CanProduce(this);
+        // myProductionStrategy = new CanProduce(this);
     }
 
     /*
@@ -47,43 +47,43 @@ public class Barracks extends Building {
         addProducable(new Soldier());
     }
 
-    //public void addProductionActions (ProductionBuilding productionBuilding) {
-        /*
-         * getActions().add(new ProductionAction("soldier",null,"I maketh un soldier",
-         * productionBuilding.getWorldLocation()){
-         * 
-         * @Override
-         * public void apply(int playerID) {
-         * Unit newProduction = (Unit) getProducables().get(0).copy();
-         * Location3D newProductionLoc = new Location3D(getProducedFrom());
-         * newProduction.setWorldLocation(newProductionLoc.getX(), newProductionLoc.getY(), 0);
-         * //these below are for testing purposes
-         * newProduction.move(getRallyPoint());
-         * //this part below will not be in actual implementation as I will notify player/unit
-         * manager that a new unit should be added to the player
-         * myInteractiveEntities.add(newProduction);
-         * getGameBuildingManager().distributeProduct(newProduction, playerID);
-         * //notifyProductionObserver(newProduction);
-         * }
-         * });
-         */
+    // public void addProductionActions (ProductionBuilding productionBuilding) {
+    /*
+     * getActions().add(new ProductionAction("soldier",null,"I maketh un soldier",
+     * productionBuilding.getWorldLocation()){
+     * 
+     * @Override
+     * public void apply(int playerID) {
+     * Unit newProduction = (Unit) getProducables().get(0).copy();
+     * Location3D newProductionLoc = new Location3D(getProducedFrom());
+     * newProduction.setWorldLocation(newProductionLoc.getX(), newProductionLoc.getY(), 0);
+     * //these below are for testing purposes
+     * newProduction.move(getRallyPoint());
+     * //this part below will not be in actual implementation as I will notify player/unit
+     * manager that a new unit should be added to the player
+     * myInteractiveEntities.add(newProduction);
+     * getGameBuildingManager().distributeProduct(newProduction, playerID);
+     * //notifyProductionObserver(newProduction);
+     * }
+     * });
+     */
 
     @Override
     public void addActions () {
-       put("s", new InteractiveAction(this) {
-          private Location3D myLocation;
-          
-          @Override
-          public void apply() {
-              getEntity().move(myLocation);
-          }
-          
-          @Override
-          public void update(Command command) {          
-              PositionCommand click = (PositionCommand) command;
-              myLocation = Camera.instance().viewtoWorld(click.getPosition());
-          }
-       });  
+        put("s", new InteractiveAction(this) {
+            private Location3D myLocation;
+
+            @Override
+            public void apply () {
+                getEntity().move(myLocation);
+            }
+
+            @Override
+            public void update (Command command) {
+                PositionCommand click = (PositionCommand) command;
+                myLocation = Camera.instance().viewtoWorld(click.getPosition());
+            }
+        });
     }
 
     @Override
@@ -97,13 +97,13 @@ public class Barracks extends Building {
     @Override
     public void update (double elapsedTime) {
         super.update(elapsedTime);
-            try {
-                // getActions().get(0).apply(2); //2: for testing. make Barrack create new Units of
-                // different team.
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            // getActions().get(0).apply(2); //2: for testing. make Barrack create new Units of
+            // different team.
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         for (InteractiveEntity ie : myInteractiveEntities) {
             ie.update(elapsedTime);
         }

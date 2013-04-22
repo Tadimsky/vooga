@@ -1,6 +1,7 @@
 package vooga.rts.player;
 
 import java.awt.AWTException;
+import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Robot;
@@ -9,6 +10,7 @@ import vooga.rts.commands.Command;
 import vooga.rts.controller.Controllable;
 import vooga.rts.controller.Controller;
 import vooga.rts.gui.Window;
+import vooga.rts.gui.menus.GameMenu;
 import vooga.rts.util.Camera;
 import vooga.rts.util.Location;
 
@@ -31,8 +33,13 @@ public class HumanPlayer extends Player implements Controller {
 
     private Robot myMouseMover;
 
+    private GameMenu myGameMenu;
+
     public HumanPlayer (int id) {
         super(id);
+
+        myGameMenu = new GameMenu();
+
         try {
             myMouseMover = new Robot();
         }
@@ -47,6 +54,7 @@ public class HumanPlayer extends Player implements Controller {
     public void sendCommand (Command command) {
         // Check for camera movement
         getManager().receiveCommand(command);
+        myGameMenu.receiveCommand(command);
     }
 
     public void checkCameraMouse (double elapsedtime) {
@@ -92,6 +100,12 @@ public class HumanPlayer extends Player implements Controller {
     public void update (double elapsedTime) {
         super.update(elapsedTime);
         checkCameraMouse(elapsedTime);
+    }
+
+    @Override
+    public void paint (Graphics2D pen) {
+        super.paint(pen);
+        myGameMenu.paint(pen);
     }
 
 }

@@ -17,13 +17,13 @@ import vooga.rts.gamedesign.sprite.gamesprites.Projectile;
 import vooga.rts.gamedesign.sprite.gamesprites.Resource;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Garrison;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Soldier;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Worker;
 import vooga.rts.gamedesign.state.DetectableState;
 import vooga.rts.gamedesign.strategy.production.CanProduce;
 import vooga.rts.gamedesign.weapon.Weapon;
+import vooga.rts.gui.menus.GameMenu;
 import vooga.rts.map.GameMap;
 import vooga.rts.player.HumanPlayer;
 import vooga.rts.player.Player;
@@ -39,11 +39,11 @@ import vooga.rts.util.PointTester;
 
 
 /**
- * The main model of the game. This keeps track of all the players, the humanplayer 
+ * The main model of the game. This keeps track of all the players, the humanplayer
  * associated with the local game, plus the map.
  * 
  * @author Challen Herzberg-Brovold
- *
+ * 
  */
 
 public class GameState extends SubState implements Controller {
@@ -107,9 +107,7 @@ public class GameState extends SubState implements Controller {
         // If it's a drag, we need to do some extra checking.
         if (command instanceof DragCommand) {
             myDrag = ((DragCommand) command).getScreenRectangle();
-            if (myDrag == null) {
-                return;
-            }
+            if (myDrag == null) { return; }
         }
         sendCommand(command);
     }
@@ -121,7 +119,8 @@ public class GameState extends SubState implements Controller {
 
     /**
      * Adds a player to the game
-     * @param player to add 
+     * 
+     * @param player to add
      * @param teamID of the player.
      */
     public void addPlayer (Player player, int teamID) {
@@ -165,7 +164,6 @@ public class GameState extends SubState implements Controller {
                                a.getWorldLocation(), new Dimension(30, 30), 2, 10, 6);
         a.getAttackStrategy().addWeapons(new Weapon(proj, 400, a.getWorldLocation(), 1));
         myHumanPlayer.add(a);
-
         addPlayer(2);
         Unit c = new Soldier(new Location3D(1000, 500, 0), 2);
         c.setHealth(150);
@@ -182,14 +180,14 @@ public class GameState extends SubState implements Controller {
         ((CanProduce) b.getProductionStrategy()).setRallyPoint(new Location3D(600, 500, 0));
         myHumanPlayer.add(b);
 
-//        Garrison garrison =
-//                new Garrison((new Pixmap(ResourceManager.getInstance()
-//                        .<BufferedImage> getFile("images/factory.png", BufferedImage.class))),
-//                             new Location3D(300, 300, 0), new Dimension(100, 100), null, 1, 300,
-//                             InteractiveEntity.DEFAULT_BUILD_TIME);
-//        garrison.getOccupyStrategy().addValidClassType(new Soldier());
-//        garrison.getOccupyStrategy().createOccupyActions(garrison);
-//        myHumanPlayer.add(garrison);
+        // Garrison garrison =
+        // new Garrison((new Pixmap(ResourceManager.getInstance()
+        // .<BufferedImage> getFile("images/factory.png", BufferedImage.class))),
+        // new Location3D(300, 300, 0), new Dimension(100, 100), null, 1, 300,
+        // InteractiveEntity.DEFAULT_BUILD_TIME);
+        // garrison.getOccupyStrategy().addValidClassType(new Soldier());
+        // garrison.getOccupyStrategy().createOccupyActions(garrison);
+        // myHumanPlayer.add(garrison);
 
         myMap = new GameMap(8, new Dimension(512, 512));
 
@@ -207,17 +205,17 @@ public class GameState extends SubState implements Controller {
             }
         });
 
-//        final Garrison testGarrison = garrison;
-//        occupyPukingTest = new DelayedTask(1, new Runnable() {
-//            @Override
-//            public void run () {
-//               if (testGarrison.getOccupyStrategy().getOccupiers().size() > 5) {
-//                    System.out.println("will puke!");
-//                    testGarrison.getAction(new Command("puke all I have")).apply();
-//                }
-//                occupyPukingTest.restart();
-//            }
-//        });
+        // final Garrison testGarrison = garrison;
+        // occupyPukingTest = new DelayedTask(1, new Runnable() {
+        // @Override
+        // public void run () {
+        // if (testGarrison.getOccupyStrategy().getOccupiers().size() > 5) {
+        // System.out.println("will puke!");
+        // testGarrison.getAction(new Command("puke all I have")).apply();
+        // }
+        // occupyPukingTest.restart();
+        // }
+        // });
     }
 
     private void yuckyUnitUpdate (double elapsedTime) {
