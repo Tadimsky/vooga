@@ -5,8 +5,8 @@ public class GameMap {
     private int myMaxPlayers;
     private int myPlayersPerTeam;
     private String myFilePath;
-    
-    public GameMap(String name, String pathofMapFile, int maxPlayers, int playersPerTeam) {
+
+    public GameMap (String name, String pathofMapFile, int maxPlayers, int playersPerTeam) {
         myName = name;
         myFilePath = pathofMapFile;
         myMaxPlayers = maxPlayers;
