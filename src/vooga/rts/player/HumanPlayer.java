@@ -61,7 +61,7 @@ public class HumanPlayer extends Player implements Observer {
     }
 
     private void createCommandMap () {
-        myCommandMap.put(0, new ClickCommand("click", null));
+        //myCommandMap.put(0, new ClickCommand("click", null));
         // ... add more here
     }
     
