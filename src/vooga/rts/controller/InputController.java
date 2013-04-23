@@ -45,6 +45,7 @@ public class InputController implements Controller {
     @Override
     public void sendCommand (Command command) {
         myState.receiveCommand(command);
+        
     }
 
     /*

@@ -99,7 +99,6 @@ public class Unit extends InteractiveEntity {
 
             @Override
             public void apply () {
-                System.out.println("Moving along sir");
                 getEntity().move(myLocation);
             }
 
