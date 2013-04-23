@@ -166,7 +166,8 @@ public class EntityState {
 
         if (myAttackingDelay != null) {
             if (myMovementState == MovementState.MOVING) {
-                myAttackingDelay.restart();
+            	myAttackingDelay.cancel();
+            	myAttackingState = AttackingState.NOT_ATTACKING;
             }
             else {
                // System.out.println("Not Moving!");

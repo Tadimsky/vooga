@@ -68,12 +68,7 @@ public class CanAttack implements AttackStrategy {
      *         activated Weapon.
      */
     private boolean inWeaponRange (InteractiveEntity enemy, double distance) {
-        // ellipse thing doesnt seem to be working very well.
-        if (!myWeapons.isEmpty() && distance < myWeapons.get(myWeaponIndex).getRange()) {
-            return true;
-        }
-        // buggy :( myWeapons.get(myWeaponIndex).inRange(enemy)
-        return false;
+        return (!myWeapons.isEmpty() && myWeapons.get(myWeaponIndex).inRange(enemy, distance));
     }
 
     /**
