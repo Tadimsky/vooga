@@ -1,5 +1,6 @@
 package vooga.rts.leveleditor.gui;
 
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
@@ -18,17 +19,16 @@ public class TileButton extends JToggleButton {
 
     private Tile myTile;
     private TilePanel myOwner;
-    private BufferedImage myIcon;
+    private Image myIcon;
     private Input myInput;
 
     public TileButton (Tile t, TilePanel owner) {
         myTile = t;
-        myIcon = t.getMyImage();
+        myIcon = t.getMyImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         myOwner = owner;
         myInput = new Input(INPUT_DIR, this);
         myInput.addListenerTo(this);
 
-        myIcon.getGraphics().drawImage(myIcon, 0, 0, 32, 32, null);
         setToolTipText(t.getMyName());
         setIcon(new ImageIcon(myIcon));
         setMargin(new Insets(2, 2, 2, 2));

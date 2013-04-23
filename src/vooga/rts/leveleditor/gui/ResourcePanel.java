@@ -3,6 +3,7 @@ package vooga.rts.leveleditor.gui;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -34,9 +35,14 @@ public class ResourcePanel extends MapComponentPanel {
 
     @Override
     public void addButton() {
-        for(String str : myResource.keySet()) {
-            myPanel.add(new ResourceButton(new Resource(Integer.parseInt(str)),this));
-        }       
+        for(int i=0; i<myFiles.length; ++i) {
+            try {
+                BufferedImage image = ImageIO.read(myFiles[i]);
+                myPanel.add(new ResourceButton(new Resource(i+1,myFiles[i].getName(),image),this));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }     
     }
 
     /**

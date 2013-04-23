@@ -1,8 +1,11 @@
 package vooga.rts.leveleditor.gui;
 
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import util.input.Input;
 import util.input.InputClassTarget;
@@ -26,8 +29,9 @@ public class ResourceButton extends JToggleButton {
 
     private Resource myResource;
     private ResourcePanel myOwner;
-    private BufferedImage myIcon;
+    private Image myIcon;
     private Input myInput;
+    private boolean isInitialized;
 
     /**
      * Constructor for this class
@@ -37,12 +41,12 @@ public class ResourceButton extends JToggleButton {
      */
     public ResourceButton (Resource r, ResourcePanel owner) {
         myResource = r;
-        myIcon = r.getMyImage();
+        myIcon = r.getMyImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         myOwner = owner;
         myInput = new Input(INPUT_DIR, this);
         myInput.addListenerTo(this);
+        isInitialized = false;
 
-        myIcon.getGraphics().drawImage(myIcon, 0, 0, 32, 32, null);
         setToolTipText(r.getMyName());
         setIcon(new ImageIcon(myIcon));
         setMargin(new Insets(2, 2, 2, 2));
@@ -50,9 +54,31 @@ public class ResourceButton extends JToggleButton {
 
     @InputMethodTarget(name = "onLeftMouseDown")
     public void getResource (PositionObject p) {
+        if(!isInitialized) {
+        showCustmizationDailog();
+        }
         myOwner.getCanvas().remove(false);
         myOwner.setCurrentSelectResource(myResource);
         myOwner.getCanvas().setMode(MapPanel.RESOURCEMODE);
+    }
+
+    public void showCustmizationDailog() {
+        JTextField resourceType = new JTextField();
+        JTextField resourceAmount = new JTextField();
+        Object[] message = {"Type", resourceType, "Amount", resourceAmount};
+        int option = JOptionPane.showConfirmDialog(null, message,"Set resource",JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            try {
+                String type = resourceType.getText();
+                myResource.setType(type);
+                int amount = Integer.parseInt(resourceAmount.getText());
+                myResource.setAmount(amount);
+                isInitialized = true;
+            }
+            catch (Exception e1) {
+               
+            }
+        }
     }
 
 }

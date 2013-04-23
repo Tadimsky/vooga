@@ -51,6 +51,7 @@ public class Camera {
 
     public void setMapSize (Dimension mapSize) {
         myMapSize = mapSize;
+        updateWorldSize();
     }
 
     /**
@@ -238,5 +239,10 @@ public class Camera {
     
     public Shape getWorldVision() {
         return myWorldVision;
+    }
+    
+    public void setViewSize(Dimension dim) {
+        myScreenSize = new Dimension(dim);
+        updateWorldSize();
     }
 }

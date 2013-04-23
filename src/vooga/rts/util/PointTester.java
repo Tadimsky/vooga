@@ -28,8 +28,7 @@ public class PointTester {
         for (int x = 0; x < 1000; x++) {
             for (int y = 0; y < 1000; y++) {
 
-                // Location nP = Camera.instance().worldToView(new Location3D(x* width , y * width ,
-                // 0));
+                Point2D nP = Camera.instance().worldToView(new Location3D(x* width , y * width ,0));
 
                 /*
                  * Polygon diamond = new Polygon();
@@ -39,7 +38,7 @@ public class PointTester {
                  * diamond.addPoint((int)nP.getX() + width/2, (int)nP.getY() + height);
                  */
 
-                // Ellipse2D diamond = new Ellipse2D.Double(nP.getX(), nP.getY(), 1, 1);
+                Ellipse2D diamond = new Ellipse2D.Double(nP.getX(), nP.getY(), 1, 1);
 
                 myShapes.add(new Location3D(x * width, y * width, 0));
             }
@@ -47,9 +46,7 @@ public class PointTester {
     }
 
     public void paint (Graphics2D pen) {
-        int width = 12;
-        int height = 6;
-/*
+
         for (Location3D loc : myShapes) {
             Point2D nP = Camera.instance().worldToView(loc);
             if (Camera.instance().isVisible(nP)) {
@@ -58,7 +55,7 @@ public class PointTester {
             }
         }
         Camera.instance().paint(pen);
-        */
+        
     }
 
 }

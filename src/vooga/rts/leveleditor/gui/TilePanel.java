@@ -20,10 +20,6 @@ public class TilePanel extends MapComponentPanel {
     
     @Override
     public void addButton() {
-//        for(String str : myResource.keySet()) {
-//            myPanel.add(new TileButton(new Tile(Integer.parseInt(str)),this));
-//        }
-        
         for(int i=0; i<myFiles.length; ++i) {
             try {
                 BufferedImage image = ImageIO.read(myFiles[i]);

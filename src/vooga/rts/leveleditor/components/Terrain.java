@@ -29,7 +29,7 @@ public class Terrain extends MapComponent {
 
     public Terrain (Location loc, int ID) {
         super(BUNDLE_NAME);
-        setType(ID);
+        //setType(ID);
         myLocation = loc;
     }
 
@@ -45,6 +45,13 @@ public class Terrain extends MapComponent {
 
     public Terrain (int i) {
         this(0, 0, i);
+    }
+    
+    public Terrain (int ID, String name, BufferedImage image) {
+        super(ID,name,"");
+        myID = ID;
+        myName = name;
+        myImage = image;
     }
 
     public void setType (int id) {
