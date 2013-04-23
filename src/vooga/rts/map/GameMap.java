@@ -76,7 +76,10 @@ public class GameMap implements IGameLoop, Observer {
         myTiles.update(elapsedTime); //What's this used for? (CHB)
         for (GameEntity g: myMoving.keySet()) {
             Vector v = g.getWorldLocation().difference(mySprites.get(g).getCenter().to2D());
-            System.out.println("vector magnitude: " + v.getMagnitude());
+            //System.out.println("vector magnitude: " + v.getMagnitude());
+            System.out.println("Path length: " + myMoving.get(g).size());
+            System.out.println("node location: " + mySprites.get(g).getCenter().toString());
+            System.out.println("Initial position: " + g.getWorldLocation().toString());
             if (v.getMagnitude() < Location3D.APPROX_EQUAL) {
                 if (myMoving.get(g).size() == 0) {
                     myMoving.remove(g);
@@ -84,9 +87,11 @@ public class GameMap implements IGameLoop, Observer {
                 }
                 myMoving.get(g).setNext();
                 mySprites.put(g, myMoving.get(g).getNext());
-            }   
+            }  
             g.setVelocity(v.getAngle(), g.getSpeed());
-            g.translate(g.getVelocity()); // Possibly no longer need GameEntities to necessarily implement IGameLoop. Just needs to paint
+            Vector velocity = g.getVelocity();
+            velocity.scale(elapsedTime);
+            g.translate(velocity); // Possibly no longer need GameEntities to necessarily implement IGameLoop. Just needs to paint
         }
     }
 
