@@ -28,7 +28,6 @@ public class RightClickAction extends ManagerAction {
         if (myLocation != null) {
             for (InteractiveEntity ie : getManager().getSelected()) {
                 System.out.println(getManager().getSelected().size());
-                System.out.println("Moving around");
                 ie.move(myLocation); // This should be handled by the units move action.
             }
         }

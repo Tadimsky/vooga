@@ -64,32 +64,28 @@ public class GameMap implements IGameLoop, Observer {
     public Node getNode (Location3D location) {
         int x = (int) location.getX() / myNodeSize;
         int y = (int) location.getY() / myNodeSize;
-        System.out.println("node x and y: " + x + " "+ y);
         return myNodeMap.get(x, y);
     }
 
     public Path getPath (PathFinder finder, Location3D start, Location3D finish) {
-        System.out.println(getNode(start).equals(null));
         return finder.calculatePath(getNode(start), getNode(finish), myNodeMap);
     }
 
     @Override
     public void update (double elapsedTime) {
         myTiles.update(elapsedTime); //What's this used for? (CHB)
-        System.out.println("Moving size: " + myMoving.size());
         for (GameEntity g: myMoving.keySet()) {
-            System.out.println(g.getWorldLocation().getX() + " dis da world x");
-           
-            Node node = mySprites.get(g);
-            node.getCenter();
             Vector v = g.getWorldLocation().difference(mySprites.get(g).getCenter().to2D());
+            System.out.println("vector magnitude: " + v.getMagnitude());
             if (v.getMagnitude() < Location3D.APPROX_EQUAL) {
                 if (myMoving.get(g).size() == 0) {
                     myMoving.remove(g);
                     continue;
                 }
                 myMoving.get(g).setNext();
-            }
+                mySprites.put(g, myMoving.get(g).getNext());
+            }   
+            g.setVelocity(v.getAngle(), g.getSpeed());
             g.translate(g.getVelocity()); // Possibly no longer need GameEntities to necessarily implement IGameLoop. Just needs to paint
         }
     }
@@ -97,9 +93,13 @@ public class GameMap implements IGameLoop, Observer {
     @Override
     public void update (Observable arg0, Object arg1) {
         if (arg1 instanceof Location3D) { // This will get changed eventually hopefully, will only be called when something is moving
+
             GameEntity entity = (GameEntity) arg0;
-            myMoving.put(entity, getPath(entity.getFinder(), entity.getWorldLocation(), (Location3D) arg1));
-            
+            entity.getFinder();
+            entity.getWorldLocation();
+            Location3D location = (Location3D) arg1;
+            myMoving.put(entity, getPath(entity.getFinder(), entity.getWorldLocation(), location));
+            mySprites.put(entity, myMoving.get(entity).getNext());
         }
     }
 

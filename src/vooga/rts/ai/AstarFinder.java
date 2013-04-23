@@ -24,6 +24,7 @@ public class AstarFinder implements PathFinder {
     
     @Override
     public Path calculatePath (Node start, Node finish, NodeMap map) {
+
         Path result = null;
         List<Node> close = new ArrayList<Node>();
         List<Node> open = new ArrayList<Node>();
@@ -37,8 +38,13 @@ public class AstarFinder implements PathFinder {
         double gMax = 0;
         while (open.size() > 0) {
             Node current = getLowest(fScore, open);
-            if (current.equals(finish)) {
+            System.out.println("finish x & y: " + finish.getX() + " " + finish.getY());
+            System.out.println("current x & y: " + current.getX() + " " + current.getY());
+            System.out.println(current.getX() == finish.getX() && current.getY() == finish.getY());
+            if (current.getX() == finish.getX() && current.getY() == finish.getY()) {
+                System.out.println("finished for good");
                 result  =  new Path(constructPath(comesFrom, finish));
+                System.out.println("Got this far");
                 break;
             }
             open.remove(current);
@@ -63,7 +69,8 @@ public class AstarFinder implements PathFinder {
                     }
                 }
             }
-        }       
+        } 
+        System.out.println("result returned");
         return result; //At some point, there will be a catch so it just returns to the closest node to the desired one.
     }
 

@@ -193,7 +193,6 @@ public class GameEntity extends GameSprite {
      */
     public void move (Location3D loc) {
         setChanged();
-        System.out.println("setChanged()())())()()()()()() fuck da police");
         notifyObservers(loc);
         // All this stuff dun gon git moved to the Map
 
