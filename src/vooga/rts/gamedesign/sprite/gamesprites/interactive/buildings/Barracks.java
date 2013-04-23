@@ -34,17 +34,9 @@ public class Barracks extends Building {
                      double buildTime) {
         super(image, center, size, sound, playerID, health, buildTime);
         myInteractiveEntities = new ArrayList<InteractiveEntity>();
-        initProducables();
 
         setRallyPoint(new Location3D(300, 400, 0));
         // myProductionStrategy = new CanProduce(this);
-    }
-
-    /*
-     * FOR TESTING: CALLED IN CONSTRUCTOR TO INITIALIZE PRODUCABLE LIST
-     */
-    private void initProducables () {
-        addProducable(new Soldier());
     }
 
     // public void addProductionActions (ProductionBuilding productionBuilding) {

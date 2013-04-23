@@ -55,7 +55,8 @@ public class CanProduce implements ProductionStrategy {
 	@Override
 	public void createProductionActions(final InteractiveEntity producer) {
 		for (final InteractiveEntity producable : myProducables) {
-			producer.addAction("I am a pony", new InteractiveAction(producer) {
+			String commandName = "make " + producable.getInfo().getName();
+			producer.addAction(commandName, new InteractiveAction(producer) {
 				@Override
 				public void update(Command command) {
 				}
@@ -64,7 +65,7 @@ public class CanProduce implements ProductionStrategy {
 				public void apply() {
 					// check for resources
 					final InteractiveEntity unit = producable;
-					DelayedTask dt = new DelayedTask(1, new Runnable() {
+					DelayedTask dt = new DelayedTask(unit.getBuildTime(), new Runnable() {
 						@Override
 						public void run() {
 							//System.out.println("Creating");
@@ -80,6 +81,8 @@ public class CanProduce implements ProductionStrategy {
 					producer.addTask(dt);
 				}
 			});
+			System.out.println(producable.getInfo());
+			producer.addInfo(commandName, producable.getInfo());
 		}
 	}
 }

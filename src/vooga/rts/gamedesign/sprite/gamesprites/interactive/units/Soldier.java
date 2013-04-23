@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.strategy.attackstrategy.CanAttack;
 import vooga.rts.resourcemanager.ResourceManager;
+import vooga.rts.util.Information;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
@@ -34,6 +35,9 @@ public class Soldier extends Unit {
     // private int myHealth; //TESTING PURPOSE
     public Soldier() {
         this(DEFAULT_IMAGE, DEFAULT_LOCATION, DEFAULT_SIZE, DEFAULT_SOUND, DEFAULT_PLAYERID, DEFAULT_HEALTH, InteractiveEntity.DEFAULT_BUILD_TIME);
+        //for testing.
+        Information i = new Information("Marine", "I fear no darkness. I was born in it", null, "buttons/marine.png");
+        setInfo(i);
     }
     
     public Soldier(Location3D location, int teamID) {

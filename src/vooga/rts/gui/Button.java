@@ -22,11 +22,15 @@ public abstract class Button extends Observable implements IGameLoop {
 
     public Button (String image, Dimension size, Location pos) {
         if (image != null) {
-            myImage = ResourceManager.getInstance().<BufferedImage>getFile(image, BufferedImage.class);
+            myImage = ResourceManager.getInstance().<BufferedImage> getFile(image, BufferedImage.class);
         }
         mySize = size;
         myPos = pos;
         isFocused = false;
+    }
+    
+    public void setImage (BufferedImage i) {
+        myImage = i;
     }
 
     @Override

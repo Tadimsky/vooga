@@ -39,19 +39,14 @@ public abstract class Menu extends Observable implements IGameLoop, Observer {
         return a;
     }
 
-    protected void paintBG (Graphics2D pen) {
+    @Override
+    public void paint (Graphics2D pen) {
         if (myImage != null) {
             if (myTransform == null) {
                 myTransform = getTransform(pen);
             }
             pen.drawImage(myImage, myTransform, null);
         }
-    }
-
-    @Override
-    public void paint (Graphics2D pen) {
-        paintBG(pen);
-
         for (Button b : myButtons) {
             b.paint(pen);
         }
@@ -65,6 +60,10 @@ public abstract class Menu extends Observable implements IGameLoop, Observer {
     public void addButton (Button b) {
         myButtons.add(b);
         b.addObserver(this);
+    }
+
+    public void clearButtons () {
+        myButtons.clear();
     }
 
     public void receiveCommand (Command command) {

@@ -49,6 +49,7 @@ public class HumanPlayer extends Player implements Observer {
         createCommandMap();
         myGameMenu = new GameMenu();
         myGameMenu.addObserver(this);
+        myManager.addObserver(myGameMenu);
 
         try {
             myMouseMover = new Robot();

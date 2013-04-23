@@ -16,7 +16,7 @@ import vooga.rts.manager.Manager;
  */
 public class Player implements Controller, IGameLoop {
 
-    private Manager myManager;
+    protected Manager myManager;
     private int myTeamID;
 
     public Player (int id) {
