@@ -1,5 +1,6 @@
 package vooga.rts.gui.menus;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -15,8 +16,10 @@ import vooga.rts.commands.PositionCommand;
 import vooga.rts.gui.Button;
 import vooga.rts.gui.Menu;
 import vooga.rts.gui.Window;
+import vooga.rts.gui.buttons.ActionButton;
 import vooga.rts.gui.buttons.ImageButton;
 import vooga.rts.gui.buttons.MainMenuButton;
+import vooga.rts.gui.buttons.TextButton;
 import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Location;
 
@@ -54,31 +57,39 @@ public class GameMenu extends Menu {
     }
 
     private void createActionButtons () {
-        int iy = (int) (Window.SCREEN_SIZE.getHeight() - ACTION_MENU_HEIGHT);
-        int ix = (int) (Window.SCREEN_SIZE.getWidth() - ACTION_MENU_WIDTH);
-        int xPadding = 30;
-        int yPadding = 30;
-        int numPerRow = 4;
-
-        int ly = iy + yPadding;
-
-        for (int i = 1; i <= numPerRow; i++) {
-            int lx = ix + (int) (ACTION_BUTTON_DIMENSION.getWidth() * (i - 1) + xPadding * i);
-            Button b =
-                    new ImageButton(ACTION_IMAGE_LOCATION, ACTION_BUTTON_DIMENSION,
-                                    new Location(lx, ly));
-            myActionButtons.add(b);
-            addButton(b);
-        }
-        ly += yPadding + ACTION_BUTTON_DIMENSION.getHeight();
-        for (int i = 1; i <= numPerRow; i++) {
-            int lx = ix + (int) (ACTION_BUTTON_DIMENSION.getWidth() * (i - 1) + xPadding * i);
-            Button b =
-                    new ImageButton(ACTION_IMAGE_LOCATION, ACTION_BUTTON_DIMENSION,
-                                    new Location(lx, ly));
-            myActionButtons.add(b);
-            addButton(b);
-        }
+        /*
+         * int iy = (int) (Window.SCREEN_SIZE.getHeight() - ACTION_MENU_HEIGHT);
+         * int ix = (int) (Window.SCREEN_SIZE.getWidth() - ACTION_MENU_WIDTH);
+         * int xPadding = 30;
+         * int yPadding = 30;
+         * int numPerRow = 4;
+         * 
+         * int ly = iy + yPadding;
+         * 
+         * for (int i = 1; i <= numPerRow; i++) {
+         * int lx = ix + (int) (ACTION_BUTTON_DIMENSION.getWidth() * (i - 1) + xPadding * i);
+         * Button b =
+         * new ImageButton(ACTION_IMAGE_LOCATION, ACTION_BUTTON_DIMENSION,
+         * new Location(lx, ly));
+         * myActionButtons.add(b);
+         * addButton(b);
+         * }
+         * ly += yPadding + ACTION_BUTTON_DIMENSION.getHeight();
+         * for (int i = 1; i <= numPerRow; i++) {
+         * int lx = ix + (int) (ACTION_BUTTON_DIMENSION.getWidth() * (i - 1) + xPadding * i);
+         * Button b =
+         * new ImageButton(ACTION_IMAGE_LOCATION, ACTION_BUTTON_DIMENSION,
+         * new Location(lx, ly));
+         * myActionButtons.add(b);
+         * addButton(b);
+         * }
+         */
+        Button b =
+                new ActionButton("Create", 0, Color.BLACK, 24,
+                                 new Location(Window.SCREEN_SIZE.getWidth() - 330,
+                                              Window.SCREEN_SIZE.getHeight() - 140));
+        myActionButtons.add(b);
+        addButton(b);
     }
 
     public void setResources () {
@@ -114,9 +125,13 @@ public class GameMenu extends Menu {
         if (o.equals(myExitButton)) {
             System.exit(0);
         }
+        if (o instanceof ActionButton) {
+            ActionButton a = (ActionButton) o;
+            Integer id = a.getID();
 
-        setChanged();
-        notifyObservers(arg);
+            setChanged();
+            notifyObservers(id);
+        }
     }
 
 }

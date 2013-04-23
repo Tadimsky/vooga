@@ -1,5 +1,6 @@
 package vooga.rts.state;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
@@ -89,17 +90,24 @@ public class GameState extends SubState implements Controller {
 
     @Override
     public void paint (Graphics2D pen) {
+        pen.setBackground(Color.BLACK);
         myMap.paint(pen);
+        r.paint(pen);
+        // a bit odd, but we need to paint the other players before we paint HumanPlayer because
+        // HumanPlayer contains the gameMenu
         for (Player p : myPlayers) {
-            p.paint(pen);
+            if (!(p instanceof HumanPlayer)) {
+                p.paint(pen);
+            }
         }
+        myHumanPlayer.paint(pen);
         if (myDrag != null) {
             pen.draw(myDrag);
             // pen.draw(worldShape);
         }
         Camera.instance().paint(pen);
         myFrames.paint(pen);
-        r.paint(pen);
+
     }
 
     @Override
@@ -107,9 +115,7 @@ public class GameState extends SubState implements Controller {
         // If it's a drag, we need to do some extra checking.
         if (command instanceof DragCommand) {
             myDrag = ((DragCommand) command).getScreenRectangle();
-            if (myDrag == null) {
-                return;
-            }
+            if (myDrag == null) { return; }
         }
         sendCommand(command);
     }
