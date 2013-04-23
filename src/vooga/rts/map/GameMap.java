@@ -3,14 +3,21 @@ package vooga.rts.map;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
+import vooga.rts.util.Vector;
 import vooga.rts.IGameLoop;
 import vooga.rts.ai.Path;
 import vooga.rts.ai.PathFinder;
+import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.resourcemanager.ResourceManager;
-import vooga.rts.util.Camera;
-import vooga.rts.util.Location;
+import vooga.rts.util.Camera; 
 import vooga.rts.util.Location3D;
 
 
@@ -28,13 +35,16 @@ import vooga.rts.util.Location3D;
  * 
  */
 
-public class GameMap implements IGameLoop {
+public class GameMap implements IGameLoop, Observer {
 
     private int myNodeSize;
     private NodeMap myNodeMap;
     private TileMap myTiles;
     private TerrainManager myTerrain;
-
+    private Map<GameSprite, Node> mySprites;
+    private Map<GameEntity, Path> myMoving;
+    private int myWidth;
+    private int myHeight;
     /**
      * calculates how many nodes there are
      * 
@@ -42,39 +52,49 @@ public class GameMap implements IGameLoop {
      */
     public GameMap (int node, Dimension size) {
         NodeFactory factory = new NodeFactory();
+        mySprites = new HashMap<GameSprite, Node>();
+        myMoving = new HashMap<GameEntity, Path>();
         myTerrain = new TerrainManager();
         myNodeSize = node;
-        myNodeMap = factory.makeMap(myNodeSize, size);
         Camera.instance().setMapSize(size);
         randomGenMap();
+        myNodeMap = factory.makeMap(node, new Dimension(myWidth, myHeight));
     }
 
-    /**
-     * @return the terrain
-     */
-    public TerrainManager getTerrain () {
-        return myTerrain;
-    }
-
-    /**
-     * @param terrain the terrain to set
-     */
-    public void setTerrain (TerrainManager terrain) {
-        myTerrain = terrain;
-    }
-
-    public Node getNode (Location location) {
-        int x = (int) location.x / myNodeSize;
-        int y = (int) location.y / myNodeSize;
+    public Node getNode (Location3D location) {
+        int x = (int) location.getX() / myNodeSize;
+        int y = (int) location.getY() / myNodeSize;
+        System.out.println("node x and y: " + x + " "+ y);
         return myNodeMap.get(x, y);
     }
 
-    public Path getPath (PathFinder finder, Location start, Location finish) {
+    public Path getPath (PathFinder finder, Location3D start, Location3D finish) {
+        System.out.println(getNode(start).equals(null));
         return finder.calculatePath(getNode(start), getNode(finish), myNodeMap);
     }
 
-    public NodeMap getMap () {
-        return myNodeMap;
+    @Override
+    public void update (double elapsedTime) {
+        myTiles.update(elapsedTime); //What's this used for? (CHB)
+        for (GameEntity g: myMoving.keySet()) {
+            Vector v = g.getWorldLocation().difference(mySprites.get(g).getCenter().to2D());
+            if (v.getMagnitude() < Location3D.APPROX_EQUAL) {
+                if (myMoving.get(g).size() == 0) {
+                    myMoving.remove(g);
+                    continue;
+                }
+                myMoving.get(g).setNext();
+            }
+            g.translate(g.getVelocity()); // Possibly no longer need GameEntities to necessarily implement IGameLoop. Just needs to paint
+        }
+    }
+
+    @Override
+    public void update (Observable arg0, Object arg1) {
+        if (arg1 instanceof Location3D) { // This will get changed eventually hopefully, will only be called when something is moving
+            GameEntity entity = (GameEntity) arg0;
+            myMoving.put(entity, getPath(entity.getFinder(), entity.getWorldLocation(), (Location3D) arg1)); 
+        }
     }
 
     /**
@@ -90,11 +110,6 @@ public class GameMap implements IGameLoop {
     }
 
     @Override
-    public void update (double elapsedTime) {
-        myTiles.update(elapsedTime);
-    }
-
-    @Override
     public void paint (Graphics2D pen) {
         myTiles.paint(pen);
     }
@@ -106,6 +121,9 @@ public class GameMap implements IGameLoop {
 
         int tileWidthX = 60;
         int tileWidthY = 42;
+        myWidth = tilesX*tileWidthX;
+        myHeight = tilesY*tileWidthY;
+        
         myTiles = new TileMap(new Dimension(tileWidthX, tileWidthY), tilesX, tilesY);
 
         BufferedImage banana =
@@ -129,5 +147,27 @@ public class GameMap implements IGameLoop {
         }
         System.out.println("Map Made");
         Camera.instance().setMapSize(new Dimension(tilesX * tileWidthX, tilesY * tileWidthY));
+    }
+
+    public void add (GameSprite sprite) {
+        mySprites.put(sprite, getNode(sprite.getWorldLocation()));
+    }
+
+    /**
+     * @param terrain the terrain to set
+     */
+    public void setTerrain (TerrainManager terrain) {
+        myTerrain = terrain;
+    }
+
+    /**
+     * @return the terrain
+     */
+    public TerrainManager getTerrain () {
+        return myTerrain;
+    }
+
+    public NodeMap getMap () {
+        return myNodeMap;
     }
 }

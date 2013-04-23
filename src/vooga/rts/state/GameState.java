@@ -71,6 +71,7 @@ public class GameState extends SubState implements Controller {
         // myMap = new GameMap(8, new Dimension(512, 512));
         pt = new PointTester();
         myFrames = new FrameCounter(new Location(100, 20));
+        myMap = new GameMap(8, new Dimension(512, 512));
         setupGame();
     }
 
@@ -165,11 +166,11 @@ public class GameState extends SubState implements Controller {
                         .<BufferedImage> getFile("images/bullet.png", BufferedImage.class)),
                                a.getWorldLocation(), new Dimension(30, 30), 2, 10, 6);
         a.getAttackStrategy().addWeapons(new Weapon(proj, 400, a.getWorldLocation(), 1));
-        myHumanPlayer.add(a);
+        //myHumanPlayer.add(a);
         addPlayer(2);
         Unit c = new Soldier(new Location3D(1000, 500, 0), 2);
         c.setHealth(150);
-        // myHumanPlayer.add(c);
+        myHumanPlayer.add(c);
         myPlayers.get(1).add(c);
         Building b =
                 new Building((new Pixmap(ResourceManager.getInstance()
@@ -191,7 +192,7 @@ public class GameState extends SubState implements Controller {
         garrison.getOccupyStrategy().createOccupyActions(garrison);
         myHumanPlayer.add(garrison);
 
-        myMap = new GameMap(8, new Dimension(512, 512));
+
 
         r =
                 new Resource(new Pixmap(ResourceManager.getInstance()

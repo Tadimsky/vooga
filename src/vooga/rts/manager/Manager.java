@@ -24,6 +24,7 @@ import vooga.rts.gamedesign.state.OccupyState;
 import vooga.rts.manager.actions.DragSelectAction;
 import vooga.rts.manager.actions.LeftClickAction;
 import vooga.rts.manager.actions.RightClickAction;
+import vooga.rts.state.GameState;
 import vooga.rts.state.State;
 import vooga.rts.util.Location3D;
 
@@ -133,6 +134,7 @@ public class Manager implements State, IActOn, Observer {
      */
     public void add (InteractiveEntity entity) {
         entity.addObserver(this);
+        entity.addObserver(GameState.getMap());
         myAddQueue.add(entity);
     }
 
@@ -335,12 +337,10 @@ public class Manager implements State, IActOn, Observer {
             if (!myEntities.contains(sent)) {
                 add(sent);
             }
-
             if (!sent.getEntityState().canSelect()) {
                 sent.setVisible(false);
                 deselect(sent);
             }
-
         }
         else
             if (state instanceof Integer) {

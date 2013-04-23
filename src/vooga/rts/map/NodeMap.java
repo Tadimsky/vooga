@@ -27,6 +27,7 @@ public class NodeMap implements Observer {
 
     public NodeMap (int width, int height) {
         myMap = new Node[width][height];
+        System.out.println("height and width: " + width + " " + height);
         myWidth = width;
         myHeight = height;
         myLookupMap = new HashMap<GameSprite, Node>();
@@ -57,6 +58,8 @@ public class NodeMap implements Observer {
      * @return node at the coordinates
      */
     public Node get (int x, int y) {
+//        System.out.println("height: " + myHeight + "width: " + myWidth);
+//        System.out.println("x: " + x + "y: " + y);
         return myMap[x][y];
     }
 

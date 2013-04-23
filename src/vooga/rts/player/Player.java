@@ -6,6 +6,7 @@ import vooga.rts.commands.Command;
 import vooga.rts.controller.Controller;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.manager.Manager;
+import vooga.rts.state.GameState;
 
 /**
  * Sends commands to its unit manager from either the human input, the network
@@ -35,6 +36,7 @@ public class Player implements Controller, IGameLoop {
 
     public void add (InteractiveEntity unit) {
         myManager.add(unit);
+        GameState.getMap().add(unit);
     }
 
     @Override

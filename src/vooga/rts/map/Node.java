@@ -17,10 +17,11 @@ import vooga.rts.util.Location3D;
 public class Node {
     public static int NODE_SIZE = 8;
 
-    private int myHeight;
-    private int myTier;
     private int myX;
     private int myY;
+    private int myHeight;
+    private int myTier;
+    private Location3D myCenter;
     private Rectangle myBounds;
 
     /**
@@ -33,8 +34,9 @@ public class Node {
     public Node (int x, int y, int tier) {
         myX = x;
         myY = y;
+        myCenter = new Location3D(myX * NODE_SIZE + NODE_SIZE/2, myY * NODE_SIZE + NODE_SIZE/2, tier);
         myTier = tier;
-        myBounds = new Rectangle(myX * NODE_SIZE, myY * NODE_SIZE, NODE_SIZE, NODE_SIZE);
+        myBounds = new Rectangle(x * NODE_SIZE, y * NODE_SIZE, NODE_SIZE, NODE_SIZE);
     }
 
     /**
@@ -48,12 +50,8 @@ public class Node {
         this(y, x, 0);
     }
 
-    public int getX () {
-        return myX;
-    }
-
-    public int getY () {
-        return myY;
+    public Location3D getCenter() {
+        return myCenter;
     }
 
     // public void addObstruction (IObstruction obstruct) {
@@ -86,5 +84,13 @@ public class Node {
      */
     public boolean isInside (Location3D world) {
         return myBounds.contains(world.to2D());
+    }
+    
+    public int getX () {
+        return myX;
+    }
+        
+    public int getY () {
+        return myY;
     }
 }

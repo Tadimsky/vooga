@@ -17,19 +17,24 @@ import vooga.rts.util.Location;
 public class Path {
     
     private Queue<Node> myPath;
+    private Node myNext;
     
     public Path (Queue<Node> path) {
         myPath = path;
+        setNext();
     }
     
     /**
      * 
      * @return This methods will return the next node to go
      */
-    public Location getNext() { 
-        return myPath.poll().getCenter();
+    public Node getNext() { 
+        return myNext;
     }
     
+    public void setNext() {
+        myNext = myPath.poll();
+    }
     /**
      * 
      * @return the number of nodes in the queue.

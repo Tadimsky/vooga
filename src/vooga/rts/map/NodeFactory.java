@@ -30,7 +30,7 @@ public class NodeFactory {
             xCenter = x + nodeSize / 2;
             for (int y = 0; y < yNodes; y++) {
                 yCenter = y + nodeSize / 2;
-                map.put(new Node(x, y), 0, 0);
+                map.put(new Node(x, y), x, y);
             }
         }
         return map;
