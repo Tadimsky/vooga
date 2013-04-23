@@ -3,7 +3,7 @@ package vooga.rts.networking.client.GUI;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.TableModel;
+import vooga.rts.networking.communications.LobbyInfo;
 
 
 /**
@@ -16,6 +16,7 @@ public class ServerBrowserView extends JPanel {
 
     private static final long serialVersionUID = 5915312995153741263L;
     JTable myTable;
+    ServerBrowserTableAdapter myAdapter;
 
     /**
      * Initialize view.
@@ -23,11 +24,20 @@ public class ServerBrowserView extends JPanel {
      * @param adapter adapter for server browser table
      * @param gameName name of the game
      */
-    public ServerBrowserView (TableModel adapter) {
+    public ServerBrowserView (ServerBrowserTableAdapter adapter) {
+        myAdapter = adapter;
         myTable = new JTable(adapter);
         myTable.setFillsViewportHeight(true);
         JScrollPane pane = new JScrollPane(myTable);
         add(pane);
+    }
+
+    public void addLobbies (LobbyInfo[] lobbies) {
+        myAdapter.addLobbies(lobbies);
+    }
+
+    public int getSelectedID () {
+        return myAdapter.getidOfRow(myTable.getSelectedRow());
     }
 
 }
