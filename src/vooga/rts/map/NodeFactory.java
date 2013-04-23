@@ -1,7 +1,6 @@
 package vooga.rts.map;
 
 import java.awt.Dimension;
-import vooga.rts.util.Location;
 
 
 public class NodeFactory {
@@ -21,16 +20,12 @@ public class NodeFactory {
      * @return
      */
     public NodeMap makeMap (int nodeSize, Dimension size) {
-        int xCenter = 0;
-        int yCenter = 0;
         int xNodes = size.width / nodeSize;
         int yNodes = size.height / nodeSize;
         NodeMap map = new NodeMap(xNodes, yNodes);
         for (int x = 0; x < xNodes; x++) {
-            xCenter = x + nodeSize / 2;
             for (int y = 0; y < yNodes; y++) {
-                yCenter = y + nodeSize / 2;
-                map.put(new Node(x, y), 0, 0);
+                map.put(new Node(x, y), x, y);
             }
         }
         return map;

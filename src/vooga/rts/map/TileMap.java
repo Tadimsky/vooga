@@ -31,6 +31,8 @@ public class TileMap implements IGameLoop {
 
     private Dimension myTileSize;
 
+    private Dimension myMapSize;
+
     private Map<Integer, BufferedImage> myTileTypes;
 
     private Tile[][] myTiles;
@@ -47,6 +49,9 @@ public class TileMap implements IGameLoop {
         myWidth = width;
         myHeight = height;
         myTileSize = tileSize;
+        myMapSize =
+                new Dimension((int) (myWidth * myTileSize.getWidth()),
+                              (int) (myHeight * myTileSize.getHeight()));
         myTileTypes = new HashMap<Integer, BufferedImage>();
         myTiles = new Tile[myWidth][myHeight];
     }
@@ -147,17 +152,19 @@ public class TileMap implements IGameLoop {
         startY /= Camera.ISO_HEIGHT;
 
         // Get the end index of what is visible
-        int endX = (int) (view.getMaxX() / myTileSize.getWidth() + 1);
+        int endX =
+                (int) (view.getMaxX() < myMapSize.getWidth() ? view.getMaxX() : myMapSize
+                        .getWidth());
+        endX /= myTileSize.getWidth();
         endX /= Camera.ISO_HEIGHT;
+        endX = endX < myWidth ? endX : myWidth - 1;
 
-        int endY = (int) (view.getMaxY() / myTileSize.getHeight() + 1);
+        int endY =
+                (int) (view.getMaxY() < myMapSize.getHeight() ? view.getMaxY() : myMapSize
+                        .getHeight());
+        endY /= myTileSize.getHeight();
         endY /= Camera.ISO_HEIGHT;
-        /*
-         * startX = 0;
-         * startY = 0;
-         * endX = myWidth;
-         * endY = myHeight;
-         */
+        endY = endY < myHeight ? endY : myHeight - 1;
 
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++) {

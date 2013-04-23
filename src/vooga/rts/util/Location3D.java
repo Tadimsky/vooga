@@ -157,6 +157,13 @@ public class Location3D {
         return getDistance(other.getX(), other.getY(), other.getZ());
     }
     
+    public double getManhattanDistance(Location3D other) {
+        double dx = Math.abs(other.getX() - this.getX());
+        double dy = Math.abs(other.getY() - this.getY());
+        double dz = Math.abs(other.getZ() - this.getZ());
+        return dx + dy + dz;
+    }
+    
     public void negate() {
         myX *= -1;
         myY *= -1;

@@ -239,6 +239,7 @@ public class Camera {
     
     public Shape getWorldVision() {
         return myWorldVision;
+        
     }
     
     public void setViewSize(Dimension dim) {

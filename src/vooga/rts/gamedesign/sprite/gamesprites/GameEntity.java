@@ -2,25 +2,14 @@ package vooga.rts.gamedesign.sprite.gamesprites;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.geom.Point2D;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
-import vooga.rts.gamedesign.state.AttackingState;
-import vooga.rts.gamedesign.state.EntityState;
-import vooga.rts.gamedesign.state.MovementState;
-import vooga.rts.gamedesign.state.OccupyState;
-import vooga.rts.gamedesign.state.ProducingState;
-import vooga.rts.gamedesign.strategy.occupystrategy.CannotBeOccupied;
-import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
-import vooga.rts.util.Camera;
-import vooga.rts.util.Location;
-import vooga.rts.util.Location3D;
-import vooga.rts.util.Pixmap;
-import vooga.rts.util.Sound;
-import vooga.rts.util.Vector;
-import vooga.rts.map.GameMap;
 import vooga.rts.ai.Path;
 import vooga.rts.ai.PathFinder;
+import vooga.rts.gamedesign.state.EntityState;
+import vooga.rts.gamedesign.state.MovementState;
+import vooga.rts.map.GameMap;
+import vooga.rts.util.Location3D;
+import vooga.rts.util.Pixmap;
+import vooga.rts.util.Vector;
 
 
 /**
@@ -165,8 +154,12 @@ public class GameEntity extends GameSprite {
      * @param vector
      */
     public void translate (Vector vector) {
-        getWorldLocation().translate(vector);
-        resetBounds();
+        if (vector.getMagnitude() != 0) {
+            getWorldLocation().translate(vector);
+            resetBounds();
+            setChanged();
+            notifyObservers(getWorldLocation());
+        }
     }
 
     /**
@@ -220,7 +213,7 @@ public class GameEntity extends GameSprite {
      *        is the map that the game is being played on
      */
     public void move (Location3D loc, GameMap map) {
-        setPath(loc.to2D(), map);
+        // setPath(loc.to2D(), map);
     }
 
     /**
@@ -231,10 +224,11 @@ public class GameEntity extends GameSprite {
      * @param map
      *        is the map that the game is being played on
      */
-    public void setPath (Location location, GameMap map) {
+    public void setPath (Location3D location, GameMap map) {
+
         myPath =
-                myFinder.calculatePath(map.getNode(getWorldLocation().to2D()),
-                                       map.getNode(location), map.getMap());
+                myFinder.calculatePath(map.getNodeMap().getNode(getWorldLocation()), map
+                        .getNodeMap().getNode(location), map.getNodeMap());
         // myGoal = myPath.getNext();
     }
 
@@ -306,6 +300,13 @@ public class GameEntity extends GameSprite {
             setVelocity(getVelocity().getAngle(), 0);
             getEntityState().stop();
         }
+    }
+
+    /**
+     * Sets the object to be in the changed state for the observer pattern.
+     */
+    public void setChanged () {
+        super.setChanged();
     }
 
 }

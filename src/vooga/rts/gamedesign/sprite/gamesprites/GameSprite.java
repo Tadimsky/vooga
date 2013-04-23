@@ -229,8 +229,7 @@ public abstract class GameSprite extends Observable implements IGameLoop {
     }
 
     public void setWorldLocation (Location3D togo) {
-        myWorldLocation = new Location3D(togo);
-        resetBounds();
+        setWorldLocation(togo.getX(), togo.getY(), togo.getZ());
     }
 
     public void update (double elapsedTime) {

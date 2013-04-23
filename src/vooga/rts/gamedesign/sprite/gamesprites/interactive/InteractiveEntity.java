@@ -399,13 +399,6 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     }
 
     /**
-     * Sets the object to be in the changed state for the observer pattern.
-     */
-    public void setChanged () {
-        super.setChanged();
-    }
-
-    /**
      * Gets the occupy strategy of the entity (either CanBeOccupied or
      * CannotBeOccupied).
      * 
