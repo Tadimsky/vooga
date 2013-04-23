@@ -36,6 +36,7 @@ import vooga.rts.util.DelayedTask;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
+import vooga.rts.util.SpriteEngine;
 
 
 /**
@@ -64,6 +65,8 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     private List<DelayedTask> myTasks;
     private double myBuildTime;
     private List<InteractiveEntity> myProducables;
+    //test
+    private SpriteEngine test;
 
     public static final double DEFAULT_BUILD_TIME = 5;
 
@@ -102,6 +105,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
         myOccupyStrategy = new CannotBeOccupied();
         myProducables = new ArrayList<InteractiveEntity>();
         setSpeed(DEFAULT_INTERACTIVEENTITY_SPEED);
+        test = new SpriteEngine("animation/claudius.png", 6, 4);
     }
 
     public void addAction (String command, Action action) {
@@ -294,7 +298,12 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
                                          selectLocation.getY() + LOCATION_OFFSET, 50, 30);
             pen.fill(selectedCircle);
         }
-        super.paint(pen);
+        //super.paint(pen);
+        if (Camera.instance().issVisible(getWorldLocation())) {
+        	Point2D worldLocation = Camera.instance().worldToView(getWorldLocation());
+        	pen.drawImage(test.getNextImage(), null, (int) worldLocation.getX(), (int) worldLocation.getY());
+        }
+        
         if (myAttackStrategy.getCanAttack() && !getAttackStrategy().getWeapons().isEmpty()) {
             for (Projectile p : myAttackStrategy.getWeapons()
                     .get(myAttackStrategy.getWeaponIndex()).getProjectiles()) {
