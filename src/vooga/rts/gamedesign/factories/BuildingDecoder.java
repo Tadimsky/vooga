@@ -38,7 +38,7 @@ public class BuildingDecoder extends Decoder{
 	}
 
 	@Override
-	public void create(Document doc) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void create(Document doc, String tag) {
 		//there is some duplicate code between decoders that should be factored out. 
 		String path = doc.getElementsByTagName(HEAD_TAG).item(0).getAttributes().getNamedItem(SOURCE_TAG).getTextContent();	
 		

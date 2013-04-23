@@ -342,8 +342,7 @@ public class Manager implements State, IActOn, Observer {
             }
 
         }
-        else
-            if (state instanceof Integer) {
+        else if (state instanceof Integer) {
                 int index = findEntityWithHashCode((Integer) state);
                 InteractiveEntity unit = myEntities.get(index);
                 unit.getEntityState().setOccupyState(OccupyState.NOT_OCCUPYING);

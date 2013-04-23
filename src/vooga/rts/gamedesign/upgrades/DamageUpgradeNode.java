@@ -2,7 +2,15 @@ package vooga.rts.gamedesign.upgrades;
 
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 
-
+/**
+ *
+ * This class represents the upgrade taken place on the InteractiveEntity's
+ * projectile damage. This upgrade will only be available given the
+ * InteractiveEntity has CanAttack as its AttackStrategy.
+ * 
+ * @author Wenshun Liu
+ *
+ */
 public class DamageUpgradeNode extends UpgradeNode {
 
     public DamageUpgradeNode (UpgradeTree upgradeTree,
@@ -12,10 +20,14 @@ public class DamageUpgradeNode extends UpgradeNode {
         super(upgradeTree, upgradeType, upgradeValue, costedResourceAmount);
     }
 
+    /**
+     * Applies the upgrade to an InteractiveEntity using reflection helper,
+     * which locates the property to be upgraded and applies the upgrade.
+     */
     @Override
-    public void apply (InteractiveEntity requester) {
-        // Currently no need to check for can or cannot attack and if weapon's empty. Watch for
-        // updates
-        requester.getAttackStrategy().getCurrentWeapon().addDamage(getUpgradeValue());
+    public void upgrade (InteractiveEntity requester) {
+    	getReflectionHelper().changeValue("myDamage",
+    			requester.getAttackStrategy().getCurrentWeapon().getProjectile(),
+    			getUpgradeValue());
     }
 }

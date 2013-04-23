@@ -102,6 +102,14 @@ public class Weapon {
     public List<Projectile> getProjectiles () {
         return myProjectiles;
     }
+    
+    /**
+     * Returns the projectile that is currently in use.
+     * @return the projectile that is currently in use
+     */
+    public Projectile getProjectile() {
+    	return myProjectile;
+    }
 
     /**
      * This method is used to change the projectile for the weapon.

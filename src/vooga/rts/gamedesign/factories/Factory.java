@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.gamedesign.strategy.attackstrategy.AttackStrategy;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
 import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
+import vooga.rts.gamedesign.upgrades.UpgradeTree;
 
 
 /**
@@ -46,6 +48,7 @@ public class Factory {
 	Map<String, Strategy> myStrategies;
 	Map<String, String[]> myProductionDependencies;
 	Map<String, String[]> myStrategyDependencies;
+	Map<String, UpgradeTree> myUpgradeTrees;
 	
 	
 	public Factory() throws IllegalArgumentException, SecurityException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ParserConfigurationException, SAXException, IOException {
@@ -56,6 +59,7 @@ public class Factory {
 		myStrategies = new HashMap<String, Strategy>();
 		myProductionDependencies = new HashMap<String, String[]>();
 		myStrategyDependencies = new HashMap<String, String[]>();
+		myUpgradeTrees = new HashMap<String, UpgradeTree>();
 	}
 	
 	/**
@@ -74,6 +78,14 @@ public class Factory {
 	
 	public void put(String name, Strategy value){
 		myStrategies.put(name, value);
+	}
+	
+	public void put(String name, UpgradeTree upgradeTree){
+		myUpgradeTrees.put(name, upgradeTree);
+	}
+	
+	public Map<String, UpgradeTree> getUpgradeTrees(){
+		return myUpgradeTrees;
 	}
 	
 	/**
@@ -206,13 +218,15 @@ public class Factory {
 			doc.getDocumentElement().normalize();
 			System.out.println(doc.getDocumentElement().getNodeName());
 			
+			//myDecoders.get(doc.getDocumentElement().getNodeName()).create(doc);
+			
 			NodeList head = doc.getChildNodes();
 			Node childNode = head.item(0);
 			NodeList children = childNode.getChildNodes();
 			for(int i = 0 ; i < children.getLength() ; i++){
 				Node tempNode = children.item(i);
 				if(tempNode.getNodeType() == Node.ELEMENT_NODE){
-					System.out.println("CURRENT DECODER: " + tempNode.getNodeName());
+					//System.out.println("CURRENT DECODER: " + tempNode.getNodeName());
 					String type = tempNode.getNodeName();
 					myDecoders.get(type).create(doc, type);
 				}
@@ -254,40 +268,5 @@ public class Factory {
 			mySprites.get(key).setOccupyStrategy(occupy);
 		}
 	}
-	
-	/**
-	 * TESTING PURPOSE
-	 */
-	public static void main(String[] args) throws IllegalArgumentException, SecurityException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ParserConfigurationException, SAXException, IOException {
-		//loads Upgrade XML - creates tree - updates activate state
-		Factory factory = new Factory();
-		
-		factory.loadXMLFile("Factory.xml");
-		
-
-		/**creates an UpgradeBuilding
-		UpgradeBuilding upgradeBuilding = new UpgradeBuilding();
-		
-		//creates two Units - adds upgrade Actions to the UpgradeBuilding
-		//the first Unit needs to specify the UpgradeTree all Units will be using.
-		InteractiveEntity oneUnit = new Unit();
-		//oneUnit.setUpgradeTree(resultTree);
-		upgradeBuilding.addUpgradeActions(resultTree);
-		InteractiveEntity twoUnit = new Unit();
-		oneUnit.setAttackStrategy(new CanAttack());
-		twoUnit.setAttackStrategy(new CanAttack());
-		for (Action a: upgradeBuilding.getActions()) {
-			System.out.println("Action type: " + a.getName());
-		}
-		System.out.println(oneUnit.getMaxHealth());
-		System.out.println(twoUnit.getMaxHealth());
-		
-		//finds Action  - 
-		Action WorstArmorAction = upgradeBuilding.findAction("Boost1");
-		//WorstArmorAction.apply();
-		System.out.println(oneUnit.getMaxHealth());
-		System.out.println(twoUnit.getMaxHealth());*/
-	}
-
 }
 

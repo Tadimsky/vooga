@@ -2,7 +2,6 @@
 
 
 <GameElements>
-<!--
 <Upgrade>
 	<type>
 		<name>Health</name>
@@ -15,7 +14,7 @@
 			<resourceAmount>30</resourceAmount>
 		</upgradeNode>
 		<upgradeNode>
-			<parent>Health</parent>
+			<parent>Boost1</parent>
 			<nodeName>Boost2</nodeName>
 			<object>Health</object>
 			<value>100</value>
@@ -34,7 +33,7 @@
 			<resourceAmount>30</resourceAmount>
 		</upgradeNode>
 		<upgradeNode>
-			<parent>Attack</parent>
+			<parent>CanAttack</parent>
 			<nodeName>RangeBoost1</nodeName>
 			<object>Range</object>
 			<value>100</value>
@@ -42,7 +41,7 @@
 			<resourceAmount>30</resourceAmount>
 		</upgradeNode>
 		<upgradeNode>
-			<parent>Attack</parent>
+			<parent>CanAttack</parent>
 			<nodeName>DamageBoost1</nodeName>
 			<object>Damage</object>
 			<value>100</value>
@@ -51,7 +50,6 @@
 		</upgradeNode>
 	</type>
 </Upgrade>
--->
 	<resources src = "vooga.rts.gamedesign.sprite.gamesprites.Resource">
 		<resource>
 			<name>gold</name>

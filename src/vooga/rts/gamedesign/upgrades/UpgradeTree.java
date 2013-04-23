@@ -1,24 +1,22 @@
 package vooga.rts.gamedesign.upgrades;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import vooga.rts.action.InteractiveAction;
+import vooga.rts.commands.Command;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.UpgradeBuilding;
 
 
 /**
  * This class is the tree of upgrades that any object that can be upgraded will
- * hold. For example, every unit will have an upgrade tree (and each unit of
- * the same type will have the same upgrade tree). Upgrades are being stored
- * in a tree like structure because in some cases upgrades are specified in
- * certain branches so that buying a certain tier 1 upgrade does not
- * necessarily mean that all tier 2 upgrades are now available. For example
- * buying the tier 1 armor upgrade does not mean that the tier 2 weapon upgrade
- * is available (only the tier 2 armor upgrade would be available). If there
- * are multiple types of tier 1 upgrades, the root of the tree would not
- * contain an upgrade.
+ * hold. For example, every unit will have an upgrade tree. Upgrades are being
+ * stored in a tree like structure because in some cases upgrades are specified
+ * in certain orders, so that buying a certain tier 1 upgrade does not 
+ * necessarily mean that all tier 2 upgrades are now available. The root of the
+ * tree is just a place holder. It would not contain an upgrade. The children
+ * of the root represent the different "genres" of upgrades. The actually
+ * upgrades start below the "genres".
  * 
  * @author Ryan Fishel
  * @author Kevin Oh
@@ -29,25 +27,36 @@ import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.UpgradeBuil
 public class UpgradeTree {
     private UpgradeNode myHead;
     private List<UpgradeNode> myCurrentUpgrades;
-    private Map<Integer, List<InteractiveEntity>> myUsers;
 
     public UpgradeTree () {
         myHead = new UpgradeNode();
         myCurrentUpgrades = new ArrayList<UpgradeNode>();
-        myUsers = new HashMap<Integer, List<InteractiveEntity>>();
     }
 
     /**
      * Updates the list of current and next upgrades based on the given
-     * UpgradeNode, which is newly activated
+     * UpgradeNode, which is newly activated. Also updates the Actions of
+     * the entity that owns this upgrade tree.
      * 
-     * @param u
+     * @param activateNode the UpgradeNode that is newly activated
+     * @param entity the entity that the activation will be applied on
      */
-    public void activateNode (UpgradeNode u) {
-        myCurrentUpgrades.remove(u);
-        if (!u.getChildren().isEmpty()) {
-            for (UpgradeNode node : u.getChildren()) {
-                myCurrentUpgrades.add(node);
+    public void activateNode (UpgradeNode activateNode, final InteractiveEntity entity) {
+        myCurrentUpgrades.remove(activateNode);
+        entity.removeAction(activateNode.getUpgradeName());
+        if (!activateNode.getChildren().isEmpty()) {
+            for (final UpgradeNode newUpgrade : activateNode.getChildren()) {
+                myCurrentUpgrades.add(newUpgrade);
+                entity.addAction(newUpgrade.getUpgradeName(), new InteractiveAction(entity) {
+    				@Override
+    	            public void update (Command command) {
+    	            }
+
+    	            @Override
+    	            public void apply () {
+    	                newUpgrade.apply(entity);
+    	            }
+    			});
             }
         }
     }
@@ -68,12 +77,24 @@ public class UpgradeTree {
             }
         }
     }
-
+    
+    /**
+     * Adds a new Branch to the head of the upgrade tree. Indicating that a
+     * new type of upgrade has been added.
+     * 
+     * @param branchName the name of the new branch/upgrade type
+     */
     public void addBranch (String branchName) {
         UpgradeNode branch = new UpgradeNode(this, branchName, 0, 0);
         myHead.addChild(branch);
     }
 
+    /**
+     * Finds and returns the upgrade node with the given name.
+     * 
+     * @param upgradeName the name of the upgrade node to be found
+     * @return the UpgradeNode with the given name
+     */
     public UpgradeNode findNode (String upgradeName) {
         UpgradeNode current = myHead;
         while (!current.getChildren().isEmpty()) {
@@ -90,57 +111,21 @@ public class UpgradeTree {
     }
 
     /**
-     * Finds the most advanced upgrade has been made in the giving upgrade type.
+     * Returns the list of upgrade node that is current available to be
+     * activated.
      * 
-     * @param upgradeType
-     * @return
+     * @return List<UpgradeNode> The list of upgrade node that is current
+     * available for activation
      */
-    public UpgradeNode findCurrent (String upgradeType) {
-        UpgradeNode current = new UpgradeNode();
-        for (UpgradeNode n : myHead.getChildren()) {
-            if (n.getUpgradeName().equals(upgradeType)) {
-                current = n;
-            }
-        }
-
-        while (current != null) {
-            if (current.getHasBeenUpgraded()) {
-                current = current.getChildren().get(0);
-            }
-            else {
-                break;
-            }
-        }
-        return current;
-    }
-
-    public Map<Integer, List<InteractiveEntity>> getUsers () {
-        return myUsers;
-    }
-
-    public List<InteractiveEntity> getPlayerUsers (int playerID) {
-        return myUsers.get(playerID);
-    }
-
-    public void addUser (InteractiveEntity i, int playerID) {
-        if (myUsers.get(playerID) == null) {
-            List<InteractiveEntity> entityGroup = new ArrayList<InteractiveEntity>();
-            entityGroup.add(i);
-            myUsers.put(playerID, entityGroup);
-        }
-        else {
-            List<InteractiveEntity> entityGroup = myUsers.get(playerID);
-            entityGroup.add(i);
-            myUsers.put(playerID, entityGroup);
-        }
-
-        myUsers.get(playerID).add(i);
-    }
-
     public List<UpgradeNode> getCurrentUpgrades () {
         return myCurrentUpgrades;
     }
 
+    /**
+     * Returns the head of the upgrade tree.
+     * 
+     * @return the head of the upgrade tree
+     */
     public UpgradeNode getHead () {
         return myHead;
     }

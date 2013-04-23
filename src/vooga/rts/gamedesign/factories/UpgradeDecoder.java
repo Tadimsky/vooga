@@ -101,7 +101,8 @@ public class UpgradeDecoder extends Decoder {
 			}
 		}
 		upgradeTree.updateTreeStatus();
-		printTree(upgradeTree);
+		//printTree(upgradeTree);
+		myFactory.put("", upgradeTree);
 	}
 	
 	private String loadSingleLine(Element element, String tag) {
@@ -116,6 +117,7 @@ public class UpgradeDecoder extends Decoder {
 	 * @param upgradeTree
 	 */
 	private void printTree(UpgradeTree upgradeTree) {
+		//System.out.println("Also Goes Here");
 		for (UpgradeNode u: upgradeTree.getHead().getChildren()) {
 			UpgradeNode current = u;
 			while (!current.getChildren().isEmpty()) {
@@ -123,7 +125,7 @@ public class UpgradeDecoder extends Decoder {
 					System.out.println("Name: " + node.getUpgradeName() +
 							" Parent Name " + current.getUpgradeName());
 				}
-				current = current.getChildren().get(1);
+				current = current.getChildren().get(0);
 						//should recurse if really want to print the whole tree
 			}
 		}
