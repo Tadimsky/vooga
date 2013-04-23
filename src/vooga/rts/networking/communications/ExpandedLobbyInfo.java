@@ -107,6 +107,15 @@ public class ExpandedLobbyInfo extends LobbyInfo {
             }
         }
     }
+    
+    /**
+     * Gets the player in the given position
+     * @param position of player
+     * @return player
+     */
+    public Player getPlayerAtPosition (int position) {
+        return myPlayers[position];
+    }
 
     /**
      * returns the max teams.

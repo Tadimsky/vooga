@@ -34,6 +34,15 @@ public class LobbyInfo extends Observable implements Serializable {
         myMapName = mapName;
         myID = ID;
     }
+    
+    /**
+     * Constructor that creates a new LobbyInfo with a different ID
+     * @param lobbyInfo info
+     * @param newID new ID
+     */
+    public LobbyInfo (LobbyInfo lobbyInfo, int newID) {
+        this(lobbyInfo.getLobbyName(), lobbyInfo.getMapName(), lobbyInfo.getMaxPlayers(), newID);
+    }
 
     /**
      * Returns the name of the lobby

@@ -2,6 +2,9 @@ package vooga.rts.networking.server;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import vooga.rts.networking.logger.HandlerTxt;
+import vooga.rts.networking.logger.NetworkLogger;
 
 
 /**
@@ -20,6 +23,10 @@ public class MatchmakerServer extends AbstractThreadContainer {
      * Initializes overall server hierarchy.
      */
     public MatchmakerServer () {
+        NetworkLogger.getInstance();
+        NetworkLogger.setLevel(Level.ALL);
+        NetworkLogger.addHandler(new HandlerTxt());
+        NetworkLogger.logMessage(Level.CONFIG, "Server started");
     }
 
     /**
@@ -34,9 +41,11 @@ public class MatchmakerServer extends AbstractThreadContainer {
         GameContainer container;
         if (myGameContainers.containsKey(gameName)) {
             container = myGameContainers.get(gameName);
+            NetworkLogger.logMessage(Level.FINER, "GameContainer joined");
         } else {
             container = new GameContainer();
             myGameContainers.put(gameName, container);
+            NetworkLogger.logMessage(Level.FINER, "new GameContainer");
         }
         container.addConnection(thread);
         removeConnection(thread);

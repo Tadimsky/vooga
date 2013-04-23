@@ -63,6 +63,14 @@ public class NetworkLogger {
     public void addHandler (int handlerType) {
         mySetup.addHandler(handlerType);
     }
+    
+    /**
+     * Adds a handler passed in based on the format.
+     * @param format to create handler.
+     */
+    public static void addHandler (IHandlerFormat format) {
+        LOGGER.addHandler(format.getFormatHandler());
+    }
 
     /**
      * Adds a memory handler to the logger depending on static constants and

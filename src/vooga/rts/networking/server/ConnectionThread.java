@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
 import vooga.rts.networking.communications.Message;
 import vooga.rts.networking.communications.clientmessages.InitialConnectionMessage;
 import vooga.rts.networking.communications.servermessages.CloseConnectionMessage;
+import vooga.rts.networking.logger.NetworkLogger;
 
 
 /**
@@ -42,9 +44,7 @@ public class ConnectionThread extends Thread {
             myOutput = new ObjectOutputStream(mySocket.getOutputStream());
         }
         catch (IOException e) {
-            ServerLogger.getInstance();
-            ServerLogger.myLogger.severe("severe message in connection thread");
-
+            NetworkLogger.logMessage(Level.FINER, "Initial connection failed");
         }
     }
 
@@ -85,13 +85,11 @@ public class ConnectionThread extends Thread {
             }
         }
         catch (IOException e) {
-            // TODO add logger
-            e.printStackTrace();
+            NetworkLogger.logMessage(Level.FINER, "connection failed - IO");
             close();
         }
         catch (ClassNotFoundException e) {
-            // TODO add logger
-            e.printStackTrace();
+            NetworkLogger.logMessage(Level.FINER, "connection failed - Class exception");
             close();
         }
     }
@@ -106,7 +104,6 @@ public class ConnectionThread extends Thread {
 
     /**
      * Closes streams and socket of this thread
-     * TODO catch exceptions
      */
     public void close () {
         myConnectionActive = false;
@@ -123,8 +120,7 @@ public class ConnectionThread extends Thread {
             }
         }
         catch (IOException e) {
-            // TODO logger
-            e.printStackTrace();
+            NetworkLogger.logMessage(Level.FINER, "closing connections failed");
         }
     }
 
@@ -139,11 +135,10 @@ public class ConnectionThread extends Thread {
         }
         try {
             myOutput.writeObject(m);
+            NetworkLogger.logMessage(Level.FINEST, "Message sent");
         }
         catch (IOException e) {
-            // TODO add logger
-            e.printStackTrace();
-
+            NetworkLogger.logMessage(Level.FINE, "failed sending message");
         }
     }
 

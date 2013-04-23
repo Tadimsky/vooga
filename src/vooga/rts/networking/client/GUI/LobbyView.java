@@ -6,17 +6,22 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Collection;
+import java.util.EventListener;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import vooga.rts.networking.communications.Player;
 
+
 /**
  * Represents the view of the lobby.
+ * 
  * @author David Winegar
  * @author Sean Wareham
- *
+ * 
  */
 public class LobbyView extends JPanel {
 
@@ -33,6 +38,8 @@ public class LobbyView extends JPanel {
     Player[] myPlayers;
     IModel myModel;
     Collection<Player> myUserControlledPlayers;
+    private ItemListener myFactionListener;
+    private ItemListener myTeamListener;
 
     /**
      * Create the panel.
@@ -59,38 +66,14 @@ public class LobbyView extends JPanel {
         for (int i = 0; i < myMaxPlayers; i++) {
             teamNumList[i] = i + 1;
         }
-        
-        ActionListener factionListener = new ActionListener () {
-            @Override
-            public void actionPerformed (ActionEvent e) {
-                JComboBox box = (JComboBox) e.getSource();
-                String faction = (String) box.getSelectedItem();
-                for(int i = 0; i < myFactionBoxes.length; i++) {
-                    if (box == myFactionBoxes[i]) {
-                        myModel.updateFaction(faction, i);
-                    }
-                }
-            }
-        };
-        
-        ActionListener teamListener = new ActionListener () {
-            @Override
-            public void actionPerformed (ActionEvent e) {
-                JComboBox box = (JComboBox) e.getSource();
-                Integer team = (Integer) box.getSelectedItem();
-                for(int i = 0; i < myTeamBoxes.length; i++) {
-                    if (box == myTeamBoxes[i]) {
-                        myModel.updateTeam(team, i);
-                    }
-                }
-            }
-        };
+
+        initializeListeners();
 
         // initialize labels and buttons for player slots
         for (int i = 0; i < myMaxPlayers; i++) {
             myUsernameLabels[i] = createLabel(NO_PLAYER, COLUMN_1, i + 1);
-            myTeamBoxes[i] = createComboBox(teamNumList, COLUMN_2, i + 1, teamListener);
-            myFactionBoxes[i] = createComboBox(factions, COLUMN_3, i + 1, factionListener);
+            myTeamBoxes[i] = createComboBox(teamNumList, COLUMN_2, i + 1, myTeamListener);
+            myFactionBoxes[i] = createComboBox(factions, COLUMN_3, i + 1, myFactionListener);
         }
 
         // initialize title labels
@@ -99,6 +82,34 @@ public class LobbyView extends JPanel {
         createLabel("Team", COLUMN_2, ROW_1);
         createLabel("Faction", COLUMN_3, ROW_1);
 
+    }
+
+    private void initializeListeners () {
+        myFactionListener = new ItemListener() {
+            @Override
+            public void itemStateChanged (ItemEvent e) {
+                JComboBox box = (JComboBox) e.getSource();
+                String faction = (String) box.getSelectedItem();
+                for (int i = 0; i < myFactionBoxes.length; i++) {
+                    if (box == myFactionBoxes[i]) {
+                        myModel.updateFaction(faction, i);
+                    }
+                }
+            }
+        };
+
+        myTeamListener = new ItemListener() {
+            @Override
+            public void itemStateChanged (ItemEvent e) {
+                JComboBox box = (JComboBox) e.getSource();
+                Integer team = (Integer) box.getSelectedItem();
+                for (int i = 0; i < myTeamBoxes.length; i++) {
+                    if (box == myTeamBoxes[i]) {
+                        myModel.updateTeam(team, i);
+                    }
+                }
+            }
+        };
     }
 
     /**
@@ -115,13 +126,16 @@ public class LobbyView extends JPanel {
     /**
      * Creates a combobox and adds it to grid
      */
-    private JComboBox createComboBox (Object[] objectArray, int xposition, int yposition, ActionListener listener) {
-        JComboBox box = new JComboBox();
+    private JComboBox createComboBox (Object[] objectArray,
+                                      int xposition,
+                                      int yposition,
+                                      ItemListener listener) {
+        JComboBox box = new JComboBox(objectArray);
         GridBagConstraints boxConstraints = new GridBagConstraints();
         boxConstraints.fill = GridBagConstraints.HORIZONTAL;
         addComponentToGrid(xposition, yposition, box, boxConstraints);
         box.setEnabled(false);
-        box.addActionListener(listener);
+        box.addItemListener(listener);
         return box;
     }
 
@@ -137,20 +151,28 @@ public class LobbyView extends JPanel {
         labelConstraints.gridy = yposition;
         add(component, labelConstraints);
     }
-    
+
     private void updateLabelsAndButtons () {
         for (int i = 0; i < myPlayers.length; i++) {
             Player player = myPlayers[i];
             if (player != null) {
-               myUsernameLabels[i].setText(player.getName());
-               myFactionBoxes[i].setSelectedItem(player.getFaction());
-               myTeamBoxes[i].setSelectedItem(player.getTeam());
-               if(myUserControlledPlayers.contains(player)) {
-                   myFactionBoxes[i].setEnabled(true);
-                    myTeamBoxes[i].setEnabled(true);
+                myUsernameLabels[i].setText(player.getName());
+                myFactionBoxes[i].setEnabled(true);
+                myTeamBoxes[i].setEnabled(true);
+                myFactionBoxes[i].removeItemListener(myFactionListener);
+                myTeamBoxes[i].removeItemListener(myTeamListener);
+                myFactionBoxes[i].setSelectedItem(player.getFaction());
+                myTeamBoxes[i].setSelectedItem(player.getTeam());
+                myFactionBoxes[i].addItemListener(myFactionListener);
+                myTeamBoxes[i].addItemListener(myTeamListener);
+                if (!myUserControlledPlayers.contains(player)) {
+                    myFactionBoxes[i].setEnabled(false);
+                    myTeamBoxes[i].setEnabled(false);
                 }
             }
         }
+        validate();
+        repaint();
     }
 
     public void update (Collection<Player> userControlledPlayers, Player[] allPlayers) {

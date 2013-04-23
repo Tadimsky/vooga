@@ -1,5 +1,6 @@
 package vooga.rts.networking.server;
 
+import vooga.rts.networking.communications.ExpandedLobbyInfo;
 import vooga.rts.networking.communications.LobbyInfo;
 
 /**
@@ -61,5 +62,12 @@ public interface IThreadContainer {
      * @param myLobbyInfo info about the lobby
      */
     public void startLobby (ConnectionThread thread, LobbyInfo myLobbyInfo);
+    
+    /**
+     * This updates the lobby with the new expandedLobbyInfo.
+     * @param thread
+     * @param myLobbyInfo
+     */
+    public void updateLobbyInfo (ConnectionThread thread, ExpandedLobbyInfo lobbyInfo);
 
 }

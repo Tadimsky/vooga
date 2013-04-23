@@ -1,7 +1,12 @@
 package vooga.rts.networking.server;
 
+import java.util.logging.Level;
+import vooga.rts.networking.communications.ExpandedLobbyInfo;
 import vooga.rts.networking.communications.LobbyInfo;
-import vooga.rts.networking.communications.servermessages.LobbyInfoMessage;
+import vooga.rts.networking.communications.clientmessages.UpdateLobbyInfoMessage;
+import vooga.rts.networking.communications.servermessages.SendLobbyInfoUpdatesMessage;
+import vooga.rts.networking.communications.servermessages.SwitchToLobbyMessage;
+import vooga.rts.networking.logger.NetworkLogger;
 
 
 /**
@@ -26,9 +31,11 @@ public class Lobby extends Room {
     public void leaveLobby (ConnectionThread thread) {
         removeConnection(thread);
         getGameContainer().addConnection(thread);
+        getGameContainer().decrementLobbyInfoSize(getID());
         if (haveNoConnections()) {
             getGameContainer().removeRoom(this);
         }
+        NetworkLogger.logMessage(Level.FINER, "Lobby left");
     }
 
     @Override
@@ -39,6 +46,14 @@ public class Lobby extends Room {
     @Override
     public void addConnection (ConnectionThread thread) {
         super.addConnection(thread);
-        thread.sendMessage(new LobbyInfoMessage(getLobbyModel()));
+        thread.sendMessage(new SwitchToLobbyMessage(getLobbyModel(), thread.getID()));
+        getGameContainer().incrementLobbyInfoSize(getID());
     }
+    
+    @Override
+    public void updateLobbyInfo (ConnectionThread thread, ExpandedLobbyInfo lobbyInfo) {
+        setLobbyInfo(lobbyInfo);
+        sendMessageToAllConnections(new SendLobbyInfoUpdatesMessage(lobbyInfo));
+    }
+
 }
