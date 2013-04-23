@@ -19,6 +19,7 @@ import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
 import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
 import vooga.rts.gamedesign.upgrades.UpgradeNode;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
+import vooga.rts.state.GameState;
 import vooga.rts.util.Camera;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
@@ -54,6 +55,7 @@ public class Unit extends InteractiveEntity {
     public Unit () {
         this(null, new Location3D(), new Dimension(0, 0), null, 0, 100,
              InteractiveEntity.DEFAULT_BUILD_TIME);
+        addObserver(GameState.getMap());
     }
 
     /**
@@ -97,6 +99,7 @@ public class Unit extends InteractiveEntity {
 
             @Override
             public void apply () {
+                System.out.println("Moving along sir");
                 getEntity().move(myLocation);
             }
 

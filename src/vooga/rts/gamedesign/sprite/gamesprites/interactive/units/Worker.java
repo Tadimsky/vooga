@@ -46,12 +46,10 @@ public class Worker extends Unit {
 		super(image, center, size, sound, playerID, health, buildTime);
 		myGatherAmount = gatherAmount;
 		myGatherStrategy = new CanGather(DEFUALT_GATHER_INTERVAL, gatherAmount);
-
 	}
 
 	@Override
 	public void update(double elapsedTime) {
-		super.update(elapsedTime);
 		myGatherStrategy.update(elapsedTime);
 	}
 

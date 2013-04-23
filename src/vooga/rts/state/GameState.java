@@ -83,7 +83,7 @@ public class GameState extends SubState implements Controller {
             p.update(elapsedTime);
         }
 
-        yuckyUnitUpdate(elapsedTime);
+//        yuckyUnitUpdate(elapsedTime);
 
         myFrames.update(elapsedTime);
     }
@@ -160,18 +160,18 @@ public class GameState extends SubState implements Controller {
                         .<BufferedImage> getFile("images/scv.gif", BufferedImage.class)),
                            new Location3D(100, 100, 0), new Dimension(75, 75), null, 1, 200, 40, 5);
         myHumanPlayer.add(worker);
-        Unit a = new Soldier();
-        Projectile proj =
-                new Projectile(new Pixmap(ResourceManager.getInstance()
-                        .<BufferedImage> getFile("images/bullet.png", BufferedImage.class)),
-                               a.getWorldLocation(), new Dimension(30, 30), 2, 10, 6);
-        a.getAttackStrategy().addWeapons(new Weapon(proj, 400, a.getWorldLocation(), 1));
-        //myHumanPlayer.add(a);
-        addPlayer(2);
-        Unit c = new Soldier(new Location3D(1000, 500, 0), 2);
-        c.setHealth(150);
-        myHumanPlayer.add(c);
-        myPlayers.get(1).add(c);
+//        Unit a = new Soldier();
+//        Projectile proj =
+//                new Projectile(new Pixmap(ResourceManager.getInstance()
+//                        .<BufferedImage> getFile("images/bullet.png", BufferedImage.class)),
+//                               a.getWorldLocation(), new Dimension(30, 30), 2, 10, 6);
+//        a.getAttackStrategy().addWeapons(new Weapon(proj, 400, a.getWorldLocation(), 1));
+//        myHumanPlayer.add(a);
+//        addPlayer(2);
+//        Unit c = new Soldier(new Location3D(1000, 500, 0), 2);
+//        c.setHealth(150);
+//        myHumanPlayer.add(c);
+//        myPlayers.get(1).add(c);
         Building b =
                 new Building((new Pixmap(ResourceManager.getInstance()
                         .<BufferedImage> getFile("images/factory.png", BufferedImage.class))),

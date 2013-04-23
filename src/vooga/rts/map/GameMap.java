@@ -76,7 +76,12 @@ public class GameMap implements IGameLoop, Observer {
     @Override
     public void update (double elapsedTime) {
         myTiles.update(elapsedTime); //What's this used for? (CHB)
+        System.out.println("Moving size: " + myMoving.size());
         for (GameEntity g: myMoving.keySet()) {
+            System.out.println(g.getWorldLocation().getX() + " dis da world x");
+           
+            Node node = mySprites.get(g);
+            node.getCenter();
             Vector v = g.getWorldLocation().difference(mySprites.get(g).getCenter().to2D());
             if (v.getMagnitude() < Location3D.APPROX_EQUAL) {
                 if (myMoving.get(g).size() == 0) {
@@ -93,7 +98,8 @@ public class GameMap implements IGameLoop, Observer {
     public void update (Observable arg0, Object arg1) {
         if (arg1 instanceof Location3D) { // This will get changed eventually hopefully, will only be called when something is moving
             GameEntity entity = (GameEntity) arg0;
-            myMoving.put(entity, getPath(entity.getFinder(), entity.getWorldLocation(), (Location3D) arg1)); 
+            myMoving.put(entity, getPath(entity.getFinder(), entity.getWorldLocation(), (Location3D) arg1));
+            
         }
     }
 
@@ -116,8 +122,8 @@ public class GameMap implements IGameLoop, Observer {
 
     private void randomGenMap () {
 
-        int tilesX = 256;
-        int tilesY = 256;
+        int tilesX = 128;
+        int tilesY = 128;
 
         int tileWidthX = 60;
         int tileWidthY = 42;

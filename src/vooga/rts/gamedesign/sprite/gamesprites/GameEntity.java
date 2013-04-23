@@ -64,7 +64,6 @@ public class GameEntity extends GameSprite {
         myEntityState = new EntityState();
         mySpeed = DEFAULT_SPEED;
         myFinder = new AstarFinder();
-        addObserver(GameState.getMap()); // Only things that are gonna move need to have the map observe them
     }
 
     /**
@@ -194,6 +193,7 @@ public class GameEntity extends GameSprite {
      */
     public void move (Location3D loc) {
         setChanged();
+        System.out.println("setChanged()())())()()()()()() fuck da police");
         notifyObservers(loc);
         // All this stuff dun gon git moved to the Map
 
