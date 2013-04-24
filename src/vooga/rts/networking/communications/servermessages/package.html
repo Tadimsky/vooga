@@ -11,8 +11,11 @@ This package represents all classes that are sent from the server to the client.
 
 <h4>Class hierarchy</h4>
 <p> 
-All classes in this package extend ServerInfoMessage, and must create one method:
-affectClient (IClientModel model).
+All classes in this package implement ServerInfoMessage, and must create one method:
+affectClient (IClientModel model).  Classes that deal with the LobbyInfo object
+extend the AbstractLobbyInfo class while those that do not extend the superclass
+Message.  When needed, message that utilize the LobbyInfo from the superclass,
+AbstractLobbyInfoMessage, are cast the LobbyInfo to ExtendedLobbyInfo
 
 <h4>Workflow</h4>
 <p> 

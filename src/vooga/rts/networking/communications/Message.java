@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @author David Winegar
  * 
  */
-public abstract class Message implements Serializable, Comparable<Message> {
+public abstract class Message implements Serializable, Comparable<Message>,IMessage {
 
     private static final long serialVersionUID = 3906028159511905867L;
     private TimeStamp myTimeStamp;

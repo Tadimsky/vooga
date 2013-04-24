@@ -3,6 +3,8 @@ package vooga.rts.networking.server;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+
+import vooga.rts.networking.NetworkBundle;
 import vooga.rts.networking.communications.LobbyInfo;
 import vooga.rts.networking.communications.servermessages.LobbyListMessage;
 import vooga.rts.networking.logger.NetworkLogger;
@@ -36,14 +38,14 @@ public class GameContainer extends AbstractThreadContainer {
     protected void addRoom (Room room) {
         myRooms.put(room.getID(), room);
     }
-    
+
     /**
      * Increments lobby info size with the given id
      */
     protected void incrementLobbyInfoSize (int id) {
         myLobbyInfos.get(id).addPlayer();
     }
-    
+
     /**
      * Decrements lobby info size with the given id
      */
@@ -53,18 +55,21 @@ public class GameContainer extends AbstractThreadContainer {
 
     /**
      * Joins the lobby if the lobby exists.
+     * 
      * @param thread that is joining
      * @param lobbyNumber number of lobby
      */
     @Override
     public void joinLobby (ConnectionThread thread, int lobbyNumber) {
-        if (myRooms.containsKey(lobbyNumber)) {
+        if (myRooms.containsKey(lobbyNumber) &&
+            myRooms.get(lobbyNumber).getNumberOfConnections() < myRooms.get(lobbyNumber)
+                    .getMaxConnections()) {
             removeConnection(thread);
             myRooms.get(lobbyNumber).addConnection(thread);
+            NetworkLogger.logMessage(Level.INFO, NetworkBundle.getString("LobbyJoined"));
         }
-        NetworkLogger.logMessage(Level.FINER, "Lobby joined");
     }
-    
+
     @Override
     public void startLobby (ConnectionThread thread, LobbyInfo lobbyInfo) {
         lobbyInfo = new LobbyInfo(lobbyInfo, myRoomNumber);
@@ -73,9 +78,9 @@ public class GameContainer extends AbstractThreadContainer {
         myRoomNumber++;
         lobby.addConnection(thread);
         addRoom(lobby);
-        NetworkLogger.logMessage(Level.FINER, "Lobby started");
+        NetworkLogger.logMessage(Level.INFO, NetworkBundle.getString("LobbyStarted"));
     }
-    
+
     @Override
     public void requestLobbies (ConnectionThread thread) {
         LobbyInfo[] infoArray = myLobbyInfos.values().toArray(new LobbyInfo[myLobbyInfos.size()]);

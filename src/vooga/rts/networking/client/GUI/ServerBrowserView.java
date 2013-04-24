@@ -39,5 +39,9 @@ public class ServerBrowserView extends JPanel {
     public int getSelectedID () {
         return myAdapter.getidOfRow(myTable.getSelectedRow());
     }
+    
+    public boolean hasSelected () {
+        return myTable.getSelectedRow() != -1;
+    }
 
 }

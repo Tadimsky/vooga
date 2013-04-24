@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
@@ -104,5 +105,16 @@ public class ViewContainerPanel extends JPanel {
         bottomPanel.add(myLeftButton, BorderLayout.WEST);
         bottomPanel.add(myRightButton, BorderLayout.EAST);
         add(bottomPanel, BorderLayout.SOUTH);
+    }
+
+    /**
+     * Method for alerting the user to a very important message. Primarily considered for displaying
+     * sever errors.
+     * 
+     * @param title title of the dialog window (ie: Error)
+     * @param message message content
+     */
+    public void showMessageDialog (String title, String message) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.PLAIN_MESSAGE);
     }
 }

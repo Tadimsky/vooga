@@ -4,15 +4,14 @@ import javax.swing.JPanel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Collection;
-import java.util.EventListener;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
+import vooga.rts.networking.NetworkBundle;
 import vooga.rts.networking.communications.Player;
 
 
@@ -44,7 +43,7 @@ public class LobbyView extends JPanel {
     /**
      * Create the panel.
      */
-    public LobbyView (IModel model, String[] factions, int maxPlayers) {
+    public LobbyView (IModel model, List<String> myFactions, int maxPlayers) {
         // initialize GridBagLayout
         GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0 };
@@ -73,14 +72,13 @@ public class LobbyView extends JPanel {
         for (int i = 0; i < myMaxPlayers; i++) {
             myUsernameLabels[i] = createLabel(NO_PLAYER, COLUMN_1, i + 1);
             myTeamBoxes[i] = createComboBox(teamNumList, COLUMN_2, i + 1, myTeamListener);
-            myFactionBoxes[i] = createComboBox(factions, COLUMN_3, i + 1, myFactionListener);
+            myFactionBoxes[i] = createComboBox(myFactions.toArray(), COLUMN_3, i + 1, myFactionListener);
         }
 
         // initialize title labels
-        // TODO resources file
-        createLabel("Player Name", COLUMN_1, ROW_1);
-        createLabel("Team", COLUMN_2, ROW_1);
-        createLabel("Faction", COLUMN_3, ROW_1);
+        createLabel(NetworkBundle.getString("PlayerName"), COLUMN_1, ROW_1);
+        createLabel(NetworkBundle.getString("Team"), COLUMN_2, ROW_1);
+        createLabel(NetworkBundle.getString("Faction"), COLUMN_3, ROW_1);
 
     }
 
@@ -110,6 +108,7 @@ public class LobbyView extends JPanel {
                 }
             }
         };
+
     }
 
     /**
@@ -169,6 +168,9 @@ public class LobbyView extends JPanel {
                     myFactionBoxes[i].setEnabled(false);
                     myTeamBoxes[i].setEnabled(false);
                 }
+            }
+            else {
+                myUsernameLabels[i].setText(NO_PLAYER);
             }
         }
         validate();

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
+import vooga.rts.networking.NetworkBundle;
 import vooga.rts.networking.logger.NetworkLogger;
 
 
@@ -19,10 +20,11 @@ public class ConnectionServer extends Thread {
     private static final int PORT = 55308;
     private int myConnectionID = 0;
     private MatchmakerServer myMatchServer;
-    private boolean myServerAcceptingConnections = false;
+    private boolean myIsServerAcceptingConnections = false;
 
     /**
      * Creates a connection server that sends connections to the MatchmakerServer specified.
+     * 
      * @param matchServer server to send connections to
      */
     public ConnectionServer (MatchmakerServer matchServer) {
@@ -34,25 +36,26 @@ public class ConnectionServer extends Thread {
      */
     @Override
     public void run () {
-        myServerAcceptingConnections = true;
+        myIsServerAcceptingConnections = true;
         ServerSocket serverSocket = null;
 
-        while (myServerAcceptingConnections) {
+        while (myIsServerAcceptingConnections) {
             try {
                 serverSocket = new ServerSocket(PORT + myConnectionID);
-                
+
                 Socket socket = serverSocket.accept();
                 ConnectionThread thread =
                         new ConnectionThread(socket, myMatchServer, myConnectionID);
                 myConnectionID++;
                 thread.start();
                 myMatchServer.addConnection(thread);
-                NetworkLogger.logMessage(Level.FINEST, "New connection joined");
+                NetworkLogger.logMessage(Level.INFO, NetworkBundle.getString("NewConnection") +
+                                                       ": " + thread.getID());
                 serverSocket.close();
             }
             catch (IOException e) {
-                NetworkLogger.logMessage(Level.SEVERE, "Connection Server failed");
-                myServerAcceptingConnections = false;
+                NetworkLogger.logMessage(Level.SEVERE, NetworkBundle.getString("ConnectionFailed"));
+                myIsServerAcceptingConnections = false;
             }
         }
 
@@ -61,16 +64,17 @@ public class ConnectionServer extends Thread {
                 serverSocket.close();
             }
             catch (IOException e) {
-                NetworkLogger.logMessage(Level.SEVERE, "Connection serversSocket close failed");
+                NetworkLogger.logMessage(Level.SEVERE,
+                                         NetworkBundle.getString("ConnectionSocketFailed"));
             }
         }
     }
-    
+
     /**
      * Stops accepting connections from this server and closes the socket.
      */
     protected void stopAcceptingConnections () {
-        myServerAcceptingConnections = false;
+        myIsServerAcceptingConnections = false;
     }
 
 }

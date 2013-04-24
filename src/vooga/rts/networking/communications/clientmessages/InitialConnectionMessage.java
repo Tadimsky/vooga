@@ -1,5 +1,6 @@
 package vooga.rts.networking.communications.clientmessages;
 
+import vooga.rts.networking.communications.Message;
 import vooga.rts.networking.server.ConnectionThread;
 import vooga.rts.networking.server.IThreadContainer;
 
@@ -11,7 +12,7 @@ import vooga.rts.networking.server.IThreadContainer;
  * @author David Winegar
  * 
  */
-public class InitialConnectionMessage extends ClientInfoMessage {
+public class InitialConnectionMessage extends Message implements ClientInfoMessage {
 
     private static final long serialVersionUID = -3741469544179563398L;
     private String myGameName;
@@ -19,6 +20,7 @@ public class InitialConnectionMessage extends ClientInfoMessage {
 
     /**
      * Creates the message.
+     * 
      * @param gameName name of the game
      * @param userName name of the user
      */

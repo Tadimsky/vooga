@@ -3,6 +3,7 @@ package vooga.rts.networking.server;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import vooga.rts.networking.NetworkBundle;
 import vooga.rts.networking.communications.ExpandedLobbyInfo;
 import vooga.rts.networking.communications.LobbyInfo;
 import vooga.rts.networking.communications.Message;
@@ -48,7 +49,7 @@ public abstract class AbstractThreadContainer implements IThreadContainer, IMess
     }
 
     @Override
-    public void leaveLobby (ConnectionThread thread) {
+    public void leaveLobby (ConnectionThread thread, ExpandedLobbyInfo lobbyInfo) {
     }
 
     @Override
@@ -81,7 +82,7 @@ public abstract class AbstractThreadContainer implements IThreadContainer, IMess
      */
     @Override
     public void receiveMessageFromClient (Message message, ConnectionThread thread) {
-        NetworkLogger.logMessage(Level.FINEST, "Message received from " + thread.getID());
+        NetworkLogger.logMessage(Level.FINEST, NetworkBundle.getString("MessageReceived") + thread.getID());
         stampMessage(message);
         if (message instanceof ClientInfoMessage) {
             ClientInfoMessage systemMessage = (ClientInfoMessage) message;
@@ -91,7 +92,7 @@ public abstract class AbstractThreadContainer implements IThreadContainer, IMess
 
     /**
      * Overridable method for stamping this message called by receiveMessageFromClient.
-     * ]
+     * 
      */
     protected void stampMessage (Message message) {
         message.stampTime();
@@ -135,4 +136,7 @@ public abstract class AbstractThreadContainer implements IThreadContainer, IMess
         myConnectionThreads.clear();
     }
 
+    protected int getNumberOfConnections () {
+        return myConnectionThreads.size();
+    }
 }

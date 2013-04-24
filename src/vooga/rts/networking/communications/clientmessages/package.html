@@ -11,9 +11,12 @@ This package represents messages from the client to the server.
  
 <h4>Class hierarchy</h4>
 <p> 
-Each message in this package subclasses ClientInfoMessage. All
+Each message in this package implements ClientInfoMessage. All
 of them use the method AffectServer (ConnectionThread thread, IThreadContainer server)
-which acts in some way on the thread and server.
+which acts in some way on the thread and server. Classes that deal with the LobbyInfo object
+extend the AbstractLobbyInfo class while those that do not extend the superclass
+Message.  When needed, message that utilize the LobbyInfo from the superclass,
+AbstractLobbyInfoMessage, are cast the LobbyInfo to ExtendedLobbyInfo
 
 <h4>Workflow</h4>
 <p> 

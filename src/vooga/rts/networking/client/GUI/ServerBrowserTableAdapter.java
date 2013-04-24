@@ -1,6 +1,8 @@
 package vooga.rts.networking.client.GUI;
 
 import javax.swing.table.AbstractTableModel;
+
+import vooga.rts.networking.NetworkBundle;
 import vooga.rts.networking.communications.LobbyInfo;
 
 
@@ -14,9 +16,9 @@ import vooga.rts.networking.communications.LobbyInfo;
 public class ServerBrowserTableAdapter extends AbstractTableModel {
     private static final long serialVersionUID = -4753703508648678535L;
 
-    private String[] myColumnNames = { "Server Name",
-                                      "Map",
-                                      "Players" };
+    private String[] myColumnNames = { NetworkBundle.getString("ServerName"),
+    		NetworkBundle.getString("Map"),
+    		NetworkBundle.getString("Players") };
 
     private LobbyInfo[] myLobbies = new LobbyInfo[0];
 
@@ -47,7 +49,7 @@ public class ServerBrowserTableAdapter extends AbstractTableModel {
         switch(arg1) {
             case 0: return myLobbies[arg0].getLobbyName();
             case 1: return myLobbies[arg0].getMapName();
-            case 2: return myLobbies[arg0].getMaxPlayers() + " / " + myLobbies[arg0].getCurrentPlayers();
+            case 2: return myLobbies[arg0].getCurrentPlayers() + " / " + myLobbies[arg0].getMaxPlayers();
             default: return null;
         }
     }

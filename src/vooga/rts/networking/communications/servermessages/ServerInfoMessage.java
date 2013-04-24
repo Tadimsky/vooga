@@ -1,18 +1,17 @@
 package vooga.rts.networking.communications.servermessages;
 
 import vooga.rts.networking.client.IClientModel;
-import vooga.rts.networking.communications.Message;
+import vooga.rts.networking.communications.IMessage;
 
 
 /**
  * Represents a message from server to client.
  * 
  * @author David Winegar
+ * @author srwareham
  * 
  */
-public abstract class ServerInfoMessage extends Message {
-
-    private static final long serialVersionUID = 1155598288906476729L;
+public interface ServerInfoMessage extends IMessage {
 
     /**
      * Updates the client in some way.

@@ -107,9 +107,10 @@ public class ExpandedLobbyInfo extends LobbyInfo {
             }
         }
     }
-    
+
     /**
      * Gets the player in the given position
+     * 
      * @param position of player
      * @return player
      */
@@ -134,23 +135,20 @@ public class ExpandedLobbyInfo extends LobbyInfo {
     public Player[] getPlayers () {
         return Arrays.copyOf(myPlayers, myPlayers.length);
     }
-    
+
     /**
      * Returns if the game is startable.
+     * 
      * @return true if game can be started
      */
     public boolean canStartGame () {
         for (int i = 0; i < myPlayers.length; i++) {
-            if (myPlayers[i] == null) {
-                return false;
-            }
+            if (myPlayers[i] == null) { return false; }
         }
-        
+
         int team1 = myPlayers[0].getTeam();
         for (int i = 0; i < myPlayers.length; i++) {
-            if (myPlayers[i].getTeam() != team1) {
-                return true;
-            }
+            if (myPlayers[i].getTeam() != team1) { return true; }
         }
         return false;
     }
