@@ -133,7 +133,7 @@ public class Manager extends Observable implements State, IActOn, Observer {
      *        The entity that is to be added.
      */
     public void add (InteractiveEntity entity) {
-        entity.addObserver(GameState.getMap().getNodeMap());
+        entity.addObserver(GameState.getMap()); // easiest way for now
         entity.addObserver(this);
         entity.setChanged();
         entity.notifyObservers(entity.getWorldLocation());

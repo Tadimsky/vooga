@@ -23,19 +23,16 @@ import vooga.rts.util.Location3D;
  * @author Challen Herzberg-Brovold
  * 
  */
-public class NodeMap implements Observer {
+public class NodeMap {
 
     private int myWidth;
     private int myHeight;
     private Node[][] myMap;
 
-    private Map<GameSprite, Node> myLookupMap;
-
     public NodeMap (int width, int height) {
         myMap = new Node[width][height];
         myWidth = width;
         myHeight = height;
-        myLookupMap = new HashMap<GameSprite, Node>();
     }
 
     /**
@@ -89,6 +86,40 @@ public class NodeMap implements Observer {
         myMap[x][y] = node;
     }
 
+    public List<Node> getVisible() {
+        Rectangle view = Camera.instance().getWorldVision().getBounds();
+        // Get the start index of what is visible by the cameras.
+        int startX = (int) (view.getMinX() > 0 ? view.getMinX() : 0);
+        startX /= Node.NODE_SIZE;
+        int startY = (int) (view.getMinY() > 0 ? view.getMinY() : 0);
+        startY /= Node.NODE_SIZE;
+        // Get the end index of what is visible
+        int endX =
+                (int) (view.getMaxX() < Node.NODE_SIZE * myWidth ? view.getMaxX() : myWidth *
+                                                                                    Node.NODE_SIZE);
+        endX /= Node.NODE_SIZE;
+        endX = endX < myWidth ? endX : myWidth - 1;
+        int endY =
+                (int) (view.getMaxY() < Node.NODE_SIZE * myHeight ? view.getMaxY() : myHeight *
+                                                                                     Node.NODE_SIZE);
+        endY /= Node.NODE_SIZE;
+        endY = endY < myHeight ? endY : myHeight - 1;
+        List<Node> result = new ArrayList<Node>();
+        int depth = (endX - startX) + (endY - startY);
+        for (int z = 0; z < depth; z++) {
+            for (int y = 0; y <= z; y++) {
+                int x = z - y;
+                Node n = get(x + startX, y + startY);// This could get add to a list, returns and is painted
+                if (n != null) {
+                  result.add(n);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
     public void paint (Graphics2D pen) {
         Rectangle view = Camera.instance().getWorldVision().getBounds();
 
@@ -125,28 +156,6 @@ public class NodeMap implements Observer {
                 }
             }
         }
-    }
-
-    /**
-     * Adds a Sprite to a Node.
-     * 
-     * @param sprite The sprite to be added to the node.
-     * @param node The node to add the sprite to.
-     */
-    private void addToNode (GameSprite sprite, Node node) {
-        myLookupMap.put(sprite, node);
-        node.addSprite(sprite);
-    }
-
-    /**
-     * Removes a Sprite from its current Node.
-     * 
-     * @param sprite The sprite to be added to the node.
-     * @param node The node to add the sprite to.
-     */
-    private void removeFromNode (GameSprite sprite) {
-        Node node = myLookupMap.get(sprite);
-        node.removeSprite(sprite);
     }
 
     /**
@@ -202,46 +211,5 @@ public class NodeMap implements Observer {
         int x = (int) Math.floor(location.getX() / Node.NODE_SIZE);
         int y = (int) Math.floor(location.getY() / Node.NODE_SIZE);
         return get(x, y);
-    }
-
-    @Override
-    public void update (Observable arg0, Object arg1) {
-        // Map only worries about Game Sprite observables
-        if (!(arg0 instanceof GameSprite)) {
-            return;
-        }
-        GameSprite item = (GameSprite) arg0;
-        Node cur = myLookupMap.get(item);
-        // If the map doesn't know about it yet
-        if (cur == null) {
-            Node newNode = findContainingNode(item.getWorldLocation());
-            if (newNode != null) {
-                addToNode(item, newNode);
-                cur = newNode;
-            }
-        }
-
-        // if it's updating with its new location
-        if (arg1 instanceof Location3D) {
-            // hasn't moved outside of the current node
-            if (cur.contains(item.getWorldLocation())) {
-                return;
-            }
-            else {
-                Node newNode = findContainingNode(item.getWorldLocation());
-                if (newNode != null) {
-                    removeFromNode(item);
-                    addToNode(item, newNode);
-                }
-            }
-        }
-        if (item instanceof InteractiveEntity) {
-            InteractiveEntity ie = (InteractiveEntity) item;
-            if (ie.isDead()) {
-                if (cur != null) {
-                    removeFromNode(item);
-                }
-            }
-        }
     }
 }

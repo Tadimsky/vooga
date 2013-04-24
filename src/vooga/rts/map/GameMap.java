@@ -135,7 +135,6 @@ public class GameMap implements IGameLoop, Observer {
     @Override
     public void update (double elapsedTime) {
         // myTiles.update(elapsedTime);
-        //Updates myMoving
         for (GameEntity ie: myMoving.keySet()) {
             Vector v = ie.getWorldLocation().difference(myEntities.get(ie).getCenter().to2D());
             if(v.getMagnitude() < Location3D.APPROX_EQUAL) {
@@ -161,8 +160,9 @@ public class GameMap implements IGameLoop, Observer {
     @Override
     public void paint (Graphics2D pen) {
         myTiles.paint(pen);
-        myNodeMap.paint(pen);// going to paint the nodes by getting the ones we want using getVisible method -> returns list of visible nodes
-        
+        for (Node n : myNodeMap.getVisible()) {
+            n.paint(pen);
+        }       
     }
 
     public void setTileMap(TileMap map) {
@@ -214,13 +214,5 @@ public class GameMap implements IGameLoop, Observer {
             }
         }
         Camera.instance().setMapSize(size);
-    }
-
-    public void setTileMap (TileMap map) {
-        myTiles = map;
-    }
-
-    public Dimension getSize () {
-        return mySize;
     }
 }
