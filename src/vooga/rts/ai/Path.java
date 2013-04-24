@@ -19,20 +19,26 @@ import vooga.rts.util.Location3D;
 public class Path {
     
     private Queue<Node> myPath;
+    private Node myNext;
     
     public Path (Queue<Node> path) {
         myPath = path;
+        setNext();
     }
     
     public Path () {
         this(new LinkedList<Node>());
+    }
+    
+    public void setNext() {
+        myNext = myPath.poll();
     }
     /**
      * 
      * @return This methods will return the next node to go
      */
     public Location3D getNext() { 
-        return myPath.poll().getCenter();
+        return myNext.getCenter();
     }
     
     /**

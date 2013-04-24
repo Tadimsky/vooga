@@ -136,8 +136,7 @@ public class GameMap implements IGameLoop, Observer {
     public void update (double elapsedTime) {
         myTiles.update(elapsedTime);
         for (GameEntity ie: myMoving.keySet()) {
-            System.out.println(myMoving.size());
-            Vector v = ie.getWorldLocation().difference(myEntities.get(ie).getCenter().to2D());
+            Vector v = ie.getWorldLocation().difference(myMoving.get(ie).getNext().to2D());
             if(v.getMagnitude() < Location3D.APPROX_EQUAL) {
                 if(myMoving.get(ie).size() == 0) {
                     myMoving.remove(ie);
@@ -146,12 +145,14 @@ public class GameMap implements IGameLoop, Observer {
                     continue;
                 }
                 else {
+                    myMoving.get(ie).setNext();
                     ie.setVelocity(v.getAngle(), ie.getSpeed());
                     ie.getState().setMovementState(MovementState.MOVING);
                 }
             }
             Vector velocity = new Vector(ie.getVelocity());
             velocity.scale(elapsedTime);
+            System.out.println("Hi");
             ie.translate(velocity);
             ie.stopMoving();
             ie.getEntityState().update(elapsedTime);

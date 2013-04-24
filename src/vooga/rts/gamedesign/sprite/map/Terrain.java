@@ -29,7 +29,6 @@ public class Terrain extends GameSprite {
      */
     public Terrain(Pixmap image, Location3D center, Dimension size) {
         super(image, center, size);
-        addObserver(GameState.getMap().getNodeMap());
     }
     
     /**
