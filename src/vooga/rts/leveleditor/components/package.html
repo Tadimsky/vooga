@@ -6,6 +6,59 @@
 <p>
 This package is part of the CompSci 308 VOOGA Game Engine Project.
 
-<p> TODO: Yang
+<p>
+This package contains all the back-end classes required in the level editor. Some classes in this package extend
+the class in game design and map part.
+
+<h4>EditableMap</h4>
+<p>
+@See EditableMap
+<p>
+the EditableMap class contains all information of the map, which can be used in the real game. This class allow users
+to create, modify, generate and load the map. Also, it allow user add players into the map. 
+<h4>EditableResource</h4>
+<p>
+@See EditableResource
+<p>
+this class is a class of all kinds of resources in the map. Including something like gold and gas. It extends Resource class
+in gamedesign package.
+<h4>EditableTerrain</h4>
+<p>
+@See EditableTerrain
+<p>
+this class is a class of all kinds of terrains in the map. Including something like buildings and mountains. It extends Terrain class
+in gamedesign package.
+<h4>EditableTile</h4>
+<p>
+@See EditableTile
+<p>
+this class is a class of all kinds of tiles in the map. Including something like grass and water. It extens Tile class
+in gamedesign package.
+<h4>EditableTileMap</h4>
+<p>
+@See EditableTileMap
+<p>
+this class contains all the tile in the game map. It extends the TileMap class in gamemap. The difference is that this 
+all the node in this EditableTileMap is consisted of EditableTile
+<h4>MapLoader</h4>
+<p>
+@See MapLoader
+<p>
+this class is responsible for loading a map from a xml file into the leveleditor. Ideally, the game mao will also use this
+loader to generated their map.
+<h4>MapSaver</h4>
+<p>
+@See MapSaver
+<p>
+this class is responsible for generate a map to a xml file from a map that is edited by users.
+<h4>PlayerSet</h4>
+<p>
+@See PlayerSet
+<p>
+this class is a container for all players. It can support add and remove players from the game map.
+
+
+
+
 </body>
 </html>

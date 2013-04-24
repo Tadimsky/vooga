@@ -146,7 +146,9 @@ public class NodeMap implements Observer {
      */
     private void removeFromNode (GameSprite sprite) {
         Node node = myLookupMap.get(sprite);
-        node.removeSprite(sprite);
+        if (node != null) {
+            node.removeSprite(sprite);
+        }
     }
 
     /**
@@ -242,6 +244,9 @@ public class NodeMap implements Observer {
                     removeFromNode(item);
                 }
             }
+        }
+        if (arg1 instanceof String && ((String)arg1).equals("remove")) {
+            removeFromNode(item);
         }
     }
 }

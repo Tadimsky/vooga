@@ -9,8 +9,6 @@ import javax.swing.JTabbedPane;
 import vooga.rts.leveleditor.components.EditableTerrain;
 import vooga.rts.leveleditor.components.EditableTile;
 import vooga.rts.leveleditor.components.EditableResource;
-import vooga.rts.resourcemanager.ImageLoader;
-import vooga.rts.resourcemanager.ResourceManager;
 
 /**
  * 
@@ -23,6 +21,7 @@ import vooga.rts.resourcemanager.ResourceManager;
  * @author Ziqiang Huang
  *
  */
+@SuppressWarnings("serial")
 public class Canvas extends JFrame {
 
     public static final Dimension DEFAULT_CANVAS_SIZE  = new Dimension (800,600);
@@ -40,6 +39,9 @@ public class Canvas extends JFrame {
     private EditableTile myCurrentSelectTile;
     private JScrollPane  myMapScroll;
 
+    /**
+     * Constructor for the class
+     */
     public Canvas() {
         setTitle("Level Editor");
         myMapPanel = new MapPanel(this);
@@ -77,70 +79,104 @@ public class Canvas extends JFrame {
 
     }
 
-
+    /**
+     * Set r as the current selected resource selected by user
+     * @param r
+     */
     public void setCurrentSelectResource(EditableResource r) {
         myCurrentSelectResource = r;
     }
-
+    
+    /**
+     * 
+     * @return the current selected resource
+     */
     public EditableResource getCurrentSelectResource() {
         return myCurrentSelectResource;
     }
     
+    /**
+     * Set t as the current selected terrain selected by user
+     * @param t
+     */
     public void setCurrentSelectTerrain(EditableTerrain t) {
         myCurrentSelectTerrain = t;        
     }
     
+    /**
+     * 
+     * @return the current selected terrain
+     */
     public EditableTerrain getCurrentSelectTerrain() {
         return myCurrentSelectTerrain;
     }
     
-    public void setCurrentSelectTile(EditableTile myTile) {
-        myCurrentSelectTile = myTile;       
+    /**
+     * Set t as the current selected tile
+     * 
+     * @param myTile
+     */
+    public void setCurrentSelectTile(EditableTile t) {
+        myCurrentSelectTile = t;       
     }
     
+    /**
+     * 
+     * @return the current selected tile
+     */
     public EditableTile getCurrentSelectTile() {
         return myCurrentSelectTile;
     }
 
-
+    /**
+     * clear the canvas
+     */
     public void clear() {
         myMapPanel.clear();
         myLayerPanel.clear();
 
     }
 
-    public void remove(boolean b) {
-        myMapPanel.setRemoveFlag(b);       
-    }
-
+    /**
+     * 
+     * @return the map panel for the canvas
+     */
     public MapPanel getMapPanel() {
         return myMapPanel;
     }
     
+    /**
+     * Set the edit mode according to the mode 
+     * @param mode
+     */
     public void setMode(int mode) {
        myMapPanel.setMode(mode);       
     }
     
+    /**
+     * add a layer to the canvas
+     */
     public void addLayer() {
-//       myMapPanel.addLayer();
+       myMapPanel.addLayer();
        myLayerPanel.addLayer(myMapPanel.getMaxLayer());
        
     }
     
+    /**
+     * remove the last layer from the canvas
+     */
     public void removeLayer() {
        myLayerPanel.removeLayer(myMapPanel.getMaxLayer());
-//       myMapPanel.removeLayer(); 
+       myMapPanel.removeLayer(); 
     }
 
-    
-    public static void main(String[] args) {
-        ResourceManager.getInstance().registerResourceLoader(new ImageLoader());
-        ResourceManager.getInstance().setResourceBase("/vooga/rts/leveleditor/resource/");
-        
-        new Canvas();
+    /**
+     * remove all the players from the map
+     */
+    public void clearPlayer() {
+        myMapPanel.getMyMap().getPlayerSet().clearPlayers();
+        myMapPanel.repaint();
     }
-
-
 
 
 }

@@ -3,7 +3,6 @@ package vooga.rts.leveleditor.gui;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -13,7 +12,6 @@ import util.input.InputClassTarget;
 import util.input.InputMethodTarget;
 import util.input.PositionObject;
 import vooga.rts.leveleditor.components.EditableResource;
-import vooga.rts.util.Pixmap;
 
 
 /**
@@ -24,6 +22,7 @@ import vooga.rts.util.Pixmap;
  * 
  */
 
+@SuppressWarnings("serial")
 @InputClassTarget
 public class ResourceButton extends JToggleButton {
 
@@ -31,7 +30,6 @@ public class ResourceButton extends JToggleButton {
 
     private EditableResource myResource;
     private ResourcePanel myOwner;
-    private Pixmap myIcon;
     private Input myInput;
     private boolean isInitialized;
 
@@ -44,7 +42,7 @@ public class ResourceButton extends JToggleButton {
      */
     public ResourceButton (EditableResource editableResource, BufferedImage image, ResourcePanel owner) {
         myResource = editableResource;
-        myIcon = editableResource.getImage();
+        editableResource.getImage();
         Image image2 = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         myOwner = owner;
         myInput = new Input(INPUT_DIR, this);
@@ -55,18 +53,25 @@ public class ResourceButton extends JToggleButton {
         setIcon(new ImageIcon(image2));
         setMargin(new Insets(2, 2, 2, 2));
     }
-
+    
+    /**
+     * get the resource from the button when being clicked
+     * @param p
+     */
     @InputMethodTarget(name = "onLeftMouseDown")
     public void getResource (PositionObject p) {
         if(!isInitialized) {
-        showCustmizationDailog();
+            showCustmizationDailog();
         }
-        myOwner.getCanvas().remove(false);
         myOwner.setCurrentSelectResource(myResource);
         myOwner.getCanvas().setMode(MapPanel.RESOURCEMODE);
     }
 
-    public void showCustmizationDailog() {
+    /**
+     * show the customizationDaliog of this resource 
+     * users should enter in the type and the amount of the resource
+     */
+    private void showCustmizationDailog() {
         JTextField resourceType = new JTextField();
         JTextField resourceAmount = new JTextField();
         Object[] message = {"Type", resourceType, "Amount", resourceAmount};
@@ -84,5 +89,7 @@ public class ResourceButton extends JToggleButton {
             }
         }
     }
+    
+    
 
 }

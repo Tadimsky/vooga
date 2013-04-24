@@ -7,6 +7,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import vooga.rts.leveleditor.components.EditableMap;
 
 /**
  * This class holds all the menus for the level editor
@@ -14,12 +15,18 @@ import javax.swing.JTextField;
  * @author Ziqiang Huang
  *
  */
+@SuppressWarnings("serial")
 public class MenuManager extends JMenuBar {
 
     public static final String USER_DIR = "user.dir";
     private Canvas myCanvas;
     private JFileChooser myChooser;
-
+    
+    /**
+     * Constructor for the class
+     * 
+     * @param canvas the canvas that holds the menu manager
+     */
     public MenuManager(Canvas canvas) {
         myCanvas = canvas;
         myChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
@@ -70,15 +77,13 @@ public class MenuManager extends JMenuBar {
             @Override
             public void actionPerformed (ActionEvent e) {
                myCanvas.setMode(MapPanel.PLAYERMODE);
-               myCanvas.getMapPanel().setRemoveFlag(false);
             }
         });
 
         menu.add(new AbstractAction("RemovePlayer") {
             @Override
             public void actionPerformed (ActionEvent e) {
-                myCanvas.setMode(MapPanel.PLAYERMODE);
-                myCanvas.getMapPanel().setRemoveFlag(true);
+                myCanvas.clearPlayer();
             }
         });
     }
@@ -103,7 +108,6 @@ public class MenuManager extends JMenuBar {
                     }
                 }
                 catch (Exception exception) {
-                    //TODO
                 }
             }
         });
@@ -115,20 +119,23 @@ public class MenuManager extends JMenuBar {
                 try {
                     int response = myChooser.showOpenDialog(null);
                     if (response == JFileChooser.APPROVE_OPTION) {
-                        myCanvas.getMapPanel().getMyMap().load(myChooser.getSelectedFile());
-                        myCanvas.getMapPanel().repaint();    
+                        myCanvas.getMapPanel().getMyMap().load(myChooser.getSelectedFile());          
+                        EditableMap newMap = myCanvas.getMapPanel().getMyMap().returnLoadedMap();
+                        myCanvas.getMapPanel().setMap(newMap);                       
+                        myCanvas.getMapPanel().repaint();
                     }
                 }
                 catch (Exception exception) {
-                    //TODO
                 }
             }
         });
 
     }
 
-
-    protected void showCustomizeMapDialog() {
+    /**
+     * show the customization dialog for the map
+     */
+    public void showCustomizeMapDialog() {
         JTextField MapName = new JTextField();
         JTextField MapDesc = new JTextField();
         JTextField TileWidth = new JTextField();
@@ -157,7 +164,6 @@ public class MenuManager extends JMenuBar {
                 myCanvas.getMapPanel().initializeMap(name,desc,width,height,tileWidth,tileHeight);
             }
             catch (Exception e1) {
-                //TODO
             }
         }
     }

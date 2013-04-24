@@ -186,4 +186,8 @@ public class TileMap implements IGameLoop {
     public Dimension getMyTileSize() {
         return myTileSize;
     }
+    
+    public Map<Integer , BufferedImage> getMyTileTypes() {
+        return myTileTypes;
+    }
 }

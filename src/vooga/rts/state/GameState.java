@@ -54,8 +54,6 @@ public class GameState extends SubState implements Controller {
     private List<Player> myPlayers;
     private List<DelayedTask> myTasks;
 
-    private PointTester pt;
-
     private FrameCounter myFrames;
 
     private Rectangle2D myDrag;
@@ -64,9 +62,9 @@ public class GameState extends SubState implements Controller {
         super(observer);
         myTeams = new HashMap<Integer, Team>();
         myPlayers = new ArrayList<Player>();
-        myMap = new GameMap(new Dimension(4000, 2000));
+        myMap = new GameMap(new Dimension(4000, 2000), true);
         // myMap = new GameMap(8, new Dimension(512, 512));
-        pt = new PointTester();
+
         myFrames = new FrameCounter(new Location(100, 20));
         myTasks = new ArrayList<DelayedTask>();
         setupGame();
@@ -146,7 +144,6 @@ public class GameState extends SubState implements Controller {
         addPlayer(result, teamID);
     }
 
-    private DelayedTask test;
     private DelayedTask deoccupyTest;
 
     public void setupGame () {
@@ -168,7 +165,7 @@ public class GameState extends SubState implements Controller {
         Projectile proj =
                 new Projectile(new Pixmap(ResourceManager.getInstance()
                         .<BufferedImage> getFile("images/bullet.png", BufferedImage.class)),
-                               a.getWorldLocation(), new Dimension(30, 30), 2, 10, 6, 800);
+                               a.getWorldLocation(), new Dimension(10, 10), 2, 10, 6, 800);
         a.getAttackStrategy().addWeapon(new Weapon(proj, 400, a.getWorldLocation(), 1));
         Information i2 =
                 new Information("Marine", "I am a soldier of Nunu.", null, "buttons/marine.png");
@@ -188,7 +185,7 @@ public class GameState extends SubState implements Controller {
         Building b =
                 new Building(new Pixmap(ResourceManager.getInstance()
                         .<BufferedImage> getFile("images/factory.png", BufferedImage.class)),
-                             new Location3D(500, 1000, 0), new Dimension(100, 100), null, 1, 300,
+                             new Location3D(500, 1000, 0), new Dimension(368, 224), null, 1, 300,
                              InteractiveEntity.DEFAULT_BUILD_TIME);
         b.setProductionStrategy(new CanProduce(b));
         ((CanProduce) b.getProductionStrategy()).addProducable(new Unit());
@@ -201,20 +198,24 @@ public class GameState extends SubState implements Controller {
 
         for (int j = 0; j < 10; j++) {
             getMap().getResources().add(new Resource(new Pixmap("images/mineral.gif"),
-                                                     new Location3D(200 + j * 15, 300 + j * 10, 0),
+                                                     new Location3D(600 + j * 30, 600  - j * 20, 0),
                                                      new Dimension(50, 50), 0, 200, "mineral"));
         }
 
-        for (int j = 0; j < 10; j++) {
-            getMap().getTerrain().add(new Terrain(new Pixmap("images/gold.png"),
-                                                  new Location3D(100, 100, j * 25),
-                                                  new Dimension(50, 50)));
+        for (int j = 0; j < 4; j++) {
+            for (int k = 0; k < 8; k++) {
+                getMap().getTerrain().add(new Terrain(new Pixmap("images/gold.png"),
+                                                      new Location3D(100 + k * 25, 100, j * 25),
+                                                      new Dimension(50, 50)));
+            }
+            
         }
         Building garrison =
                 new Building(new Pixmap(ResourceManager.getInstance()
-                        .<BufferedImage> getFile("images/barracks.jpeg", BufferedImage.class)),
-                             new Location3D(300, 300, 0), new Dimension(100, 100), null, 1, 300,
+                        .<BufferedImage> getFile("images/home.png", BufferedImage.class)),
+                             new Location3D(300, 300, 0), new Dimension(128, 128), null, 1, 300,
                              InteractiveEntity.DEFAULT_BUILD_TIME);
+        
         Information garrisonInfo =
                 new Information("Garrison", "This is a garrison that soldiers can occupy", null,
                                 "buttons/marine.png");
@@ -242,10 +243,9 @@ public class GameState extends SubState implements Controller {
             }
         });
 
-        b =
-                new Building(new Pixmap(ResourceManager.getInstance()
+        b = new Building(new Pixmap(ResourceManager.getInstance()
                         .<BufferedImage> getFile("images/factory.png", BufferedImage.class)),
-                             new Location3D(100, 500, 0), new Dimension(100, 100), null, 1, 300,
+                             new Location3D(100, 500, 0), new Dimension(368, 224), null, 1, 300,
                              InteractiveEntity.DEFAULT_BUILD_TIME);
         b.setProductionStrategy(new CanProduce(b));
         ((CanProduce) b.getProductionStrategy()).addProducable(new Unit());

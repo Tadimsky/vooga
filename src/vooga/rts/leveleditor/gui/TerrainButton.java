@@ -3,7 +3,6 @@ package vooga.rts.leveleditor.gui;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -13,9 +12,13 @@ import util.input.InputClassTarget;
 import util.input.InputMethodTarget;
 import util.input.PositionObject;
 import vooga.rts.leveleditor.components.EditableTerrain;
-import vooga.rts.util.Pixmap;
 
-
+/**This class represents the terrain button on terrain panel
+ * 
+ * @author Ziqiang Huang
+ *
+ */
+@SuppressWarnings("serial")
 @InputClassTarget
 public class TerrainButton extends JToggleButton {
 
@@ -23,13 +26,19 @@ public class TerrainButton extends JToggleButton {
 
     private EditableTerrain myTerrain;
     private TerrainPanel myOwner;
-    private Pixmap myIcon;
     private Input myInput;
     private boolean isInitialized;
-
+    
+    /**
+     * Constructor for the map
+     * 
+     * @param t the terrain the button represents
+     * @param image the buffered image for the button icon
+     * @param owner the panel that holds the button
+     */
     public TerrainButton (EditableTerrain t, BufferedImage image, TerrainPanel owner) {
         myTerrain = t;
-        myIcon = t.getImage();
+        t.getImage();
         Image image2 = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         myOwner = owner;
         myInput = new Input(INPUT_DIR, this);
@@ -40,17 +49,24 @@ public class TerrainButton extends JToggleButton {
         setMargin(new Insets(2, 2, 2, 2));
 
     }
-
+    
+    /**
+     * get the terrain from the button when the button is clicked
+     * @param p
+     */
     @InputMethodTarget(name = "onLeftMouseDown")
     public void getResource (PositionObject p) {
         if(!isInitialized) {
             showCustmizationDailog();
-            }
-        myOwner.getCanvas().remove(false);
+        }
         myOwner.setCurrentSelectTerrain(myTerrain);
         myOwner.getCanvas().setMode(MapPanel.TERRAINMODE);
     }
 
+    /**
+     * show the custmization dailog for the terrain
+     * users should enter in the type and walkability of the map
+     */
     private void showCustmizationDailog() {
         JTextField terrainType = new JTextField();
         JTextField walkability = new JTextField();
@@ -64,8 +80,7 @@ public class TerrainButton extends JToggleButton {
                 myTerrain.setWalkability(w);
                 isInitialized = true;
             }
-            catch (Exception e1) {
-               
+            catch (Exception e1) {              
             }
         }
         
