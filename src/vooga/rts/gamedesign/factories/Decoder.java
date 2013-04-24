@@ -28,6 +28,8 @@ public abstract class Decoder {
 	protected static final String ATTACK_TAG = "attack";
 	protected static final String OCCUPY_TAG = "occupy";
 	protected static final String PRODUCE_TAG = "produce";
+	protected static final String UPGRADE_TAG = "upgrade";
+	protected static final String UPGRADE_TREE_NAME_TAG = "upgradeTreeName";
 	protected static final String GATHER_TAG = "gather";
 	protected static final String SOURCE_TAG = "src";
 	protected static final String SPEED_TAG = "speed";
@@ -38,6 +40,7 @@ public abstract class Decoder {
 	protected static final String LIFESPAN_TAG = "lifespan";
 	protected static final String CAN_ATTACK = "canattack";
 	protected static final String CANNOT_ATTACK = "cannotattack";
+	protected static final String CAN_UPGRADE = "canupgrade";
 	protected static final String MYWEAPONS_TAG = "myweapons";
 	protected static final String CANNOT_GATHER = "cannotgather";
 	

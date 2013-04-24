@@ -63,10 +63,12 @@ public class UnitDecoder extends Decoder {
 				myFactory.putProductionDependency(name, nameCanProduce);
 			}
 			//Load Strategy Dependencies now
-			String[] strategies = new String[3];
+			String[] strategies = new String[5];
 			strategies[0] = CANNOT_ATTACK;
 			strategies[1] = getElement(nElement, OCCUPY_TAG);
 			strategies[2] = getElement(nElement, GATHER_TAG);
+			strategies[3] = getElement(nElement, UPGRADE_TAG);
+			strategies[4] = getElement(nElement, UPGRADE_TREE_NAME_TAG);
 			
 			//Load Weapon Dependency
 			String[] weapons = getElement(nElement, MYWEAPONS_TAG).split("\\s+");

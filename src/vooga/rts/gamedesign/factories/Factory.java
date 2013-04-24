@@ -25,6 +25,8 @@ import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.gamedesign.strategy.attackstrategy.AttackStrategy;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
 import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
+import vooga.rts.gamedesign.strategy.upgradestrategy.CanUpgrade;
+import vooga.rts.gamedesign.strategy.upgradestrategy.UpgradeStrategy;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
 import vooga.rts.gamedesign.weapon.Weapon;
 import vooga.rts.resourcemanager.ImageLoader;
@@ -343,6 +345,12 @@ public class Factory {
 			if (mySprites.get(key) instanceof Unit) {
 				((Unit)mySprites.get(key)).setGatherStrategy(gather);
 			}
+			UpgradeStrategy upgrade = (UpgradeStrategy) myStrategies.get(strategies[3]);
+			mySprites.get(key).setOccupyStrategy(occupy);
+			if (upgrade instanceof CanUpgrade) {
+				mySprites.get(key).setUpgradeTree(myUpgradeTrees.get(myStrategies.get(strategies[4])));
+			}
+			
 		}
 	}
 	

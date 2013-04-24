@@ -87,6 +87,8 @@
 			<health>1000</health>
 			<buildtime>100</buildtime>
 			<occupy>cannotbeoccupied</occupy>
+			<upgrade>canupgrade</upgrade>
+			<upgradeTreeName>SoldierUpgrade</upgradeTreeName>
 			<produce>worker soldier</produce>
 			<myweapons></myweapons>
 			
@@ -105,6 +107,8 @@
 			<speed>180</speed>
 			<gather>cannotgather</gather>
 			<occupy>cannotbeoccupied</occupy>
+			<upgrade>canupgrade</upgrade>
+			<upgradeTreeName>SoldierUpgrade</upgradeTreeName>
 			<produce></produce>
 			<myweapons>gun</myweapons>
 		</unit>
@@ -117,6 +121,8 @@
 			<speed>140</speed>
 			<gather>cangather</gather>
 			<occupy>cannotbeoccupied</occupy>
+			<upgrade>canupgrade</upgrade>
+			<upgradeTreeName>SoldierUpgrade</upgradeTreeName>
 			<produce>home</produce>
 			<myweapons></myweapons>
 		</unit>
