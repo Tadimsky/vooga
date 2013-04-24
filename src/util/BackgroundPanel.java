@@ -47,7 +47,7 @@ public class BackgroundPanel extends JPanel{
      * filled by added content.
      */
     public BackgroundPanel(String filepath, int hgap, int vgap) {
-        ImageIcon icon = new ImageIcon(this.getClass().getResource("../" + filepath));
+        ImageIcon icon = new ImageIcon(this.getClass().getResource(filepath));
         setBackgroundImage(icon);
         defineMargin(hgap, vgap);
         repaint();  

@@ -7,6 +7,7 @@ import vooga.rts.networking.communications.ExpandedLobbyInfo;
 import vooga.rts.networking.communications.LobbyInfo;
 import vooga.rts.networking.communications.servermessages.FinalizeLobbyInfoMessage;
 import vooga.rts.networking.communications.servermessages.SendLobbyInfoUpdatesMessage;
+import vooga.rts.networking.communications.servermessages.StartGameMessage;
 import vooga.rts.networking.communications.servermessages.SwitchToLobbyMessage;
 
 
@@ -60,6 +61,7 @@ public class Lobby extends Room {
     public void clientIsReadyToStart (ConnectionThread thread) {
         numberOfClientsReady++;
         if (numberOfClientsReady == getNumberOfConnections()) {
+            sendMessageToAllConnections (new StartGameMessage());
             new GameServer(getID(), getGameContainer(), this);
         }
     }

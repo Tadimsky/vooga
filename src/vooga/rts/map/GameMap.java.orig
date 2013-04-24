@@ -58,9 +58,13 @@ public class GameMap implements IGameLoop, Observer {
      */
     public GameMap (Dimension size) {
         mySize = size;
+<<<<<<< HEAD
         //Dimension dou = new Dimension((int)size.getWidth(), (int)(size.getHeight() * 2));
         NodeFactory factory = new NodeFactory();
+=======
+        NodeFactory factory = new NodeFactory();
         Dimension dou = new Dimension((int) size.getWidth(), (int) (size.getHeight() * 2));
+>>>>>>> origin
         myNodeMap = factory.makeMap(Node.NODE_SIZE, size);
         myTerrain = new GameSpriteManager<Terrain>();
         myResources = new GameSpriteManager<Resource>();
@@ -173,6 +177,7 @@ public class GameMap implements IGameLoop, Observer {
         return mySize;
     }
 
+<<<<<<< HEAD
     @Override
     public void update (Observable arg0, Object arg1) {
         if(arg1 instanceof Location3D) {
@@ -187,6 +192,26 @@ public class GameMap implements IGameLoop, Observer {
         myEntities.remove(ie);
     }
     
+=======
+    /**
+     * Returns an Interactive Entity that is at the specified location.
+     * 
+     * @param loc The location to search for an interactive entity.
+     * @return The Interactive Entity if it exists, otherwise null.
+     */
+    public InteractiveEntity getEntity (Location3D loc) {
+        Node n = myNodeMap.getNode(loc);
+        for (GameSprite gs : n.getContents()) {
+            if (gs instanceof InteractiveEntity) {
+                if (gs.intersects(loc)) {
+                    return (InteractiveEntity) gs;
+                }
+            }
+        }
+        return null;
+    }
+
+>>>>>>> origin
     private void randomGenMap (Dimension size) {
         int tileWidth = 64;
         int tileHeight = 64;
@@ -215,6 +240,8 @@ public class GameMap implements IGameLoop, Observer {
         }
         Camera.instance().setMapSize(size);
     }
+<<<<<<< HEAD
+=======
 
     public void setTileMap (TileMap map) {
         myTiles = map;
@@ -223,4 +250,5 @@ public class GameMap implements IGameLoop, Observer {
     public Dimension getSize () {
         return mySize;
     }
+>>>>>>> origin
 }
