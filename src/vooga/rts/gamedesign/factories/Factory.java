@@ -269,12 +269,13 @@ public class Factory {
 		for(String key: myStrategyDependencies.keySet()){
 			String[] strategies = myStrategyDependencies.get(key);
 			//Do the same for other strategies
-			//AttackStrategy attack = (AttackStrategy) myStrategies.get(strategies[0]);
-			//mySprites.get(key).setAttackStrategy(attack);
+			AttackStrategy attack = (AttackStrategy) myStrategies.get(strategies[0]);
+			mySprites.get(key).setAttackStrategy(attack);
 			OccupyStrategy occupy = (OccupyStrategy) myStrategies.get(strategies[1]);
 			mySprites.get(key).setOccupyStrategy(occupy);
 			GatherStrategy gather = (GatherStrategy) myStrategies.get(strategies[2]);
 			mySprites.get(key).setGatherStrategy(gather);
+			
 		}
 	}
 	

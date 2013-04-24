@@ -26,8 +26,11 @@ public class DamageUpgradeNode extends UpgradeNode {
      */
     @Override
     public void upgrade (InteractiveEntity requester) {
-    	getReflectionHelper().changeValue("myDamage",
-    			requester.getAttackStrategy().getCurrentWeapon().getProjectile(),
-    			getUpgradeValue());
+    	if(requester.getAttackStrategy().hasWeapon()){
+        	getReflectionHelper().changeValue("myDamage",
+        			requester.getAttackStrategy().getCurrentWeapon().getProjectile(),
+        			getUpgradeValue());
+    	}
+
     }
 }
