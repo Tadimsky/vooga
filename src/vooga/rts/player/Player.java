@@ -7,7 +7,6 @@ import vooga.rts.controller.Controller;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.manager.Manager;
 
-
 /**
  * Sends commands to its unit manager from either the human input, the network
  * input or the ai input.]
@@ -17,34 +16,35 @@ import vooga.rts.manager.Manager;
  */
 public class Player implements Controller, IGameLoop {
 
-    protected Manager myManager;
-    private int myTeamID;
+	protected Manager myManager;
+	private int myTeamID;
 
-    public Player (int id) {
-        myManager = new Manager();
-        myTeamID = id;
-    }
+	public Player(int id) {
+		myManager = new Manager(id);
+		myTeamID = id;
+	}
 
-    @Override
-    public void sendCommand (Command command) {
-        // TODO Auto-generated method stub
-    }
+	@Override
+	public void sendCommand(Command command) {
+		// TODO Auto-generated method stub
+	}
 
-    public Manager getManager () {
-        return myManager;
-    }
+	public Manager getManager() {
+		return myManager;
+	}
 
-    public void add (InteractiveEntity unit) {
-        myManager.add(unit);
-    }
+	public void add(InteractiveEntity unit) {
+		unit.setPlayerID(myTeamID);
+		myManager.add(unit);
+	}
 
-    @Override
-    public void paint (Graphics2D pen) {
-        //myManager.paint(pen);
-    }
+	@Override
+	public void paint(Graphics2D pen) {
+		// myManager.paint(pen);
+	}
 
-    @Override
-    public void update (double elapsedTime) {
-        myManager.update(elapsedTime);
-    }
+	@Override
+	public void update(double elapsedTime) {
+		myManager.update(elapsedTime);
+	}
 }

@@ -49,10 +49,12 @@ public class Manager extends Observable implements State, IActOn, Observer {
     private Map<String, Action> myActions;
 
     private Queue<InteractiveEntity> myAddQueue;
+    private int myPlayer;
 
     Iterator<InteractiveEntity> myUpdateIterator;
 
-    public Manager () {
+    public Manager (int playerID) {
+    	myPlayer = playerID;
         myEntities = new ArrayList<InteractiveEntity>();
         mySelectedEntities = new ArrayList<InteractiveEntity>();
         myGroups = new HashMap<Integer, List<InteractiveEntity>>();
@@ -133,6 +135,7 @@ public class Manager extends Observable implements State, IActOn, Observer {
      *        The entity that is to be added.
      */
     public void add (InteractiveEntity entity) {
+    	entity.setPlayerID(myPlayer);
         entity.addObserver(GameState.getMap().getNodeMap());
         entity.addObserver(this);
         entity.setChanged();

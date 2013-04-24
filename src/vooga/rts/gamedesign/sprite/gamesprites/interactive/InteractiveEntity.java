@@ -31,6 +31,7 @@ import vooga.rts.gamedesign.state.AttackingState;
 import vooga.rts.gamedesign.state.UnitState;
 import vooga.rts.gamedesign.strategy.attackstrategy.AttackStrategy;
 import vooga.rts.gamedesign.strategy.attackstrategy.CannotAttack;
+import vooga.rts.gamedesign.strategy.gatherstrategy.CannotGather;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
 import vooga.rts.gamedesign.strategy.occupystrategy.CannotBeOccupied;
 import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
@@ -44,10 +45,10 @@ import vooga.rts.gamedesign.weapon.Weapon;
 import vooga.rts.state.GameState;
 import vooga.rts.util.Camera;
 import vooga.rts.util.DelayedTask;
+import vooga.rts.util.Information;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
-import vooga.rts.util.Information;
 
 
 /**
@@ -117,6 +118,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
         myAttackStrategy = new CannotAttack();
         myProductionStrategy = new CannotProduce();
         myUpgradeStrategy = new CanUpgrade();
+        myGatherStrategy = new CannotGather();
         myActions = new HashMap<String, Action>();
         myInfos = new HashMap<String, Information>();
         isSelected = false;
@@ -149,15 +151,6 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 
     public Information getInfo () {
         return myInfo;
-    }
-
-    /**
-     * Sets the current gather strategy to other
-     * 
-     * @param other
-     */
-    public void setGatherStrategy (GatherStrategy other) {
-        myGatherStrategy = other;
     }
 
     public void setUpgradeTree (UpgradeTree upgradeTree) {
@@ -397,7 +390,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
             getEntityState().setUnitState(UnitState.ATTACK);
         }
         if (other instanceof Building) {
-        	getEntityState().setUnitState(UnitState.OCCUPY);
+            getEntityState().setUnitState(UnitState.OCCUPY);
         }
 
         move(other.getWorldLocation());
@@ -432,8 +425,9 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 
     /**
      * Sets the attack strategy for an interactive. Can set the interactive to
-     * CanAttack or to CannotAttack and then can specify how it would attack. Also updates
-     * the weapons of the strategy to be at the same location of this entity.
+     * CanAttack or to CannotAttack and then can specify how it would attack.
+     * Also updates the weapons of the strategy to be at the same location of
+     * this entity.
      * 
      * @param newStrategy
      *        is the new attack strategy that the interactive will have
@@ -479,6 +473,8 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 
         super.update(elapsedTime);
 
+        super.update(elapsedTime);
+
         Iterator<DelayedTask> it = myTasks.iterator();
         while (it.hasNext()) {
             DelayedTask dt = it.next();
@@ -487,9 +483,16 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
                 it.remove();
             }
         }
-
         if (myAttackStrategy.hasWeapon()) {
-            myAttackStrategy.getCurrentWeapon().update(elapsedTime);
+            Weapon weapon = myAttackStrategy.getCurrentWeapon();
+            List<InteractiveEntity> enemies =
+                    GameState.getMap().<InteractiveEntity> getInArea(getWorldLocation(),
+                                                                     weapon.getRange(), this,
+                                                                     getPlayerID(), false);
+            if (!enemies.isEmpty()) {
+                enemies.get(0).getAttacked(this);
+            }
+            weapon.update(elapsedTime);
         }
         getEntityState().update(elapsedTime);
 

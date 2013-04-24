@@ -47,9 +47,7 @@ import vooga.rts.util.PointTester;
  * 
  */
 
-public class GameState extends SubState implements Controller {
-
-    private final static int DEFAULT_NODE_SIZE = 8;
+public class GameState extends SubState implements Controller {    
     private Map<Integer, Team> myTeams;
     private static GameMap myMap;
     private HumanPlayer myHumanPlayer;
@@ -266,12 +264,12 @@ public class GameState extends SubState implements Controller {
     private void yuckyUnitUpdate (double elapsedTime) {
         List<InteractiveEntity> p1 = myTeams.get(1).getUnits();
         List<InteractiveEntity> p2 = myTeams.get(2).getUnits();
-        for (InteractiveEntity u1 : p1) {
-            for (InteractiveEntity u2 : p2) {
-                u2.getAttacked(u1);
-                u1.getAttacked(u2);
-            }
-        }
+//        for (InteractiveEntity u1 : p1) {
+//            for (InteractiveEntity u2 : p2) {
+//                u2.getAttacked(u1);
+//                u1.getAttacked(u2);
+//            }
+//        }
 
         for (DelayedTask dt : myTasks) {
             dt.update(elapsedTime);
