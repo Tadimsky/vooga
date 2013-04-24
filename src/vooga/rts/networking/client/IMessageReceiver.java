@@ -14,7 +14,7 @@ public interface IMessageReceiver {
     /**
      * Returns the current message being recieved.
      * 
-     * @param message
+     * @param message 
      */
     public void getMessage (Message message);
 }

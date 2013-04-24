@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author Henrique Moraes
  * 
  */
-public class Player implements Serializable {
+public class PlayerInfo implements Serializable {
 
     private static final long serialVersionUID = -2457375513280272584L;
     private String myName;
@@ -29,7 +29,7 @@ public class Player implements Serializable {
      * @param faction 
      * @param id 
      */
-    public Player (String name, int team, String faction, int id) {
+    public PlayerInfo (String name, int team, String faction, int id) {
         myName = name;
         myID = id;
         myFaction = faction;
@@ -92,10 +92,10 @@ public class Player implements Serializable {
 
     @Override
     public boolean equals (Object obj) {
-        if (!(obj instanceof Player)) {
+        if (!(obj instanceof PlayerInfo)) {
             return false;
         }
-        Player other = (Player) obj;
+        PlayerInfo other = (PlayerInfo) obj;
         if (other.getId() == myID) {
             return true;
         }

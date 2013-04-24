@@ -41,7 +41,7 @@ public class ConnectionServer extends Thread {
 
         while (myIsServerAcceptingConnections) {
         	try {
-        		serverSocket = new ServerSocket(PORT + myConnectionID);
+        		serverSocket = new ServerSocket(PORT);
 
         		Socket socket = serverSocket.accept();
         		ConnectionThread thread =

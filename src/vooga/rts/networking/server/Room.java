@@ -43,6 +43,7 @@ public class Room extends AbstractThreadContainer {
         myLobbyModel = room.getLobbyInfo();
         room.removeAllConnections();
         container.removeRoom(room);
+        container.addRoom(this);
     }
 
     private void setIDandContainer (int id, GameContainer container) {
