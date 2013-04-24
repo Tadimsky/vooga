@@ -44,7 +44,7 @@ public class ServerBrowserTableAdapter extends AbstractTableModel {
      * @param row to get
      * @return lobbyID
      */
-    public int getidOfRow (int row) {
+    public int getIdOfRow (int row) {
         return myLobbies[row].getId();
     }
 

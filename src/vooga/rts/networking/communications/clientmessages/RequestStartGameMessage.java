@@ -11,7 +11,7 @@ import vooga.rts.networking.server.IThreadContainer;
  * @author David Winegar
  * 
  */
-public class StartGameMessage extends Message implements ClientInfoMessage {
+public class RequestStartGameMessage extends Message implements ClientInfoMessage {
 
     private static final long serialVersionUID = -1959013766966880914L;
 

@@ -8,6 +8,7 @@ import vooga.rts.networking.communications.LobbyInfo;
  * Represents the client to ServerInfoMessages
  * 
  * @author David Winegar
+ * @author Sean Wareham
  * 
  */
 public interface IClientModel {
@@ -46,5 +47,16 @@ public interface IClientModel {
      * @param message 
      */
     public void alertClient (String title, String message);
+
+    /**
+     * Loads the game and waits for the start.
+     * @param lobbyInfo 
+     */
+    public void loadGame (ExpandedLobbyInfo lobbyInfo);
+
+    /**
+     * Starts the game.
+     */
+    public void startGame ();
 
 }

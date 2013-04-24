@@ -40,34 +40,34 @@ public class ConnectionServer extends Thread {
         ServerSocket serverSocket = null;
 
         while (myIsServerAcceptingConnections) {
-            try {
-                serverSocket = new ServerSocket(PORT + myConnectionID);
+        	try {
+        		serverSocket = new ServerSocket(PORT + myConnectionID);
 
-                Socket socket = serverSocket.accept();
-                ConnectionThread thread =
-                        new ConnectionThread(socket, myMatchServer, myConnectionID);
-                myConnectionID++;
-                thread.start();
-                myMatchServer.addConnection(thread);
-                NetworkLogger.getLogger().log(Level.INFO, NetworkBundle.getString("NewConnection") +
-                                                          ": " + thread.getID());
-                serverSocket.close();
-            }
-            catch (IOException e) {
-                NetworkLogger.getLogger().log(Level.SEVERE,
-                                              NetworkBundle.getString("ConnectionFailed"));
-                myIsServerAcceptingConnections = false;
-            }
+        		Socket socket = serverSocket.accept();
+        		ConnectionThread thread =
+        				new ConnectionThread(socket, myMatchServer, myConnectionID);
+        		myConnectionID++;
+        		thread.start();
+        		myMatchServer.addConnection(thread);
+        		NetworkLogger.getLogger().log(Level.INFO, NetworkBundle.getString("NewConnection") +
+        				": " + thread.getID());
+        		serverSocket.close();
+        	}
+        	catch (IOException e) {
+        		NetworkLogger.getLogger().log(Level.SEVERE,
+        				NetworkBundle.getString("ConnectionFailed"));
+        		myIsServerAcceptingConnections = false;
+        	}
         }
 
         if (serverSocket != null) {
-            try {
-                serverSocket.close();
-            }
-            catch (IOException e) {
-                NetworkLogger.getLogger().log(Level.SEVERE,
-                                              NetworkBundle.getString("ConnectionSocketFailed"));
-            }
+        	try {
+        		serverSocket.close();
+        	}
+        	catch (IOException e) {
+        		NetworkLogger.getLogger().log(Level.SEVERE,
+        				NetworkBundle.getString("ConnectionSocketFailed"));
+        	}
         }
     }
 
