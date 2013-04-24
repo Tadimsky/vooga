@@ -81,7 +81,7 @@ public class Client extends Thread implements IClient {
         }
         catch (IOException e) {
             NetworkLogger.getLogger().log(Level.WARNING,
-                                          NetworkBundle.getString("ExceptionServer" + e));
+                                          NetworkBundle.getString("ExceptionServer") + e);
         }
     }
 

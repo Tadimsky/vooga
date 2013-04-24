@@ -146,8 +146,8 @@ public class ConnectionThread extends Thread {
         }
         catch (IOException e) {
             NetworkLogger.getLogger().log(Level.FINE,
-                                          NetworkBundle.getString("MessageFailed" +
-                                                                  m.getClass().toString()));
+                                          NetworkBundle.getString("MessageFailed") +
+                                          m.getClass().toString());
         }
     }
 
