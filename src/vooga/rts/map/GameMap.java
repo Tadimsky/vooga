@@ -7,17 +7,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import vooga.rts.IGameLoop;
 import vooga.rts.ai.Path;
 import vooga.rts.ai.PathFinder;
+import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
 import vooga.rts.gamedesign.sprite.gamesprites.Resource;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.sprite.map.Terrain;
+import vooga.rts.gamedesign.state.MovementState;
 import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Camera;
-import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
+import vooga.rts.util.Vector;
+import vooga.towerdefense.model.Pathfinder;
 
 
 /**
@@ -34,13 +39,15 @@ import vooga.rts.util.Location3D;
  * 
  */
 
-public class GameMap implements IGameLoop {
+public class GameMap implements IGameLoop, Observer {
 
     private NodeMap myNodeMap;
     private TileMap myTiles;
     private GameSpriteManager<Terrain> myTerrain;
     private GameSpriteManager<Resource> myResources;
-    private Map<InteractiveEntity, Node> myMoving;
+    private Map<GameSprite, Node> myEntities;
+    private Map<GameEntity, Path> myMoving;
+    //private Map<Node, List<InteractiveEntity>> myNodeEntities; still in question
     private Dimension mySize;
 
     /**
@@ -53,10 +60,10 @@ public class GameMap implements IGameLoop {
         //Dimension dou = new Dimension((int)size.getWidth(), (int)(size.getHeight() * 2));
         NodeFactory factory = new NodeFactory();
         myNodeMap = factory.makeMap(Node.NODE_SIZE, size);
-
         myTerrain = new GameSpriteManager<Terrain>();
         myResources = new GameSpriteManager<Resource>();
-        myMoving = new HashMap<InteractiveEntity, Node>();
+        myEntities = new HashMap<GameSprite, Node>();
+        myMoving = new HashMap<GameEntity, Path>();
         Camera.instance().setMapSize(size);
         //randomGenMap(dou);
     }
@@ -80,8 +87,9 @@ public class GameMap implements IGameLoop {
         return myResources;
     }
 
-    public Path getPath (PathFinder finder, Location3D start, Location3D finish) {
-        return finder.calculatePath(getNodeMap().getNode(start), getNodeMap().getNode(finish),
+    public Path getPath (InteractiveEntity ie, Location3D finish) {
+        PathFinder finder = ie.getFinder();
+        return finder.calculatePath(myNodeMap.getNode(ie.getWorldLocation()), getNodeMap().getNode(finish),
                                     myNodeMap);
     }
 
@@ -126,6 +134,26 @@ public class GameMap implements IGameLoop {
     public void update (double elapsedTime) {
         // myTiles.update(elapsedTime);
         //Updates myMoving
+        for (GameEntity ie: myMoving.keySet()) {
+            Vector v = ie.getWorldLocation().difference(myEntities.get(ie).getCenter().to2D());
+            if(v.getMagnitude() < Location3D.APPROX_EQUAL) {
+                if(myMoving.get(ie).size() == 0) {
+                    myMoving.remove(ie);
+                    myNodeMap.getNode(ie.getWorldLocation()).addSprite(ie);
+                    myEntities.put(ie, myNodeMap.getNode(ie.getWorldLocation()));
+                    continue;
+                }
+                else {
+                    ie.setVelocity(v.getAngle(), ie.getSpeed());
+                    ie.getState().setMovementState(MovementState.MOVING);
+                }
+            }
+            Vector velocity = new Vector(ie.getVelocity());
+            velocity.scale(elapsedTime);
+            ie.translate(velocity);
+            ie.stopMoving();
+            ie.getEntityState().update(elapsedTime);
+        }
     }
 
     @Override
@@ -135,6 +163,28 @@ public class GameMap implements IGameLoop {
         
     }
 
+    public void setTileMap(TileMap map) {
+        myTiles = map;
+    }
+    
+    public Dimension getSize() {
+        return mySize;
+    }
+
+    @Override
+    public void update (Observable arg0, Object arg1) {
+        if(arg1 instanceof Location3D) {
+            InteractiveEntity ie = (InteractiveEntity) arg0;
+            myMoving.put(ie, getPath(ie, (Location3D) arg1));
+            myEntities.get(ie).removeSprite(ie);
+            myEntities.remove(ie);
+        }    
+    }
+    
+    public void remove(GameEntity ie) {
+        myEntities.remove(ie);
+    }
+    
     private void randomGenMap (Dimension size) {
         int tileWidth = 64;
         int tileHeight = 64;
@@ -164,13 +214,5 @@ public class GameMap implements IGameLoop {
             }
         }
         Camera.instance().setMapSize(size);
-    }
-    
-    public void setTileMap(TileMap map) {
-        myTiles = map;
-    }
-    
-    public Dimension getSize() {
-        return mySize;
     }
 }

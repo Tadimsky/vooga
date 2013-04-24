@@ -82,7 +82,7 @@ public abstract class InteractiveEntity extends GameEntity implements
 	private double myBuildTime;
 	private List<InteractiveEntity> myProducables;
 	private Information myInfo;
-
+	private PathFinder myFinder;
 	public static final double DEFAULT_BUILD_TIME = 5;
 
 	/**
@@ -116,8 +116,12 @@ public abstract class InteractiveEntity extends GameEntity implements
 		myOccupyStrategy = new CannotBeOccupied();
 		myProducables = new ArrayList<InteractiveEntity>();
 		setSpeed(DEFAULT_INTERACTIVEENTITY_SPEED);
+		myFinder = new AstarFinder();
 	}
 
+	public PathFinder getFinder() {
+	    return myFinder;
+	}
 	public void addAction(String command, Action action) {
 		myActions.put(command, action);
 	}

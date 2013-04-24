@@ -51,34 +51,8 @@ public class GameEntity extends GameSprite {
         myGoal = new Location3D(center);
         myEntityState = new EntityState();
         mySpeed = DEFAULT_SPEED;
-    }
-
-    public boolean reachedGoal () {
-        Vector v = getWorldLocation().difference(myGoal.to2D());
-        return (v.getMagnitude() < Location3D.APPROX_EQUAL);
-    }
-
-    /**
-     * Updates the shape's location.
-     */
-    // TODO: make Velocity three dimensional...
-    public void update (double elapsedTime) {
-        Vector v = getWorldLocation().difference(myGoal.to2D());
-        if (reachedGoal()) {
-            setVelocity(v.getAngle(), 0);
-            myEntityState.stop();
-        }
-        else {
-            setVelocity(v.getAngle(), getSpeed());
-            myEntityState.setMovementState(MovementState.MOVING);
-        }
-
-        Vector velocity = new Vector(myVelocity);
-        velocity.scale(elapsedTime);
-        translate(velocity);
-        stopMoving();
-        myEntityState.update(elapsedTime);
-        super.update(elapsedTime);
+        addObserver(GameState.getMap()); // This only realy nneds to be in classes that actually can move around, but for now just leaving it like this
+        
     }
 
     /**
@@ -86,7 +60,8 @@ public class GameEntity extends GameSprite {
      * its location. Possible design choice error.
      */
     public void move (Location3D loc) {
-        myGoal = loc;
+        setChanged();
+        notifyObservers(loc);
     }
 
     /**
@@ -238,6 +213,7 @@ public class GameEntity extends GameSprite {
      */
     public void die () {
         myCurrentHealth = 0;
+        GameState.getMap().remove(this);
     }
 
     @Override
