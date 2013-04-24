@@ -38,6 +38,7 @@ public class AstarFinder implements PathFinder {
         while (open.size() > 0) {
             Node current = getLowest(fScore, open);
             if (current.equals(finish)) {
+                System.out.println("Finished finding");
                 result  =  new Path(constructPath(comesFrom, finish));
                 break;
             }
@@ -47,7 +48,7 @@ public class AstarFinder implements PathFinder {
                 if (neighbor == null || !neighbor.connectsTo(current)) {
                     continue;
                 }
-                double newGscore = gScore.get(current) + 1;
+                double newGscore = gScore.get(current) + Node.NODE_SIZE;
                 if (close.contains(neighbor) && newGscore >= gScore.get(neighbor)) {
                     continue;
                 }

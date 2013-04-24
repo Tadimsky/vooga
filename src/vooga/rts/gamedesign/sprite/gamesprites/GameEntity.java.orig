@@ -62,7 +62,8 @@ public class GameEntity extends GameSprite {
      */
     // TODO: make Velocity three dimensional...
     public void update (double elapsedTime) {    
-        Vector v = getWorldLocation().difference(myGoal.to2D());       
+        Vector v = getWorldLocation().difference(myGoal.to2D());
+        //System.out.println(myGoal.toString());        
         if(v.getMagnitude() < Location3D.APPROX_EQUAL) {
             if(myPath.size() == 0) {                
                 setVelocity(v.getAngle(), 0);
@@ -73,14 +74,12 @@ public class GameEntity extends GameSprite {
             }
         }
         else {
-           setVelocity(v.getAngle(), getSpeed());
+            setVelocity(v.getAngle(), getSpeed());
             myEntityState.setMovementState(MovementState.MOVING);
         }
         Vector velocity = new Vector(myVelocity);
-        System.out.println("Vecotr direction: " + velocity.getAngle());
         velocity.scale(elapsedTime);
         translate(velocity);
-        stopMoving();
         myEntityState.update(elapsedTime);
         super.update(elapsedTime);
     }
@@ -213,6 +212,28 @@ public class GameEntity extends GameSprite {
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Moves the Unit only. Updates first the angle the Unit is facing, and then
+     * its location. Possible design choice error.
+     */
+    public void move (Location3D loc) {
+        myGoal = new Location3D(loc);
+        Vector v = getWorldLocation().difference(myGoal.to2D());
+
+        // magic numero
+        if (v.getMagnitude() < Location3D.APPROX_EQUAL) {
+            setVelocity(v.getAngle(), 0);
+            myEntityState.setMovementState(MovementState.STATIONARY);
+        }
+        else {
+            setVelocity(v.getAngle(), getSpeed());
+            myEntityState.setMovementState(MovementState.MOVING);
+        }
+    }
+
+    /**
+>>>>>>> 3c3e3e23a4312d14b0b9943ca80d748438f0c6ef
      * Returns the speed of the entity.
      * 
      * @return the speed of the entity

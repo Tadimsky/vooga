@@ -223,8 +223,7 @@ public abstract class InteractiveEntity extends GameEntity implements
 			}
 
 		}
-		if (infoCommands.isEmpty()) {
-			System.out.println("I am a manly man");
+		if (infoCommands.isEmpty()) {			
 			return null;
 		}
 		return infoCommands;
