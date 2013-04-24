@@ -4,12 +4,15 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import vooga.rts.IGameLoop;
 import vooga.rts.ai.Path;
 import vooga.rts.ai.PathFinder;
 import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
 import vooga.rts.gamedesign.sprite.gamesprites.Resource;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.sprite.map.Terrain;
 import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Camera;
@@ -37,6 +40,7 @@ public class GameMap implements IGameLoop {
     private TileMap myTiles;
     private GameSpriteManager<Terrain> myTerrain;
     private GameSpriteManager<Resource> myResources;
+    private Map<InteractiveEntity, Node> myMoving;
     private Dimension mySize;
 
     /**
@@ -46,13 +50,13 @@ public class GameMap implements IGameLoop {
      */
     public GameMap (Dimension size) {
         mySize = size;
-        Dimension dou = new Dimension((int)size.getWidth(), (int)(size.getHeight() * 2));
+        //Dimension dou = new Dimension((int)size.getWidth(), (int)(size.getHeight() * 2));
         NodeFactory factory = new NodeFactory();
         myNodeMap = factory.makeMap(Node.NODE_SIZE, size);
 
         myTerrain = new GameSpriteManager<Terrain>();
         myResources = new GameSpriteManager<Resource>();
-
+        myMoving = new HashMap<InteractiveEntity, Node>();
         Camera.instance().setMapSize(size);
         //randomGenMap(dou);
     }
@@ -121,12 +125,14 @@ public class GameMap implements IGameLoop {
     @Override
     public void update (double elapsedTime) {
         // myTiles.update(elapsedTime);
+        //Updates myMoving
     }
 
     @Override
     public void paint (Graphics2D pen) {
         myTiles.paint(pen);
-        myNodeMap.paint(pen);
+        myNodeMap.paint(pen);// going to paint the nodes by getting the ones we want using getVisible method -> returns list of visible nodes
+        
     }
 
     private void randomGenMap (Dimension size) {

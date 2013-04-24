@@ -116,7 +116,7 @@ public class NodeMap implements Observer {
         for (int z = 0; z < depth; z++) {
             for (int y = 0; y <= z; y++) {
                 int x = z - y;
-                Node n = get(x + startX, y + startY);
+                Node n = get(x + startX, y + startY);// This could get add to a list, returns and is painted
                 if (n != null) {
                     n.paint(pen);
                 }

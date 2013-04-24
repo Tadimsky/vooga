@@ -1,2 +1,12 @@
-Apr 24, 2013 1:11:36 AM vooga.rts.networking.logger.NetworkLogger logMessage
-CONFIG: Server started
+Apr 24, 2013 3:33:37 AM vooga.rts.networking.server.MatchmakerServer <init>
+INFO: Server Started
+Apr 24, 2013 3:33:37 AM vooga.rts.networking.server.ConnectionServer run
+INFO: New Connection Joined: 0
+Apr 24, 2013 3:33:37 AM vooga.rts.networking.server.AbstractThreadContainer receiveMessageFromClient
+FINEST: Message received from: 0
+Apr 24, 2013 3:33:37 AM vooga.rts.networking.server.MatchmakerServer joinGameContainer
+INFO: New GameContainer Created: Test Game
+Apr 24, 2013 3:33:37 AM vooga.rts.networking.server.AbstractThreadContainer receiveMessageFromClient
+FINEST: Message received from: 0
+Apr 24, 2013 3:33:37 AM vooga.rts.networking.server.ConnectionThread sendMessage
+FINEST: Message Sent of typeclass vooga.rts.networking.communications.servermessages.LobbyListMessage
