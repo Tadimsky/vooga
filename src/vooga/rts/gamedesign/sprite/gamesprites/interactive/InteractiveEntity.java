@@ -73,8 +73,8 @@ public abstract class InteractiveEntity extends GameEntity implements
 	private Sound mySound;
 	private AttackStrategy myAttackStrategy;
 	private ProductionStrategy myProductionStrategy;
+	private UpgradeStrategy myUpgradeStrategy;
 	private OccupyStrategy myOccupyStrategy;
-	private GatherStrategy myGatherStrategy;
 	private int myArmor;
 	private Map<String, Action> myActions;
 	private Map<String, Information> myInfos;
@@ -108,6 +108,7 @@ public abstract class InteractiveEntity extends GameEntity implements
 		mySound = sound;
 		myAttackStrategy = new CannotAttack();
 		myProductionStrategy = new CannotProduce();
+		myUpgradeStrategy = new CanUpgrade();
 		myActions = new HashMap<String, Action>();
 		myInfos = new HashMap<String, Information>();
 		isSelected = false;
@@ -140,6 +141,14 @@ public abstract class InteractiveEntity extends GameEntity implements
 		return myInfo;
 	}
 
+	public void setUpgradeTree(UpgradeTree upgradeTree) {
+		myUpgradeStrategy.setUpgradeTree(upgradeTree, this);
+	}
+
+	public UpgradeTree getUpgradeTree() {
+		return myUpgradeStrategy.getUpgradeTree();
+	}
+	
 	/**
 	 * returns the list of producables
 	 */
@@ -303,16 +312,6 @@ public abstract class InteractiveEntity extends GameEntity implements
 	 */
 	public void setProductionStrategy(ProductionStrategy productionStrategy) {
 		myProductionStrategy = productionStrategy;
-	}
-
-	/**
-	 * Returns the upgrade tree for the interactive entity.
-	 * 
-	 * @return the upgrade tree for the interactive entity
-	 */
-
-	public UpgradeTree getUpgradeTree() {
-		return myUpgradeTree;
 	}
 
 	/**
@@ -516,14 +515,6 @@ public abstract class InteractiveEntity extends GameEntity implements
 	public void setChanged() {
 		super.setChanged();
 	}
-	
-	/**
-	 * Sets the current gather strategy to other
-	 * @param other
-	 */
-    public void setGatherStrategy(GatherStrategy other) {
-    	myGatherStrategy = other;
-    }
 
 	/**
 	 * Gets the occupy strategy of the entity (either CanBeOccupied or

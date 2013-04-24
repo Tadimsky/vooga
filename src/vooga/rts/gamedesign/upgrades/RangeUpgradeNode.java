@@ -1,6 +1,7 @@
 package vooga.rts.gamedesign.upgrades;
 
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.util.ReflectionHelper;
 
 /**
 *
@@ -26,9 +27,10 @@ public class RangeUpgradeNode extends UpgradeNode {
     @Override
     public void upgrade (InteractiveEntity requester) {
     	if(requester.getAttackStrategy().hasWeapon()){
-    	  	getReflectionHelper().changeValue("myRange",
+    		ReflectionHelper.changeValue("myRange",
         			requester.getAttackStrategy().getCurrentWeapon(),
         			getUpgradeValue());
+        	
     	}
     	
     }

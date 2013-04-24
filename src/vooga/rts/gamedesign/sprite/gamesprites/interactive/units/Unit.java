@@ -29,16 +29,7 @@ import vooga.rts.util.Sound;
  */
 public class Unit extends InteractiveEntity {
 
-    private List<GameSprite> myKills; // TODO: WHAT TYPE SHOULD IT BE??
-    // private boolean myIsLeftSelected; // TODO: also need the same thing for
-    // Projectiles
-    // private boolean myIsRightSelected; // TODO: should be observing the mouse
-    // action instead!!
-    // private PathingHelper myPather;
-
     private GatherStrategy myGatherStrategy;
-
-    private OccupyStrategy myOccupyStrategy;
 
     public Unit () {
         this(new Pixmap("images/sprites/soldier.png"), new Location3D(), new Dimension(0, 0), null,
@@ -100,5 +91,9 @@ public class Unit extends InteractiveEntity {
         return new Unit(getImage(), getWorldLocation(), getSize(), getSound(), getPlayerID(),
                         getHealth(), getBuildTime());
     }
+
+	public void setGatherStrategy(GatherStrategy gatherStrategy) {
+		myGatherStrategy = gatherStrategy;
+	}
 
 }
