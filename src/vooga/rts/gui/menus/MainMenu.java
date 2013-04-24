@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Observable;
 import vooga.rts.gui.Menu;
 import vooga.rts.gui.Window;
 import vooga.rts.gui.buttons.MainMenuButton;
@@ -38,7 +39,7 @@ public class MainMenu extends Menu {
 
         mySingleButton =
                 new MainMenuButton("Single Player", myDefaultButtonDimension,
-                                   myDefaultButtonLocation);
+                                   myDefaultButtonLocation, 0);
         setScaledButton(mySingleButton);
 
         addButton(mySingleButton);
@@ -46,7 +47,7 @@ public class MainMenu extends Menu {
         myMultiButton =
                 new MainMenuButton("Multi Player", myDefaultButtonDimension,
                                    new Location(myDefaultButtonLocation.getX(),
-                                                (myDefaultButtonLocation.getY() + ySpacing)));
+                                                (myDefaultButtonLocation.getY() + ySpacing)), 1);
 
         setScaledButton(myMultiButton);
 
@@ -74,5 +75,14 @@ public class MainMenu extends Menu {
         pen.setColor(Color.white);
         pen.drawString("The Vooga RTS Game", 150, 150);
 
+    }
+    
+    @Override
+    public void update(Observable o, Object a) {
+        if (o instanceof MainMenuButton) {
+            setChanged();
+            int s = (Integer) a;
+            notifyObservers(s);
+        }
     }
 }

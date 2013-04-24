@@ -7,60 +7,40 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import vooga.rts.commands.InformationCommand;
 import vooga.rts.gui.Button;
+import vooga.rts.util.Information;
 import vooga.rts.util.Location;
 
 
-public class ActionButton extends Button {
+public class ActionButton extends ImageButton {
+    
+    private InformationCommand myInfoCommand;
 
-    private String myText;
-    private Color myBGColor;
-    private Color myTextColor;
-    private int fontSize;
-    private int myXPadding = 5;
-    private int myYPadding = 10;
-    private int myID;
-
-    public ActionButton (String text, int i, Color d, int f, Location pos) {
-        super(null, null, pos);
-        myText = text;
-        myTextColor = d;
-        fontSize = f;
-        myID = i;
-    }
-
-    @Override
-    public void update (double elapsedTime) {
-        setChanged();
-        notifyObservers();
-    }
-
-    @Override
-    public void paint (Graphics2D pen) {
-        pen.setFont(new Font("Arial", Font.BOLD, fontSize));
-        int width = pen.getFontMetrics().stringWidth(myText);
-        int height = pen.getFontMetrics().getHeight();
-        
-        mySize = new Dimension(width, height);
-        pen.setColor(myTextColor);
-        pen.drawString(myText, (int) myPos.getX(), (int) myPos.getY() + height);
-        // pen.drawRect((int) myPos.getX(), (int) myPos.getY()-height, width, height);
-
+    public ActionButton (String image, Dimension size, Location pos, InformationCommand c) {
+        super(image, size, pos);
+        myInfoCommand = c;
     }
     
-    public int getID () {
-        return myID;
+    public ActionButton (InformationCommand c, Dimension size, Location pos) {
+        super(c.getInfo().getButtonImage(), size, pos);
+        myInfoCommand = c;
     }
-
+    
     @Override
-    public void processClick () {
-        update(0);
+    public void paint (Graphics2D pen) {
+        super.paint(pen);
+        if (isFocused) {
+            pen.drawString(myInfoCommand.getInfo().getName(), (int) myPos.getX(), (int) myPos.getY());
+        }
     }
-
+    
     @Override
-    public void processHover () {
-        // TODO Auto-generated method stub
-
+    public void processClick() {
+        setChanged();
+        notifyObservers(myInfoCommand);
     }
+
 
 }

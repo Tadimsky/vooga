@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import vooga.rts.networking.NetworkBundle;
@@ -34,7 +35,7 @@ import vooga.rts.networking.communications.servermessages.ServerInfoMessage;
  * @author David Winegar
  * 
  */
-public class ClientModel implements IMessageReceiver, IClientModel, IModel {
+public class ClientModel extends Observable implements IMessageReceiver, IClientModel, IModel {
 
     private IClient myClient;
     private String myUserName;

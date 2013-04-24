@@ -75,6 +75,7 @@ public class Window {
                 myFrame.setResizable(false);
                 myFrame.setAlwaysOnTop(false);
                 myFrame.setVisible(true);
+                //myFrame.setIgnoreRepaint(true);
             }
         }
         else {
@@ -97,6 +98,7 @@ public class Window {
                 myFrame.setMinimumSize(new Dimension(SCREEN_SIZE));
                 myFrame.setResizable(true);
                 myFrame.setVisible(true);
+                //myFrame.setIgnoreRepaint(false);
             }
         }
         SCREEN_SIZE =

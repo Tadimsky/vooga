@@ -12,6 +12,7 @@ import java.util.Observer;
 import vooga.rts.action.*;
 import vooga.rts.commands.ClickCommand;
 import vooga.rts.commands.Command;
+import vooga.rts.commands.InformationCommand;
 import vooga.rts.controller.Controllable;
 import vooga.rts.controller.Controller;
 import vooga.rts.gui.Window;
@@ -40,13 +41,10 @@ public class HumanPlayer extends Player implements Observer {
 
     private GameMenu myGameMenu;
 
-    private HashMap<Integer, Command> myCommandMap;
 
     public HumanPlayer (int id) {
         super(id);
 
-        myCommandMap = new HashMap<Integer, Command>();
-        createCommandMap();
         myGameMenu = new GameMenu();
         myGameMenu.addObserver(this);
         myManager.addObserver(myGameMenu);
@@ -61,16 +59,16 @@ public class HumanPlayer extends Player implements Observer {
         // Maybe look for design pattern that can implement filtering the inputs
     }
 
-    private void createCommandMap () {
-        //myCommandMap.put(0, new ClickCommand("click", null));
-        // ... add more here
-    }
-    
+
     @Override
     public void sendCommand (Command command) {
         // Check for camera movement
-        getManager().receiveCommand(command);
-        myGameMenu.receiveCommand(command);
+        if (myGameMenu.withinBoundary(command)) {
+            myGameMenu.receiveCommand(command);
+        }
+        else {
+            getManager().receiveCommand(command);
+        }
     }
 
     public void checkCameraMouse (double elapsedtime) {
@@ -126,17 +124,12 @@ public class HumanPlayer extends Player implements Observer {
 
     @Override
     public void update (Observable o, Object a) {
-        if (o instanceof GameMenu) {
-            GameMenu g = (GameMenu) o;
-            Integer i = (Integer) a;
-            processAction(i);
+        if (a instanceof InformationCommand) {
+            InformationCommand i = (InformationCommand) a;
+            getManager().receiveCommand(i);
         }
 
     }
 
-    private void processAction (int a) {
-        // This code handles an action of id "a".
-        Command command = myCommandMap.get(a);
-    }
 
 }

@@ -15,6 +15,9 @@ public abstract class Button extends Observable implements IGameLoop {
     protected Dimension mySize;
     protected Location myPos;
     protected boolean isFocused;
+    
+    protected static final int S_X = (int) Window.SCREEN_SIZE.getWidth();
+    protected static final int S_Y = (int) Window.SCREEN_SIZE.getHeight();
 
     /*
      * TODO: Add onFocus behavior for each button.
