@@ -11,6 +11,7 @@ import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.gamedesign.strategy.attackstrategy.AttackStrategy;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
 import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
+import vooga.rts.gamedesign.strategy.upgradestrategy.UpgradeStrategy;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.ReflectionHelper;
 
@@ -25,7 +26,7 @@ public class StrategyDecoder extends Decoder{
 	private static final String ATTACK_TAG = "attacks";
 	private static final String OCCUPY_TAG = "occupys";
 	private static final String GATHER_TAG = "gathers";
-	
+	private static final String UPGRADE_TAG = "upgrades";
 	
 	Factory myFactory;
 	
@@ -53,6 +54,12 @@ public class StrategyDecoder extends Decoder{
 				
 				//This class needs to change because strategy constructors have changed. 
 				Strategy strat = (Strategy) ReflectionHelper.makeInstance(path);
+				if (strat instanceof GatherStrategy) {
+					System.out.println("gather strategy found!");
+				}
+				if (strat instanceof UpgradeStrategy) {
+					System.out.println("upgrade strategy found!");
+				}
 				myFactory.put(key, strat);
 				
 			}
@@ -68,10 +75,12 @@ public class StrategyDecoder extends Decoder{
 		NodeList attackLst = doc.getElementsByTagName(ATTACK_TAG).item(0).getChildNodes();
 		NodeList occupyLst = doc.getElementsByTagName(OCCUPY_TAG).item(0).getChildNodes();
 		NodeList gatherLst = doc.getElementsByTagName(GATHER_TAG).item(0).getChildNodes();
+		NodeList upgradeLst = doc.getElementsByTagName(UPGRADE_TAG).item(0).getChildNodes();
 		
 		getSources(attackLst);
 		getSources(occupyLst);
 		getSources(gatherLst);
+		getSources(upgradeLst);
 	}
 
 }

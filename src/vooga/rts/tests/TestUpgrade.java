@@ -12,11 +12,9 @@ import org.xml.sax.SAXException;
 import vooga.rts.commands.Command;
 import vooga.rts.gamedesign.factories.Factory;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Soldier;
 import vooga.rts.gamedesign.strategy.attackstrategy.CanAttack;
 import vooga.rts.gamedesign.strategy.attackstrategy.CannotAttack;
 import vooga.rts.gamedesign.upgrades.UpgradeNode;
-import vooga.rts.gamedesign.upgrades.UpgradeTree;
 
 public class TestUpgrade {
 	
@@ -38,17 +36,9 @@ public class TestUpgrade {
 		Factory factory = new Factory();
 		factory.loadXMLFile("Factory.xml");
 
-		Soldier soldier = new Soldier();
+		Unit soldier = (Unit) factory.getInteractiveEntity("combat");
 		soldier.setAttackStrategy(new CannotAttack()); //sets soldier to cannot attack to test upgrade
-		for (String s: factory.getUpgradeTrees().keySet()) {
-			System.out.println(s);
-		}
-		UpgradeTree tree = factory.getUpgradeTrees().get("SoldierUpgrade");
-		if (tree == null) {
-			System.out.println("null");
-		}
 		
-		soldier.setUpgradeTree(tree);
 		try {
 			while (true) {
 				System.out.println("\n");

@@ -78,6 +78,10 @@
 			<cangather src = "vooga.rts.gamedesign.strategy.gatherstrategy.CanGather"/>
 			<cannotgather src = "vooga.rts.gamedesign.strategy.gatherstrategy.CannotGather"/>
 		</gathers>
+		<upgrades>
+			<canupgrade src = "vooga.rts.gamedesign.strategy.upgradestrategy.CanUpgrade"/>
+			<cannotupgrade src = "vooga.rts.gamedesign.strategy.upgradestrategy.CannotUpgrade"/>
+		</upgrades>
 	</strategies>
 	<buildings src = "vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building">
 		<building>
