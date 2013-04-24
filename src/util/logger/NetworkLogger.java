@@ -232,21 +232,11 @@ public class NetworkLogger {
     }
 
     /**
-     * Logs a message into the logger with its current level
      * 
-     * @param message
+     * @return The logger associated with this API
      */
-    public static void logMessage (String message) {
-        LOGGER.log(LOGGER.getLevel(), message);
-    }
-
-    /**
-     * 
-     * @param level Constant representing the level of the message
-     * @param message String containing the message to be logged
-     */
-    public static void logMessage (Level level, String message) {
-        LOGGER.log(level, message);
+    public static Logger getLogger() {
+    	return LOGGER;
     }
 
 }

@@ -1,12 +1,13 @@
 package vooga.rts.networking.server;
 
 import java.util.logging.Level;
+import util.logger.NetworkLogger;
 import vooga.rts.networking.NetworkBundle;
 import vooga.rts.networking.communications.ExpandedLobbyInfo;
 import vooga.rts.networking.communications.LobbyInfo;
+import vooga.rts.networking.communications.servermessages.FinalizeLobbyInfoMessage;
 import vooga.rts.networking.communications.servermessages.SendLobbyInfoUpdatesMessage;
 import vooga.rts.networking.communications.servermessages.SwitchToLobbyMessage;
-import vooga.rts.networking.logger.NetworkLogger;
 
 
 /**
@@ -16,6 +17,8 @@ import vooga.rts.networking.logger.NetworkLogger;
  * 
  */
 public class Lobby extends Room {
+
+    private int numberOfClientsReady = 0;
 
     /**
      * Instantiates the Lobby.
@@ -40,20 +43,31 @@ public class Lobby extends Room {
         else {
             sendMessageToAllConnections(new SendLobbyInfoUpdatesMessage(lobbyInfo));
         }
-        NetworkLogger.logMessage(Level.INFO,
-                                 NetworkBundle.getString("LobbyLeft") + ": " +
-                                         lobbyInfo.getLobbyName());
+        NetworkLogger.getLogger().log(Level.INFO,
+                                      NetworkBundle.getString("LobbyLeft") + ": " +
+                                              lobbyInfo.getLobbyName());
     }
 
     @Override
-    public void startGameServer (ConnectionThread thread) {
-        new GameServer(getID(), getGameContainer(), this);
+    public void requestGameStart (ConnectionThread thread) {
+        if (getLobbyInfo().isLobbyFull() &&
+            getLobbyInfo().getNumberOfPlayers() == getNumberOfConnections()) {
+            sendMessageToAllConnections(new FinalizeLobbyInfoMessage(getLobbyInfo()));
+        }
+    }
+
+    @Override
+    public void clientIsReadyToStart (ConnectionThread thread) {
+        numberOfClientsReady++;
+        if (numberOfClientsReady == getNumberOfConnections()) {
+            new GameServer(getID(), getGameContainer(), this);
+        }
     }
 
     @Override
     public void addConnection (ConnectionThread thread) {
         super.addConnection(thread);
-        thread.sendMessage(new SwitchToLobbyMessage(getLobbyModel(), thread.getID()));
+        thread.sendMessage(new SwitchToLobbyMessage(getLobbyInfo(), thread.getID()));
         getGameContainer().incrementLobbyInfoSize(getID());
     }
 

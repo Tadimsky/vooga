@@ -8,7 +8,7 @@ import vooga.rts.networking.communications.Message;
  * Presumably this will be implemented in a thread that will continuously send and receive
  * messages to the server
  * 
- * @author srwareham
+ * @author David Winegar
  * 
  */
 public interface IClient {
@@ -19,12 +19,10 @@ public interface IClient {
      */
     public void sendData (Message message);
 
-    public void beginAcceptingConnections ();
-
     /**
      * Sets this as the message receiver.
      * 
-     * @param messageReceiver
+     * @param messageReceiver 
      */
     public void setMessageReceiver (IMessageReceiver messageReceiver);
 

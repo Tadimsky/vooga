@@ -1,4 +1,4 @@
-package vooga.rts.networking.client.GUI;
+package vooga.rts.networking.client.clientgui;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;

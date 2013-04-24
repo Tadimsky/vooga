@@ -1,20 +1,20 @@
 package vooga.rts.networking.client;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.Observable;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
+
 import vooga.rts.networking.NetworkBundle;
-import vooga.rts.networking.client.GUI.CreateLobbyView;
-import vooga.rts.networking.client.GUI.IModel;
-import vooga.rts.networking.client.GUI.LobbyView;
-import vooga.rts.networking.client.GUI.ServerBrowserTableAdapter;
-import vooga.rts.networking.client.GUI.ServerBrowserView;
-import vooga.rts.networking.client.GUI.ViewContainerPanel;
+import vooga.rts.networking.client.clientgui.CreateLobbyView;
+import vooga.rts.networking.client.clientgui.IModel;
+import vooga.rts.networking.client.clientgui.LobbyView;
+import vooga.rts.networking.client.clientgui.ServerBrowserTableAdapter;
+import vooga.rts.networking.client.clientgui.TableContainerView;
+import vooga.rts.networking.client.clientgui.ViewContainerPanel;
 import vooga.rts.networking.communications.ExpandedLobbyInfo;
 import vooga.rts.networking.communications.LobbyInfo;
 import vooga.rts.networking.communications.Message;
@@ -40,12 +40,13 @@ public class ClientModel extends Observable implements IMessageReceiver, IClient
     private IClient myClient;
     private String myUserName;
     private ViewContainerPanel myContainerPanel;
-    private ServerBrowserView myServerBrowserView;
+    private TableContainerView myServerBrowserView;
     private CreateLobbyView myCreateLobbyView;
     private ExpandedLobbyInfo myLobbyInfo;
     private LobbyView myLobbyView;
     private List<String> myFactions;
     private List<Player> myUserControlledPlayers = new ArrayList<Player>();
+    private ServerBrowserTableAdapter myServerBrowserAdapter = new ServerBrowserTableAdapter();
 
     /**
      * This is the handler of information needed by all of the views in the process of connecting to
@@ -64,10 +65,9 @@ public class ClientModel extends Observable implements IMessageReceiver, IClient
         myUserName = userName;
         myFactions = factions;
         myContainerPanel = new ViewContainerPanel(gameName);
-        myServerBrowserView = new ServerBrowserView(new ServerBrowserTableAdapter());
+        myServerBrowserView = new TableContainerView(myServerBrowserAdapter);
         myCreateLobbyView = new CreateLobbyView(maps, maxPlayerArray);
         myClient = new Client(this);
-        myClient.beginAcceptingConnections();
         Message initialConnection = new InitialConnectionMessage(gameName, userName);
         myClient.sendData(initialConnection);
         switchToServerBrowserView();
@@ -103,9 +103,9 @@ public class ClientModel extends Observable implements IMessageReceiver, IClient
                                            new ActionListener() {
                                                @Override
                                                public void actionPerformed (ActionEvent arg0) {
-                                                   if (myServerBrowserView.hasSelected()) {
-                                                       requestJoinLobby(myServerBrowserView
-                                                               .getSelectedID());
+                                                   if (myServerBrowserView.hasSelectedRow()) {
+                                                       requestJoinLobby(myServerBrowserAdapter
+                                                               .getidOfRow(myServerBrowserView.getSelectedRow()));
                                                    }
                                                }
                                            });
@@ -192,7 +192,7 @@ public class ClientModel extends Observable implements IMessageReceiver, IClient
 
     @Override
     public void addLobbies (LobbyInfo[] lobbies) {
-        myServerBrowserView.addLobbies(lobbies);
+        myServerBrowserAdapter.changeLobbies(lobbies);
     }
 
     @Override

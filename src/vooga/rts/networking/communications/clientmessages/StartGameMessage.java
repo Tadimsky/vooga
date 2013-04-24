@@ -17,7 +17,7 @@ public class StartGameMessage extends Message implements ClientInfoMessage {
 
     @Override
     public void affectServer (ConnectionThread thread, IThreadContainer server) {
-        server.startGameServer(thread);
+        server.requestGameStart(thread);
     }
 
 }

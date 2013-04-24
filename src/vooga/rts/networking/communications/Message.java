@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @author David Winegar
  * 
  */
-public abstract class Message implements Serializable, Comparable<Message>,IMessage {
+public abstract class Message implements Serializable, Comparable<Message>, IMessage {
 
     private static final long serialVersionUID = 3906028159511905867L;
     private TimeStamp myTimeStamp;
@@ -64,6 +64,7 @@ public abstract class Message implements Serializable, Comparable<Message>,IMess
 
     /**
      * Call this method to mark the time received (final time)
+     * 
      * @param time to stamp
      */
     public void stampTime (long time) {
@@ -101,6 +102,7 @@ public abstract class Message implements Serializable, Comparable<Message>,IMess
 
     /**
      * Compares based on timestamps
+     * 
      * @param message to compare
      */
     @Override

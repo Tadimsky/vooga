@@ -5,6 +5,7 @@ import java.util.List;
 
 import vooga.rts.gamedesign.sprite.gamesprites.IAttackable;
 import vooga.rts.gamedesign.weapon.Weapon;
+import vooga.rts.util.Location3D;
 
 
 /**
@@ -14,22 +15,17 @@ import vooga.rts.gamedesign.weapon.Weapon;
  * 
  * @author Ryan Fishel
  * @author Kevin Oh
- * @author Francesco Agosti
+ * @author Francesco Agosti (did not have anything to do with this CannotAttack having weapons stuff)
  * @author Wenshun Liu
  * 
  */
 
 public class CannotAttack implements AttackStrategy {
-	private List<Weapon> myWeapons; //TODO: probably won't need these
-	private int myWeaponIndex;
-	private boolean myCanAttack = false;
 	
 	/**
 	 * Creates a new attack strategy that represents an entity that cannot attack.
 	 */
 	public CannotAttack() {
-		 myWeapons = new ArrayList<Weapon>();
-		 myWeaponIndex = 0;
 	}
 
 	/**
@@ -46,37 +42,30 @@ public class CannotAttack implements AttackStrategy {
 	 * @return a null list of Weapons
 	 */
 	public List<Weapon> getWeapons() {
-		return null;
+		return new ArrayList<Weapon>();
 	}
 
-	/**
-	 * Returns the index of the Weapon that's currently been activated in the
-	 * list of Weapons belonged to this CanAttack object. In the case of
-	 * CannotAttack return -1, representing no Weapon has been activated.
-	 * @return -1, representing no Weapon has been activated.
-	 */
-	public int getWeaponIndex() {
-		return -1;
-	}
 
 	/**
 	 * Adds a Weapon to the list of Weapons belonged to this AttackStrategy.
 	 * @param weapon the new Weapon to be added into the list.
 	 */
 	public void addWeapons(Weapon weapon) {
-		myWeapons.add(weapon);
+		return;
 
 	}
 
-	/**
-	 * Determines whether this CanAttack is able to attack.
-	 * @return Whether this CanAttack is able to attack.
-	 */
-	public boolean getCanAttack() {
-		return myCanAttack;
+	@Override
+	public void setWeaponLocation(Location3D newLocation) {
+		
 	}
 
+	@Override
 	public Weapon getCurrentWeapon() {
 		return null;
 	}
+	
+    public boolean hasWeapon(){
+    	return false;
+    }
 }

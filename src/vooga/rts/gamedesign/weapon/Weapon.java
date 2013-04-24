@@ -180,5 +180,6 @@ public class Weapon {
      */
     public void setCenter (Location3D center) {
         myCenter = center;
+        myProjectile.setWorldLocation(center);
     }
 }

@@ -26,13 +26,13 @@ public class LobbyInfo extends Observable implements Serializable {
      * @param lobbyName name of lobby
      * @param mapName name of map
      * @param maxPlayers maximum players
-     * @param ID id
+     * @param id id
      */
-    public LobbyInfo (String lobbyName, String mapName, int maxPlayers, int ID) {
+    public LobbyInfo (String lobbyName, String mapName, int maxPlayers, int id) {
         myLobbyName = lobbyName;
         myMaxPlayers = maxPlayers;
         myMapName = mapName;
-        myID = ID;
+        myID = id;
     }
     
     /**
@@ -99,7 +99,7 @@ public class LobbyInfo extends Observable implements Serializable {
      * 
      * @return id number
      */
-    public int getID () {
+    public int getId () {
         return myID;
     }
     
@@ -107,7 +107,7 @@ public class LobbyInfo extends Observable implements Serializable {
      * Gets the current number of players
      * @return number of players
      */
-    public int getCurrentPlayers () {
+    public int getNumberOfPlayers () {
         return myPlayersCount;
     }
 

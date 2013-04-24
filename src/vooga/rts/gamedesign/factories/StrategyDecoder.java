@@ -68,7 +68,8 @@ public class StrategyDecoder extends Decoder{
 		NodeList attackLst = doc.getElementsByTagName(ATTACK_TAG).item(0).getChildNodes();
 		NodeList occupyLst = doc.getElementsByTagName(OCCUPY_TAG).item(0).getChildNodes();
 		NodeList gatherLst = doc.getElementsByTagName(GATHER_TAG).item(0).getChildNodes();
-			
+		
+		getSources(attackLst);
 		getSources(occupyLst);
 		getSources(gatherLst);
 	}

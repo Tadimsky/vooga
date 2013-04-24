@@ -21,7 +21,7 @@ public class MailingHandler extends Handler implements IMail{
 	@Override
 	public void publish(LogRecord record) {
 		MailSender mail = new MailSender(myFromAddress,myToAddress, 
-				myServerAddress, mySubject, getFormatter().format(record));
+				myServerAddress, mySubject, myMessage + getFormatter().format(record));
 		
 		mail.sendMail();
 	}
@@ -43,6 +43,6 @@ public class MailingHandler extends Handler implements IMail{
 		myToAddress = to;
 		myServerAddress = server;
 		mySubject = subject;
-		myMessage = message;
+		myMessage = message+"\n\n";
 	}
 }

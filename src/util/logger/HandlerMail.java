@@ -37,7 +37,7 @@ public class HandlerMail implements IVoogaHandler, IMail{
 	 * @param to String array with recipients to send e-mail to
 	 * @param server Server address
 	 * @param subject Subject of e-mail
-	 * @param message Text in e-mail
+	 * @param message Extra text in e-mail
 	 */
 	public HandlerMail(String from, String[] to, String server,
 			String subject, String message) {

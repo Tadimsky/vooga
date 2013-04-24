@@ -5,6 +5,12 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 
+/**
+ * Class used for reading in map names.
+ * 
+ * @author Henrique Morales
+ * 
+ */
 public class MapsAccessor {
     private static final String DEFAULT_PACKAGE = "vooga.rts.";
     private static final String DEFAULT_RESOURCE = ".resources.maps";
