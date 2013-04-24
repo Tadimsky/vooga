@@ -1,7 +1,6 @@
 package vooga.rts.gamedesign.factories;
 
 import java.awt.Dimension;
-import java.lang.reflect.InvocationTargetException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -14,21 +13,32 @@ import vooga.rts.util.Pixmap;
 import vooga.rts.util.ReflectionHelper;
 import vooga.rts.util.Sound;
 
+
+/**
+* This Class acts as the decoder for all interactive entities since they all have the same constructor. 
+* If you would like to extend interactive entity to implement a class with a different constructor then you 
+* should use default values for the extra parameters (or you could write your own decoder).
+*
+*/
 public class InteractiveEntityDecoder extends Decoder {
 	
 	private int DEFAULTTEAM = 0;
 	
 	private Factory myFactory;
+	private CustomHandler myCustomHandler;
 
 	public InteractiveEntityDecoder(Factory factory){
 		myFactory = factory;
+		myCustomHandler = new CustomHandler(factory);
 	}
 
 	@Override
-	public void create(Document doc, String type) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	public void create(Document doc, String type) {
 		//there is some duplicate code between decoders that should be factored out. 
 		String path = doc.getElementsByTagName(type).item(0).getAttributes().getNamedItem(SOURCE_TAG).getTextContent();	
-		NodeList nodeLst = doc.getElementsByTagName(type.substring(0, type.length()-1));
+		String subtype = type.substring(0, type.length()-1);
+		NodeList nodeLst = doc.getElementsByTagName(subtype);
+		myCustomHandler.create(doc, subtype);
 		for(int i = 0 ; i < nodeLst.getLength() ; i++){
 			Element nElement = (Element) nodeLst.item(i);
 			String name = getElement(nElement, NAME_TAG);
@@ -53,7 +63,16 @@ public class InteractiveEntityDecoder extends Decoder {
 			}
 			//Load Strategy Dependencies now
 			String[] strategies = new String[3];
-			strategies[1] = nElement.getElementsByTagName(OCCUPY_TAG).item(0).getTextContent();
+			strategies[0] = getElement(nElement, ATTACK_TAG);
+			strategies[1] = getElement(nElement, OCCUPY_TAG);
+			
+			if(subtype.equals(BUILDING_TYPE)) {
+				strategies[2] = "cannotgather";
+			}else{
+				strategies[2] = getElement(nElement, GATHER_TAG);
+			}
+
+			
 			myFactory.putStrategyDependency(name, strategies);
 			
 			

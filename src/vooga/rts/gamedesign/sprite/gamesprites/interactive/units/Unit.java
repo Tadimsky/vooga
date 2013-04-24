@@ -111,4 +111,5 @@ public class Unit extends InteractiveEntity {
         return new Unit(getImage(), getWorldLocation(), getSize(), getSound(), getPlayerID(),
                         getHealth(), getBuildTime());
     }
+    
 }

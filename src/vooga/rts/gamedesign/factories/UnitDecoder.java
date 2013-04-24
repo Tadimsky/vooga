@@ -1,7 +1,6 @@
 package vooga.rts.gamedesign.factories;
 
 import java.awt.Dimension;
-import java.lang.reflect.InvocationTargetException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,10 +33,7 @@ public class UnitDecoder extends Decoder {
 	
 	
 	@Override
-	public void create(Document doc, String type) throws InstantiationException,
-			IllegalAccessException, IllegalArgumentException,
-			InvocationTargetException, NoSuchMethodException,
-			SecurityException, ClassNotFoundException {
+	public void create(Document doc, String type) {
 		
 		String path = doc.getElementsByTagName(HEAD_TAG).item(0).getAttributes().getNamedItem(SOURCE_TAG).getTextContent();
 		NodeList nodeLst = doc.getElementsByTagName(TYPE_TAG);

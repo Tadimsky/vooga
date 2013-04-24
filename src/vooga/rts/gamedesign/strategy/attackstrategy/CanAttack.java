@@ -45,6 +45,7 @@ public class CanAttack implements AttackStrategy {
         myWeaponIndex = 0;
     }
 
+    
     /**
      * Attacks the given IAttackable object by first judging whether the Weapon
      * is in range for the attack action.

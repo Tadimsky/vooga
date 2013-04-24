@@ -18,7 +18,9 @@ import vooga.rts.util.DelayedTask;
  * 
  */
 public class CanGather implements GatherStrategy {
-
+	
+	private static final double DEFAULTCOOL = 10;
+	private static final int DEFAULTAMOUNT = 10;
 	private DelayedTask myGatherDelay;
 	private double myCooldown;
 	private int myGatherAmount;
@@ -37,7 +39,15 @@ public class CanGather implements GatherStrategy {
 		myGatherAmount = gatherAmount;
 		myGatherState = GatherState.WAITING;
 	}
-
+	
+	public CanGather(){
+		this(DEFAULTCOOL, DEFAULTAMOUNT);
+	}
+	
+	/**
+	 * Allows the entity to gather a specific resource (a IGatherable object)
+	 * 
+	 */
 	public void gatherResource(int playerID, IGatherable gatherable) {
 		if(((Resource)gatherable).isDead()) {
 			return;
