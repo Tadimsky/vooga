@@ -45,11 +45,7 @@ public class GameMap implements IGameLoop {
      * @param mapSize This is the size of the map in pixels
      */
     public GameMap (Dimension size) {
-<<<<<<< HEAD
-=======
         mySize = size;
-        NodeFactory factory = new NodeFactory();
->>>>>>> master
         Dimension dou = new Dimension((int)size.getWidth(), (int)(size.getHeight() * 2));
         NodeFactory factory = new NodeFactory();
         myNodeMap = factory.makeMap(Node.NODE_SIZE, size);
