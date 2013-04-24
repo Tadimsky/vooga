@@ -44,7 +44,7 @@ public class HandlerTxt implements IVoogaHandler {
     		myExtension = ext;
     	}
     	else {
-    		NetworkLogger.logMessage(Level.INFO, EXTENSION_ERROR);
+    		NetworkLogger.getLogger().log(Level.INFO, EXTENSION_ERROR);
     	}
     }
 

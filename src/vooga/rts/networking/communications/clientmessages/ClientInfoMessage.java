@@ -1,8 +1,8 @@
 package vooga.rts.networking.communications.clientmessages;
 
+import vooga.rts.networking.communications.IMessage;
 import vooga.rts.networking.server.ConnectionThread;
 import vooga.rts.networking.server.IThreadContainer;
-import vooga.rts.networking.communications.*;
 
 
 /**

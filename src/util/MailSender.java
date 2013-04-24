@@ -1,6 +1,7 @@
 package util;
 
 import java.util.Properties;
+import java.util.logging.Level;
 
 import javax.mail.Address;
 import javax.mail.Message;
@@ -62,6 +63,15 @@ public class MailSender implements IMail{
 		setProperties(from,to,server,subject,message);
 		sendMail();
 	}
+	
+	/**
+	 * Sends an e-mail according to given information
+	 * @param String containing message to send through e-mail
+	 */
+	public void sendMail(String message) {
+		myMessage = message;
+		sendMail();
+	}
 
 	/**
 	 * Sends an e-mail according to given information
@@ -85,9 +95,9 @@ public class MailSender implements IMail{
 			Transport.send(mimeMsg);
 
 		} catch (AddressException e) {
-			NetworkLogger.logMessage("Error in choosing e-mail address\n"+e.toString());
+			NetworkLogger.getLogger().log(Level.WARNING,"Error in choosing e-mail address\n"+e.toString());
 		} catch (MessagingException e) {
-			NetworkLogger.logMessage("Error in creating e-mail message\n"+e.toString());
+			NetworkLogger.getLogger().log(Level.WARNING,"Error in creating e-mail message\n"+e.toString());
 		}
 	}
 }

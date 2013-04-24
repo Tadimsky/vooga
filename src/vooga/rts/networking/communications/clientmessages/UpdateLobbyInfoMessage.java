@@ -7,17 +7,26 @@ import vooga.rts.networking.server.ConnectionThread;
 import vooga.rts.networking.server.IThreadContainer;
 
 
+/**
+ * Message for updating the lobby information.
+ * 
+ * @author srwareham
+ * 
+ */
 public class UpdateLobbyInfoMessage extends AbstractLobbyInfoMessage implements ClientInfoMessage {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 397434129045885123L;
+
     /**
      * Create the UpdateLobbyInfoMessage with the requisite LobbyInfo.
      * 
-     * @param lobbyInfo
+     * @param lobbyInfo 
      */
     public UpdateLobbyInfoMessage (LobbyInfo lobbyInfo) {
         super(lobbyInfo);
     }
-
-    private static final long serialVersionUID = -8851500817586023212L;
 
     @Override
     public void affectServer (ConnectionThread thread, IThreadContainer server) {

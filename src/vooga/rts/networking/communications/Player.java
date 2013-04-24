@@ -24,10 +24,10 @@ public class Player implements Serializable {
      * A player object whose purpose is to contain state for the game simulation to read in and
      * construct based off of appropriately.
      * 
-     * @param name
-     * @param team
-     * @param faction
-     * @param id
+     * @param name 
+     * @param team 
+     * @param faction 
+     * @param id 
      */
     public Player (String name, int team, String faction, int id) {
         myName = name;
@@ -50,7 +50,7 @@ public class Player implements Serializable {
      * 
      * @return
      */
-    public int getID () {
+    public int getId () {
         return myID;
     }
 
@@ -75,7 +75,7 @@ public class Player implements Serializable {
     /**
      * Setter for the faction of the player.
      * 
-     * @param faction
+     * @param faction 
      */
     public void setFaction (String faction) {
         myFaction = faction;
@@ -84,7 +84,7 @@ public class Player implements Serializable {
     /**
      * Setter for the team of the player.
      * 
-     * @param team
+     * @param team 
      */
     public void setTeam (int team) {
         myTeam = team;
@@ -92,11 +92,20 @@ public class Player implements Serializable {
 
     @Override
     public boolean equals (Object obj) {
-        if (!(obj instanceof Player)) return false;
+        if (!(obj instanceof Player)) {
+            return false;
+        }
         Player other = (Player) obj;
-        if (other.getID() == myID) return true;
+        if (other.getId() == myID) {
+            return true;
+        }
 
         return false;
+    }
+    
+    @Override
+    public int hashCode () {
+        return myID;
     }
 
 }

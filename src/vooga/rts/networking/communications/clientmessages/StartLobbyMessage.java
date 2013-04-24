@@ -14,22 +14,20 @@ import vooga.rts.networking.server.IThreadContainer;
  */
 public class StartLobbyMessage extends AbstractLobbyInfoMessage implements ClientInfoMessage {
     /**
+     * 
+     */
+    private static final long serialVersionUID = -5320733290627185191L;
+
+
+    /**
      * Create the StartLobbyMessage with the requisite LobbyInfo.
      * 
-     * @param lobbyInfo
+     * @param lobbyInfo 
      */
     public StartLobbyMessage (LobbyInfo lobbyInfo) {
         super(lobbyInfo);
-        // TODO Auto-generated constructor stub
     }
 
-    private static final long serialVersionUID = -6507449287521383418L;
-
-    /**
-     * Instantiates message with lobbyInfo
-     * 
-     * @param lobbyInfo info to send
-     */
 
     @Override
     public void affectServer (ConnectionThread thread, IThreadContainer server) {

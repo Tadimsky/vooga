@@ -20,6 +20,12 @@ public class AlertClientMessage extends Message implements ServerInfoMessage {
     private String myMessage;
     private String myTitle;
 
+    /**
+     * Creates a message to alert the client.
+     * 
+     * @param title 
+     * @param message 
+     */
     public AlertClientMessage (String title, String message) {
         myTitle = title;
         myMessage = message;

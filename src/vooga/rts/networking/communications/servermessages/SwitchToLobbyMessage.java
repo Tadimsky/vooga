@@ -20,6 +20,7 @@ public class SwitchToLobbyMessage extends AbstractLobbyInfoMessage implements Se
      * Instantiates the message
      * 
      * @param lobbyInfo info to store
+     * @param initialID 
      */
     public SwitchToLobbyMessage (ExpandedLobbyInfo lobbyInfo, int initialID) {
         super(lobbyInfo);

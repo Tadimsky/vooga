@@ -30,6 +30,11 @@ public class NetworkBundle {
         return BUNDLE;
     }
 
+    /**
+     * 
+     * @param key Key at properties file
+     * @return value associated with the string
+     */
     public static String getString (String key) {
         return BUNDLE.getString(key);
     }

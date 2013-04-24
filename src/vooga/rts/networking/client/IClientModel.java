@@ -19,22 +19,22 @@ public interface IClientModel {
     /**
      * Adds a lobby to the server's collection of lobbies.
      * 
-     * @param lobbies
+     * @param lobbies 
      */
     public void addLobbies (LobbyInfo[] lobbies);
 
     /**
      * Switches the clients visual elements to that of the Lobby.
      * 
-     * @param lobbyInfo
-     * @param id
+     * @param lobbyInfo 
+     * @param id 
      */
     public void switchToLobby (ExpandedLobbyInfo lobbyInfo, int id);
 
     /**
      * Updates the client held Lobby information with that passed down from the server.
      * 
-     * @param lobbyInfo
+     * @param lobbyInfo 
      */
     public void updateLobby (ExpandedLobbyInfo lobbyInfo);
 
@@ -42,8 +42,8 @@ public interface IClientModel {
      * Immediately alerts the client to an important message.
      * Such as an error in client behavior (clicking prematurely on a start button, for example)
      * 
-     * @param title
-     * @param message
+     * @param title  
+     * @param message 
      */
     public void alertClient (String title, String message);
 

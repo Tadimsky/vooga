@@ -43,8 +43,9 @@ public class UserTimeStamp extends TimeStamp {
 
     @Override
     public long getDifference () {
-        if (getFinalTime() == DEFAULT_VALUE)
+        if (getFinalTime() == DEFAULT_VALUE) {
             setFinalTime(System.currentTimeMillis() - mySystemStartTime);
+        }
         return getFinalTime() - getInitialTime();
     }
 

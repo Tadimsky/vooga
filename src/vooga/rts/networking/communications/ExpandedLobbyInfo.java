@@ -28,13 +28,13 @@ public class ExpandedLobbyInfo extends LobbyInfo {
      * @param lobbyName name of lobby
      * @param mapName name of map
      * @param maxPlayers max players
-     * @param ID id
+     * @param id id
      */
     public ExpandedLobbyInfo (String lobbyName,
                               String mapName,
                               int maxPlayers,
-                              int ID) {
-        super(lobbyName, mapName, maxPlayers, ID);
+                              int id) {
+        super(lobbyName, mapName, maxPlayers, id);
         myMaxTeams = maxPlayers;
         myPlayers = new Player[maxPlayers];
     }
@@ -46,7 +46,7 @@ public class ExpandedLobbyInfo extends LobbyInfo {
      */
     public ExpandedLobbyInfo (LobbyInfo lobbyInfo) {
         this(lobbyInfo.getLobbyName(), lobbyInfo.getMapName(), lobbyInfo.getMaxPlayers(), lobbyInfo
-                .getID());
+                .getId());
     }
 
     /**

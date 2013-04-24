@@ -40,7 +40,7 @@ public class Room extends AbstractThreadContainer {
     public Room (int id, GameContainer container, Room room) {
         super(room);
         setIDandContainer(id, container);
-        myLobbyModel = room.getLobbyModel();
+        myLobbyModel = room.getLobbyInfo();
         room.removeAllConnections();
         container.removeRoom(room);
     }
@@ -62,7 +62,7 @@ public class Room extends AbstractThreadContainer {
         return myID;
     }
 
-    protected ExpandedLobbyInfo getLobbyModel () {
+    protected ExpandedLobbyInfo getLobbyInfo () {
         return myLobbyModel;
     }
     

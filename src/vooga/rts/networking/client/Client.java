@@ -46,6 +46,7 @@ public class Client extends Thread implements IClient {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        start();
     }
 
     /**
@@ -102,9 +103,5 @@ public class Client extends Thread implements IClient {
         }
     }
 
-    @Override
-    public void beginAcceptingConnections () {
-        start();
-    }
 
 }

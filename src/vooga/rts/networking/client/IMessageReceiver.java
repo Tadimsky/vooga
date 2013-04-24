@@ -11,6 +11,10 @@ import vooga.rts.networking.communications.Message;
  * 
  */
 public interface IMessageReceiver {
-
+    /**
+     * Returns the current message being recieved.
+     * 
+     * @param message
+     */
     public void getMessage (Message message);
 }
