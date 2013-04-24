@@ -2,6 +2,7 @@ package vooga.rts.gamedesign.sprite.gamesprites;
 
 import java.awt.Dimension;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
+import vooga.rts.state.GameState;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 
@@ -39,7 +40,7 @@ public class Resource extends GameEntity implements IGatherable {
                      int health,
                      String type) {
         super(image, center, size, playerID, health);
-        myType = type;
+        myType = type;   
     }
 
     @Override

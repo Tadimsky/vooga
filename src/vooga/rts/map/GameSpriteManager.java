@@ -54,6 +54,8 @@ public class GameSpriteManager<T extends GameSprite> extends Observable implemen
      */
     public void add (T gs) {
         gs.addObserver(GameState.getMap().getNodeMap());
+        gs.setChanged();
+        gs.notifyObservers(gs.getWorldLocation());
         myGameSprites.add(gs);
     }
 

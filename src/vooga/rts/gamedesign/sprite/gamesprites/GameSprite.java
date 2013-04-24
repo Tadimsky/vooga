@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.Observable;
 import vooga.rts.IGameLoop;
+import vooga.rts.state.GameState;
 import vooga.rts.util.Camera;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
@@ -243,5 +244,12 @@ public abstract class GameSprite extends Observable implements IGameLoop {
      */
     public Pixmap getImage () {
         return myPixmap;
+    }
+    
+    /**
+     * Sets the object to be in the changed state for the observer pattern.
+     */
+    public void setChanged () {
+        super.setChanged();
     }
 }

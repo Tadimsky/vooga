@@ -39,7 +39,7 @@ public class Player implements Controller, IGameLoop {
 
     @Override
     public void paint (Graphics2D pen) {
-        myManager.paint(pen);
+        //myManager.paint(pen);
     }
 
     @Override

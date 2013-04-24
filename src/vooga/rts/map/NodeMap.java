@@ -1,6 +1,7 @@
 package vooga.rts.map;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.Observable;
 import java.util.Observer;
 import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.map.Tile;
+import vooga.rts.util.Camera;
 import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 
@@ -16,8 +19,8 @@ import vooga.rts.util.Location3D;
 /**
  * This class stores all the nodes that will be used for pathfinding.
  * 
- * @author Challen Herzberg-Brovold
  * @author Jonathan Schmidt
+ * @author Challen Herzberg-Brovold
  * 
  */
 public class NodeMap implements Observer {
@@ -60,7 +63,7 @@ public class NodeMap implements Observer {
      * @return node at the coordinates
      */
     public Node get (int x, int y) {
-        if (x > 0 && y > 0 && x < myMap.length && y < myMap[0].length) {
+        if (x >= 0 && y >= 0 && x < myMap.length && y < myMap[0].length) {
             return myMap[x][y];
         }
         return null;
@@ -87,7 +90,41 @@ public class NodeMap implements Observer {
     }
 
     public void paint (Graphics2D pen) {
-        // Paint everything in the game!
+        Rectangle view = Camera.instance().getWorldVision().getBounds();
+
+        // Get the start index of what is visible by the cameras.
+        int startX = (int) (view.getMinX() > 0 ? view.getMinX() : 0);
+        startX /= Node.NODE_SIZE;
+
+        int startY = (int) (view.getMinY() > 0 ? view.getMinY() : 0);
+        startY /= Node.NODE_SIZE;
+
+        // Get the end index of what is visible
+        int endX =
+                (int) (view.getMaxX() < Node.NODE_SIZE * myWidth ? view.getMaxX() : myWidth *
+                                                                                    Node.NODE_SIZE);
+        endX /= Node.NODE_SIZE;
+        endX = endX < myWidth ? endX : myWidth - 1;
+
+        int endY =
+                (int) (view.getMaxY() < Node.NODE_SIZE * myHeight ? view.getMaxY() : myHeight *
+                                                                                     Node.NODE_SIZE);
+        endY /= Node.NODE_SIZE;
+        endY = endY < myHeight ? endY : myHeight - 1;
+
+        int depth = (endX - startX) + (endY - startY);
+        for (int z = 0; z < depth; z++) {
+            for (int y = 0; y <= z; y++) {
+                int x = z - y;
+                Node n = get(x + startX, y + startY);
+                if (n != null) {
+                    n.paint(pen);
+                }
+                else {
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -121,7 +158,7 @@ public class NodeMap implements Observer {
     private Node findContainingNode (Location3D world) {
         // This should be the node for this location.
         Node potential = getNode(world);
-        if (potential != null && potential.contains(world)) {
+        if (potential != null) { // && potential.contains(world)) {
             return potential;
         }
         return null;
@@ -186,7 +223,6 @@ public class NodeMap implements Observer {
 
         // if it's updating with its new location
         if (arg1 instanceof Location3D) {
-            System.out.println("Updating poition");
             // hasn't moved outside of the current node
             if (cur.contains(item.getWorldLocation())) {
                 return;
@@ -198,11 +234,10 @@ public class NodeMap implements Observer {
                     addToNode(item, newNode);
                 }
             }
-
         }
         if (item instanceof InteractiveEntity) {
             InteractiveEntity ie = (InteractiveEntity) item;
-            if (ie.isDead()) {                
+            if (ie.isDead()) {
                 if (cur != null) {
                     removeFromNode(item);
                 }

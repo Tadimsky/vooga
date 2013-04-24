@@ -21,7 +21,7 @@ public class Canvas extends JPanel {
     public Canvas (BufferStrategy buffer) {
         super();
         myStrategy = buffer;
-        setBackground(Color.WHITE);
+        setBackground(Color.BLACK);
         super.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
     }
 

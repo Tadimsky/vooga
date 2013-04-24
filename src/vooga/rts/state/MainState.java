@@ -101,9 +101,8 @@ public class MainState implements State, Observer {
     private void render () {
 
         Graphics2D graphics = myWindow.getCanvas().getGraphics();
-        graphics.setColor(Color.WHITE);
-        graphics.fillRect(0, 0, myWindow.getCanvas().getWidth(), myWindow.getCanvas().getHeight());
         graphics.setColor(Color.BLACK);
+        graphics.fillRect(0, 0, myWindow.getCanvas().getWidth(), myWindow.getCanvas().getHeight());        
         // long preRender = System.nanoTime();
         paint(graphics);
         // System.out.println("Render Time = " + (System.nanoTime() - preRender) / 1000000 +

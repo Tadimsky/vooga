@@ -186,7 +186,6 @@ public class GameEntity extends GameSprite {
         }
         else {
             setVelocity(v.getAngle(), getSpeed());
-            System.out.println(getSpeed());
             myEntityState.setMovementState(MovementState.MOVING);
         }
     }
@@ -301,12 +300,4 @@ public class GameEntity extends GameSprite {
             getEntityState().stop();
         }
     }
-
-    /**
-     * Sets the object to be in the changed state for the observer pattern.
-     */
-    public void setChanged () {
-        super.setChanged();
-    }
-
 }

@@ -135,6 +135,8 @@ public class Manager extends Observable implements State, IActOn, Observer {
     public void add (InteractiveEntity entity) {
         entity.addObserver(GameState.getMap().getNodeMap());
         entity.addObserver(this);
+        entity.setChanged();
+        entity.notifyObservers(entity.getWorldLocation());
         myAddQueue.add(entity);
     }
 
@@ -359,7 +361,8 @@ public class Manager extends Observable implements State, IActOn, Observer {
             }
 
         }
-        else if (state instanceof Integer) {
+        else
+            if (state instanceof Integer) {
                 int index = findEntityWithHashCode((Integer) state);
                 InteractiveEntity unit = myEntities.get(index);
                 unit.getEntityState().setOccupyState(OccupyState.NOT_OCCUPYING);

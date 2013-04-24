@@ -46,7 +46,7 @@ public class TileMap implements IGameLoop {
      * @param height The number of tiles in the Y direction.
      */
     public TileMap (Dimension tileSize, int width, int height) {
-        myWidth = width;
+        myWidth = width; 
         myHeight = height;
         myTileSize = tileSize;
         myMapSize =
@@ -86,9 +86,8 @@ public class TileMap implements IGameLoop {
         Pixmap image = new Pixmap(pic);
 
         Location3D position =
-                new Location3D(x * myTileSize.width / 2 /* + myTileSize.width / 2 */,
-                               y * myTileSize.height / 2
-                               /* + myTileSize.height / 2 */, 0);
+                new Location3D(x * myTileSize.width / 2 ,
+                               y * myTileSize.height / 2, 0);
 
         Tile newTile = new Tile(image, position, myTileSize);
         setTile(x, y, newTile);
@@ -130,7 +129,7 @@ public class TileMap implements IGameLoop {
     public void update (double elapsedTime) {
         for (int x = 0; x < myWidth; x++) {
             for (int y = 0; y < myHeight; y++) {
-                Tile cur = myTiles[x][y];
+                Tile cur = getTile(x, y);
                 if (cur != null) {
                     cur.update(elapsedTime);
                 }

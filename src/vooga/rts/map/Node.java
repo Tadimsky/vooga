@@ -1,9 +1,15 @@
 package vooga.rts.map;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
+import vooga.rts.util.Camera;
 import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 
@@ -51,7 +57,7 @@ public class Node {
      * @param y The Y index
      */
     public Node (int x, int y) {
-        this(y, x, 0);
+        this(x, y, 0);
     }
 
     public int getX () {
@@ -91,7 +97,8 @@ public class Node {
      * @return Whether it is in the node or not
      */
     public boolean contains (Location3D world) {
-        return myBounds.contains(world.to2D());
+        return world.getX() >= myBounds.getMinX() && world.getX() <= myBounds.getMaxX() &&
+               world.getY() >= myBounds.getMinY() && world.getY() <= myBounds.getMaxY();
     }
 
     public void addSprite (GameSprite sprite) {
@@ -111,27 +118,64 @@ public class Node {
     }
 
     public boolean containsSprite (GameSprite sprite) {
-        return true;
+        return myContents.contains(sprite);
     }
 
-    public <T extends GameSprite> List<T> filterGameSprites (List<GameSprite> fullList, GameSprite gsType, int teamID, boolean same) {
-        List<T> resultList = new ArrayList<T>();        
+    public <T extends GameSprite> List<T> filterGameSprites (List<GameSprite> fullList,
+                                                             GameSprite gsType,
+                                                             int teamID,
+                                                             boolean same) {
+        List<T> resultList = new ArrayList<T>();
         for (GameSprite item : fullList) {
             /*
-            if (item instanceof ) {
-               
-               Determine whether these things are the same.
-                
-            }*/
+             * if (item instanceof ) {
+             * 
+             * Determine whether these things are the same.
+             * 
+             * }
+             */
             if (same) {
-                
+
             }
-            else
-            {
-                
+            else {
+
             }
             resultList.add((T) item);
         }
-        return resultList;
+        return resultList; 
     }
+
+    public void paint (Graphics2D pen) {        
+        for (GameSprite gs : myContents) {
+            gs.paint(pen);
+        }
+    }
+    
+    /**
+     * Paints the Node with a ellipse surrounding it. This is used for testing purposes.
+     * Also prints the index of the node which can be the order that the node was painted.
+     * 
+     * @param pen The Graphics 2D to paint with
+     * @param index The index of the node
+     */
+    public void paint (Graphics2D pen, int index) {
+        Point2D screen =
+                Camera.instance().worldToView(new Location3D(myX * NODE_SIZE, myY * NODE_SIZE, 0));
+        if (myX % 10 == 0 || myY % 10 == 0) {
+            pen.fill(new Ellipse2D.Double(screen.getX(), screen.getY(), NODE_SIZE, NODE_SIZE));
+        }
+        else
+        {
+            pen.draw(new Ellipse2D.Double(screen.getX(), screen.getY(), NODE_SIZE, NODE_SIZE));
+        }
+        pen.setColor(Color.red);
+        pen.setFont(new Font("Arial", Font.PLAIN, 10));
+        pen.drawString(Integer.toString(index), (int)screen.getX(), (int)screen.getY());
+        pen.setColor(Color.blue);
+        pen.setFont(new Font("Arial", Font.PLAIN, 12));
+        pen.drawString("(" + myX + ", " + myY  + ")", (int)screen.getX(), (int)screen.getY()+ NODE_SIZE/2 + 6);
+        pen.setColor(Color.black);
+        paint(pen);
+    }
+
 }
