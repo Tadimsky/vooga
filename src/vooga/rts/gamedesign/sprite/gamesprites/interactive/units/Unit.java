@@ -54,7 +54,7 @@ public class Unit extends InteractiveEntity {
 
     public Unit () {
         this(new Pixmap("images/sprites/soldier.png"), new Location3D(), new Dimension(0, 0), null,
-             0, 100, InteractiveEntity.DEFAULT_BUILD_TIME);
+                       0, 100, InteractiveEntity.DEFAULT_BUILD_TIME);
     }
 
     /**

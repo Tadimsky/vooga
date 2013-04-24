@@ -54,9 +54,6 @@ public class GameSpriteManager<T extends GameSprite> implements IGameLoop, Obser
      * @param gs The item to add
      */
     public void add (T gs) {
-        gs.addObserver(GameState.getMap().getNodeMap());
-        gs.setChanged();
-        gs.notifyObservers(gs.getWorldLocation());
         myGameSprites.add(gs);
     }
 
