@@ -31,6 +31,7 @@ public class Soldier extends Unit {
     public static Sound DEFAULT_SOUND = null;
     public static int DEFAULT_PLAYERID = 2;
     public static int DEFAULT_HEALTH = 100;
+    public static int DEFAULT_SPEED = 100;
 
     // private int myHealth; //TESTING PURPOSE
     public Soldier() {
@@ -45,7 +46,7 @@ public class Soldier extends Unit {
     }
     
     public Soldier(Pixmap image, Location3D center, Dimension size, Sound sound, int playerID, int health, double buildTime) {
-        super(image, center, size, sound, playerID, health, buildTime);
+        super(image, center, size, sound, playerID, health, buildTime, DEFAULT_SPEED);
         setAttackStrategy(new CanAttack(getWorldLocation(), DEFAULT_PLAYERID));
     }
 

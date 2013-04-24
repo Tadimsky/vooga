@@ -152,7 +152,7 @@ public class Input {
                                 } else if(paramClasses[0].isInstance(in)) {
                                         gameBehaviors.get(gameBehavior).invoke(x.get(), paramClasses[0].cast(in));
                                 }
-                        } catch (IllegalArgumentException e) {
+                        } catch (IllegalArgumentException e) {                            
                         } catch (IllegalAccessException e) {
                         } catch (InvocationTargetException e) {
                         } catch (NullPointerException e) {

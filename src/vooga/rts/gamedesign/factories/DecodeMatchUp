@@ -4,22 +4,31 @@
 <XMLMatchUp>
 	<pair>
 		<type>Upgrade</type>
-		<path>vooga.rts.gamedesign.factories.UpgradeDecoder</path>
+		<decoderPath>vooga.rts.gamedesign.factories.UpgradeDecoder</decoderPath>
 	</pair>
 	<pair>
 		<type>buildings</type>
-		<path>vooga.rts.gamedesign.factories.InteractiveEntityDecoder</path>
+		<decoderPath>vooga.rts.gamedesign.factories.BuildingDecoder</decoderPath>
 	</pair>
 	<pair>
 		<type>resources</type>
-		<path>vooga.rts.gamedesign.factories.ResourceDecoder</path>
+		<decoderPath>vooga.rts.gamedesign.factories.ResourceDecoder</decoderPath>
 	</pair>
 	<pair>
 		<type>strategies</type>
-		<path>vooga.rts.gamedesign.factories.StrategyDecoder</path>
+		<decoderPath>vooga.rts.gamedesign.factories.StrategyDecoder</decoderPath>
 	</pair>
 	<pair>
 		<type>units</type>
-		<path>vooga.rts.gamedesign.factories.InteractiveEntityDecoder</path>
+		<decoderPath>vooga.rts.gamedesign.factories.UnitDecoder</decoderPath>
 	</pair>
+	<pair>
+		<type>weapons</type>
+		<decoderPath>vooga.rts.gamedesign.factories.WeaponDecoder</decoderPath>
+	</pair>	
+	<pair>
+		<type>projectiles</type>
+		<decoderPath>vooga.rts.gamedesign.factories.ProjectileDecoder</decoderPath>
+	</pair>
+	
 </XMLMatchUp>

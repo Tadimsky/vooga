@@ -45,7 +45,7 @@ public class UpgradeDecoder extends Decoder {
 	public UpgradeDecoder(Factory factory) throws IllegalArgumentException, SecurityException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, ParserConfigurationException, SAXException, IOException{
 		myFactory = factory;
 		myUpgradeNodeType = new HashMap<String, String>();
-		myFactory.loadMappingInfo("UpgradeNodeMatchUp", myUpgradeNodeType);
+		//myFactory.loadDecoders("UpgradeNodeMatchUp", myUpgradeNodeType);
 	}
 	
 	/**

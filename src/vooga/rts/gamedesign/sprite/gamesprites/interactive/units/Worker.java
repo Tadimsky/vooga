@@ -21,73 +21,77 @@ import vooga.rts.util.Sound;
  */
 public class Worker extends Unit {
 
-	private GatherStrategy myGatherStrategy;
-	private static final int DEFUALT_GATHER_INTERVAL = 5;
-	private int myGatherAmount;
+    private GatherStrategy myGatherStrategy;
+    private static final int DEFUALT_GATHER_INTERVAL = 5;
+    private int myGatherAmount;
 
-	/**
-	 * Creates a new worker
-	 * 
-	 * @param image
-	 *            is the image of the worker
-	 * @param center
-	 *            is the location of the worker
-	 * @param size
-	 *            is the size of the worker
-	 * @param sound
-	 *            is the sound the worker will make
-	 * @param playerID
-	 *            represents the team that the worker is on
-	 * @param health
-	 *            is the health of the worker
-	 */
-	public Worker(Pixmap image, Location3D center, Dimension size, Sound sound,
-			int playerID, int health, int gatherAmount, double buildTime) {
-		super(image, center, size, sound, playerID, health, buildTime);
-		myGatherAmount = gatherAmount;
-		myGatherStrategy = new CanGather(DEFUALT_GATHER_INTERVAL, gatherAmount);
+    /**
+     * Creates a new worker
+     * 
+     * @param image
+     *        is the image of the worker
+     * @param center
+     *        is the location of the worker
+     * @param size
+     *        is the size of the worker
+     * @param sound
+     *        is the sound the worker will make
+     * @param playerID
+     *        represents the team that the worker is on
+     * @param health
+     *        is the health of the worker
+     */
+    public Worker (Pixmap image,
+                   Location3D center,
+                   Dimension size,
+                   Sound sound,
+                   int playerID,
+                   int health,
+                   int gatherAmount,
+                   double buildTime) {
+        super(image, center, size, sound, playerID, health, buildTime, 80);
+        myGatherAmount = gatherAmount;
+        myGatherStrategy = new CanGather(DEFUALT_GATHER_INTERVAL, gatherAmount);
 
-	}
+    }
 
-	@Override
-	public void update(double elapsedTime) {
-		super.update(elapsedTime);
-		myGatherStrategy.update(elapsedTime);
-	}
+    @Override
+    public void update (double elapsedTime) {
+        super.update(elapsedTime);
+        myGatherStrategy.update(elapsedTime);
+    }
 
-	/**
-	 * Another recognize method specific for workers as they can gather
-	 * resources which are not InteractiveEntities
-	 */
-	public void recognize(Resource resource) {
-		gather(resource);
-	}
+    /**
+     * Another recognize method specific for workers as they can gather
+     * resources which are not InteractiveEntities
+     */
+    public void recognize (Resource resource) {
+        gather(resource);
+    }
 
-	/**
-	 * The worker gathers the resource if it can and then resets its gather
-	 * cooldown.
-	 * 
-	 * @param gatherable
-	 *            is the resource being gathered.
-	 */
-	public void gather(IGatherable gatherable) {
-		// shouldnt the cast be to a type Resource?
-		if (this.collidesWith((GameEntity) gatherable)) {
-			myGatherStrategy.gatherResource(getPlayerID(), gatherable);
-		}
-	}
+    /**
+     * The worker gathers the resource if it can and then resets its gather
+     * cooldown.
+     * 
+     * @param gatherable
+     *        is the resource being gathered.
+     */
+    public void gather (IGatherable gatherable) {
+        // shouldnt the cast be to a type Resource?
+        if (this.collidesWith((GameEntity) gatherable)) {
+            myGatherStrategy.gatherResource(getPlayerID(), gatherable);
+        }
+    }
 
-	/**
-	 * Sets the amount that the worker can gather at a time.
-	 * 
-	 * @param gatherAmount
-	 *            is the amount that the worker can gather
-	 */
-	public void setGatherAmount(int gatherAmount) {
-		myGatherAmount = gatherAmount;
-		myGatherStrategy = new CanGather(DEFUALT_GATHER_INTERVAL,
-				myGatherAmount);
-	}
+    /**
+     * Sets the amount that the worker can gather at a time.
+     * 
+     * @param gatherAmount
+     *        is the amount that the worker can gather
+     */
+    public void setGatherAmount (int gatherAmount) {
+        myGatherAmount = gatherAmount;
+        myGatherStrategy = new CanGather(DEFUALT_GATHER_INTERVAL, myGatherAmount);
+    }
 
 }
-

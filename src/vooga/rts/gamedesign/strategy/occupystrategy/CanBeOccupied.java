@@ -156,19 +156,4 @@ public class CanBeOccupied implements OccupyStrategy {
     public int getMaxOccupiers () {
         return myMaxOccupiers;
     }
-
-    /**
-     * TESTING FOR VERIFYING VALID OCCUPIER
-     * 
-     * @param argus
-     */
-    public static void main (String[] argus) {
-        OccupyStrategy o = new CanBeOccupied();
-        o.addValidClassType(new Unit());
-        Soldier s = new Soldier();
-        Unit u = new Unit();
-        // System.out.println("Soldier: " + verifyOccupier(s));
-        // System.out.println("Unit: " + verifyOccupier(u));
-    }
-
 }

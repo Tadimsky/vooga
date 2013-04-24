@@ -36,7 +36,8 @@ public class Node {
     private Location3D myCenter;
 
     private List<GameSprite> myContents;
-    //private Set<GameSprite> myContents;
+
+    // private Set<GameSprite> myContents;
 
     /**
      * Creates a Node at the specified index and in the specified tier.
@@ -50,15 +51,22 @@ public class Node {
         myY = y;
         myTier = tier;
         myBounds = new Rectangle(myX * NODE_SIZE, myY * NODE_SIZE, NODE_SIZE, NODE_SIZE);
+
         /*
-        myContents = new TreeSet<GameSprite>(new Comparator<GameSprite>() {
-            @Override
-            public int compare (GameSprite o1, GameSprite o2) {
-                return (int) (o1.getWorldLocation().getZ() - o2.getWorldLocation().getZ());
-            }
-        });
-        */
+         * myContents = new TreeSet<GameSprite>(new Comparator<GameSprite>() {
+         * 
+         * @Override
+         * public int compare (GameSprite o1, GameSprite o2) {
+         * if (o1 != null && o2 != null) {
+         * return (int) (o1.getWorldLocation().getZ() - o2.getWorldLocation().getZ());
+         * }
+         * return 0;
+         * }
+         * });
+         */
+
         myContents = new ArrayList<GameSprite>();
+
         myCenter =
                 new Location3D(myX * NODE_SIZE + NODE_SIZE / 2, myY * NODE_SIZE + NODE_SIZE / 2,
                                tier);

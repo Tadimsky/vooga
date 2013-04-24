@@ -29,12 +29,7 @@ import vooga.rts.util.Sound;
  */
 public class Unit extends InteractiveEntity {
 
-    private GatherStrategy myGatherStrategy;
-
-    public Unit () {
-        this(new Pixmap("images/sprites/soldier.png"), new Location3D(), new Dimension(0, 0), null,
-             0, 100, InteractiveEntity.DEFAULT_BUILD_TIME);
-    }
+    public static final Dimension DEFAULT_SIZE = new Dimension(50, 50);
 
     /**
      * Creates a new unit with an image, location, size, sound, teamID,
@@ -59,9 +54,17 @@ public class Unit extends InteractiveEntity {
                  Sound sound,
                  int playerID,
                  int health,
-                 double buildTime) {
+                 double buildTime,
+                 int speed) {
         super(image, center, size, sound, playerID, health, buildTime);
+        setSpeed(speed);
         addActions();
+    }
+
+    public Unit (Pixmap image, Sound sound, int health, double buildTime, int speed) {
+        this(image, InteractiveEntity.DEFAULT_LOCATION, DEFAULT_SIZE, sound,
+             InteractiveEntity.DEFAULT_PLAYERID, health, buildTime, speed);
+
     }
 
     @Override
@@ -89,11 +92,7 @@ public class Unit extends InteractiveEntity {
     @Override
     public InteractiveEntity copy () {
         return new Unit(getImage(), getWorldLocation(), getSize(), getSound(), getPlayerID(),
-                        getHealth(), getBuildTime());
+                        getHealth(), getBuildTime(), getSpeed());
     }
-
-	public void setGatherStrategy(GatherStrategy gatherStrategy) {
-		myGatherStrategy = gatherStrategy;
-	}
 
 }

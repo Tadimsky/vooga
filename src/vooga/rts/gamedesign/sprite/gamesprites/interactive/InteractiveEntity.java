@@ -64,6 +64,8 @@ import vooga.rts.util.Information;
 
 public abstract class InteractiveEntity extends GameEntity implements IAttackable, IActOn {
 
+    public static final Location3D DEFAULT_LOCATION = new Location3D(0, 0, 0);
+    public static final int DEFAULT_PLAYERID = 0;
     private static final int LOCATION_OFFSET = 20;
     private static int DEFAULT_INTERACTIVEENTITY_SPEED = 150;
     private boolean isSelected;
@@ -73,6 +75,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     private ProductionStrategy myProductionStrategy;
     private UpgradeStrategy myUpgradeStrategy;
     private OccupyStrategy myOccupyStrategy;
+    private GatherStrategy myGatherStrategy;
     private int myArmor;
     private Map<String, Action> myActions;
     private Map<String, Information> myInfos;
@@ -146,6 +149,15 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 
     public Information getInfo () {
         return myInfo;
+    }
+
+    /**
+     * Sets the current gather strategy to other
+     * 
+     * @param other
+     */
+    public void setGatherStrategy (GatherStrategy other) {
+        myGatherStrategy = other;
     }
 
     public void setUpgradeTree (UpgradeTree upgradeTree) {
@@ -246,7 +258,6 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 
         }
         if (infoCommands.isEmpty()) {
-            System.out.println("I am a manly man");
             return null;
         }
         return infoCommands;
@@ -457,7 +468,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 
     @Override
     public void update (double elapsedTime) {
-        
+
         if (myPath.size() == 0) {
             setVelocity(getVelocity().getAngle(), 0);
             getEntityState().stop();
@@ -478,9 +489,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
         }
 
         if (myAttackStrategy.hasWeapon()) {
-
             myAttackStrategy.getCurrentWeapon().update(elapsedTime);
-
         }
         getEntityState().update(elapsedTime);
 
@@ -573,6 +582,11 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     public void move (Location3D loc) {
         myPath = GameState.getMap().getPath(myFinder, getWorldLocation(), loc);
         super.move(myPath.getNext());
+    }
+
+    public void addWeapon (Weapon toAdd) {
+        myAttackStrategy.addWeapon(toAdd);
+
     }
 
 }

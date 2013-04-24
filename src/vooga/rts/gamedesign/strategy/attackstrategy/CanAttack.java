@@ -40,7 +40,7 @@ public class CanAttack implements AttackStrategy {
         Weapon defaultWeapon =
                 new Weapon(new Projectile(Projectile.DEFAULT_PIC, worldLocation,
                                           Projectile.DEFAULT_DIMENSION, PlayerID,
-                                          Projectile.DEFAULT_DAMAGE, Projectile.DEFAULT_HEALTH),
+                                          Projectile.DEFAULT_DAMAGE, Projectile.DEFAULT_HEALTH,800),
                            Weapon.DEFAULT_RANGE, worldLocation, Weapon.DEFAULT_COOLDOWN_TIME);
         myWeapons.add(defaultWeapon);
         myWeaponIndex = 0;
@@ -117,7 +117,7 @@ public class CanAttack implements AttackStrategy {
      * 
      * @param weapon the new Weapon to be added into the list.
      */
-    public void addWeapons (Weapon weapon) {
+    public void addWeapon (Weapon weapon) {
         myWeapons.add(weapon);
     }
 

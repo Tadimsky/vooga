@@ -2,6 +2,7 @@
 
 
 <GameElements>
+<!--
 <Upgrade>
 	<tree>
 		<treeName>SoldierUpgrade</treeName>
@@ -53,6 +54,7 @@
 		</type>
 	</tree>
 </Upgrade>
+-->
 	<resources src = "vooga.rts.gamedesign.sprite.gamesprites.Resource">
 		<resource>
 			<name>gold</name>
@@ -86,9 +88,10 @@
 			<sound>pikachu.wav</sound>
 			<health>1000</health>
 			<buildtime>100</buildtime>
-			<attack>cannotattack</attack>
 			<occupy>cannotbeoccupied</occupy>
 			<produce>worker soldier</produce>
+			<myweapons></myweapons>
+			
 		</building>
 		<custombuilding src = "vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Tower">
 			<name>tower</name>
@@ -101,10 +104,11 @@
 			<sound>pikachu.wav</sound>
 			<health>100</health>
 			<buildtime>100</buildtime>
-			<attack>canattack</attack>
+			<speed>180</speed>
 			<gather>cannotgather</gather>
 			<occupy>cannotbeoccupied</occupy>
 			<produce></produce>
+			<myweapons>gun</myweapons>
 		</unit>
 		<unit>
 			<name>worker</name>
@@ -112,15 +116,46 @@
 			<sound>pikachu.wav</sound>
 			<health>100</health>
 			<buildtime>100</buildtime>
-			<attack>cannotattack</attack>
+			<speed>140</speed>
 			<gather>cangather</gather>
 			<occupy>cannotbeoccupied</occupy>
 			<produce>home</produce>
+			<myweapons></myweapons>
 		</unit>
 		<customunit src = "vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Soldier">
 			<name>soldier</name>
 		</customunit>
 	</units>
+	<weapons src = "vooga.rts.gamedesign.weapon.Weapon">
+			<weapon>
+				<name>gun</name>
+				<myprojectile>bullet</myprojectile>
+				<range>500</range>
+				<cooldown>1</cooldown>
+			</weapon>
+			<weapon>
+				<name>sniper</name>
+				<myprojectile>sniperbullet</myprojectile>
+				<range>800</range>
+				<cooldown>1</cooldown>
+			</weapon>
+	</weapons>
+	<projectiles src = "vooga.rts.gamedesign.sprite.gamesprites.Projectile">
+		<projectile>
+			<name>bullet</name>
+			<img>bullet.png</img>
+			<damage>10</damage>
+			<lifespan>100</lifespan>
+			<speed>200</speed>
+		</projectile>
+		<projectile>
+			<name>sniperbullet</name>
+			<img>bullet.png</img>
+			<damage>10</damage>
+			<lifespan>100</lifespan>
+			<speed>400</speed>
+		</projectile>
+	</projectiles>
 </GameElements>
 
 
