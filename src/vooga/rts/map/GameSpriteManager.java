@@ -116,11 +116,17 @@ public class GameSpriteManager<T extends GameSprite> implements IGameLoop, Obser
         }
     }
 
+    /**
+     * Returns the number of entities in the manager.
+     */
     public int getSize () {
         return myGameSprites.size();
     }
-
-    public List<T> getMySprites () {
+    
+    /**
+     * Returns the contents of the Game Sprite Manager
+     */
+    public List<T> getContents() {
         return myGameSprites;
     }
 

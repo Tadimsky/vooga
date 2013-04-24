@@ -51,9 +51,10 @@ public class Unit extends InteractiveEntity {
     private GatherStrategy myGatherStrategy;
 
     private OccupyStrategy myOccupyStrategy;
+
     public Unit () {
-        this(new Pixmap("sprites/soldier.png"), new Location3D(), new Dimension(0, 0), null, 0, 100,
-             InteractiveEntity.DEFAULT_BUILD_TIME);
+        this(new Pixmap("images/sprites/soldier.png"), new Location3D(), new Dimension(0, 0), null,
+             0, 100, InteractiveEntity.DEFAULT_BUILD_TIME);
     }
 
     /**
@@ -102,8 +103,8 @@ public class Unit extends InteractiveEntity {
         });
     }
 
-    public void occupy(InteractiveEntity i) {
-    	i.getOccupied(this);
+    public void occupy (InteractiveEntity i) {
+        i.getOccupied(this);
     }
 
     @Override
@@ -111,5 +112,5 @@ public class Unit extends InteractiveEntity {
         return new Unit(getImage(), getWorldLocation(), getSize(), getSound(), getPlayerID(),
                         getHealth(), getBuildTime());
     }
-    
+
 }

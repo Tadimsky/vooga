@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.geom.Point2D;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
+import vooga.rts.resourcemanager.ResourceManager;
 
 
 /**
@@ -50,7 +52,7 @@ public class Pixmap {
 	 * Set this image to the image referred to by the given filename.
 	 */
 	public void setImage (String fileName) {
-		myImage = new ImageIcon(getClass().getResource(RESOURCE_LOCATION + fileName)).getImage();
+		myImage = ResourceManager.getInstance().<BufferedImage> getFile(fileName, BufferedImage.class);
 		myFileName = fileName;
 	}
 
