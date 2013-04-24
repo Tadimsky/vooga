@@ -134,7 +134,7 @@ public class GameMap implements IGameLoop, Observer {
 
     @Override
     public void update (double elapsedTime) {
-        // myTiles.update(elapsedTime);
+        myTiles.update(elapsedTime);
         for (GameEntity ie: myMoving.keySet()) {
             Vector v = ie.getWorldLocation().difference(myEntities.get(ie).getCenter().to2D());
             if(v.getMagnitude() < Location3D.APPROX_EQUAL) {
@@ -214,5 +214,9 @@ public class GameMap implements IGameLoop, Observer {
             }
         }
         Camera.instance().setMapSize(size);
+    }
+    
+    public void add (GameEntity ge) {
+        myEntities.put(ge, myNodeMap.getNode(ge.getWorldLocation()));
     }
 }

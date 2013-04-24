@@ -136,7 +136,7 @@ public class Manager extends Observable implements State, IActOn, Observer {
         entity.addObserver(GameState.getMap()); // easiest way for now
         entity.addObserver(this);
         entity.setChanged();
-        entity.notifyObservers(entity.getWorldLocation());
+        GameState.getMap().add(entity);
         myAddQueue.add(entity);
     }
 
