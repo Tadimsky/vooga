@@ -1,5 +1,8 @@
 package vooga.rts.networking.server;
 
+import java.util.logging.Level;
+import util.logger.NetworkLogger;
+import vooga.rts.networking.NetworkBundle;
 import vooga.rts.networking.communications.GameMessage;
 import vooga.rts.networking.communications.Message;
 
@@ -25,6 +28,8 @@ public class GameServer extends Room {
      */
     public GameServer (int id, GameContainer container, Lobby lobby) {
         super(id, container, lobby);
+        NetworkLogger.getLogger().log(Level.INFO,
+                                      NetworkBundle.getString("ServerStarted"));
     }
 
     @Override

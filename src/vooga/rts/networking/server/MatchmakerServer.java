@@ -25,7 +25,7 @@ public class MatchmakerServer extends AbstractThreadContainer {
      */
     public MatchmakerServer () {
         NetworkLogger instance = NetworkLogger.getInstance();
-        NetworkLogger.setLevel(Level.ALL);
+        NetworkLogger.setLevel(Level.INFO);
         instance.addHandler(new HandlerTxt());
         NetworkLogger.getLogger().log(Level.INFO, NetworkBundle.getString("ServerStarted"));
     }

@@ -16,10 +16,11 @@ import vooga.rts.networking.client.clientgui.ViewContainerPanel;
 import vooga.rts.networking.communications.ExpandedLobbyInfo;
 import vooga.rts.networking.communications.LobbyInfo;
 import vooga.rts.networking.communications.Message;
-import vooga.rts.networking.communications.Player;
+import vooga.rts.networking.communications.PlayerInfo;
 import vooga.rts.networking.communications.clientmessages.InitialConnectionMessage;
 import vooga.rts.networking.communications.clientmessages.JoinLobbyMessage;
 import vooga.rts.networking.communications.clientmessages.LeaveLobbyMessage;
+import vooga.rts.networking.communications.clientmessages.ReadyToStartGameMessage;
 import vooga.rts.networking.communications.clientmessages.RequestServerListMessage;
 import vooga.rts.networking.communications.clientmessages.RequestStartGameMessage;
 import vooga.rts.networking.communications.clientmessages.StartLobbyMessage;
@@ -45,23 +46,28 @@ public class ClientModel extends Observable implements IMessageReceiver, IClient
     private ExpandedLobbyInfo myLobbyInfo;
     private LobbyView myLobbyView;
     private List<String> myFactions;
-    private List<Player> myUserControlledPlayers = new ArrayList<Player>();
+    private List<PlayerInfo> myUserControlledPlayers = new ArrayList<PlayerInfo>();
+    private PlayerInfo myPlayer;
     private ServerBrowserTableAdapter myServerBrowserAdapter = new ServerBrowserTableAdapter();
+    private NetworkedGame myGame;
 
     /**
      * This is the handler of information needed by all of the views in the process of connecting to
      * / creating a server, creating a game, waiting in a lobby.
      * 
-     * @param gameName
-     * @param userName
-     * @param maps
-     * @param maxPlayerArray
+     * @param gameName 
+     * @param userName 
+     * @param factions 
+     * @param maps 
+     * @param maxPlayerArray 
      */
-    public ClientModel (String gameName,
+    public ClientModel (NetworkedGame game,
+                        String gameName,
                         String userName,
                         List<String> factions,
                         List<String> maps,
                         List<Integer> maxPlayerArray) {
+        myGame = game;
         myUserName = userName;
         myFactions = factions;
         myContainerPanel = new ViewContainerPanel(gameName);
@@ -232,10 +238,10 @@ public class ClientModel extends Observable implements IMessageReceiver, IClient
 
     @Override
     public void switchToLobby (ExpandedLobbyInfo lobbyInfo, int playerID) {
-        Player userPlayer = new Player(myUserName, 1, myFactions.get(0), playerID);
+        myPlayer = new PlayerInfo(myUserName, 1, myFactions.get(0), playerID);
         myUserControlledPlayers.clear();
-        myUserControlledPlayers.add(userPlayer);
-        lobbyInfo.addPlayer(userPlayer);
+        myUserControlledPlayers.add(myPlayer);
+        lobbyInfo.addPlayer(myPlayer);
         switchToLobbyView(lobbyInfo);
     }
 
@@ -253,12 +259,12 @@ public class ClientModel extends Observable implements IMessageReceiver, IClient
 
     @Override
     public void loadGame (ExpandedLobbyInfo lobbyInfo) {
-        // TODO
+        myGame.loadGame(lobbyInfo, myPlayer);
+        myClient.sendData(new ReadyToStartGameMessage());
     }
 
     @Override
     public void startGame () {
-        // TODO
-
+        myGame.startGame(myClient);
     }
 }

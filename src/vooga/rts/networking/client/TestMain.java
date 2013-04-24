@@ -21,7 +21,7 @@ public class TestMain {
         maxPlayers.add(4);
         maxPlayers.add(6);
         ClientModel model =
-                new ClientModel("Test Game", "User 1", factions, maps, maxPlayers);
+                new ClientModel(null, "Test Game", "User 1", factions, maps, maxPlayers);
 
         JFrame frame = new JFrame();
         frame.add(model.getView());

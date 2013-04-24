@@ -18,11 +18,11 @@ import javax.swing.JPanel;
 public class ViewContainerPanel extends JPanel {
 
     private static final long serialVersionUID = -2362417830702753508L;
-    BorderLayout myLayout = new BorderLayout(0, 0);
-    JButton myLeftButton;
-    JButton myRightButton;
-    JLabel myLabel;
-    String myGameName;
+    private BorderLayout myLayout = new BorderLayout(0, 0);
+    private JButton myLeftButton;
+    private JButton myRightButton;
+    private JLabel myLabel;
+    private String myGameName;
 
     /**
      * Creates a panel that provides methods for changing view.

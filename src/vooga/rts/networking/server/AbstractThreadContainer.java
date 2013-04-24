@@ -38,6 +38,9 @@ public abstract class AbstractThreadContainer implements IThreadContainer, IMess
      */
     public AbstractThreadContainer (AbstractThreadContainer container) {
         myConnectionThreads = new HashMap<Integer, ConnectionThread>(container.myConnectionThreads);
+        for (ConnectionThread thread  : myConnectionThreads.values()) {
+            thread.switchMessageServer(this);
+        }
     }
 
     @Override

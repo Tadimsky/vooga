@@ -12,12 +12,12 @@ and communication between them.
 
 <h2>The simple version of how to make an RTS game multiplayer</h2>
 <p>
-In the properties file needed by the arcade, include the lines "multiplayer=true".
-Include in the games.rts.(game name).resources package a file called
-maps.properties. This file should include a list of keys of map names to 
-values of the maximum number of players that can play on that map. In the
-games.rts.(game name).resources.maps package there should be map files
-with the same file name as the map name. 
+Have game classes implement NetworkedGame and IMessageReceiver. Instantiate a ClientModel 
+with all its constructors. Override GameMessage with the necessary information for the game.
+ClientModel will call loadGame (ExpandedLobbyInfo info, PlayerInfo userPlayer) when the
+game is ready to load - the game should load the game based on this info. When startGame (IClient client)
+is called, the game must set itself as an IMessageReceiver for the client and start the game.
+The game can now start passing GameMessage objects back and forth to the server.
 
 <!-- Put @see and @since tags down here. -->
 
