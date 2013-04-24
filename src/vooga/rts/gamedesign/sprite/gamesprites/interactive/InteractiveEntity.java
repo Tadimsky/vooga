@@ -28,6 +28,7 @@ import vooga.rts.gamedesign.sprite.gamesprites.Projectile;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.state.AttackingState;
+import vooga.rts.gamedesign.state.UnitState;
 import vooga.rts.gamedesign.strategy.attackstrategy.AttackStrategy;
 import vooga.rts.gamedesign.strategy.attackstrategy.CannotAttack;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
@@ -381,12 +382,13 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
      *        - the other InteractiveEntity
      */
     public void recognize (InteractiveEntity other) {
-        if (other instanceof Building) {
-            // occupy or do something
-        }
         if (isEnemy(other)) {
-            // switch to attack state
+            getEntityState().setUnitState(UnitState.ATTACK);
         }
+        if (other instanceof Building) {
+        	getEntityState().setUnitState(UnitState.OCCUPY);
+        }
+
         move(other.getWorldLocation());
     }
 
