@@ -52,7 +52,7 @@ import vooga.rts.util.Sound;
 /**
  * This class is the extension of GameEntity. It represents shapes that are able
  * to upgrade (to either stat of its current properties or add new properties)
- * and attack others.
+ * and attack others. This is a test
  * 
  * @author Ryan Fishel
  * @author Kevin Oh
