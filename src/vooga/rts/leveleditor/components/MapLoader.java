@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 
 
@@ -243,8 +244,7 @@ public class MapLoader {
                     String terrainImageName = myTerrainImageName.get(terrainID);
                     Pixmap terrainImage = new Pixmap(myTerrainImage.get(terrainID));
                     int terrainWalkAbility = Integer.parseInt(myTerrainWalkAbility.get(terrainID));
-                    myMap.addTerrain(terrainImage, x, y, z, terrainID, terrainName, terrainImageName, 
-                                 terrainWalkAbility);
+                    myMap.addTerrain(terrainImage, new Location3D(x,y,z), terrainID, terrainName, terrainImageName, terrainWalkAbility);
                 }
         }
         
@@ -308,8 +308,7 @@ public class MapLoader {
             String resourceImageName = myResourceImageName.get(resourceID);
             Pixmap resourceImage = new Pixmap(myResourceImage.get(resourceID));
             int resourceAmount = Integer.parseInt(myResourceAmount.get(resourceID));
-            myMap.addResource(resourceImage, x, y, z, resourceID,
-                              resourceName, resourceImageName, resourceAmount);
+            myMap.addResource(resourceImage, new Location3D(x,y,z), resourceID, resourceName, resourceImageName, resourceAmount);
         }
     }  
     

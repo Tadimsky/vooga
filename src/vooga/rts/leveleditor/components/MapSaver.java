@@ -28,6 +28,40 @@ import vooga.rts.util.Pixmap;
  *
  */
 public class MapSaver {
+    /**
+     * the string of id 
+     */
+    public static final String ID = "ID";
+    /**
+     * the string of x 
+     */
+    public static final String X = "X";
+    
+    /**
+     * the string of y 
+     */
+    public static final String Y = "Y";
+    
+    /**
+     * the string of z 
+     */
+    public static final String Z = "Z";
+    
+    /**
+     * the string of name 
+     */
+    public static final String NAME = "name";
+    
+    /**
+     * the string of image 
+     */
+    public static final String IMAGE = "image";
+    
+    /**
+     * the string of amount 
+     */
+    public static final String AMOUNT = "amount";
+   
     
     private DocumentBuilderFactory myFactory;
     private DocumentBuilder myBuilder;
@@ -50,10 +84,10 @@ public class MapSaver {
     /**
      * generate a map file
      * @param objectiveFile the objective file
-     * @throws Exception exception
+     * @param Exception exception of this method
+     * 
      */
     public void generateMapFile(File objectiveFile) throws Exception {
-        
         String filePath = objectiveFile.getPath();
         String fileName = objectiveFile.getName();
         myDocument = myBuilder.newDocument();
@@ -75,14 +109,11 @@ public class MapSaver {
         Element root = myDocument.createElement("Map");
         myDocument.appendChild(root);
         
-        
         appendInfo(root);
         appendResourceInfo(root);
         appendTile(root);
         appendTerrain(root);
         appendResource(root);
-        
-        
         
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
@@ -90,11 +121,9 @@ public class MapSaver {
         //transformer.setOutputProperty("http://xml.apache.org/xslt}indent-amount", "2");
         
         FileOutputStream out = new FileOutputStream(mapXMLFile);    
-        
-        
+                
         StreamResult result = new StreamResult(out);
         transformer.transform(new DOMSource(myDocument), result);
-        
     }
     
     /**
@@ -252,9 +281,9 @@ public class MapSaver {
             int x = (int)loc.getX();
             int y = (int)loc.getY();
             Element myPlayer = myDocument.createElement("Player");
-            myPlayer.setAttribute("ID", i + "");
-            myPlayer.setAttribute("X", x + "");
-            myPlayer.setAttribute("Y", y + "");
+            myPlayer.setAttribute(ID, i + "");
+            myPlayer.setAttribute(X, x + "");
+            myPlayer.setAttribute(Y, y + "");
             players.appendChild(myPlayer);
         }
         info.appendChild(players);
@@ -283,58 +312,10 @@ public class MapSaver {
         tileAmount.setAttribute("X", mySavingMap.getMyXsize() + "");
         tileAmount.setAttribute("Y", mySavingMap.getMyYsize() + "");
         sizeInfo.appendChild(tileAmount);
-   
-        Set<Integer> myTileIndex = new HashSet<Integer>();
-        Set<Integer> myTerrainIndex = new HashSet<Integer>();
-        Set<Integer> myResourceIndex = new HashSet<Integer>();
-        
-        for (int i = 0; i < mySavingMap.getMyXsize(); i++) {
-            for (int j = 0; j < mySavingMap.getMyYsize(); j++) {
-                EditableTile currentTile = mySavingMap.getMyTile(i, j);
-                int id = currentTile.getMyID();
-                if (!myTileIndex.contains(id) && id != 0) { 
-                    myTileIndex.add(id);
-                    Element newTile =  myDocument.createElement("tiletype");
-                    newTile.setAttribute("ID", id + "");
-                    newTile.setAttribute("image", currentTile.getMyImageName());
-                    newTile.setAttribute("name", currentTile.getMyName());
-                    tileIndex.appendChild(newTile);
-                }
-            }
-        }
-        
-         
-        
-        for (int i = 0; i < mySavingMap.getTerrainSize(); i++) {
-            
-            EditableTerrain currentTerrain = mySavingMap.getTerrain(i);
-            int id = currentTerrain.getMyID();
-            if (!myTerrainIndex.contains(id)) {
-                myTerrainIndex.add(id);
-                Element newTerrain =  myDocument.createElement("terraintype");
-                newTerrain.setAttribute("ID", id + "");
-                newTerrain.setAttribute("image", currentTerrain.getMyImageName());
-                newTerrain.setAttribute("name", currentTerrain.getMyName());
-                newTerrain.setAttribute("walkAbility", currentTerrain.getMyWalkAbility() + "");
-                terrainIndex.appendChild(newTerrain);
-                    
-            }
-        }
-        
-        for (int i = 0; i < mySavingMap.getResourceSize(); i++) {    
-            EditableResource currentResource = mySavingMap.getResource(i);
-            int id = currentResource.getMyID();
-            if (!myResourceIndex.contains(id)) {
-                myResourceIndex.add(id);
-                Element newResource =  myDocument.createElement("resourcetype");
-                newResource.setAttribute("ID", id + "");
-                newResource.setAttribute("image", currentResource.getMyImageName());
-                newResource.setAttribute("name", currentResource.getType());
-                newResource.setAttribute("amount", currentResource.getMyAmount() + "");
-                resourceIndex.appendChild(newResource);
-                    
-            }
-        }
+  
+        appendTileIndex(tileIndex);
+        appendTerrainIndex(terrainIndex);
+        appendResourceIndex(resourceIndex);
         
         resourceInfo.appendChild(sizeInfo);
         resourceInfo.appendChild(tileIndex);
@@ -343,6 +324,72 @@ public class MapSaver {
         
         root.appendChild(resourceInfo);
         
+    }
+    
+    /**
+     * append the tile index
+     * @param tileIndex root element
+     */
+    public void appendTileIndex(Element tileIndex) {
+        Set<Integer> myTileIndex = new HashSet<Integer>();
+        for (int i = 0; i < mySavingMap.getMyXsize(); i++) {
+            for (int j = 0; j < mySavingMap.getMyYsize(); j++) {
+                EditableTile currentTile = mySavingMap.getMyTile(i, j);
+                int id = currentTile.getMyID();
+                if (!myTileIndex.contains(id) && id != 0) { 
+                    myTileIndex.add(id);
+                    Element newTile =  myDocument.createElement("tiletype");
+                    newTile.setAttribute(ID, id + "");
+                    newTile.setAttribute(IMAGE, currentTile.getMyImageName());
+                    newTile.setAttribute(NAME, currentTile.getMyName());
+                    tileIndex.appendChild(newTile);
+                }
+            }
+        }
+    }
+    
+    /**
+     * append the terrain index
+     * @param terrainIndex root element
+     */
+    public void appendTerrainIndex(Element terrainIndex) {
+        Set<Integer> myTerrainIndex = new HashSet<Integer>();
+        for (int i = 0; i < mySavingMap.getTerrainSize(); i++) {    
+            EditableTerrain currentTerrain = mySavingMap.getTerrain(i);
+            int id = currentTerrain.getMyID();
+            if (!myTerrainIndex.contains(id)) {
+                myTerrainIndex.add(id);
+                Element newTerrain =  myDocument.createElement("terraintype");
+                newTerrain.setAttribute(ID, id + "");
+                newTerrain.setAttribute(IMAGE, currentTerrain.getMyImageName());
+                newTerrain.setAttribute(NAME, currentTerrain.getMyName());
+                newTerrain.setAttribute("walkAbility", currentTerrain.getMyWalkAbility() + "");
+                terrainIndex.appendChild(newTerrain);
+                    
+            }
+        }
+    }
+
+    /**
+     * append resource index
+     * @param resourceIndex root element
+     */
+    public void appendResourceIndex(Element resourceIndex) {
+        Set<Integer> myResourceIndex = new HashSet<Integer>();
+        for (int i = 0; i < mySavingMap.getResourceSize(); i++) {    
+            EditableResource currentResource = mySavingMap.getResource(i);
+            int id = currentResource.getMyID();
+            if (!myResourceIndex.contains(id)) {
+                myResourceIndex.add(id);
+                Element newResource =  myDocument.createElement("resourcetype");
+                newResource.setAttribute(ID, id + "");
+                newResource.setAttribute(IMAGE, currentResource.getMyImageName());
+                newResource.setAttribute(NAME, currentResource.getType());
+                newResource.setAttribute(AMOUNT, currentResource.getMyAmount() + "");
+                resourceIndex.appendChild(newResource);
+                    
+            }
+        }
     }
     
     /**
@@ -378,15 +425,15 @@ public class MapSaver {
          
         for (int i = 0; i < mySavingMap.getTerrainSize(); i++) {
             EditableTerrain ter = mySavingMap.getTerrain(i);    
-            int ID = ter.getMyID();
+            int id = ter.getMyID();
             int x = (int)ter.getWorldLocation().getX();
             int y = (int)ter.getWorldLocation().getY();
             int z = (int)ter.getWorldLocation().getZ();
             Element newTerrain =  myDocument.createElement("terrain");
-            newTerrain.setAttribute("ID", ID + "");
-            newTerrain.setAttribute("X", x + "");
-            newTerrain.setAttribute("Y", y + "");
-            newTerrain.setAttribute("Z", z + "");
+            newTerrain.setAttribute(ID, id + "");
+            newTerrain.setAttribute(X, x + "");
+            newTerrain.setAttribute(Y, y + "");
+            newTerrain.setAttribute(Z, z + "");
             terrains.appendChild(newTerrain);
         }
         
@@ -404,18 +451,18 @@ public class MapSaver {
         
         for (int i = 0; i < mySavingMap.getResourceSize(); i++) {
             EditableResource res = mySavingMap.getResource(i);
-            int ID = res.getMyID();
+            int id = res.getMyID();
             int x = (int)res.getWorldLocation().getX();
             int y = (int)res.getWorldLocation().getY();
             int z = (int)res.getWorldLocation().getZ();
             int amount = (int)res.getMyAmount();
             
             Element newResource =  myDocument.createElement("resource");
-            newResource.setAttribute("ID", ID + "");
+            newResource.setAttribute("ID", id + "");
             newResource.setAttribute("X", x + "");
             newResource.setAttribute("Y", y + "");
             newResource.setAttribute("Z", z + "");
-            newResource.setAttribute("amount", amount + "");
+            newResource.setAttribute(AMOUNT, amount + "");
             resources.appendChild(newResource);
         }
         

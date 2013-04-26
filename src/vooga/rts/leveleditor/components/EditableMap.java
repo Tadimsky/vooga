@@ -99,8 +99,8 @@ public class EditableMap extends GameMap {
 
     public void clearMap () {
         myTileMap.removeAllTiles();
-        getTerrain().getContents().clear();
-        getResources().getContents().clear();
+        getTerrain().clearAll();
+        getResources().clearAll();
         System.out.println("clear");
     }
     
@@ -255,39 +255,7 @@ public class EditableMap extends GameMap {
                            String name , String imageName, int walkAbility) {
         addTerrain(new EditableTerrain(image, center , id , name, imageName, walkAbility));
     }
-    
-    /**
-     * add new terrains based on differnent parameters
-     * @param image  image of that terrain
-     * @param x x position
-     * @param y y position
-     * @param z z position
-     * @param id id of the terrain
-     * @param name name of the terrain
-     * @param imageName imageName of the terrain
-     * @param walkAbility walkability of the terrain
-     */
-    public void addTerrain(Pixmap image, int x, int y , int z, int id, 
-                           String name , String imageName , int walkAbility) {
-        addTerrain(image, new Location3D(x, y, z), id, name, imageName, walkAbility);
-    }
-    /**
-     * add terrain based on different parameters 
-     * @param image image of the terrain
-     * @param x x position
-     * @param y y position 
-     * @param layerCount number of layers
-     * @param layerHeight height of layer
-     * @param id id of the terrain
-     * @param name name of the terrain
-     * @param imageName image name of the terrain
-     * @param walkAbility walkability of the terrain
-     */
-    public void addTerrain(Pixmap image, int x, int y, int layerCount, 
-                           int layerHeight, int id , String name , String imageName, int walkAbility) {
-        addTerrain(image, x, y, layerCount * layerHeight, id, name, imageName, walkAbility);
-    }
-    
+        
     /**
      * add a resource to the map
      * @param res certain resource
@@ -307,39 +275,6 @@ public class EditableMap extends GameMap {
     public void addResource(Pixmap image, Location3D center , int id, 
                             String name , String imageName, int amount) {
         addResource(new EditableResource(image, center, id, name, imageName, amount));
-    }
-    
-    /**
-     * add a resource to the map based on different parameters
-     * @param image image of the resource
-     * @param x x position
-     * @param y y position 
-     * @param z z position
-     * @param id id of the resource
-     * @param name name of the resource
-     * @param imageName of the resource
-     * @param walkAbility of the resource
-     */
-    public void addResource(Pixmap image, int x, int y , int z,
-                            int id, String name , String imageName , int walkAbility) {
-        addResource(image, new Location3D(x, y , z), id, name, imageName, walkAbility);
-    }
-    
-    /**
-     * add a resource based on differnet parameters
-     * @param image image of resource
-     * @param x x position
-     * @param y y position
-     * @param layerCount number of layers
-     * @param layerHeight height of layer
-     * @param id id of the resource
-     * @param name name of the resource
-     * @param imageName image name of the resource
-     * @param amount amount of the resource
-     */
-    public void addResource(Pixmap image, int x, int y, int layerCount, 
-                            int layerHeight, int id , String name , String imageName, int amount) {
-        addResource(image, x, y, layerCount * layerHeight, id, name, imageName, amount);
     }
     
     /**

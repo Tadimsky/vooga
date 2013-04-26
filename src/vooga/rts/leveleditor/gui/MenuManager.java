@@ -121,6 +121,10 @@ public class MenuManager extends JMenuBar {
                     if (response == JFileChooser.APPROVE_OPTION) {
                         myCanvas.getMapPanel().getMyMap().load(myChooser.getSelectedFile());          
                         EditableMap newMap = myCanvas.getMapPanel().getMyMap().returnLoadedMap();
+                        myCanvas.getMapPanel().setWidth(newMap.getMyXsize());
+                        myCanvas.getMapPanel().setHeight(newMap.getMyYsize());
+                        myCanvas.getMapPanel().setTileWidth(newMap.getMyTileWidth());
+                        myCanvas.getMapPanel().setTileHeight(newMap.getMyTileHeight());
                         myCanvas.getMapPanel().setMap(newMap);                       
                         myCanvas.getMapPanel().repaint();
                     }

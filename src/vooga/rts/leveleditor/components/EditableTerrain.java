@@ -42,37 +42,7 @@ public class EditableTerrain extends Terrain {
         myImageName = imageName;
         myWalkAbility = walkAbility;
     }
-   /**
-    * constructor for editable terrain
-    * @param image the image of this terrain
-    * @param x x position of this terrain
-    * @param y y position of this terrain
-    * @param z z position of this terrain
-    * @param id id of this terrain
-    * @param name name of this terrain
-    * @param imageName imagename of this terrain 
-    * @param walkAbility walkability of this terrain
-    */
-    public EditableTerrain (Pixmap image, int x, int y , int z, int id,
-                            String name , String imageName , int walkAbility) {
-        this(image , new Location3D(x, y, z) , id , name , imageName , walkAbility);
-    }
-    /**
-     * constructor for editableterrain
-     * @param image the image of this terrain
-     * @param x the x position of this terrain
-     * @param y the y position of this terrain
-     * @param layerCount number of layers
-     * @param layerHeight height of a single layer
-     * @param id id of this terrain
-     * @param name name 
-     * @param imageName image name
-     * @param walkAbility walkability
-     */
-    public EditableTerrain (Pixmap image, int x, int y, int layerCount, int layerHeight, 
-                                   int id , String name , String imageName, int walkAbility) {
-        this(image, x, y, layerCount * layerHeight, id, name, imageName, walkAbility);
-    }
+    
     /**
      * return the id of this 
      * @return myID id of this terrain
