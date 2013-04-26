@@ -152,8 +152,9 @@ public class GameMap implements IGameLoop, Observer {
             }
             Vector velocity = new Vector(ie.getVelocity());
             velocity.scale(elapsedTime);
-            System.out.println("Hi");
             ie.translate(velocity);
+            System.out.println("holla");
+            System.out.println(myMoving.size());
             ie.stopMoving();
             ie.getEntityState().update(elapsedTime);
         }
@@ -162,6 +163,9 @@ public class GameMap implements IGameLoop, Observer {
     @Override
     public void paint (Graphics2D pen) {
         myTiles.paint(pen);
+        for (GameEntity g: myMoving.keySet()) {
+            g.paint(pen);
+        }
         for (Node n : myNodeMap.getVisible()) {
             n.paint(pen);
         }       
@@ -180,6 +184,8 @@ public class GameMap implements IGameLoop, Observer {
         if(arg1 instanceof Location3D) {
             InteractiveEntity ie = (InteractiveEntity) arg0;
             myMoving.put(ie, getPath(ie, (Location3D) arg1));
+            Vector v = ie.getWorldLocation().difference(myMoving.get(ie).getNext().to2D());
+            ie.setVelocity(v.getAngle(), ie.getSpeed());
             myEntities.get(ie).removeSprite(ie);
             myEntities.remove(ie);
         }    

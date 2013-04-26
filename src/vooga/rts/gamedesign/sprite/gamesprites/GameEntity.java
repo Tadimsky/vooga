@@ -164,11 +164,12 @@ public class GameEntity extends GameSprite {
      * @param vector
      */
     public void translate (Vector vector) {
+        System.out.println(vector.getMagnitude());
         if (vector.getMagnitude() != 0) {
             getWorldLocation().translate(vector);
             resetBounds();
-            setChanged();
-            notifyObservers(getWorldLocation());
+            //setChanged();
+            //notifyObservers(getWorldLocation());
         }
     }
 
