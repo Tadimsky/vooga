@@ -248,9 +248,7 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
             }
 
         }
-        if (infoCommands.isEmpty()) {
-            return null;
-        }
+        if (infoCommands.isEmpty()) { return null; }
         return infoCommands;
     }
 
@@ -326,20 +324,22 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 
     @Override
     public void paint (Graphics2D pen) {
-        if (!isVisible()) {
-            return;
-        }
+        if (!isVisible()) { return; }
         // pen.rotate(getVelocity().getAngle());
 
         // should probably use the getBottom, getHeight etc...implement them
         Point2D selectLocation = Camera.instance().worldToView(getWorldLocation());
 
-        pen.drawRect((int) selectLocation.getX() - LOCATION_OFFSET,
-                     (int) (selectLocation.getY() - 5 * LOCATION_OFFSET), 50, 5);
+        // pen.drawRect((int) selectLocation.getX() - LOCATION_OFFSET, (int) (selectLocation.getY()
+        // - 5 * LOCATION_OFFSET), 50, 5);
+        pen.drawRect((int) getLeft(), (int) getUp()-LOCATION_OFFSET, getMaxHealth(), 5);
+
         Rectangle2D healthBar =
-                new Rectangle2D.Double((int) selectLocation.getX() - LOCATION_OFFSET,
-                                       (int) (selectLocation.getY() - 5 * LOCATION_OFFSET),
-                                       50 * getHealth() / getMaxHealth(), 5);
+                new Rectangle2D.Double((int) getLeft(),
+                                       (int) getUp()-LOCATION_OFFSET,
+                                       getHealth(), 5);
+        
+        
         float width = (float) (healthBar.getWidth() * (getHealth() / getMaxHealth()));
         pen.setPaint(new GradientPaint((float) healthBar.getX() - width, (float) healthBar
                 .getMaxY(), Color.RED, (float) healthBar.getMaxX(), (float) healthBar.getMaxY(),
@@ -555,8 +555,8 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
 
     }
 
-	public void setUpgradeStrategy(UpgradeStrategy upgradeStrategy) {
-		myUpgradeStrategy = upgradeStrategy;
-	}
+    public void setUpgradeStrategy (UpgradeStrategy upgradeStrategy) {
+        myUpgradeStrategy = upgradeStrategy;
+    }
 
 }

@@ -44,7 +44,7 @@ public class Unit extends InteractiveEntity {
 	//default values
     public static Pixmap DEFAULT_IMAGE = new Pixmap("images/sprites/soldier.png");
     public static Location3D DEFAULT_LOCATION = new Location3D();
-    public static Dimension DEFAULT_SIZE = new Dimension(90,90);
+    public static Dimension DEFAULT_SIZE = new Dimension(30,30);
     public static Sound DEFAULT_SOUND = null;
     public static int DEFAULT_PLAYERID = 1;
     public static int DEFAULT_HEALTH = 100;

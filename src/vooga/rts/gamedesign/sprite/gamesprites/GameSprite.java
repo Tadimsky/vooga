@@ -42,28 +42,28 @@ public abstract class GameSprite extends Observable implements IGameLoop {
      * Returns shape's left-most coordinate in pixels.
      */
     public double getLeft () {
-        return myWorldLocation.getX() - mySize.width / 2;
+        return Camera.instance().worldToView(myWorldLocation).getX() - mySize.width / 2;
     }
 
     /**
      * Returns shape's up-most coordinate in pixels.
      */
     public double getUp () {
-        return myWorldLocation.getY() - mySize.height / 2;
+        return Camera.instance().worldToView(myWorldLocation).getY() - mySize.height / 2;
     }
 
     /**
      * Returns shape's right-most coordinate in pixels.
      */
     public double getRight () {
-        return myWorldLocation.getX() + mySize.width / 2;
+        return Camera.instance().worldToView(myWorldLocation).getX() + mySize.width / 2;
     }
 
     /**
      * Returns shape's bottom-most coordinate in pixels.
      */
     public double getBottom () {
-        return myWorldLocation.getY() + mySize.height / 2;
+        return Camera.instance().worldToView(myWorldLocation).getY() + mySize.height / 2;
     }
 
     /**
@@ -245,7 +245,7 @@ public abstract class GameSprite extends Observable implements IGameLoop {
     public Pixmap getImage () {
         return myPixmap;
     }
-    
+
     /**
      * Sets the object to be in the changed state for the observer pattern.
      */
