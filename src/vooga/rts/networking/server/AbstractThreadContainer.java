@@ -3,7 +3,8 @@ package vooga.rts.networking.server;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import util.logger.NetworkLogger;
+
+import util.logger.LoggerManager;
 import vooga.rts.networking.NetworkBundle;
 import vooga.rts.networking.communications.ExpandedLobbyInfo;
 import vooga.rts.networking.communications.LobbyInfo;
@@ -38,6 +39,9 @@ public abstract class AbstractThreadContainer implements IThreadContainer, IMess
      */
     public AbstractThreadContainer (AbstractThreadContainer container) {
         myConnectionThreads = new HashMap<Integer, ConnectionThread>(container.myConnectionThreads);
+        for (ConnectionThread thread  : myConnectionThreads.values()) {
+            thread.switchMessageServer(this);
+        }
     }
 
     @Override
@@ -87,7 +91,7 @@ public abstract class AbstractThreadContainer implements IThreadContainer, IMess
      */
     @Override
     public void receiveMessageFromClient (Message message, ConnectionThread thread) {
-        NetworkLogger.getLogger().log(Level.FINEST, NetworkBundle.getString("MessageReceived") +
+        LoggerManager.DEFAULT_LOGGER.log(Level.FINEST, NetworkBundle.getString("MessageReceived") +
                                                     thread.getID());
         stampMessage(message);
         if (message instanceof ClientInfoMessage) {

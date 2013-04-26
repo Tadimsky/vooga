@@ -50,7 +50,7 @@ public class CannotAttack implements AttackStrategy {
 	 * Adds a Weapon to the list of Weapons belonged to this AttackStrategy.
 	 * @param weapon the new Weapon to be added into the list.
 	 */
-	public void addWeapons(Weapon weapon) {
+	public void addWeapon(Weapon weapon) {
 		return;
 
 	}

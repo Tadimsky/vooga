@@ -7,13 +7,16 @@ import java.awt.geom.Point2D;
 
 public interface ISpriteView extends IMotionPainting {
 
-    ISpriteView reset ();
+    public ISpriteView reset ();
 
-    void paint (Graphics2D pen, Point2D myCenter, Dimension mySize);
+    public void paint (Graphics2D pen, Point2D center, Dimension size);
 
-    Image getDefaultImg ();
+    public Image getDefaultImg ();
+    
     public void setDefaultView(ISpriteView ispriteview);
 
-    void paint (Graphics2D pen, Point2D center, Dimension size, double angle);
+    public void paint (Graphics2D pen, Point2D center, Dimension size, double angle);
+    
+    public Image getImage();
 
 }

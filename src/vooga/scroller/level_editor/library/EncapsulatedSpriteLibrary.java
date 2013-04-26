@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import vooga.scroller.sprites.Sprite;
 import vooga.scroller.util.Pixmap;
-import vooga.scroller.util.Sprite;
 
 
 public abstract class EncapsulatedSpriteLibrary implements ISpriteLibrary{

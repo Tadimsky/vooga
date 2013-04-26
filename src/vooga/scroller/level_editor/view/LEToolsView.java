@@ -1,25 +1,17 @@
 package vooga.scroller.level_editor.view;
 
-import java.awt.Component;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.SpringLayout;
 import vooga.scroller.level_editor.commands.CommandConstants;
 import vooga.scroller.level_editor.controllerSuite.LETools;
 import vooga.scroller.util.Renderable;
 import vooga.scroller.util.Renderer;
 import vooga.scroller.util.mvc.IView;
 import vooga.scroller.util.mvc.vcFramework.WindowComponent;
-import vooga.scroller.viewUtil.BackgroundButton;
 import vooga.scroller.viewUtil.EasyGridFactory;
 import vooga.scroller.viewUtil.RadioGroup;
 

@@ -1,48 +1,33 @@
 package vooga.scroller.VisitMethodsGenerator;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import util.Secretary;
-import vooga.scroller.util.Sprite;
 
-
+/**
+ * This is an automated code generator that I wrote half for fun, half for actual use. The idea 
+ * is that if you are implementing all the collision logic, it can be a real pain to generate all 
+ * those visit methods, especially if you need visit methods for > 8 things. The number of visit 
+ * methods you will always need is n choose 2, where n is the number of different entities (different 
+ * with regards to how they collide with each other). 
+ * <br>
+ * <br>
+ * This class basically allows you to generate all the visit methods you need by passing in a location, 
+ * a file name, and a String array that has all the entities (as Strings) you want visit methods for. 
+ * 
+ * @author Jay Wang
+ *
+ */
 public class VisitMethodsGenerator {
 
     private Secretary mySecretary;
-    private Set<String> interfaceStrings;
         
     private static final String PART_ONE = "public void visit (";
     private static final String PART_TWO = ") {}";
     private static final String COMMA = ", ";
         
-
-    public VisitMethodsGenerator (List<Sprite> spriteList, String dir_location, String file_name) throws IOException {
+   
+    public VisitMethodsGenerator (String[] names, String dir_location, String file_name) throws IOException {
         mySecretary = new Secretary(dir_location, file_name);
-        interfaceStrings = new HashSet<String>();
-        generateInterfaceStrings(spriteList);
-        generateVisitMethods();
-    }
-    
-
-    
-    /**
-     * We are assuming that spriteList does not contain the player
-     * @param spriteList
-     */
-    private void generateInterfaceStrings(List<Sprite> spriteList) {
-        String interfaceString;
-        for (Sprite s : spriteList) {
-            String tmp = s.getClass().getInterfaces()[0].toString();
-            interfaceString = tmp.substring(tmp.lastIndexOf(".") + 1); //general parsing of the getInterface method
-            if (!interfaceStrings.contains(interfaceString)) {
-                interfaceStrings.add(interfaceString);
-            }
-        }
-        
-        System.out.println(interfaceStrings.toString());
     }
 
     /**
@@ -59,13 +44,12 @@ public class VisitMethodsGenerator {
      * @author Jay Wang
      * @throws IOException 
      */
-    public void generateVisitMethods () throws IOException {
-        List<String> interfaceList = new ArrayList<String>(interfaceStrings);
-        interfaceList.add(0, "IPlayer");
-        for (int i = 0; i < interfaceList.size(); i++) {
-            for (int j = i + 1; j < interfaceList.size(); j++) {
+    public void generateVisitMethods (String[] names) throws IOException {
+        System.out.println("called");
+        for (int i = 0; i < names.length; i++) {
+            for (int j = i + 1; j < names.length; j++) {
 
-                mySecretary.write(PART_ONE + interfaceList.get(i) + COMMA + interfaceList.get(j) +
+                mySecretary.write(PART_ONE + names[i] + COMMA + names[j] +
                                   PART_TWO);
             }
         }

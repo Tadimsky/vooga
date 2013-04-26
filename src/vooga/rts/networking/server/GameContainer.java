@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import util.logger.NetworkLogger;
+import util.logger.LoggerManager;
 import vooga.rts.networking.NetworkBundle;
 import vooga.rts.networking.communications.LobbyInfo;
 import vooga.rts.networking.communications.servermessages.LobbyListMessage;
@@ -66,7 +66,7 @@ public class GameContainer extends AbstractThreadContainer {
                     .getMaxConnections()) {
             removeConnection(thread);
             myRooms.get(lobbyNumber).addConnection(thread);
-            NetworkLogger.getLogger().log(Level.INFO, NetworkBundle.getString("LobbyJoined"));
+            LoggerManager.DEFAULT_LOGGER.log(Level.INFO, NetworkBundle.getString("LobbyJoined"));
         }
     }
 
@@ -78,7 +78,7 @@ public class GameContainer extends AbstractThreadContainer {
         myRoomNumber++;
         lobby.addConnection(thread);
         addRoom(lobby);
-        NetworkLogger.getLogger().log(Level.INFO, NetworkBundle.getString("LobbyStarted"));
+        LoggerManager.DEFAULT_LOGGER.log(Level.INFO, NetworkBundle.getString("LobbyStarted"));
     }
 
     @Override

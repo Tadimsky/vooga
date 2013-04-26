@@ -1,9 +1,10 @@
-
 package vooga.towerdefense.action;
 
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * An AbstractAction is superclassed to define specific Actions that can be taken by game elements.
+ * An Action is the super class of all actions that can be executed by game elements.
  * This includes attacks, upgrades, path creation and anything the developer may wish to implement.
  * 
  * @author Matthew Roy
@@ -11,49 +12,93 @@ package vooga.towerdefense.action;
  * @author Zhen Gou
  * 
  */
-
 public abstract class Action {
-    private boolean enabled;
-    private boolean complete;
+	public static final String NULL_POINTER_EXCEPTION = "Attribute(s) does not exist for element.";
+	
+    private boolean myEnabledState;
+    private boolean targetTracking;
+    private List<Action> myFollowUpActions;
 
     public Action () {
+        myFollowUpActions = new ArrayList<Action>();
+        myEnabledState = true;
     }
 
-    public void initAction () {
-        enabled = true;
-        // initialize resources
-    }
+    /**
+     * Executes action after update clears the execute condition.
+     */
+    public abstract void executeAction (double elapsedTime);
     
     /**
      * Executes action after update clears the execute condition.
      */
-    public abstract void executeAction (double elapseTime);
+    public void updateFollowUpActions(double elapsedTime) {
+        for (Action a : getFollowUpActions()) {
+            a.update(elapsedTime);
+        }
+    }
 
     /**
-     * Update action status
+     * Update action status and executes action if it needs to
+     * 
      * @param elapsedTime
      */
-    public abstract void update (double elapsedTime);
+    public void update (double elapsedTime) {
+        if (isEnabled()) {
+            executeAction(elapsedTime);
+            updateFollowUpActions(elapsedTime);
+        }
+    }
+
+    /**
+     * Adds a new action to occur after action is done executing
+     * @param action
+     */
+    public void addFollowUpAction (Action action) {
+        myFollowUpActions.add(action);
+    }
+
+    public void addFollowUpActions (List<Action> action) {
+        myFollowUpActions.addAll(action);
+    }
     
-    public boolean isComplete () {
-        enabled = false;
-        return complete;
+    /**
+     * Returns list of followup actions
+     * @return
+     */
+    public List<Action> getFollowUpActions () {
+        return myFollowUpActions;
     }
-
-    public void markComplete () {
-        complete = true;
+    
+    
+    /**
+     * Returns list of all targeted follow up actions
+     * @return
+     */
+    public List<TargetedAction> getTargetedFollowUpActions () {
+     	List<TargetedAction> actions = new ArrayList<TargetedAction>();
+    	for (Action a: getFollowUpActions()){
+    		if (a.isTargetTracking()){
+    			actions.add((TargetedAction) a);
+    		}
+    	}
+    	return actions;
     }
-
 
     public boolean isEnabled () {
-        return enabled;
+        return myEnabledState;
     }
 
     public void setEnabled (boolean isEnabled) {
-        enabled = isEnabled;
+        myEnabledState = isEnabled;
+    }
+    
+    public boolean isTargetTracking(){
+    	return targetTracking;
+    }
+    
+    public void setTargetTracking(boolean isTargeting){
+    	targetTracking = isTargeting;
+    	
     }
 }
-
-
-
-

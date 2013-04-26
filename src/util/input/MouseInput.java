@@ -19,7 +19,7 @@ import javax.swing.JComponent;
  */
 public class MouseInput extends InputDevice {
     JComponent myComponent;
-    public static final String myDevice = "Mouse";
+    public static final String DEVICE = "Mouse";
 
     private Point lastPosition;
     private Point lastClickPosition;
@@ -31,8 +31,14 @@ public class MouseInput extends InputDevice {
     private List<ButtonState> downButtons = new ArrayList<ButtonState>();
     private boolean gestureAlreadyNotified = false;
 
+    /**
+     * Constructs a Mouse Input object with a component to set up listeners
+     * to and an Input object to send actions to.
+     * @param component
+     * @param input
+     */
     public MouseInput(JComponent component, Input input) {
-        super(myDevice, input);
+        super(DEVICE, input);
         myComponent = component;
         mouseNameMap = new HashMap<Integer, String>();
         mouseNameMap.put(MouseEvent.BUTTON1, "Left");
@@ -42,14 +48,28 @@ public class MouseInput extends InputDevice {
         myInput = input;
     }
 
+    /**
+     * Creates a Position Object containing the data in a MouseEvent.
+     * @param e
+     * @return
+     */
     private PositionObject makePositionObject(MouseEvent e) {
         return new PositionObject(e.getX(), myComponent.getWidth(), e.getY(), myComponent.getHeight(), e.getWhen());
     }
 
+    /**
+     * Creates a RollObject containing the data in a MouseWheelEvent
+     * @param e
+     * @return
+     */
     private RollObject makeWheelObject(MouseWheelEvent e) {
         return new RollObject(e.getWhen(), e.getWheelRotation());
     }
 
+    /**
+     * Returns the wall closest to the given point.
+     * @return
+     */
     private String getClosestWall() {
         int[] wallDistances = new int[5];
         String[] walls = { "Left", "Right", "Top", "Bottom" };
@@ -70,6 +90,10 @@ public class MouseInput extends InputDevice {
         return walls[minIndex];
     }
 
+    /**
+     * Returns the direction that a point is from (0, 0)
+     * @return
+     */
     private String getDirection(Point pt) {
         String[] walls = { "Right", "Left", "Down", "Up" };
         int index = (Math.abs(pt.x) - Math.abs(pt.y) > 0) ? ((int) Math
@@ -78,7 +102,7 @@ public class MouseInput extends InputDevice {
     }
 
     /**
-     * Sets up single mouse listener. implements MouseMotionAdapter with
+     * Sets up a mouse listener. implements MouseMotionAdapter with
      * mouseMove and MouseDrag
      */
     private void initialize() {
@@ -142,7 +166,7 @@ public class MouseInput extends InputDevice {
             @Override
             public void mousePressed(MouseEvent e) {
                 String buttonName = mouseNameMap.get(e.getButton());
-                ButtonState downButton = new ButtonState(myDevice, buttonName,
+                ButtonState downButton = new ButtonState(DEVICE, buttonName,
                         e.getWhen(), inDev, e.getPoint());
                 downButtons.add(downButton);
                 notifyInputAction("Mouse_" + buttonName + "_Down",
@@ -152,7 +176,7 @@ public class MouseInput extends InputDevice {
             @Override
             public void mouseReleased(MouseEvent e) {
                 String buttonName = mouseNameMap.get(e.getButton());
-                ButtonState temp = new ButtonState(myDevice, buttonName, e
+                ButtonState temp = new ButtonState(DEVICE, buttonName, e
                         .getWhen(), inDev);
                 notifyInputAction(temp.getFullName() + "_Up",
                         makePositionObject(e));
@@ -200,10 +224,10 @@ public class MouseInput extends InputDevice {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
                     if (e.getWheelRotation() > 0)
-                        notifyInputAction(myDevice + "_Wheel" + "_Down",
+                        notifyInputAction(DEVICE + "_Wheel" + "_Down",
                                 makeWheelObject(e));
                     else
-                        notifyInputAction(myDevice + "_Wheel" + "_Up",
+                        notifyInputAction(DEVICE + "_Wheel" + "_Up",
                                 makeWheelObject(e));
                 }
             }
@@ -211,6 +235,11 @@ public class MouseInput extends InputDevice {
 
     }
 
+    /**
+     * Notifies the Input class of input events as they occur.
+     * @param keyInfo
+     * @param e
+     */
     public void notifyInput(String keyInfo, MouseEvent e) {
         notifyInputAction(keyInfo, makePositionObject(e));
     }

@@ -1,6 +1,4 @@
-import java.util.ResourceBundle;
-import arcade.model.Model;
-import arcade.view.forms.LoginView;
+import arcade.controller.Controller;
 
 /**
  * The one class that starts the entire project.
@@ -9,7 +7,7 @@ import arcade.view.forms.LoginView;
  */
 public class Main {
     
-    private static final String RESOURCE_LOCATION = "arcade.resources.";
+    
     private static final String LANGUAGE = "English";
     
     
@@ -23,10 +21,7 @@ public class Main {
      * @param args anything passed in from the command-line
      */
     public static void main (String[] args) {
-        ResourceBundle rb = ResourceBundle.getBundle(RESOURCE_LOCATION + LANGUAGE);
-        Model model = new Model(rb, LANGUAGE);
-        LoginView login = new LoginView(model, rb);
-        model.setLoginView(login);
-        
+    	Controller controller = new Controller(LANGUAGE);
+    	//System.out.println( new FilePathFormatter().formatClassFilePath("C:\\Users\\Will Nance\\Dropbox\\Eclipse\\vooga\\src\\games\\examplegenre\\example\\Example.java"));
     }
 }

@@ -1,34 +1,32 @@
 package arcade.database;
-
-import java.util.List;
+import arcade.controller.UserSpecificData;
+import arcade.games.Comment;
 import arcade.games.GameData;
+import arcade.games.Score;
 import arcade.games.UserGameData;
+import java.util.ArrayList;
 import java.util.List;
 import util.Pixmap;
 
 
 /**
  * Creates overall database
- * 
  * @author Natalia Carvalho
  */
 public class Database {
 
     private GameTable myGameTable;
     private UserTable myUserTable;
-    private UserGameDataTable myUserGameDataTable;
     private ScoreTable myScoreTable;
     private CommentTable myCommentTable;
-
     private S3Connections myS3Instance;
-
+    
     /**
      * Database constructor
      */
     public Database () {
         myGameTable = new GameTable();
         myUserTable = new UserTable();
-        myUserGameDataTable = new UserGameDataTable();
         myScoreTable = new ScoreTable();
         myCommentTable = new CommentTable();
         myS3Instance = new S3Connections();
@@ -40,19 +38,17 @@ public class Database {
     public void closeDatabaseConnection () {
         myGameTable.closeConnection();
         myUserTable.closeConnection();
-        myUserGameDataTable.closeConnection();
         myScoreTable.closeConnection();
         myCommentTable.closeConnection();
     }
 
     /**
-     * Creates a user when gien username, pw, firstname, lastname, and dataofbirth
-     * 
+     * Creates a user when given username, pw, firstname, lastname, and dataofbirth
      * @param username is user
      * @param pw is password
      * @param firstname is first name
      * @param lastname is last name
-     * @param date of birth is DOB
+     * @param dataOfBirth is DOB
      */
     public boolean createUser (String username,
                                String pw,
@@ -64,28 +60,43 @@ public class Database {
 
     /**
      * Creates a user when given username, pw, firstname, lastname, and dataofbirth and avatar
-     * 
      * @param username is user
      * @param pw is password
      * @param firstname is first name
      * @param lastname is last name
-     * @param date of birth is DOB
-     * @avatar is the filepath for the avatar
+     * @param dataOfBirth is DOB
+     * @param filepath is the filepath for the avatar
      */
-    public boolean createUser (String username,
-                               String pw,
-                               String firstname,
-                               String lastname,
-                               String dataOfBirth,
-                               String filepath) {
+    public boolean createUser (String username, String pw, String firstname, String lastname,
+                               String dataOfBirth, String filepath) {
         insertAvatar(username, filepath);
         return myUserTable.createUser(username, pw, firstname, lastname, dataOfBirth);
     }
+    
+    /**
+     * Creates a user when given username, pw, firstname, lastname, and dataofbirth and avatar
+     * @param data is a wrapper for user data
+     */
+    public boolean createUser(UserSpecificData data) {
+        return createUser(data.getUsername(), data.getPassword(), data.getFirstName(), 
+                          data.getLastName(), data.getDOB(), data.getImageFilePath());
+    }
+    
 
     /**
      * Creates a new game
-     * 
-     * @param gameName is name of name
+     * @param gameName is name of game
+     * @param author is author
+     * @param genre is genre
+     * @param price is price of game
+     * @param extendsGame string
+     * @param extendsMultiplayerGame string
+     * @param ageRating permissions
+     * @param singlePlayer game
+     * @param multiplayer game
+     * @param thumbnailPath location of thumbnail
+     * @param adscreenPath location of adscreen 
+     * @param description of game
      */
     public boolean createGame (String gameName,
                                String author,
@@ -100,220 +111,349 @@ public class Database {
                                String adscreenPath,
                                String description) {
         insertGameThumbnail(gameName, thumbnailPath);
-        //TODO insert ad screen path as well
+        insertAdScreenPath(gameName, adscreenPath);
         return myGameTable.createGame(gameName, author, genre, price, extendsGame,
                                       extendsMultiplayerGame, ageRating, singlePlayer, multiplayer,
                                       thumbnailPath, adscreenPath, description);
     }
 
-    public void userPlaysGameFirst (String user, String gameName, String highscore) {
-        myUserGameDataTable.createNewUserGameData(retrieveGameId(gameName), retrieveUserId(user));
-    }
-
-    public void updateAvatar (String user, String filepath) {
-        myUserTable.updateAvatar(user, filepath);
-    }
-
-    public String retrieveAvatar (String username) {
-        return myUserTable.retrieveAvatar(username);
-    }
-
-    public String retrieveDOB (String username) {
-        return myUserTable.retrieveDOB(username);
-    }
-
-    public List<String> retrieveListOfGames () {
-        return myGameTable.retrieveGameList();
-    }
-
-    public boolean authenticateUsernameAndPassword (String username, String password) {
-        return myUserTable.authenticateUsernameAndPassword(username, password);
-    }
-
-    public void deleteUser (String username) {
-        myUserGameDataTable.deleteUser(retrieveUserId(username));
-        myUserTable.deleteUser(username);
-    }
-
-    public void deleteGame (String gameName) {
-        myGameTable.deleteGame(gameName);
-        // TODO delete game from other tables as well
-    }
-
-    public boolean usernameExists (String username) {
-        return myUserTable.usernameExists(username);
-    }
-
-    public void addNewHighScore (String username, String gameName, int newHighScore) {
-        myScoreTable.addNewHighScore(retrieveUserId(username), retrieveGameId(gameName),
-                                     newHighScore);
-    }
-
-    public void storeUserGameData (String gameName,
-                                   String username,
-                                   String tempFilePath,
-                                   UserGameData usd) {
-        myS3Instance.putUserGameDataIntoBucket(username, gameName, usd);
-    }
-
-    public UserGameData getUserGameData (String gameName, String username) {
-        return myS3Instance.getUserGameDataFromBucket(username, gameName);
-    }
-
-    public void storeGameData (String gameName, GameData gd) {
-        myS3Instance.putGameDataIntoBucket(gameName, gd);
-    }
-
-    public GameData getGameData (String gameName) {
-        return myS3Instance.getGameDataFromBucket(gameName);
-    }
-
-    public void getHighScores (int n) {
-        // TODO implement method
-
-    }
-
-    public void updateUserGameFilePath (String filepath) {
-        // TODO implement method
-    }
-
-    public void retrieveGameFilePath (String filepath) {
-        // TODO implement method
-    }
-
-    public void insertComment (String username, String gameName, String comment) {
-
-        myCommentTable.addNewComment(retrieveGameId(gameName), retrieveUserId(username), comment);
-    }
-
-    public List<String> retrieveCommentFromUsername (String username, String gameName) {
-        return myCommentTable.getCommentByUsername(retrieveGameId(gameName),
-                                                   retrieveUserId(username));
-    }
-
-    public List<String> retrieveCommentsForGame (String gameName) {
-        return myCommentTable.getAllCommentsForGame(retrieveGameId(gameName));
-    }
-
-    public void printGameTable () {
-
-        myGameTable.printEntireTable();
-    }
-
-    public void printUserTable () {
-        myUserTable.printEntireTable();
-    }
-
-    public void printUserGameDataTable () {
-        myUserGameDataTable.printEntireTable();
-    }
-
-    private String retrieveGameId (String gameName) {
-        return myGameTable.retrieveGameId(gameName);
-    }
-
-    private String retrieveUserId (String username) {
-        return myUserTable.retrieveUserId(username);
-    }
-
-    public void updateRating (String userName, String gameName, double rating) {
-
-    }
-
-    public String getGenre (String gameName) {
-        return myGameTable.getGenre(gameName);
-    }
-
-    public String getAuthor (String gameName) {
-        return myGameTable.getAuthor(gameName);
-    }
-
-    public String getThumbnailPath (String gameName) {
-        return myGameTable.getThumbnailPath(gameName);
-    }
-
-    public String getAdScreenPath (String gameName) {
-        return myGameTable.getAdScreenPath(gameName);
-    }
-
-    public int getAgePermission (String gameName) {
-        return myGameTable.getAgePermission(gameName);
-    }
-
-    public double getPrice (String gameName) {
-        return myGameTable.getPrice(gameName);
-    }
-
-    public String getExtendsGame (String gameName) {
-        return myGameTable.getExtendsGame(gameName);
-    }
-
-    public String getExtendsGameMultiplayer (String gameName) {
-        return myGameTable.getExtendsGameMultiplayer(gameName);
-    }
-
-    public boolean getIsSinglePlayer (String gameName) {
-        return myGameTable.getIsSinglePlayer(gameName);
-    }
-
-    public boolean getIsMultiplayer (String gameName) {
-        return myGameTable.getIsMultiplayer(gameName);
-    }
-
-    public String getDescription (String gameName) {
-        return myGameTable.getDescription(gameName);
-    }
-
-    public String getGameFilePath (String gameName) {
-        return myGameTable.getGameFilePath(gameName);
-    }
-
-    public double getAverageRating (String gameName) {
-        return myUserGameDataTable.getAverageRating(gameName);
-    }
-
-    public void listAllBuckets () {
-        myS3Instance.listAllBuckets();
-    }
-
+    /**
+     * Inserts avatar into S3 Instance
+     * @param username user
+     * @param filepath of new avatar image
+     */
     public void insertAvatar (String username, String filepath) {
         myS3Instance.putAvatarIntoBucket(username, filepath);
     }
-
-    public void insertGameThumbnail (String gameName, String filepath) {
-        myS3Instance.putGameThumbnailIntoBucket(gameName, filepath);
-    }
     
-    public void insertAdScreenPath (String gameName, String filepath) {
-        myS3Instance.putAdScreenIntoBucket(gameName, filepath);
-    }
-
-    public Pixmap getGameThumbnail (String gameName) {
-        return new Pixmap(myS3Instance.getThumbnail(gameName));
-    }
-
+    /**
+     * Returns pixmap of avatar
+     * @param username user
+     */
     public Pixmap getAvatar (String username) {
         return new Pixmap(myS3Instance.getAvatar(username));
     }
 
+    /**
+     * Returns date of birth of a user
+     * @param username user
+     */
+    public String retrieveDOB (String username) {
+        return myUserTable.retrieveDOB(username);
+    }
+
+    /**
+     * Returns list of games
+     */
+    public List<String> retrieveListOfGames () {
+        return myGameTable.retrieveGameList();
+    }
     
-    public String getGameDescription (String gameName) {
-        // TODO Auto-generated method stub
-        return null;
+    /**
+     * Returns list of users
+     */
+    public List<String> retrieveListOfUsers() {
+        return myUserTable.retrieveUsernames();
     }
 
-    public Pixmap getGameAdScreen (String gameName) {
-        return new Pixmap(myS3Instance.getAdScreen(gameName));
+    /**
+     * Returns true if username and password match up, false otherwise
+     * @param username is user
+     * @param password is password
+     */
+    public boolean authenticateUsernameAndPassword (String username, String password) {
+        return myUserTable.authenticateUsernameAndPassword(username, password);
     }
 
+
+    /**
+     * Deletes user
+     * @param username is user
+     */
+    public void deleteUser (String username) {
+        //myUserGameDataTable.deleteUser(retrieveUserId(username));
+        myUserTable.deleteUser(username);
+    }
+
+    /**
+     * Deletes game
+     * @param gameName is game to be deleted
+     */
+    public void deleteGame (String gameName) {
+        myGameTable.deleteGame(gameName);
+    }
+
+    /**
+     * Returns true if usernameExists, false otherwise
+     * @param username is user
+     */
+    public boolean usernameExists (String username) {
+        return myUserTable.usernameExists(username);
+    }
+
+    /**
+     * Returns true if usernameExists, false otherwise
+     * @param username is user
+     * @param gameName is game name
+     * @param newHighScore is high score to be inserted
+     */
+    public void addNewHighScore (String username, String gameName, int newHighScore) {
+        myScoreTable.addNewHighScore(retrieveUserId(username), retrieveGameId(gameName),
+                                     newHighScore);
+    }
+    
+    /**
+     * Returns list of scores for a game
+     * @param gameName is game name
+     */
+    public List<Score> getScoresForGame(String gameName) {
+        List<String> usernames = retrieveListOfUsers();
+        List<Score> myScores = new ArrayList<Score>();
+        for (String user : usernames) {
+            myScores.addAll(myScoreTable.getScoresForGame(retrieveGameId(gameName), 
+                                                          retrieveUserId(user), gameName, user));
+        }
+        return myScores;
+    }
+    
+    /**
+     * Returns list of scores for a user
+     * @param username is user
+     */
+    public List<Score> getScoresForUser(String username) {
+        List<String> games = retrieveListOfGames();
+        List<Score> myScores = new ArrayList<Score>();
+        for (String game : games) {
+            myScores.addAll(myScoreTable.getScoresForGame(retrieveGameId(game), 
+                                                          retrieveUserId(username), game, username));
+        }
+        return myScores;
+    }
+    
+    /**
+     * Returns list of scores for a game and user
+     * @param gameName is game name
+     * @param username is user
+     */
+    public List<Score> getScoresForGameAndUser(String username, String gameName) {
+        return myScoreTable.getScoresForGame(retrieveGameId(gameName), 
+                                             retrieveUserId(username), gameName, username);
+    }
+
+    /** 
+     * Stores user game data on S3 instance
+     * @param gameName is game name
+     * @param username is user
+     * @param usd is UserGameData
+     */
+    public void storeUserGameData (String gameName,
+                                   String username,
+                                   UserGameData usd) {
+        myS3Instance.putUserGameDataIntoBucket(username, gameName, usd);
+    }
+
+    /** 
+     * Gets UserGameData from S3 Instance
+     * @param gameName is game name
+     * @param username is user
+     */
+    public UserGameData getUserGameData (String gameName, String username) {
+        return myS3Instance.getUserGameDataFromBucket(username, gameName);
+    }
+
+    /** 
+     * Stores GameData from S3 Instance
+     * @param gameName is game name
+     * @param gd is gameData
+     */
+    public void storeGameData (String gameName, GameData gd) {
+        myS3Instance.putGameDataIntoBucket(gameName, gd);
+    }
+
+    /** 
+     * Gets GameData from S3 Instance
+     * @param gameName is game name
+     */
+    public GameData getGameData (String gameName) {
+        return myS3Instance.getGameDataFromBucket(gameName);
+    }
+
+
+    /** 
+     * Inserts comment for a user and game
+     * @param username is user
+     * @param gameName is game name
+     * @param comment is comment to be inserted
+     * @param rating is rating
+     */
+    public void insertCommentAndRating (String username, String gameName, 
+                                        String comment, double rating) {
+        myCommentTable.addNewCommentAndRating(retrieveGameId(gameName), 
+                                              retrieveUserId(username), comment, rating);
+    }
+
+    /**
+     * Retrieves all comments for game
+     * @param gameName is game name
+     */
+    public List<Comment> retrieveCommentsForGame (String gameName) {
+        List<Comment> myComments = new ArrayList<Comment>();
+        List<String> myUsers = myUserTable.retrieveUsernames();
+        for (String s : myUsers) {
+            myComments.addAll(myCommentTable.getAllCommentsAndRatingsForGame(
+                                     retrieveGameId(gameName), s, retrieveUserId(s)));
+        }
+        return myComments;
+    }
+
+    /**
+     * Prints gameTable
+     */
+    public void printGameTable () {
+        myGameTable.printEntireTable();
+    }
+
+    /**
+     * Retrieves user table
+     */
+    public void printUserTable () {
+        myUserTable.printEntireTable();
+    }
+    
+    /**
+     * Retrieves score table
+     */
+    public void printScoreTable () {
+        myScoreTable.printEntireTable();
+    }
+    
+    /**
+     * Retrieves comment table
+     */
+    public void printCommentTable () {
+        myCommentTable.printEntireTable();
+    }
+
+    /**
+     * Retrieves a gameID from game
+     * @param gameName for gameID
+     */
+    private String retrieveGameId (String gameName) {
+        return myGameTable.retrieveGameId(gameName);
+    }
+
+    /**
+     * Retrieves a userID for user
+     * @param username is user
+     */
+    private String retrieveUserId (String username) {
+        return myUserTable.retrieveUserId(username);
+    }
+
+    /**
+     * Retrieves genre for game
+     * @param gameName is game
+     */
+    public String getGenre (String gameName) {
+        return myGameTable.getGenre(gameName);
+    }
+
+    /**
+     * Retrieves author for game
+     * @param gameName is game
+     */
+    public String getAuthor (String gameName) {
+        return myGameTable.getAuthor(gameName);
+    }
+
+    /**
+     * Retrieves age permission for game
+     * @param gameName is game
+     */
+    public int getAgePermission (String gameName) {
+        return myGameTable.getAgePermission(gameName);
+    }
+
+    /**
+     * Retrieves price of game
+     * @param gameName is game
+     */
+    public double getPrice (String gameName) {
+        return myGameTable.getPrice(gameName);
+    }
+
+    /**
+     * Retrieves SingleplayerGameClassKeyword of game
+     * @param gameName is game
+     */
     public String getSingleplayerGameClassKeyword (String gameName) {
-        // TODO Auto-generated method stub
-        return null;
+        return myGameTable.getExtendsGame(gameName);
     }
 
+    /**
+     * Retrieves MultiplayerGameClassKeyword of game
+     * @param gameName is game
+     */
     public String getMultiplayerGameClassKeyword (String gameName) {
-        // TODO Auto-generated method stub
-        return null;
+        return myGameTable.getExtendsGameMultiplayer(gameName);
+    }
+
+    /**
+     * Returns true if game is single player
+     * @param gameName is game
+     */
+    public boolean getIsSinglePlayer (String gameName) {
+        return myGameTable.getIsSinglePlayer(gameName);
+    }
+
+    /**
+     * Returns true if game is multiplayer
+     * @param gameName is game
+     */
+    public boolean getIsMultiplayer (String gameName) {
+        return myGameTable.getIsMultiplayer(gameName);
+    }
+
+    /**
+     * Retrieves gameDescription for game
+     * @param gameName is game
+     */
+    public String getGameDescription (String gameName) {
+        return myGameTable.getDescription(gameName);
+    }
+
+    /**
+     * Inserts game thumbnail into Amazon S3 instance
+     * @param gameName is game
+     * @param filepath is where game is located
+     */
+    public void insertGameThumbnail (String gameName, String filepath) {
+        myS3Instance.putGameThumbnailIntoBucket(gameName, filepath);
+    }
+    
+    /**
+     * Inserts ad screen into Amazon S3 instance
+     * @param gameName is game
+     * @param filepath is where the adscreen is located
+     */
+    public void insertAdScreenPath (String gameName, String filepath) {
+        myS3Instance.putAdScreenIntoBucket(gameName, filepath);
+    }
+
+    /**
+     * Returns path of saved location of game thumbnail
+     * @param gameName is game
+     */
+    public String getGameThumbnail (String gameName) {
+        return myS3Instance.getThumbnail(gameName);
+    }
+
+    /**
+     * Returns path of saved location of adscreen
+     * @param gameName is game
+     */
+    public String getGameAdScreen (String gameName) {
+        return myS3Instance.getThumbnail(gameName);
     }
 
 }

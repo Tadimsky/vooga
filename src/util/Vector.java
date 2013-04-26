@@ -90,7 +90,7 @@ public class Vector {
     /**
      * Sets this vector's magnitude to the given value.
      */
-    protected void setMagnitude (double value) {
+    public void setMagnitude (double value) {
         myMagnitude = value;
     }
 
@@ -115,13 +115,13 @@ public class Vector {
      * Adjusts this vector's direction by the given change value.
      */
     public void turn (double change) {
-        setDirection(getDirection() + change);
+        setDirection(Vector.SanitizeAngle(getDirection() + change));
     }
 
     /**
      * Sets this vector's direction to the given value.
      */
-    protected void setDirection (double value) {
+    public void setDirection (double value) {
         myAngle = value;
     }
 
@@ -291,5 +291,36 @@ public class Vector {
         else {
             return Math.abs(a / b - 1) < EPSILON;
         }
+    }
+
+    /**
+     * Sanitizes angle to in between 0 and 360 degrees
+     * e.g. 361 degrees goes to 1 degree
+     */
+	public static double SanitizeAngle(double Angle) {
+		while (Angle > 360)
+			Angle -= 360;
+		while (Angle < 0)
+			Angle += 360;
+		return Angle;
+	}
+    
+    /**
+     * Sets the vector angle and magnitude based off of component vectors.
+     * @param dX X component vector
+     * @param dY Y component vector
+     */
+    public void setVectorByComponent (double dX, double dY) {
+        setMagnitude(Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)));
+        setDirection(Math.atan2(dX, dY));
+    }
+    
+    /**
+     * Calculates the dot product of this vector with another vector.
+     * @param other The other vector in the dot product.
+     * @return The dot product of the two vectors.
+     */
+    public double dotProduct (Vector other) {
+        return getXChange() * other.getXChange() + getYChange() + other.getYChange();
     }
 }

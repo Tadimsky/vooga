@@ -27,10 +27,7 @@ public interface TextKeywords {
     static final String AUTHOR = "author";
     static final String PRICE = "price";
     static final String AGE_RATING = "age_rating";
-    static final String SINGLE_PLAYER = "singleplayer";
-    static final String SINGLE_PLAYER_INSTRUCTION = "singleplayer_instruction";
-    static final String MULTIPLAYER = "multiplayer";
-    static final String MULTIPLAYER_INSTRUCTION = "multiplayer_instruction";
+    static final String GAME_INSTRUCTION = "game_instruction";
     static final String SMALL_PICTURE = "smallpicture";
     static final String LARGE_PICTURE = "largepicture";
     static final String DESCRIPTION_MESSAGE = "description_instructions";
@@ -53,4 +50,16 @@ public interface TextKeywords {
     static final String GAME_CENTER = "game_center";
     static final String SOCIAL_CENTER = "social_center";
     static final String GAME_STORE = "game_store";
+    static final String JAVA = "java";
+    static final String GAME_FILE_ERROR = "game_file_error";
+    static final String PIN_INSTRUCTION = "pin_message";
+    static final String SUBMIT = "submit";
+    static final String TWITTER_ERROR = "twitter_error";
+    static final String MY_SCORE = "my_score_was";
+    static final String IN = "in";
+    static final String VOOGA_HASHTAG = "vooga_hashtag";
+    static final String SCORE_MESSAGE = "score_message";
+    static final String HIGH_SCORES = "high_scores";
+    static final String ALREADY_PURCHASED = "already_purchased";
+    static final String NO_GAMES = "no_games";
 }

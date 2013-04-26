@@ -20,26 +20,24 @@ import javax.swing.ImageIcon;
  * Added getter for view @author DF
  */
 
-public class Pixmap implements ISpriteView {
-    // OS-independent relative resource locations (like URLs)
-    private static final String DEFAULT_RESOURCE_LOCATION = "/vooga/scroller/images/";
+public class Pixmap implements ISpriteView, IBackgroundView {
     // underlying implementation
     private java.awt.Image myImage;
     private String myFileName;
 
 
     /**
-     * Create an image from the given filename.
+     * Create an image from the given directoryAndFilename.
      */
-    public Pixmap (String fileName) {
-        this(DEFAULT_RESOURCE_LOCATION, fileName);
+    public Pixmap (String directoryAndFileName) {
+        setImage(directoryAndFileName);
     }
     
     /**
      * Create an image from the given filename.
      */
     public Pixmap (String directory, String fileName) {
-        setImage(directory+fileName);
+        this(directory+fileName);
     }
 
     /**
@@ -92,17 +90,6 @@ public class Pixmap implements ISpriteView {
         return myImage;
     }
     
-    /**
-     * TODO - Changing the picture should be a function of the state,
-     * not changing the image itself. A sprite should hold a collection
-     * of its images and paint it.
-     * TODO - Get Version Control approval
-     * @param im
-     */
-    private void setImg(Image im) {
-        myImage = im;
-    }
-
     @Override
     public ISpriteView reset () {
         // TODO Auto-generated method stub
@@ -113,6 +100,27 @@ public class Pixmap implements ISpriteView {
     public void setDefaultView (ISpriteView ispriteview) {
        // myImage = ispriteview
         // TODO: 
+    }
+
+    @Override
+    public Image getImage () {
+        return myImage;
+    }
+
+    @Override
+    public String getFileName () {
+        return myFileName;
+    }
+
+    /**
+     * TODO - Changing the picture should be a function of the state,
+     * not changing the image itself. A sprite should hold a collection
+     * of its images and paint it.
+     * TODO - Get Version Control approval
+     * @param im
+     */
+    private void setImg(Image im) {
+        myImage = im;
     }
 
 }

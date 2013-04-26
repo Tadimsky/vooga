@@ -1,0 +1,39 @@
+/level
+                              
+                              
+                              
+                              
+                              
+                              
+                a             
+                              
+                              
+               b              
+       b                      
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+/lib
+vooga.scroller.marioGame.spritesDefinitions.MarioLib
+/key
+a=StarPortal
+b=LevelTwoBlockTwo
+/settings
+StartPoint=304 176
+Background=/vooga/scroller/images/backgrounds/background.png

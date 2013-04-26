@@ -1,7 +1,6 @@
 package vooga.scroller.sprites.animation;
 
 import vooga.scroller.util.Pixmap;
-import vooga.scroller.util.Sprite;
 
 /**
  * Abstract class that represents an animation state of a sprite. 
@@ -10,7 +9,7 @@ import vooga.scroller.util.Sprite;
  * @author Scott Valentine
  *
  */
-public abstract class AnimationState {
+public abstract class AnimationState<S> {
 
     private Pixmap myImage;
     
@@ -29,7 +28,7 @@ public abstract class AnimationState {
      * @param unit is the Sprite on which the animation acts
      * @return boolean representing the ability of this animation to occur. 
      */
-    public abstract boolean validAnimation(Sprite unit);
+    public abstract boolean validAnimation(S unit);
         
     /**
      * Gives the current image of this animation state.

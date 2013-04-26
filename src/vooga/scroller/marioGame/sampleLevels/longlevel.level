@@ -1,0 +1,33 @@
+/level
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                                
+                                                                                                                             a  
+                                                                                                                                
+b                       b                       b                       b                       b                       c   c   
+                                                                                                                                
+                                                                                                                                
+                                                                                                                        c   c   
+                                                                                                                                
+                                                                                                                                
+/lib
+vooga.scroller.marioGame.spritesDefinitions.MarioLib
+/key
+a=StarPortal
+c=LevelTwoBlockOne
+b=LevelTwoBlockThree
+/settings
+StartPoint=16 528
+Background=/vooga/scroller/images/backgrounds/background.png

@@ -42,9 +42,9 @@ public class HumanPlayer extends Player implements Observer {
     private GameMenu myGameMenu;
 
 
-    public HumanPlayer (int id) {
-        super(id);
-
+    public HumanPlayer (int id, int teamID) {
+        super(id, teamID);
+        
         myGameMenu = new GameMenu();
         myGameMenu.addObserver(this);
         myManager.addObserver(myGameMenu);

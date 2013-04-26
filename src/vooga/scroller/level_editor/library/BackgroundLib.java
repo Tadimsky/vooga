@@ -9,32 +9,45 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import vooga.scroller.util.IBackgroundView;
+import vooga.scroller.util.Pixmap;
 
 
 public class BackgroundLib implements IBackgroundLibrary {
 
-    private static final String BACKGROUND_LOCATION ="src/vooga/scroller/images/backgrounds/";
+    private static final String BACKGROUND_LOCATION ="/vooga/scroller/images/backgrounds/";
     private Map<Integer, Image> myBackgrounds;
+    private HashMap<Integer, IBackgroundView> myPixmaps;
 
+//    public BackgroundLib (String[] fileNames) {
+//        int i = 0;
+//        myBackgrounds = new HashMap<Integer, Image>();
+//        for (String fn : fileNames) {
+//            BufferedImage img = null;
+//            try {
+//                img = ImageIO.read(new File(BACKGROUND_LOCATION+fn));
+//                myBackgrounds.put(i, img);
+//                i++;
+//            } catch (IOException e) {
+//                System.out.println(e.getMessage());
+//            }
+//            
+//        }
+//    }
+    
     public BackgroundLib (String[] fileNames) {
         int i = 0;
-        myBackgrounds = new HashMap<Integer, Image>();
+        myPixmaps = new HashMap<Integer, IBackgroundView>();
         for (String fn : fileNames) {
-            BufferedImage img = null;
-            try {
-                img = ImageIO.read(new File(BACKGROUND_LOCATION+fn));
-                myBackgrounds.put(i, img);
-                i++;
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-            
+            Pixmap p =new Pixmap(BACKGROUND_LOCATION,fn);
+            myPixmaps.put(i, p);
+            i++;
         }
     }
 
     @Override
-    public Map<Integer, Image> getBackgrounds () {
-        return myBackgrounds;
+    public Map<Integer, IBackgroundView> getBackgrounds () {
+        return myPixmaps;
     }
 
 }

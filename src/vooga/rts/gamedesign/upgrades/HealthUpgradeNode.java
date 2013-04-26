@@ -1,6 +1,7 @@
 package vooga.rts.gamedesign.upgrades;
 
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.util.ReflectionHelper;
 
 /**
 *
@@ -25,7 +26,7 @@ public class HealthUpgradeNode extends UpgradeNode {
      */
     @Override
     public void upgrade (InteractiveEntity requester) {
-    	getReflectionHelper().changeValue("myMaxHealth", requester,
+    	ReflectionHelper.changeValue("myMaxHealth", requester,
     			getUpgradeValue());
     }
 

@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
 import java.util.Queue;
-import vooga.fighter.util.Text;
+import util.Text;
 import vooga.rts.IGameLoop;
 
 

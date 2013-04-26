@@ -4,17 +4,15 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import util.Location;
-import util.Secretary;
 import vooga.scroller.level_editor.Level;
 import vooga.scroller.level_management.LevelManager;
+import vooga.scroller.level_management.splash_page.SplashPage;
 import vooga.scroller.marioGame.spritesDefinitions.players.Mario;
 import vooga.scroller.scrollingmanager.ScrollingManager;
+import vooga.scroller.sprites.Sprite;
 import vooga.scroller.sprites.animation.Animation;
 import vooga.scroller.sprites.animation.MovingSpriteAnimationFactory;
-import vooga.scroller.sprites.interfaces.IPlayer;
 import vooga.scroller.sprites.superclasses.Player;
 import vooga.scroller.view.GameView;
 
@@ -38,8 +36,8 @@ public class Model {
 
     private static final String PLAYER_IMAGES = "walama.gif";
     // "mario.gif"
-    //"transparent_wolf.gif" -- not yet added.
     //"walama.gif"
+    private static final String DEFAULT_IMAGE_LOCATION = "/vooga/scroller/marioGame/images/";
     
     /**
      * Constructs a new Model based on the view and the scrolling manager used by the game.
@@ -49,20 +47,20 @@ public class Model {
      * @throws IOException 
      */
 
-    public Model (GameView gameView, ScrollingManager sm, Player player, Level ...levels) {
+    public Model (GameView gameView, ScrollingManager sm, Player player, SplashPage splashPage, Level ...levels) {
         this(gameView, sm, player);
-        myLevelManager = initializeLevelManager(levels);
+        myLevelManager = initializeLevelManager(splashPage, levels);
     }
     
     
-    public Model (GameView gameView, ScrollingManager sm, Player player, String... levelFileNames) {
+    public Model (GameView gameView, ScrollingManager sm, Player player, SplashPage splashPage, String... levelFileNames) {
         this(gameView, sm, player);
-        myLevelManager = initializeLevelManager(levelFileNames);
+        myLevelManager = initializeLevelManager(splashPage, levelFileNames);
     }
 
-    public Model (GameView gameView, ScrollingManager sm, Level level) {
-        this(gameView, sm, initTestPlayer(gameView, sm), level);
-    }
+//    public Model (GameView gameView, ScrollingManager sm, Level level) {
+//        this(gameView, sm, initTestPlayer(gameView, sm), level);
+//    }
 
 
     private Model (GameView gameView, ScrollingManager sm, Player player) {
@@ -74,8 +72,8 @@ public class Model {
 
     private static Player initTestPlayer (GameView gameView, ScrollingManager sm) {
         Player player = new Mario(new Location(), new Dimension(32, 32), gameView, sm);
-        MovingSpriteAnimationFactory msaf = new MovingSpriteAnimationFactory(PLAYER_IMAGES);
-        Animation playerAnimation = msaf.generateAnimation(player);
+        MovingSpriteAnimationFactory msaf = new MovingSpriteAnimationFactory(DEFAULT_IMAGE_LOCATION, PLAYER_IMAGES);
+        Animation<Sprite> playerAnimation = msaf.generateAnimation(player);
         
         player.setView(playerAnimation);
         return player;
@@ -85,13 +83,13 @@ public class Model {
         myLevelManager.getCurrentLevel().addPlayer(myPlayer);
     }
 
-    private LevelManager initializeLevelManager (Level[] levels) {
-        return new LevelManager(myScrollingManager, myView, levels);
+    private LevelManager initializeLevelManager (SplashPage splashPage, Level[] levels) {
+        return new LevelManager(myScrollingManager, myView, splashPage, levels);
     }
 
 
-    private LevelManager initializeLevelManager (String[] levelFileNames) {
-        return new LevelManager(myScrollingManager, myView, levelFileNames);
+    private LevelManager initializeLevelManager (SplashPage splashPage, String[] levelFileNames) {
+        return new LevelManager(myScrollingManager, myView, splashPage, levelFileNames);
     }
 
 
@@ -101,35 +99,11 @@ public class Model {
         myScrollingManager.initView(myView); 
     }
 
-
-
-//    /**
-//     * User defined player initialization.
-//     */
-//    private Player initPlayer() {
-//        // TODO: this is implemented by the developer. 
-//        
-//        Player player = new Mario(
-//                             new Location(100, 140),
-//                             new Dimension(138/6, 276/6),
-//                             myView, myScrollingManager);
-//        
-//        MovingSpriteAnimationFactory msaf = new MovingSpriteAnimationFactory(PLAYER_IMAGES);
-//        Animation playerAnimation = msaf.generateAnimation(player);
-//        
-//        player.setView(playerAnimation);
-//
-//        return player;
-//    }
-
     /**
      * Draw all elements of the game.
      */
     public void paint (Graphics2D pen) {
         myLevelManager.getCurrentLevel().paint(pen);
-        
-        
-        
     }
 
     /**
@@ -138,13 +112,15 @@ public class Model {
      * @param elapsedTime is the elapsed time since the last update.
      */
     public void update (double elapsedTime) {
-
         myLevelManager.getCurrentLevel().update(elapsedTime, myView.getSize(), myView);
-
     }
 
     /**
      * Gives various boundaries for the current level.
+     * TODO: can these be consolidated into one function (seems like a lot extra things that aren't
+     * really associated with the model.
+     * (we could just return the current level or maybe the bounds of the level(this might be 
+     * dependent on other things) )
      * 
      * @return
      */

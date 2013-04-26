@@ -1,0 +1,41 @@
+/level
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                aaa           
+                              
+                    b         
+                c             
+            ddddddddd         
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+/lib
+vooga.scroller.marioGame.spritesDefinitions.MarioLib
+/key
+c=Plant
+b=ExamplePortal
+a=Coin
+d=Platform
+/settings
+StartPoint=400 144
+Background=/vooga/scroller/images/backgrounds/background.png

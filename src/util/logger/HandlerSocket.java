@@ -17,10 +17,18 @@ public class HandlerSocket implements IVoogaHandler {
             "Error in creating socket format handler";
     private String myHost;
     private int myPort;
-
+    
     /**
      * Constructor
      * 
+     * @param host name of the host
+     * @param port number of the port to create socket
+     */
+    public HandlerSocket (String host, int port) {
+        setSocket(host, port);
+    }
+
+    /**
      * @param host name of the host
      * @param port number of the port to create socket
      */
@@ -36,7 +44,7 @@ public class HandlerSocket implements IVoogaHandler {
             handler = new SocketHandler(myHost, myPort);
         }
         catch (Exception e) {
-            NetworkLogger.LOGGER.severe(ERROR_MESSAGE);
+            LoggerManager.DEFAULT_LOGGER.severe(ERROR_MESSAGE);
         }
         return handler;
     }

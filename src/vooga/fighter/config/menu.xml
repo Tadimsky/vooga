@@ -1,28 +1,75 @@
 <?xml version="1.0"?>
 <objects>
-    <menuobject menuobjectname="ModeSelectMenu">
-    	<state name="Test">
+    <menuobject menuobjectname="StartGame">
+    	<state name = "Unselected">
             <frame image="fighter/images/StartGame.gif" />
+         </state>
+         <state name = "Selected">
+            <frame image="fighter/images/StartGame.gif" />
+            <frame image="fighter/images/fire.png" />           
         </state>
     </menuobject>
     <menuobject menuobjectname="1v1">
-    	<state name="Test">
+    	<state name = "Unselected">
             <frame image="fighter/images/1v1.jpg" />
+        </state>
+        <state name = "Selected">
+            <frame image="fighter/images/1v1.jpg" />
+            <frame image="fighter/images/fire.png" />   
         </state>
     </menuobject>
     <menuobject menuobjectname="Ryu">
-    	<state name="Test">
+    	<state name = "Unselected">
             <frame image="fighter/images/ryu_stand1.png" />
         </state>
+        <state name = "Selected">
+            <frame image="fighter/images/ryu_stand1.png" />
+            <frame image="fighter/images/fire.png" />   
+        </state>
     </menuobject>
-    <menuobject menuobjectname="EndGame">
-    	<state name="Test">
-            <frame image="fighter/images/GameOver.jpg" />
+    <menuobject menuobjectname="MainMenu">
+    	<state name = "Unselected">
+            <frame image="fighter/images/MainMenu.jpg" />
+        </state>
+        <state name = "Selected">
+            <frame image="fighter/images/MainMenu.jpg" />
+            <frame image="fighter/images/fire.png" />   
+        </state>
+    </menuobject>
+    <menuobject menuobjectname="CharacterSelectMenu">
+    	<state name = "Unselected">
+    		<frame image="fighter/images/CharacterSelect.png" />
+    	</state>
+    	<state name = "Selected">
+            <frame image="fighter/images/CharacterSelect.png"  />
+            <frame image="fighter/images/fire.png" />   
         </state>
     </menuobject>
     <menuobject menuobjectname = "BlueMap">
-    	<state name = "Test">
+    	<state name = "Unselected">
     		<frame image = "fighter/images/FinalDestination.jpg" />
     	</state>
+    	<state name = "Selected">
+            <frame image="fighter/images/FinalDestination.jpg" />
+            <frame image="fighter/images/fire.png" />   
+        </state>
+   	</menuobject>
+   	 <menuobject menuobjectname = "BacktoCharacter">
+    	<state name = "Unselected">
+    		<frame image = "fighter/images/back.png" />
+    	</state>
+    	 <state name = "Selected">
+            <frame image="fighter/images/back.png" />
+            <frame image="fighter/images/fire.png" />   
+        </state>
+   	</menuobject>
+   	<menuobject menuobjectname = "NewMap">
+    	<state name = "Unselected">
+    		<frame image = "fighter/images/new2.jpg" />
+    	</state>
+    	<state name = "Selected">
+            <frame image="fighter/images/new2.jpg" />
+            <frame image="fighter/images/fire.png" />   
+        </state>
    	</menuobject>
 </objects>

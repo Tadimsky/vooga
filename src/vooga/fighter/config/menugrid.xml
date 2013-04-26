@@ -1,19 +1,48 @@
 <?xml version="1.0"?>
 <menutype>
     <menumode menuname="MainMenu" >
-        <menuobject menuobjectname="ModeSelectMenu" />
+        <menuobject menuobjectname="StartGame" xCoord = "250" yCoord = "150" xSize = "150" ySize = "150" nextState = "ModeSelectMenu" gridnum = "1" up="3" down="3" left="2" right="2" />
+        <menuobject menuobjectname="StartGame" xCoord = "550" yCoord = "150" xSize = "150" ySize = "150" nextState = "ModeSelectMenu" gridnum = "2" up="4" down="4" left="1" right="1" />
+        <menuobject menuobjectname="StartGame" xCoord = "250" yCoord = "450" xSize = "150" ySize = "150" nextState = "ModeSelectMenu" gridnum = "3" up="1" down="1" left="4" right="4" />
+        <menuobject menuobjectname="StartGame" xCoord = "550" yCoord = "450" xSize = "150" ySize = "150" nextState = "ModeSelectMenu" gridnum = "4" up="2" down="2" left="3" right="3" />
     </menumode>
     <menumode menuname="ModeSelectMenu" >
-        <menuobject menuobjectname="1v1" />
+        <menuobject menuobjectname="1v1" xCoord = "250" yCoord = "150" xSize = "150" ySize = "150" nextState ="CharacterSelectMenu" gridnum = "1" up="3" down="3" left="2" right="2" />
+        <menuobject menuobjectname="1v1" xCoord = "550" yCoord = "150" xSize = "150" ySize = "150" nextState ="CharacterSelectMenu" gridnum = "2" up="4" down="4" left="1" right="1" />
+        <menuobject menuobjectname="1v1" xCoord = "250" yCoord = "450" xSize = "150" ySize = "150" nextState ="CharacterSelectMenu" gridnum = "3" up="1" down="1" left="4" right="4" />
+        <menuobject menuobjectname="1v1" xCoord = "550" yCoord = "450" xSize = "150" ySize = "150" nextState ="CharacterSelectMenu" gridnum = "4" up="2" down="2" left="3" right="3" />
     </menumode>
     <menumode menuname="CharacterSelectMenu" >
-        <menuobject menuobjectname="Ryu" />
+        <menuobject menuobjectname="Ryu" xCoord = "250" yCoord = "150" xSize = "150" ySize = "150" nextState ="MapSelectMenu" gridnum = "1" up="3" down="3" left="2" right="2" />
+        <menuobject menuobjectname="Ryu" xCoord = "550" yCoord = "150" xSize = "150" ySize = "150" nextState ="MapSelectMenu" gridnum = "2" up="4" down="4" left="1" right="1" />
+        <menuobject menuobjectname="Ryu" xCoord = "250" yCoord = "450" xSize = "150" ySize = "150" nextState ="MapSelectMenu" gridnum = "3" up="1" down="1" left="4" right="4" />
+        <menuobject menuobjectname="Ryu" xCoord = "550" yCoord = "450" xSize = "150" ySize = "150" nextState ="MapSelectMenu" gridnum = "4" up="2" down="2" left="3" right="3" />                        
     </menumode>
-    <menumode menuname="GameOver" >
-        <menuobject menuobjectname="EndGame" />
+    <menumode menuname="ScoreScreen" >
+        <menuobject menuobjectname="MainMenu" xCoord = "250" yCoord = "150" xSize = "150" ySize = "150" nextState ="MainMenu" gridnum = "1" up="3" down="3" left="2" right="2" />
+        <menuobject menuobjectname="MainMenu" xCoord = "550" yCoord = "150" xSize = "150" ySize = "150" nextState ="MainMenu" gridnum = "2" up="4" down="4" left="1" right="1" />
+        <menuobject menuobjectname="MainMenu" xCoord = "250" yCoord = "450" xSize = "150" ySize = "150" nextState ="MainMenu" gridnum = "3" up="1" down="1" left="4" right="4" />
+        <menuobject menuobjectname="MainMenu" xCoord = "550" yCoord = "450" xSize = "150" ySize = "150" nextState ="MainMenu" gridnum = "4" up="2" down="2" left="3" right="3" />                                
     </menumode>
+    <menumode menuname="ScoreScreen1">
+        <menuobject menuobjectname="CharacterSelectMenu" xCoord = "250" yCoord = "150" xSize = "150" ySize = "150" nextState ="CharacterSelectMenu" gridnum = "1" up="3" down="3" left="2" right="2" />
+        <menuobject menuobjectname="CharacterSelectMenu" xCoord = "550" yCoord = "150" xSize = "150" ySize = "150" nextState ="CharacterSelectMenu" gridnum = "2" up="4" down="4" left="1" right="1" />
+        <menuobject menuobjectname="CharacterSelectMenu" xCoord = "250" yCoord = "450" xSize = "150" ySize = "150" nextState ="CharacterSelectMenu" gridnum = "3" up="1" down="1" left="4" right="4" />
+        <menuobject menuobjectname="CharacterSelectMenu" xCoord = "550" yCoord = "450" xSize = "150" ySize = "150" nextState ="CharacterSelectMenu" gridnum = "4" up="2" down="2" left="3" right="3" />                            	
+   	</menumode>
     <menumode menuname="MapSelectMenu" >
-        <menuobject menuobjectname="BlueMap" />
+        <menuobject menuobjectname="BlueMap" xCoord = "250" yCoord = "150" xSize = "150" ySize = "150" nextState = "1v1" gridnum = "1" up="3" down="3" left="2" right="2" />
+        <menuobject menuobjectname="BlueMap" xCoord = "550" yCoord = "150" xSize = "150" ySize = "150" nextState = "1v1" gridnum = "2" up="4" down="4" left="1" right="1" />
+        <menuobject menuobjectname="BlueMap" xCoord = "250" yCoord = "450" xSize = "150" ySize = "150" nextState = "1v1" gridnum = "3" up="1" down="1" left="4" right="4" />
+        <menuobject menuobjectname="BlueMap" xCoord = "550" yCoord = "450" xSize = "150" ySize = "150" nextState = "1v1" gridnum = "4" up="2" down="2" left="3" right="3" />                        
     </menumode>
-    
+    <menumode menuname="MapSelectMenu1" >
+        <menuobject menuobjectname="BacktoCharacter" />
+    </menumode>
+    <menumode menuname="MapSelectMenu2" >
+        <menuobject menuobjectname="BlueMap" xCoord = "250" yCoord = "150" xSize = "150" ySize = "150" nextState = "MapEditor" gridnum = "1" up="3" down="3" left="2" right="2" />
+        <menuobject menuobjectname="BlueMap" xCoord = "550" yCoord = "150" xSize = "150" ySize = "150" nextState = "MapEditor" gridnum = "2" up="4" down="4" left="1" right="1" />
+        <menuobject menuobjectname="BlueMap" xCoord = "250" yCoord = "450" xSize = "150" ySize = "150" nextState = "MapEditor" gridnum = "3" up="1" down="1" left="4" right="4" />
+        <menuobject menuobjectname="NewMap" xCoord = "550" yCoord = "450" xSize = "150" ySize = "150" nextState = "MapEditor" gridnum = "4" up="2" down="2" left="3" right="3" />                        
+    </menumode>
 </menutype>

@@ -1,66 +1,95 @@
 package vooga.fighter.model.objects;
 
-import java.util.Collection;
-import vooga.fighter.controller.ModelDelegate;
-import vooga.fighter.model.loaders.CharacterLoader;
+import vooga.fighter.model.MenuMode;
 import vooga.fighter.model.loaders.MenuLoader;
 
-
+/**
+ * 
+ * @author Jerry and Jack
+ *
+ */
 public class MenuObject extends GameObject {
+    private String myNext;
+    private String myValue;
+    private int myGridNum;
+    private int myUp;
+    private int myDown;
+    private int myLeft;
+    private int myRight;
+    
+    MenuMode myDelegate;
+    
 
-    private String myChoice;
-    ModelDelegate myDelegate;
 
-    public MenuObject (String choice, ModelDelegate delegate) {
-        setLoader(new MenuLoader(choice, this));
+    public MenuObject (String choice, MenuMode delegate, String pathHierarchy) {
+        setLoader(new MenuLoader(choice, this, pathHierarchy));
         myDelegate = delegate;
-        myChoice = choice;
+
     }
 
     @Override
-    public boolean shouldBeRemoved () {
-        return false;
-    }
+    public void completeUpdate () {
 
-    @Override
-    public void update () {
     }
     
-    public String getChoice(){
-    	return myChoice;
+    public int getUp(){
+    	return myUp;
     }
-
-    public Collection getStates () {
-        return super.getStates();
+    
+    public int getDown(){
+    	return myDown;
     }
-
+    public int getLeft(){
+    	return myLeft;
+    }
+    
+    public int getRight(){
+    	return myRight;
+    }
+    
+    public int getNum(){
+    	return myGridNum;
+    }
+    
+    public void setUp(int up){
+    	myUp = up;
+    }
+    
+    public void setDown(int down){
+    	myDown = down;
+    }
+    
+    public void setRight(int right){
+    	myRight = right;
+    }
+    
+    public void setLeft(int left){
+    	myLeft = left;
+    }
+    
+    public void setNum(int num){
+    	myGridNum = num;
+    }
+    
+    public String getValue() {
+        return myValue;
+    }
+    
+    public void setValue(String value) {
+        myValue = value;
+    }
+    
+    public void setNext(String next) {
+        myNext = next;
+    }
+    
+    public String getNext(){
+    	return myNext;
+    }
     
     public void tellDelegate(){
-        System.out.println("<MenuObject.java><telldelegate> telling delegate");
-    	myDelegate.notifyEndCondition(myChoice);
-    }
-    @Override
-    public void dispatchCollision (GameObject other) {
-        // TODO Auto-generated method stub
+    	myDelegate.setChoice(myValue);
 
     }
 
-    @Override
-    public void handleCollision (CharacterObject other) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void handleCollision (AttackObject other) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void handleCollision (EnvironmentObject other) {
-        // TODO Auto-generated method stub
-
-
-    }
 }

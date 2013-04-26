@@ -33,4 +33,14 @@ public class CannotGather implements GatherStrategy {
 	public void update(double elapsedTime) {
 	}
 
+	@Override
+	public int getGatherAmount() {
+		return 0;
+	}
+
+	@Override
+	public void setGatherAmount(int gatherAmount) {
+		return;
+	}
+
 }

@@ -23,21 +23,16 @@ import vooga.rts.util.Location3D;
  * @author Challen Herzberg-Brovold
  * 
  */
-public class NodeMap implements Observer {
+public class NodeMap {
 
     private int myWidth;
     private int myHeight;
     private Node[][] myMap;
 
-    private Map<GameSprite, Node> myLookupMap;
-
     public NodeMap (int width, int height) {
         myMap = new Node[width][height];
         myWidth = width;
         myHeight = height;
-        System.out.println(width);
-        System.out.println(height);
-        myLookupMap = new HashMap<GameSprite, Node>();
     }
 
     /**
@@ -50,14 +45,9 @@ public class NodeMap implements Observer {
         List<Node> neighbors = new ArrayList<Node>();
         int x = current.getX();
         int y = current.getY();
-        System.out.println("Current x and y: " + current.getX() + " " + current.getY());
-        neighbors.add(get(x - 1, y));
-        neighbors.add(get(x + 1, y));
-        neighbors.add(get(x, y - 1));
-        neighbors.add(get(x, y + 1));
-        
-        for (Node neigh: neighbors) {
-            System.out.println(neigh.getX() + " " + neigh.getY());
+        for (int i = -1; i < 2; i += 2) {
+            neighbors.add(get(x + i, y));
+            neighbors.add(get(x, y + i));
         }
         return neighbors;
     }
@@ -70,13 +60,8 @@ public class NodeMap implements Observer {
      * @return node at the coordinates
      */
     public Node get (int x, int y) {
-<<<<<<< HEAD
-        if (x > 0 && y > 0 && x < myMap.length && y < myMap[0].length) {
-            return myMap[y][x];
-=======
         if (x >= 0 && y >= 0 && x < myMap.length && y < myMap[0].length) {
             return myMap[x][y];
->>>>>>> 3c3e3e23a4312d14b0b9943ca80d748438f0c6ef
         }
         return null;
     }
@@ -101,6 +86,40 @@ public class NodeMap implements Observer {
         myMap[x][y] = node;
     }
 
+    public List<Node> getVisible() {
+        Rectangle view = Camera.instance().getWorldVision().getBounds();
+        // Get the start index of what is visible by the cameras.
+        int startX = (int) (view.getMinX() > 0 ? view.getMinX() : 0);
+        startX /= Node.NODE_SIZE;
+        int startY = (int) (view.getMinY() > 0 ? view.getMinY() : 0);
+        startY /= Node.NODE_SIZE;
+        // Get the end index of what is visible
+        int endX =
+                (int) (view.getMaxX() < Node.NODE_SIZE * myWidth ? view.getMaxX() : myWidth *
+                                                                                    Node.NODE_SIZE);
+        endX /= Node.NODE_SIZE;
+        endX = endX < myWidth ? endX : myWidth - 1;
+        int endY =
+                (int) (view.getMaxY() < Node.NODE_SIZE * myHeight ? view.getMaxY() : myHeight *
+                                                                                     Node.NODE_SIZE);
+        endY /= Node.NODE_SIZE;
+        endY = endY < myHeight ? endY : myHeight - 1;
+        List<Node> result = new ArrayList<Node>();
+        int depth = (endX - startX) + (endY - startY);
+        for (int z = 0; z < depth; z++) {
+            for (int y = 0; y <= z; y++) {
+                int x = z - y;
+                Node n = get(x + startX, y + startY);// This could get add to a list, returns and is painted
+                if (n != null) {
+                  result.add(n);
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
     public void paint (Graphics2D pen) {
         Rectangle view = Camera.instance().getWorldVision().getBounds();
 
@@ -128,7 +147,7 @@ public class NodeMap implements Observer {
         for (int z = 0; z < depth; z++) {
             for (int y = 0; y <= z; y++) {
                 int x = z - y;
-                Node n = get(x + startX, y + startY);
+                Node n = get(x + startX, y + startY);// This could get add to a list, returns and is painted
                 if (n != null) {
                     n.paint(pen);
                 }
@@ -140,6 +159,8 @@ public class NodeMap implements Observer {
     }
 
     /**
+<<<<<<< HEAD
+=======
      * Adds a Sprite to a Node.
      * 
      * @param sprite The sprite to be added to the node.
@@ -158,10 +179,13 @@ public class NodeMap implements Observer {
      */
     private void removeFromNode (GameSprite sprite) {
         Node node = myLookupMap.get(sprite);
-        node.removeSprite(sprite);
+        if (node != null) {
+            node.removeSprite(sprite);
+        }
     }
 
     /**
+>>>>>>> f8d8d7c99dbd899b9790f3b7c738b28dc8e6d982
      * Finds a node that a location should correspond to.
      * 
      * @param world The world location.
@@ -191,7 +215,7 @@ public class NodeMap implements Observer {
 
         List<Node> nodeList = new ArrayList<Node>();
         for (int x = nodeX - numTiles; x < nodeX + numTiles; x++) {
-            for (int y = nodeY - numTiles; x < nodeY + numTiles; y++) {
+            for (int y = nodeY - numTiles; y < nodeY + numTiles; y++) {
                 Node cur = get(x, y);
                 if (cur != null) {
                     if (cur.contains(new Location3D(x * Node.NODE_SIZE, y * Node.NODE_SIZE, center
@@ -215,6 +239,8 @@ public class NodeMap implements Observer {
         int y = (int) Math.floor(location.getY() / Node.NODE_SIZE);
         return get(x, y);
     }
+<<<<<<< HEAD
+=======
 
     @Override
     public void update (Observable arg0, Object arg1) {
@@ -255,5 +281,9 @@ public class NodeMap implements Observer {
                 }
             }
         }
+        if (arg1 instanceof String && ((String)arg1).equals("remove")) {
+            removeFromNode(item);
+        }
     }
+>>>>>>> f8d8d7c99dbd899b9790f3b7c738b28dc8e6d982
 }

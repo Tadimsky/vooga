@@ -3,7 +3,6 @@ package vooga.scroller.level_editor.controllerSuite;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
@@ -21,9 +20,10 @@ import vooga.scroller.level_editor.view.LEGridView;
 import vooga.scroller.level_management.LevelPortal;
 import vooga.scroller.scrollingmanager.OmniScrollingManager;
 import vooga.scroller.scrollingmanager.ScrollingManager;
+import vooga.scroller.sprites.Sprite;
 import vooga.scroller.util.Editable;
+import vooga.scroller.util.IBackgroundView;
 import vooga.scroller.util.Renderable;
-import vooga.scroller.util.Sprite;
 import vooga.scroller.util.mvc.IView;
 import vooga.scroller.util.mvc.SimpleView;
 import vooga.scroller.view.GameView;
@@ -32,15 +32,14 @@ import vooga.scroller.view.GameView;
 public class LEGrid implements Editable, Renderable<LEGridView>, Scrollable {
 
     public static final int DEFAULT_SPRITE_SIZE = 32;
-    private static final Location DEFAULT_START_LOC = new Location(0,0);
-    private static final Location DEFAULT_END_LOC = new Location(100,100);
+    private static final Location DEFAULT_START_LOC = new Location(0, 0);
     private int mySpriteSize;
     private SpriteBox[][] myGrid;
     private Dimension mySize;
     private Set<SpriteBox> myPaintableBoxes;
     private StartPoint myStartPoint;
-    private LevelPortal myMainDoor; //TODO - eventually support multiple doors
-    private Image myBackground;
+    private LevelPortal myDoor;
+    private IBackgroundView myBackground;
 
     public LEGrid (int numWidthBlocks, int numHeightBlocks) {
         mySpriteSize = DEFAULT_SPRITE_SIZE;
@@ -56,27 +55,24 @@ public class LEGrid implements Editable, Renderable<LEGridView>, Scrollable {
 
     @Override
     public Object getState () {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public void paint (Graphics2D pen) {
-        pen.drawImage(myBackground, 0, 0, null);
-        for(int i = 0; i < mySize.width; i++){
-            for( int j = 0; j < mySize.height; j++){
+        if (myBackground != null) {
+            pen.drawImage(myBackground.getImage(), 0, 0, null);
+        }
+        for (int i = 0; i < mySize.width; i++) {
+            for (int j = 0; j < mySize.height; j++) {
                 myGrid[i][j].paint(pen);
             }
         }
     }
-    
+
     private BufferedImage paintThumbnail (BufferedImage img) {
         Graphics2D drawer = img.createGraphics();
-        for(int i = 0; i < mySize.width; i++){
-            for( int j = 0; j < mySize.height; j++){
-                myGrid[i][j].paint(drawer);
-            }
-        }
+        paint(drawer);
         return img;
     }
 
@@ -86,8 +82,8 @@ public class LEGrid implements Editable, Renderable<LEGridView>, Scrollable {
         addToBox(spr, currentBox);
     }
 
-    public void addSpriteToBox(int xcoor, int ycoor, Sprite sprite){
-        addToBox(sprite,getBoxFromCoor(xcoor,ycoor));
+    public void addSpriteWithCoor (int xcoor, int ycoor, Sprite sprite) {
+        addToBox(sprite, getBoxFromCoor(xcoor, ycoor));
     }
 
     /**
@@ -100,9 +96,6 @@ public class LEGrid implements Editable, Renderable<LEGridView>, Scrollable {
             myPaintableBoxes.add(currentBox);
             combineBoxes(currentBox, currentBox, spr.getWidth(), spr.getHeight());
         }
-        else {
-            // TODO send Unavailable feedback
-        }
     }
 
     @Override
@@ -111,37 +104,36 @@ public class LEGrid implements Editable, Renderable<LEGridView>, Scrollable {
         currentBox.deleteSprite();
         myPaintableBoxes.remove(currentBox);
     }
-    
-    public Set<SpriteBox> getBoxes() {
+
+    public Set<SpriteBox> getBoxes () {
         return myPaintableBoxes;
     }
-    
+
     /**
-     * TODO - Moving this responsibility to Level
+     * Create Level from Grid
+     * 
      * @param id
      * @param sm
      * @param v
-     * @return
+     * @return Level
      */
-    public Level createLevel (int id, 
-                              ScrollingManager sm) {
-        //TODO need to refactor. Editable Level.
+    public Level createLevel (int id, ScrollingManager sm) {
         Level lev = new Level(id, sm);
         for (SpriteBox box : getBoxes()) {
             lev.addSprite(box.getSprite());
         }
         return lev;
     }
-    
-    public SpriteBox getBoxFromCoor(int xcoor, int ycoor){
+
+    public SpriteBox getBoxFromCoor (int xcoor, int ycoor) {
         return myGrid[xcoor][ycoor];
     }
-    
-    public Sprite getSprite(int xcoor, int ycoor){
-        return getBoxFromCoor(xcoor,ycoor).getSprite();
+
+    public Sprite getSprite (int xcoor, int ycoor) {
+        return getBoxFromCoor(xcoor, ycoor).getSprite();
     }
-    
-    public Dimension getSize(){
+
+    public Dimension getSize () {
         return mySize;
     }
 
@@ -189,7 +181,6 @@ public class LEGrid implements Editable, Renderable<LEGridView>, Scrollable {
 
     @Override
     public Dimension getPreferredScrollableViewportSize () {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -205,72 +196,75 @@ public class LEGrid implements Editable, Renderable<LEGridView>, Scrollable {
 
     @Override
     public boolean getScrollableTracksViewportWidth () {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean getScrollableTracksViewportHeight () {
-        // TODO Auto-generated method stub
         return false;
     }
 
     /**
      * Get the overall pixels size of this LEGrid.
+     * 
      * @return
      */
     public Dimension getPixelSize () {
-        Dimension res= new Dimension(
-                                     mySize.width*mySpriteSize,
-                                     mySize.height*mySpriteSize);
-        
+        Dimension res = new Dimension(
+                                      mySize.width * mySpriteSize,
+                                      mySize.height * mySpriteSize);
+
         return res;
     }
 
+    /**
+     * Checks StartPoint and Door
+     * 
+     * @return true if valid
+     */
     public boolean isValidForSimulation () {
-        // TODO Check for valid starting and exit points.
-        return (myStartPoint!=null && myMainDoor!=null);
+        return (myStartPoint != null && myDoor != null);
+    }
+
+    /**
+     * Checks Door and Background
+     * 
+     * @return true if valid
+     */
+    public boolean isValidForSave () {
+        return (myDoor != null && myBackground != null);
     }
 
     @Override
     public void addStartPoint (int x, int y) {
-        if(myStartPoint == null){
+        if (myStartPoint == null) {
             myStartPoint = new StartPoint();
         }
-        else{
-            deleteSprite((int) myStartPoint.getX(),(int) myStartPoint.getY());
+        else {
+            deleteSprite((int) myStartPoint.getX(), (int) myStartPoint.getY());
         }
         addSprite(myStartPoint, x, y);
     }
-    
-    public Location removeStartPoint(){
-        if(myStartPoint == null){
-            return DEFAULT_START_LOC;
-        }
+
+    public Location removeStartPoint () {
+        if (myStartPoint == null) { return DEFAULT_START_LOC; }
         Location center = myStartPoint.getCenter();
-        deleteSprite((int) center.getX(),(int) center.getY());
+        deleteSprite((int) center.getX(), (int) center.getY());
         return center;
     }
 
     @Override
-    public void addDoor (int x, int y) {
-        // TODO Auto-generated method stub
-        if(myMainDoor == null){
-            myMainDoor = new LevelPortal();
+    public void addDoor (Sprite s, int x, int y) {
+        if (myDoor != null) {
+            deleteSprite((int) myDoor.getX(), (int) myDoor.getY());
         }
-        else{
-            deleteSprite((int) myMainDoor.getX(),(int) myMainDoor.getY());
-        }
-        addSprite(myMainDoor, x, y);
+        myDoor = (LevelPortal) s;
+        addSprite(myDoor, x, y);
     }
 
-    public Location removePortal () {
-        if(myMainDoor == null){
-            return DEFAULT_END_LOC;
-        }
-        Location center = myMainDoor.getCenter();
-        deleteSprite((int) center.getX(),(int) center.getY());
-        return center;
+    public void addDoorWithCoor (int xcoor, int ycoor, Sprite sprite) {
+        myDoor = (LevelPortal) sprite;
+        addSpriteWithCoor(xcoor, ycoor, sprite);
     }
 
     @Override
@@ -279,29 +273,28 @@ public class LEGrid implements Editable, Renderable<LEGridView>, Scrollable {
     }
 
     @Override
-    public void changeBackground (Image i) {
-        myBackground = i;
+    public void changeBackground (IBackgroundView bg) {
+        myBackground = bg;
     }
 
-    public Image getBackground () {
+    public IBackgroundView getBackground () {
         return myBackground;
     }
-    
-    private BufferedImage getThumbnail() {
-        BufferedImage res = new BufferedImage(getPixelSize().width, 
-                                             getPixelSize().height, 
-                                             BufferedImage.TYPE_INT_ARGB);
-        
-        
+
+    private BufferedImage getThumbnail () {
+        BufferedImage res = new BufferedImage(getPixelSize().width,
+                                              getPixelSize().height,
+                                              BufferedImage.TYPE_INT_ARGB);
+
         return paintThumbnail(res);
     }
-    
+
     /**
      * TODO - needs to be completed to provide for fileName etc...
      */
-    public void saveThumbnail(String levelFilePath) {
+    public void saveThumbnail (String levelFilePath) {
         try {
-            ImageIO.write(getThumbnail(), "PNG", new File(levelFilePath+".png"));
+            ImageIO.write(getThumbnail(), "PNG", new File(levelFilePath + ".png"));
         }
         catch (IOException e) {
             // TODO Auto-generated catch block
@@ -310,22 +303,22 @@ public class LEGrid implements Editable, Renderable<LEGridView>, Scrollable {
     }
 
     public void simulate () {
-    //        // TODO Auto-generated method stub
-    //        ScrollingManager sm = new OmniScrollingManager();
-    //        GameView display = new GameView(PlatformerConstants.DEFAULT_WINDOW_SIZE, sm);
-            IView simContainer = new SimpleView("Level Simulation");
-            ScrollingManager sm = new OmniScrollingManager();
-            Level sim = new Level(1, sm, this);
-            GameView display = sim.initializeRenderer(simContainer);
-            // container that will work with user's OS
-            JFrame frame = new JFrame("Level Simulation");
-            // add our user interface components
-            frame.getContentPane().add(display, BorderLayout.CENTER);
-            // display them
-            frame.pack();
-            frame.setVisible(true);
-            // start animation
-            display.start();
-        }
+        // // TODO Auto-generated method stub
+        // ScrollingManager sm = new OmniScrollingManager();
+        // GameView display = new GameView(PlatformerConstants.DEFAULT_WINDOW_SIZE, sm);
+        IView simContainer = new SimpleView("Level Simulation");
+        ScrollingManager sm = new OmniScrollingManager();
+        Level sim = new Level(1, sm, this);
+        GameView display = sim.initializeRenderer(simContainer);
+        // container that will work with user's OS
+        JFrame frame = new JFrame("Level Simulation");
+        // add our user interface components
+        frame.getContentPane().add(display, BorderLayout.CENTER);
+        // display them
+        frame.pack();
+        frame.setVisible(true);
+        // start animation
+        display.start();
+    }
 
 }

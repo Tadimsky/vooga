@@ -2,6 +2,7 @@ package vooga.rts.gamedesign.upgrades;
 
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.strategy.attackstrategy.CanAttack;
+import vooga.rts.util.ReflectionHelper;
 
 /**
  * This class represents the type of upgrade taken place on Attack Strategy. In
@@ -26,7 +27,7 @@ public class AttackUpgradeNode extends UpgradeNode {
      */
     @Override
     public void upgrade (InteractiveEntity requester) {
-    	getReflectionHelper().setValue("myAttackStrategy", requester,
+    	ReflectionHelper.setValue("myAttackStrategy", requester,
     			new CanAttack(requester.getWorldLocation(),
     					requester.getPlayerID()));
     }

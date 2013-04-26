@@ -5,8 +5,7 @@ createPriceField
 createAgeTextField
 createSmallImageSelector
 createLargeImageSelector
-createSinglePlayerCheckBox
-createMultiPlayerCheckBox
+createGameFileSelector
 createDescriptionButton
 createMessageArea
 createPublishButton

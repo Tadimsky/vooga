@@ -3,7 +3,6 @@ package vooga.rts.leveleditor.gui;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -13,9 +12,14 @@ import util.input.InputClassTarget;
 import util.input.InputMethodTarget;
 import util.input.PositionObject;
 import vooga.rts.leveleditor.components.EditableTile;
-import vooga.rts.util.Pixmap;
+/**
+ * This class represents for the Tile button for the level editor
+ * 
+ * @author Ziqiang Huang
+ *
+ */
 
-
+@SuppressWarnings("serial")
 @InputClassTarget
 public class TileButton extends JToggleButton {
 
@@ -23,13 +27,19 @@ public class TileButton extends JToggleButton {
 
     private EditableTile myTile;
     private TilePanel myOwner;
-    private Pixmap myIcon;
     private Input myInput;
     private boolean isInitialized; 
-
+    
+    /**
+     * Constructor for the class
+     * 
+     * @param t the editabletile for the button
+     * @param image the buffered image for the tile icon
+     * @param owner the panel that holds the button
+     */
     public TileButton (EditableTile t, BufferedImage image, TilePanel owner) {
         myTile = t;
-        myIcon = t.getImage();
+        t.getImage();
         Image image2 = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         myOwner = owner;
         myInput = new Input(INPUT_DIR, this);
@@ -47,7 +57,6 @@ public class TileButton extends JToggleButton {
         if(!isInitialized) {
             showCustmizationDailog();
             }
-        myOwner.getCanvas().remove(false);
         myOwner.setCurrentSelectTile(myTile);
         myOwner.getCanvas().setMode(MapPanel.TILEMODE);
     }

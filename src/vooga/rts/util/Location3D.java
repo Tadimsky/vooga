@@ -62,7 +62,7 @@ public class Location3D {
      * @param source The Location3D to copy from.
      */
     public Location3D (Location3D source) {
-        this(source.getX(), source.getY(), 0);
+        this(source.getX(), source.getY(), source.getZ());
     }
 
     /**

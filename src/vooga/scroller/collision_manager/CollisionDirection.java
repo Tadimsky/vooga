@@ -1,20 +1,23 @@
 package vooga.scroller.collision_manager;
 
-import vooga.scroller.sprites.interfaces.ISprite;
+import vooga.scroller.sprites.interfaces.Locatable;
 import vooga.scroller.util.Direction;
 
 public class CollisionDirection {
     
-    
-    private static final int COLLISION_GRANULARITY = 15;
+   
+    private static final int COLLISION_GRANULARITY = 25; //This is how much "wiggle" room you want when deciding what exactly is a collision 
 
     /**
-     * Helper Methods for getting Collision Direction
+     * This method takes in two sprites and returns the collision direction of 
+     * sprite1 and sprite2. For example, if sprite1 collided with sprite2 from 
+     * the top, collisionDirection(sprite1, sprite2) would return Direction.TOP. 
+     * 
      * @param Sprite sprite1
      * @param Sprite sprite2
      * @return one of four Direction enums
      */
-    public Direction collisionDirection (ISprite sprite1, ISprite sprite2) {  
+    public Direction collisionDirection (Locatable sprite1, Locatable sprite2) {  
         if (checkTop(sprite1, sprite2)) return Direction.TOP;
         else if (checkBottom(sprite1, sprite2)) return Direction.BOTTOM;
         else if (checkLeft(sprite1, sprite2)) return Direction.LEFT;
@@ -22,19 +25,19 @@ public class CollisionDirection {
         return null;
     }
     
-    private boolean checkTop(ISprite sprite1, ISprite sprite2) {
+    private boolean checkTop(Locatable sprite1, Locatable sprite2) {
         return (sprite1.getBottom() >= sprite2.getTop() && sprite1.getBottom() <= sprite2.getTop() + COLLISION_GRANULARITY);
     }
     
-    private boolean checkBottom(ISprite sprite1, ISprite sprite2) {
+    private boolean checkBottom(Locatable sprite1, Locatable sprite2) {
         return (sprite1.getTop() <= sprite2.getBottom() && sprite1.getTop() >= sprite2.getBottom() - COLLISION_GRANULARITY);
     }
     
-    private boolean checkLeft(ISprite sprite1, ISprite sprite2) {
+    private boolean checkLeft(Locatable sprite1, Locatable sprite2) {
         return (sprite1.getRight() >= sprite2.getLeft() && sprite1.getRight() <= sprite2.getLeft() + COLLISION_GRANULARITY);
     }
     
-    private boolean checkRight(ISprite sprite1, ISprite sprite2) {
+    private boolean checkRight(Locatable sprite1, Locatable sprite2) {
         return (sprite1.getLeft() <= sprite2.getRight() && sprite1.getLeft() >= sprite2.getRight() - COLLISION_GRANULARITY);
     }
     

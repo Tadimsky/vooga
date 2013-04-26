@@ -1,8 +1,8 @@
 package vooga.fighter.model.utils;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
-import vooga.fighter.model.objects.CharacterObject;
 import vooga.fighter.model.objects.GameObject;
 import util.Location;
 import util.Pixmap;
@@ -55,15 +55,31 @@ public class State {
 
     /**
      * Creates a state with the given owner, number of frames, and default priority
-     * and depth of zero. State has default frame delays of zero.
+     * and depth of zero. State has default frame delays of zero. Looping set to
+     * true by default.
      */
     public State(GameObject owner, int numFrames) {
         this(owner, numFrames, 0, 0);
     }
 
     /**
+     * Creates a new state that is a deep copy of another.
+     */
+    public State(State other) {
+        this(other.getOwner(), other.getNumFrames(), other.getPriority(), other.getDepth());
+        for (int i=0; i<myNumFrames; i++) {
+            Rectangle newRectangle = new Rectangle(other.getRectangle(i));
+            Pixmap newPixmap = new Pixmap(other.getImage(i));
+            Dimension newSize = new Dimension(other.getSize(i));
+            populateRectangle(newRectangle, i);
+            populateImage(newPixmap, i);
+            populateSize(newSize, i);
+        }
+    }
+    
+    /**
      * Creates a state with the given owner, number of frames, priority, and depth.
-     * State has default frame delays of zero.
+     * State has default frame delays of zero. Looping set to false by default.
      */
     public State(GameObject owner, int numFrames, int priority, int depth) {
         myOwner = owner;
@@ -88,6 +104,13 @@ public class State {
     }
 
     /**
+     * Returns the number of frames in this state.
+     */
+    public int getNumFrames() {
+        return myNumFrames;
+    }
+    
+    /**
      * Adds a rectangle this state's rectangle array.
      */
     public void populateRectangle(Rectangle rect, int index) {
@@ -99,6 +122,7 @@ public class State {
      */
     public void populateImage(Pixmap image, int index) {
         myImages[index] = image;
+        mySizes[index] = image.getSize();
     }
 
     /**
@@ -145,9 +169,12 @@ public class State {
      * Returns the current active rectangle for this state.
      */
     public Rectangle getCurrentRectangle() {
-        Rectangle result = myRectangles[myCurrentFrame];
+        Rectangle currentRect = myRectangles[myCurrentFrame];
         Location location = myOwner.getLocation().getLocation();
-        result.setLocation((int) location.getX(), (int) location.getY());
+        Dimension size = currentRect.getSize();
+        Point origin = new Point((int) location.getX() -(int) size.getWidth()/2 , 
+        		(int) location.getY()-(int) size.getHeight()/2 );
+        Rectangle result = new Rectangle(origin, size);
         return result;
     }
 
@@ -164,6 +191,27 @@ public class State {
     public Dimension getCurrentSize() {
         return mySizes[myCurrentFrame];
     }
+    
+    /**
+     * Returns the current active rectangle for this state.
+     */
+    public Rectangle getRectangle(int index) {
+        return myRectangles[index];
+    }
+
+    /**
+     * Returns the current active image for this state.
+     */
+    public Pixmap getImage(int index) {
+        return myImages[index];
+    }
+
+    /**
+     * Returns the current active size for this state.
+     */
+    public Dimension getSize(int index) {
+        return mySizes[index];
+    }
 
     /**
      * Returns the priority of this state. Lower numbers are considered higher
@@ -174,12 +222,26 @@ public class State {
     }
 
     /**
+     * Sets priority for this state.
+     */    
+    public void setPriority(int num){
+    	myPriority = num; 
+    }
+    
+    /**
      * Returns the depth of this state. Lower numbers are considered lower depth,
      * i.e. an image with a lower depth will be drawn first (and thus other
      * images will be drawn on top of it).
      */
     public int getDepth() {
         return myDepth;
+    }
+    
+    /**
+     * Returns the owner of this state.
+     */
+    public GameObject getOwner() {
+        return myOwner;
     }
 
     /**
@@ -241,7 +303,7 @@ public class State {
      */
     public void resetState() {
         myCurrentFrame = 0;
-    }
+    }    
 
     /**
      * Returns true if the state's animation has concluded, false otherwise.
@@ -252,4 +314,5 @@ public class State {
     public boolean hasCompleted() {
         return (myCurrentFrame >= myNumFrames);
     }
+    
 }

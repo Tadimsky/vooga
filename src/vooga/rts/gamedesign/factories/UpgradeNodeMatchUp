@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- This is the match up between upgrade nodes and their class paths -->
+
+<UpgradeNodeMatchUp>
+	<pair>
+		<type>Health</type>
+		<path>vooga.rts.gamedesign.upgrades.HealthUpgradeNode</path>
+	</pair>
+	<pair>
+		<type>Damage</type>
+		<path>vooga.rts.gamedesign.upgrades.DamageUpgradeNode</path>
+	</pair>
+	<pair>
+		<type>AttackStrategy</type>
+		<path>vooga.rts.gamedesign.upgrades.AttackUpgradeNode</path>
+	</pair>
+	<pair>
+		<type>Range</type>
+		<path>vooga.rts.gamedesign.upgrades.RangeUpgradeNode</path>
+	</pair>
+	<pair>
+		<type>AttackCoolDown</type>
+		<path>vooga.rts.gamedesign.upgrades.AttackCoolDownUpgradeNode</path>
+	</pair>
+	<pair>
+		<type>Speed</type>
+		<path>vooga.rts.gamedesign.upgrades.SpeedUpgradeNode</path>
+	</pair>
+</UpgradeNodeMatchUp>

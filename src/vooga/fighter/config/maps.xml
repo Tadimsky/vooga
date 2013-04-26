@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <maps>
-    <map mapName="BlueMap" mapBackground="fighter/images/BlueBackground.jpeg" xSize="1024" ySize="871">
-    	<startingPositions>
-    		<startingPos xCoord="140" yCoord="300"/>
-    		<startingPos xCoord="200" yCoord="300"/>
-    	</startingPositions>
-    	<environmentObjects>
-    		<environmentObject objectName="platform" xCoord="300" yCoord="300"/>
-    	</environmentObjects>
+    <map mapName="BlueMap" xSize="1024" ySize="871">
+        <startingPos xCoord="140" yCoord="300"/>
+        <startingPos xCoord="200" yCoord="300"/>
+        <state stateName = "background">
+            <frame image = "fighter/images/BlueBackground.jpeg" />
+        </state>
+        <environmentObject objectName="platform" xCoord="200" yCoord="550" />
     </map>
-    <map mapName="RainbowBackground" mapBackground="fighter/images/RainbowBackground.jpeg" xSize="1024" ySize="871">
-    	<startingPositions>
-    		<startingPos xCoord="140" yCoord="300"/>
-    		<startingPos xCoord="200" yCoord="300"/>
-    	</startingPositions>
-    	<environmentObjects>
-    		<environmentObject objectName="platform" xCoord="300" yCoord="300"/>
-        </environmentObjects>
+    <map mapName="RainbowBackground" xSize="1024" ySize="871">
+        <startingPos xCoord="140" yCoord="300"/>
+        <startingPos xCoord="200" yCoord="300"/>
+        <state stateName = "background">
+            <frame image = "fighter/images/RainbowBackground.jpeg" />
+        </state>
+        <environmentObject objectName="platform" xCoord="300" yCoord="300" />
+    </map>
+    <map mapName="NewMap" xSize="1024" ySize="871">
     </map>
 </maps>

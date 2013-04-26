@@ -72,6 +72,10 @@ public class UpdatableLocation {
         myVelocity = new Vector(angle, magnitude);
     }
     
+    public void setVelocity(Vector vector) {
+        myVelocity = vector;
+    }
+    
     /**
      * Returns the velocity for this updatable location.
      */
@@ -93,4 +97,38 @@ public class UpdatableLocation {
         return myCoordinates;
     }
     
+    /**
+     * Returns the X coordinate of location
+     */
+    public double getX(){
+    	return myCoordinates.getX();
+    }
+    
+    /**
+     * Returns the Y coordinate of location
+     */
+    public double getY(){
+    	return myCoordinates.getY();
+    }
+    
+    /**
+     * Sets the X coordinate of location
+     */
+    public void setX(double xCoord){
+    	myCoordinates.setLocation(xCoord, getY()); 
+    }
+    
+    /**
+     * Sets the Y coordinate of location
+     */
+    public void setY(double yCoord){
+    	myCoordinates.setLocation(getX(), yCoord);
+    }
+    
+    /**
+     * Sets the location
+     */
+    public void setLocation(double xCoord, double yCoord){
+    	myCoordinates.setLocation(xCoord,yCoord);
+    }
 }

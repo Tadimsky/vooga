@@ -1,9 +1,11 @@
 package arcade.database;
+import arcade.games.Score;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Creates and updates user table
@@ -11,20 +13,6 @@ import java.sql.SQLException;
  * @author Natalia Carvalho
  */
 public class ScoreTable extends Table {
-
-    private static final String TABLE_SEPARATOR = ": ";
-    private static final String GAMEID_COLUMN_FIELD = "gameid";  
-    private static final String USERID_COLUMN_FIELD = "userid";
-    private static final String HIGHSCORE_COLUMN_FIELD = "highscore";
-    private static final String SCOREID_COLUMN_FIELD = "scoreid";  
-
-    
-    private static final int GAMEID_COLUMN_INDEX = 1;
-    private static final int USERID_COLUMN_INDEX = 2;
-    private static final int HIGHSCORE_COLUMN_INDEX = 3;
-    private static final int SCOREID_COLUMN_INDEX = 4;
-    
-    private static final String TABLE_NAME = "scores";
 
     private Connection myConnection;
     private PreparedStatement myPreparedStatement; 
@@ -34,28 +22,10 @@ public class ScoreTable extends Table {
      * Constructor but eventually I want to make this part of the abstract class
      */
     public ScoreTable() {
-        myConnection=establishConnectionToDatabase();
-        myPreparedStatement=null;
-        myResultSet=null;
-    }
-    /**
-     * Closes Connection, ResultSet, and PreparedStatements once done with database
-     */
-    public void closeConnection() {
-        try {
-            if (myPreparedStatement != null) {
-                myPreparedStatement.close();
-            }
-            if (myResultSet != null) {
-                myResultSet.close();
-            }
-            if (myConnection != null) {
-                myConnection.close();
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
+        super();
+        myConnection = getDatabaseConnection().getConnection();
+        myPreparedStatement = getDatabaseConnection().getPreparedStatement();
+        myResultSet = getDatabaseConnection().getResultSet();
     }
     
     /**
@@ -66,34 +36,67 @@ public class ScoreTable extends Table {
      */
     public void addNewHighScore (String gameid, String userid, int highscore) {
         
-        String stm = "INSERT INTO scores(gameid, userid, highscore) VALUES (?, ?, ?)";
+        String stm = "INSERT INTO score(gameid, userid, highscore) VALUES (?, ?, ?)";
         try {
             myPreparedStatement = myConnection.prepareStatement(stm);
-            myPreparedStatement.setString(GAMEID_COLUMN_INDEX, gameid);
-            myPreparedStatement.setString(USERID_COLUMN_INDEX, userid);
-            myPreparedStatement.setInt(HIGHSCORE_COLUMN_INDEX, highscore);
+            myPreparedStatement.setString(Keys.SCORE_GAMEID_COLUMN_INDEX, gameid);
+            myPreparedStatement.setString(Keys.SCORE_USERID_COLUMN_INDEX, userid);
+            myPreparedStatement.setInt(Keys.SCORE_HIGHSCORE_COLUMN_INDEX, highscore);
             myPreparedStatement.executeUpdate();
         }
         catch (SQLException e) {
             e.printStackTrace();
+            //writeErrorMessage("Error adding new high score in ScoreTable.java @ Line 54");
         }
     }
-
-    @Override
-    void printEntireTable () {
-        System.out.println();
+    
+    /**
+     * Gets scores for a given game
+     * @param gameid is game id
+     * @param userid is user id
+     * @param gameName is name of game
+     * @param userName is user
+     */
+    public List<Score> getScoresForGame(String gameid, String userid, 
+                                        String gameName, String userName) {
+        String stm = "SELECT * FROM score WHERE gameid='" + 
+                    gameid + "' AND userid='" + userid + "'";
+        List<Score> scores = new ArrayList<Score>();
         try {
-            myPreparedStatement = myConnection.prepareStatement("SELECT * FROM " + TABLE_NAME);
-            myResultSet = myPreparedStatement.executeQuery();
+            myPreparedStatement = myConnection.prepareStatement(stm);
+            myResultSet  = myPreparedStatement.executeQuery();
             while (myResultSet.next()) {
-                System.out.print(myResultSet.getString(GAMEID_COLUMN_INDEX) + TABLE_SEPARATOR);
-                System.out.print(myResultSet.getString(USERID_COLUMN_INDEX) + TABLE_SEPARATOR);                
-                System.out.print(myResultSet.getInt(HIGHSCORE_COLUMN_INDEX) + TABLE_SEPARATOR);
-                System.out.println(myResultSet.getString(SCOREID_COLUMN_INDEX) + TABLE_SEPARATOR);
+                Score score = new Score(gameName, userName, 
+                                        myResultSet.getInt(Keys.SCORE_HIGHSCORE_COLUMN_INDEX));
+                scores.add(score);
+            }
+            return scores;
+        }
+        catch (SQLException e) {
+            writeErrorMessage("Error getting score for game in ScoreTable.java @ Line 78");
+        }
+        return null;
+    }
+
+    /**
+     * Prints entire table
+     */
+    public void printEntireTable () {
+        myResultSet = selectAllRecordsFromTable(Keys.SCORE_TABLE_NAME);
+        try {
+            while (myResultSet.next()) {
+                System.out.print(myResultSet.getString(Keys.SCORE_GAMEID_COLUMN_INDEX) + 
+                                 Keys.SEPARATOR);
+                System.out.print(myResultSet.getString(Keys.SCORE_USERID_COLUMN_INDEX) + 
+                                 Keys.SEPARATOR);                
+                System.out.print(myResultSet.getDouble(Keys.SCORE_HIGHSCORE_COLUMN_INDEX) + 
+                                 Keys.SEPARATOR);
+                System.out.println(myResultSet.getString(Keys.SCORE_SCOREID_COLUMN_INDEX) + 
+                                   Keys.SEPARATOR);
             }
         }
         catch (SQLException e) {
-            e.printStackTrace();
+            writeErrorMessage("Error printing entire table in ScoreTable.java @ Line 99");
         }
     }
 

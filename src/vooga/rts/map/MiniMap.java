@@ -9,10 +9,13 @@ public class MiniMap implements IGameLoop {
 
     private GameMap myMap;
     private Dimension myMaxSize;
+    
+    private int nodesPerPixel; 
 
     public MiniMap (GameMap toshow, Dimension size) {
         myMap = toshow;
-        myMaxSize = size;        
+        myMaxSize = size;
+        // nodesPerPixel = (int) myMap.getNodeMap().getWidth() / size.getWidth();
     }
 
     @Override
@@ -22,7 +25,6 @@ public class MiniMap implements IGameLoop {
 
     @Override
     public void paint (Graphics2D pen) {
-        
         
     }
 

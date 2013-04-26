@@ -14,8 +14,9 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import arcade.controller.Controller;
 import arcade.exceptions.LoginErrorException;
-import arcade.model.Model;
 import arcade.view.TextKeywords;
 
 
@@ -33,13 +34,13 @@ public class LoginView extends Account {
     private static final int WINDOW_HEIGHT = 240;
 
     /**
-     * Constructs the LoginView with a Model and ResourceBundle
+     * Constructs the LoginView with a Controller and ResourceBundle
      * 
-     * @param model to authenticate the login information
+     * @param controller to authenticate the login information
      * @param resources to display text of appropriate language on screen
      */
-    public LoginView (Model model, ResourceBundle resources) {
-        super(model, resources);
+    public LoginView (Controller controller, ResourceBundle resources) {
+        super(controller, resources);
 
         setPasswordFieldListener(new KeyAdapter() {
             @Override
@@ -87,7 +88,7 @@ public class LoginView extends Account {
         register.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                new RegisterView(getModel(), getResources(), getUsername(), getPassword());
+                new RegisterView(getController(), getResources(), getUsername(), getPassword());
                 dispose();
             }
         });
@@ -118,19 +119,17 @@ public class LoginView extends Account {
     }
 
     /**
-     * Sends the inputs to the model to try logging in.
+     * Sends the inputs to the controller to try logging in.
      */
     private void login () {
         String usernameInput = getUsername();
         String passwordInput = getPassword();
         clearUsername();
         clearPassword();
-        try
-        {
-            getModel().authenticate(usernameInput, passwordInput);
+        try {
+            getController().authenticate(usernameInput, passwordInput);
         }
-        catch (LoginErrorException e)
-        {
+        catch (LoginErrorException e) {
             sendMessage(getResources().getString(e.getLocalizedMessage()));
         }
     }

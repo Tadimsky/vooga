@@ -1,10 +1,16 @@
 package vooga.fighter.model.objects;
-import java.awt.Dimension;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import util.Location;
+import util.Vector;
+import vooga.fighter.model.ModelConstants;
+import vooga.fighter.model.loaders.AttackObjectLoader;
 import vooga.fighter.model.utils.Counter;
 import vooga.fighter.model.utils.Effect;
+import vooga.fighter.model.utils.State;
 import vooga.fighter.model.utils.UpdatableLocation;
 
 /**
@@ -18,39 +24,88 @@ public class AttackObject extends GameObject{
     private Counter myCounter;
     private GameObject myOwner;
     private List<Effect> myEffects;
-    private int myPower;   
-    private int mySpeed;
-    private int myDirection;   
     
     /**
      * Constructs an AttackObject with the given owner.
      * 
-     * Will update to use ObjectLoader.
+     * @param name of the attack object as labeled in its respective xml
      */
-    public AttackObject() {
+    public AttackObject (String name, String pathHierarchy) {
     	super();
-        myEffects = new ArrayList<Effect>();
+    	myEffects = new ArrayList<Effect>();
         myCounter = new Counter();
-    }
-    
-    public AttackObject (AttackObject other, UpdatableLocation center){
-    	super();
-        this.mySpeed= other.mySpeed;
-        this.myDirection= other.myDirection; 
-        this.myPower= other.myPower; 
-        this.myEffects= other.myEffects;
-        this.myOwner= other.myOwner;
-        this.myCounter= other.myCounter;   
-    	setLocation(center);
+        setLoader(new AttackObjectLoader(name, this, pathHierarchy));
+        setToDefaultState();
     }
     
     /**
-     * Updates the attack object.
+     * Creates a deep copy of attack object based on other attack object and character location
      */
-    public void update(){
-    	super.update();
+    public AttackObject (AttackObject other, UpdatableLocation center){
+    	super();
+    	addProperty(ModelConstants.ATTACK_PROPERTY_SPEED, other.getProperty(ModelConstants.ATTACK_PROPERTY_SPEED));
+    	addProperty(ModelConstants.ATTACK_PROPERTY_DIRECTION, other.getProperty(ModelConstants.ATTACK_PROPERTY_DIRECTION));
+    	addProperty(ModelConstants.ATTACK_PROPERTY_DAMAGE, other.getProperty(ModelConstants.ATTACK_PROPERTY_DAMAGE));
+    	addProperty(ModelConstants.ATTACK_PROPERTY_DURATION, other.getProperty(ModelConstants.ATTACK_PROPERTY_DURATION));
+    	this.myEffects = other.myEffects;
+        this.myOwner = other.myOwner;
+        this.myCounter = new Counter(getProperty(ModelConstants.ATTACK_PROPERTY_DURATION));   
+    	setLocation(center);
+    	copyStates(other);
+    	setCurrentState(other.getCurrentStateKey());
+    	addStartingAcceleration();
+        setImageData(); 
+    }
+
+    /**
+     * Creates a deep copy of another AttackObject's state map and sets it as this
+     * object's state map.
+     */
+    public void copyStates(AttackObject other) {
+    	Map<String,State> otherStates = other.getStates();
+    	for (String key : otherStates.keySet()) {
+    		State otherState = otherStates.get(key);
+    		State newState = new State(otherState);
+    		addState(key, newState);
+    	}
+    }
+        
+    /**
+     * Currently empty because of a bug in state, will change later 
+     */
+    public void updateState(){
+    	
+    }
+
+    /**
+     * Move the attack object to the position of its owner.
+     */
+    public void moveToOwner() {
+        UpdatableLocation copyLocation = myOwner.getLocation();
+        UpdatableLocation myLocation = getLocation();
+        Location newLocation = new Location(copyLocation.getLocation());
+        myLocation.setLocation(newLocation);
+    }
+    
+    
+    /**
+     * Updates the attack object by decreasing its counter.
+     */
+    public void completeUpdate(){
     	myCounter.decrementCounter();
     }
+    
+    /**
+     * Adds the initial acceleration of the attack object to the location's list
+     * of accelerations.
+     */
+    public void addStartingAcceleration() {
+        int direction = getProperty(ModelConstants.ATTACK_PROPERTY_DIRECTION);
+        int speed = getProperty(ModelConstants.ATTACK_PROPERTY_SPEED);
+    	Vector acceleration = new Vector(direction, speed);
+    	getLocation().addAcceleration(acceleration);
+    }
+    
     /**
      * Adds an effect to myEffects
      */
@@ -59,8 +114,7 @@ public class AttackObject extends GameObject{
     }
     
     /**
-     * 
-     * @return list of effects
+     * Returns the list of effects carried by this object.
      */
     public List<Effect> getEffects(){
     	return myEffects;
@@ -74,17 +128,17 @@ public class AttackObject extends GameObject{
     }
     
     /**
-     * Sets the damage done by the attack
+     * Sets the owner to the creator of the attack
      */
-    public void setPower(int power) {
-    	myPower = power;
+    public void setOwner(CharacterObject owner){
+    	myOwner= owner; 
     }
-    
     /**
      * Inflicts damage upon a target player.
      */
     public int inflictDamage(CharacterObject target){
-    	return target.changeHealth(-myPower);
+        int damage = getProperty(ModelConstants.ATTACK_PROPERTY_DAMAGE);
+    	return target.changeHealth(-damage);
     }
     
     /**
@@ -95,13 +149,20 @@ public class AttackObject extends GameObject{
             Effect copyOfEffect = effect.getCloneOfEffect();
             target.addActiveEffect(copyOfEffect);
         }
-    }    
+    }        
     
     /**
-     * Sets the amount of time left in attack to zero
+     * Sets the counter to the current amount 
      */
+    public void setCounter(int amount){
+    	myCounter.setCounter(amount); 
+    }
+    
+    /**
+     * Sets the counter to zero. 
+     */    
     public void endCounter(){
-    	myCounter.setCounter(0); 
+    	setCounter(ModelConstants.ATTACK_COUNTER_ZERO);
     }
     
     /**
@@ -109,34 +170,6 @@ public class AttackObject extends GameObject{
      */
     public boolean shouldBeRemoved() {
         return !myCounter.hasCountRemaining();
-    }
-    
-    /**
-     * Dispatches a colliding object to allow for proper collision handling. 
-     */
-    public void dispatchCollision(GameObject other) {
-        other.handleCollision(this);
-    }
-    
-    /**
-     * Collision with another CharacterObject.
-     */
-    public void handleCollision(CharacterObject other) {
-        System.out.println("AttackObject handleCollision : Attack collided with character");
-    }
-    
-    /**
-     * Collision with an AttackObject.
-     */
-    public void handleCollision(AttackObject other) {
-        System.out.println("AttackObject handleCollision : Attack collided with attack");
-    }
-    
-    /**
-     * Collision with an EnvironmentObject.
-     */
-    public void handleCollision(EnvironmentObject other) {
-        System.out.println("AttackObject handleCollision : Attack collided with environment");
-    }
+    }      
 
 }

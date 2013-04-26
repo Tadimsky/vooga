@@ -12,8 +12,8 @@ import vooga.rts.resourcemanager.ResourceManager;
  * 
  */
 public class Information {
-	private String myName;
-	private String myDescription;
+	private String myName = "";
+	private String myDescription = "";
 	private Map<String, Integer> myCost;
 	private int myUniqueID; //for networking
 	private BufferedImage myButtonImage;

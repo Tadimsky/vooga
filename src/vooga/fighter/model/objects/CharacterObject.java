@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import vooga.fighter.model.ModelConstants;
+import vooga.fighter.model.effects.BurnEffect;
 import vooga.fighter.model.loaders.CharacterLoader;
 import vooga.fighter.model.utils.Effect;
 import vooga.fighter.model.utils.Health;
 import vooga.fighter.model.utils.UpdatableLocation;
+import util.Location;
 import util.Vector;
 
 
@@ -19,40 +23,54 @@ import util.Vector;
  * 
  */
 public class CharacterObject extends GameObject {
-
+    
     private Map<String, AttackObject> myAttacks;
+    private Vector forcesApplied; 
     private List<Effect> myActiveEffects;
     private Health myHealth; 
     private List<AttackObject> currentAttacks; 
+    private boolean facingRight;  
+    private int movingDirection; 
+    private Vector myVelocity;  
     
     /**
      * Constructs a new CharacterObject.
      */
-    public CharacterObject(String charName, UpdatableLocation center) {
+    public CharacterObject(String charName, UpdatableLocation center, String pathHierarchy) {
         super();
         myAttacks = new HashMap<String, AttackObject>();
         myActiveEffects = new ArrayList<Effect>();
         myHealth = new Health();
+        movingDirection=ModelConstants.RIGHT; 
         currentAttacks= new ArrayList<AttackObject>();
-        setLoader(new CharacterLoader(charName, this));
-        setCurrentState("stand");
+        setLoader(new CharacterLoader(charName, this, pathHierarchy));
+        setHealth(getProperty("maxHealth"));
+        setToDefaultState();
         getCurrentState().setLooping(true);
         setLocation(center);
+        myVelocity=getLocation().getVelocity();
         setImageData();
         
     }
 
     /**
-     * Updates the character for one game loop cycle. Applies movement from acceleration
-     * forces acting on the character.
+     * Updates the character for one game loop cycle. Applies effects currently
+     * active on the character.
      */
-    public void update() {
-        super.update();
-        for (Effect effect : myActiveEffects) {
+    public void completeUpdate() {
+        for (int i=0; i<myActiveEffects.size(); i++) {
+            Effect effect = myActiveEffects.get(i);
             effect.update();
-        }       
+            if (effect.hasEnded()) {                
+                removeActiveEffect(effect);
+            }
+        }
     }
     
+    /**
+     * Calls GameObject's updateState() method as well as sets the default state to stand
+     * if no other state actions are going on.
+     */
     public void updateState() {
         super.updateState();
         if (getCurrentState().hasCompleted()) {
@@ -82,6 +100,22 @@ public class CharacterObject extends GameObject {
         return myActiveEffects;
     }
 
+    
+    /**
+     * Returns the mass for character
+     */
+    public int getMass(){
+    	return getProperty("mass");
+    }
+    
+    /**
+     * Returns the speed of the character 
+     */
+    public Vector getVelocity(){
+    	return myVelocity;
+    }
+    
+ 
     /**
      * Adds an AttackObject to the list of attacks available for this character.
      * Note that this attack will not be added to the list of game objects in a
@@ -92,6 +126,7 @@ public class CharacterObject extends GameObject {
         myAttacks.put(key, object);
     }
 
+    
     /**
      * Creates and returns an attack object based on a given identifier. Returns null
      * if the specified attack does not exist.
@@ -101,9 +136,10 @@ public class CharacterObject extends GameObject {
      */
     public AttackObject createAttack(String key) {
         if (myAttacks.containsKey(key)) {
-            return myAttacks.get(key);
-        }
-        else {
+            Location charLocation = getLocation().getLocation();
+            UpdatableLocation newLocation = new UpdatableLocation(charLocation.getX(), charLocation.getY());
+            return new AttackObject(myAttacks.get(key), newLocation);
+        } else {
             return null;
         }
     }
@@ -138,75 +174,88 @@ public class CharacterObject extends GameObject {
     }
 
     /**
-     * Creates a new AttackObject by cloning the object identified by the given key
-     * in the attacks map.
+     * Creates and returns a new AttackObject by cloning the object identified
+     * by the given key in the attacks map.
      */
-    public void attack(String attack) {
-        setCurrentState("weakPunch");
-        if (myAttacks.containsKey(attack)) {
-            currentAttacks.add(new AttackObject(myAttacks.get(attack), getLocation()));
-        }
+    public AttackObject attack(String key) {
+        setCurrentState(key);
+        AttackObject newAttack = createAttack(key);
+        newAttack.setOwner(this);
+        return newAttack;
     }
 
     /**
      * Moves in given direction at speed of character
      */
     public void move(int direction) {
-        setCurrentState("moveRight");
-        getLocation().translate(new Vector(direction, getProperty("speed")));
+        movingDirection=direction; 
+        getLocation().translate(new Vector(direction, getProperty("movespeed")));
+
     }
 
+    /**
+     * Makes the character move back if it runs into another character or environmentObject with higher priority
+     */
+    public void moveBack(){
+    	myVelocity.setMagnitude(forcesApplied.getMagnitude()); 
+    	reverseVelocity(); 
+    	getLocation().translate(myVelocity);
+    }
+    
+    /**
+     * Gets the direction the character is moving
+     */
+    public int getMovingDirection(){
+    	return movingDirection;
+    }
+    
     /**
      * Will add jump method
      */
     public void jump() {        
-
+    	getLocation().addAcceleration(new Vector(ModelConstants.UP, getProperty("jumpfactor")));
     } 
     
     /**
-     * Characters should never be removed.
+     * Checks to see if character is facing right
      */
-    public boolean shouldBeRemoved() {
-        return false;
+    public boolean isFacingRight(){
+    	return facingRight; 
     }
     
     /**
-     * returns list of all attackObjects
+     * Sets the character to face left 
+     */
+    public void faceLeft(){
+    	facingRight=false; 
+    }
+    
+    /**
+     * Sets the character to face right 
+     */
+    public void faceRight(){
+    	facingRight=true; 
+    }
+    
+    /**
+     * Returns list of all attackObjects
      */
     public List<AttackObject> getAttackObjects(){
     	return currentAttacks; 
     }
     
-
     /**
-     * Dispatches a colliding object to allow for proper collision handling. 
+     * Reverse the direction of the given vector
      */
-    public void dispatchCollision(GameObject other) {
-        other.handleCollision(this);
+    public void reverseVelocity(){
+    	myVelocity.setDirection(myVelocity.getDirection()-180);
     }
     
     /**
-     * Collision with another CharacterObject.
+     * Sets the applied forces acting on a character object 
      */
-    public void handleCollision(CharacterObject other) {
-        System.out.println("CharacterObject handleCollision : Character collided with character");
+    public void setAppliedForces(Vector sumOfForces){
+    	forcesApplied= sumOfForces;
     }
     
-    /**
-     * Collision with an AttackObject.
-     */
-    public void handleCollision(AttackObject other) {
-        other.inflictDamage(this);
-        System.out.println("CharacterObject handleCollision : Character collided with ATTACK");
-        
-    }
-    
-    /**
-     * Collision with an EnvironmentObject.
-     */
-    public void handleCollision(EnvironmentObject other) {
-        System.out.println("CharacterObject handleCollision : Character collided with environment");
-    }
-    
-
 }

@@ -1,0 +1,6 @@
+public void visit (IPlayer player, ILevelPortal levelPortal) {}
+public void visit (IPlayer player, IEnemy enemy) {}
+public void visit (IPlayer player, ICollectible collectible) {}
+public void visit (ILevelPortal levelPortal, IEnemy enemy) {}
+public void visit (ILevelPortal levelPortal, ICollectible collectible) {}
+public void visit (IEnemy enemy, ICollectible collectible) {}

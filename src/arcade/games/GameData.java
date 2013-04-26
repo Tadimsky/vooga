@@ -2,7 +2,7 @@ package arcade.games;
 
 import java.io.Serializable;
 
-public abstract class GameData implements Serializable {
+public class GameData implements Serializable {
     /**
      * 
      */

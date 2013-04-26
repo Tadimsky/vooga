@@ -2,9 +2,10 @@ package arcade.view.forms.payment.factory;
 
 import java.io.Reader;
 import java.util.ResourceBundle;
+
+import arcade.controller.Controller;
 import arcade.exceptions.UndefinedPaymentException;
 import arcade.games.GameInfo;
-import arcade.model.Model;
 
 /**
  * The purpose of this class is to build a map of payment option strings to
@@ -32,7 +33,7 @@ public class PaymentViewMapFactory<V> extends PrototypeMapFactory<V> {
     protected V getValue (String className) {
         try {
             Class<?> paymentViewClass = Class.forName(className);
-            return (V) paymentViewClass.getConstructor(Model.class, ResourceBundle.class,
+            return (V) paymentViewClass.getConstructor(Controller.class, ResourceBundle.class,
                                                        GameInfo.class);
         }
         catch (ClassNotFoundException e) {

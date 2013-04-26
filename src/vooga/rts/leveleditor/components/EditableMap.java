@@ -1,14 +1,9 @@
 package vooga.rts.leveleditor.components;
 
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
-import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import org.xml.sax.SAXException;
 import vooga.rts.map.GameMap;
 import vooga.rts.state.GameState;
 import vooga.rts.util.Location;
@@ -19,7 +14,7 @@ import vooga.rts.util.Pixmap;
 /**
  * a class of EditableMap, this editable map is used to generate a
  * map that can be used for game players. This class enables them to
- * generated their own map
+ * generated their own map. This class extends GameMap
  * 
  * @author Richard Yang
  * 
@@ -27,8 +22,14 @@ import vooga.rts.util.Pixmap;
 
 public class EditableMap extends GameMap {
 
-
+    /**
+     * the default value of player upper limit
+     */
     private static final int DEFAULT_PLAYER_UPPER_LIMIT = 8;
+    
+    /**
+     * the default value of team upper limit
+     */
     private static final int DEFAULT_TEAM_UPPER_LIMIT = 4;
     
     private String myMapName = "CIEMAS";
@@ -40,309 +41,432 @@ public class EditableMap extends GameMap {
     private MapLoader myLoader;
     
     private EditableTileMap myTileMap;
-
-    public EditableMap (String name, String desc, int xSize, int ySize, int tileWidth, int tileHeight) {
-        super(new Dimension(tileWidth,tileHeight),xSize,ySize);
-        myTileMap = new EditableTileMap(new Dimension(tileWidth,tileHeight),xSize,ySize);
+    /**
+     * constructor for editable map
+     * @param name the name of this map
+     * @param desc a brief description of this game map
+     * @param xSize the x size of this map, in tiles
+     * @param ySize the y size of this map, in tiles
+     * @param tileWidth the width of the tiles in this map
+     * @param tileHeight the height of the tiles in this map
+     */
+    public EditableMap (String name, String desc, int xSize, int ySize,
+                             int tileWidth, int tileHeight) {
+        super(new Dimension(tileWidth , tileHeight) , xSize , ySize);
+        myTileMap = new EditableTileMap(new Dimension(tileWidth, tileHeight), xSize, ySize);
         myMapName = name;
-        myDescription =desc;
+        myDescription = desc;
         GameState.setMap(this);
         initializeMap();
         setTileMap(myTileMap);
     }
-
+    /**
+     * default constructor
+     */
     public EditableMap () {
         this("", "", 0, 0, 0, 0);
     }
 
+    /**
+     * initialize the map tile by tile
+     */
     public void initializeMap () {
         myTileMap.initialize();
-        myPlayerSet = new PlayerSet(DEFAULT_PLAYER_UPPER_LIMIT,DEFAULT_TEAM_UPPER_LIMIT);
+        myPlayerSet = new PlayerSet(DEFAULT_PLAYER_UPPER_LIMIT, DEFAULT_TEAM_UPPER_LIMIT);
 
         try {
             mySaver = new MapSaver(this);
-            //myLoader = new MapLoader(this);
+            myLoader = new MapLoader();
         }
         catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
     }
-
-    public void resetTileMap(int xSize, int ySize ,int tileWidth, int tileHeight) {
-        myTileMap = new EditableTileMap(new Dimension(tileWidth,tileHeight),ySize,xSize);
+    /**
+     * reset the tile map to a certain size
+     * @param xSize x size of this tile map
+     * @param ySize y size of this tile map
+     * @param tileWidth the width of a single tile
+     * @param tileHeight the height of a single tile
+     */
+    public void resetTileMap(int xSize, int ySize , int tileWidth, int tileHeight) {
+        myTileMap = new EditableTileMap(new Dimension(tileWidth, tileHeight), ySize, xSize);
     }
 
+    /**
+     * clear all tiles
+     */
 
     public void clearMap () {
         myTileMap.removeAllTiles();
-        
+        getTerrain().getContents().clear();
+        getResources().getContents().clear();
+        System.out.println("clear");
+    }
+    
+    /**
+     * return the map loaded by the loader
+     * @return EditableMap
+     */
+    public EditableMap returnLoadedMap() {
+        return myLoader.getMyMap();
     }
 
+    /**
+     * print the id of each tile, just for testing purpose
+     */
     public void printMatrix () {
         System.out.println("printmatrix executed");
         System.out.println("X Size : " + getMyXsize());
         System.out.println("Y Size : " + getMyYsize());
         
-        for(int i =0 ; i<getMyXsize() ; i++) {
-            for(int j =0 ; j<getMyYsize() ; j++) {
+        for (int i = 0; i < getMyXsize(); i++) {
+            for (int j = 0; j < getMyYsize(); j++) {
                 System.out.print(myTileMap.getTile(i, j).getMyID());
                 System.out.print(" ");
             }
             System.out.print("\n");
         }
-        for (int i = 0; i < 10; i++) {
-            System.out.print("**");
-        }
         System.out.print("\n");
     }
-
+    
+    /**
+     * load the map from xml file
+     * @param resourceFile resource xml file
+     */
     public void load (File resourceFile) {
 
         try {
-            System.out.println("LOAD MAP IN THE FILE");
             myLoader.loadMapFile(resourceFile);
-
         }
-        catch (SAXException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            // TODO Auto-generated catch block
+        catch (Exception e) {
             e.printStackTrace();
         }
 
+        
+        
     }
-
+    /**
+     * load the map from a certain path
+     * @param filePath the file path
+     */
     public void load (String filePath) {
         File bufferFile = new File(filePath);
         load(bufferFile);
     }
-
+    /**
+     * save the file to a destination
+     * @param objectiveFile the destination file
+     */
     public void save (File objectiveFile) {
         try {
             mySaver.generateMapFile(objectiveFile);
         }
-        catch (TransformerException e) {
-            // TODO Auto-generated catch block
+        catch (Exception e) {
             e.printStackTrace();
         }
-        catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
     }
-
+    /**
+     * save the map to a certain path
+     * @param filePath the desitination file path
+     */
     public void save (String filePath) {
         File bufferFile = new File(filePath);
         save(bufferFile);
     }
     
+    /**
+     * add a player based on its location
+     * @param location location of the player
+     */
     public void addPlayer(Location location) {
         myPlayerSet.addPlayer(location);
     }
-    
+    /**
+     * add a player based on x and y
+     * @param x x position of player
+     * @param y y position of player
+     */
     public void addPlayer(int x , int y) {
         myPlayerSet.addPlayer(x, y);
     }
     
+    /**
+     * remove player 
+     * @param start start location
+     * @param end end location
+     */
     public void removePlayer(Location start, Location end) {
         myPlayerSet.removePlayer(start, end);
     }
     
+    /**
+     * remove a player from the map
+     * @param startX start x position 
+     * @param startY start y position
+     * @param endX end x position
+     * @param endY end y position
+     */
     public void removePlayer(int startX, int startY, int endX, int endY) {
         myPlayerSet.removePlayer(startX, startY, endX, endY);
     }
     
+    /**
+     * add a tile to this map
+     * @param loc location of the terrain
+     * @param id id of the terrain
+     * @param name name of the terrain
+     * @param imageName imageName of the terrain
+     * @param image image of the terrain
+     */
     public void addTile(Location3D loc, int id, String name, String imageName, Pixmap image) {
         myTileMap.addTile(loc, id, name, imageName, image);
     }
-    
+    /**
+     * add tile to map    
+     * @param i the ith column tile
+     * @param j the jth row tile
+     * @param id the id of the tile
+     * @param name the name of the tile
+     * @param imageName the image name of the tile
+     * @param image the image of that tile
+     */
     public void addTile(int i, int j, int id, String name , String imageName, Pixmap image) {
         myTileMap.addTile(i, j, id, name, imageName, image);
     }
-    
+    /**
+     * add new terrains to the map
+     * @param ter a certain terrain
+     */
     public void addTerrain(EditableTerrain ter) {
         getTerrain().add(ter);
     } 
     
-    public void addTerrain(Pixmap image, Location3D center , int id , String name , String imageName, int walkAbility ) {
-        addTerrain(new EditableTerrain(image, center , id , name ,imageName, walkAbility));
+    /**
+     * add new terrains based on some parameters
+     * @param image the image of the terrain
+     * @param center the center position of the terrain
+     * @param id the id of the terrain
+     * @param name of the terrain
+     * @param imageName of the terrain
+     * @param walkAbility of the terrain
+     */
+    public void addTerrain(Pixmap image, Location3D center , int id , 
+                           String name , String imageName, int walkAbility) {
+        addTerrain(new EditableTerrain(image, center , id , name, imageName, walkAbility));
     }
     
-    public void addTerrain(Pixmap image, int x, int y , int z, int id, String name , String imageName , int walkAbility) {
-        addTerrain(image, new Location3D(x, y ,z), id, name , imageName ,walkAbility);
+    /**
+     * add new terrains based on differnent parameters
+     * @param image  image of that terrain
+     * @param x x position
+     * @param y y position
+     * @param z z position
+     * @param id id of the terrain
+     * @param name name of the terrain
+     * @param imageName imageName of the terrain
+     * @param walkAbility walkability of the terrain
+     */
+    public void addTerrain(Pixmap image, int x, int y , int z, int id, 
+                           String name , String imageName , int walkAbility) {
+        addTerrain(image, new Location3D(x, y, z), id, name, imageName, walkAbility);
+    }
+    /**
+     * add terrain based on different parameters 
+     * @param image image of the terrain
+     * @param x x position
+     * @param y y position 
+     * @param layerCount number of layers
+     * @param layerHeight height of layer
+     * @param id id of the terrain
+     * @param name name of the terrain
+     * @param imageName image name of the terrain
+     * @param walkAbility walkability of the terrain
+     */
+    public void addTerrain(Pixmap image, int x, int y, int layerCount, 
+                           int layerHeight, int id , String name , String imageName, int walkAbility) {
+        addTerrain(image, x, y, layerCount * layerHeight, id, name, imageName, walkAbility);
     }
     
-    public void addTerrain(Pixmap image, int x, int y, int layerCount, int layerHeight, int id , String name , String imageName, int walkAbility) {
-        addTerrain(image,x,y,layerCount*layerHeight,id,name,imageName,walkAbility);
-    }
-    
+    /**
+     * add a resource to the map
+     * @param res certain resource
+     */
     public void addResource(EditableResource res) {
         getResources().add(res);
     }
-    
-    public void addResource(Pixmap image, Location3D center , int id, String name , String imageName, int amount) {
-        addResource(new EditableResource(image,center,id,name,imageName,amount));
+    /**
+     * add resource based on different parameters
+     * @param image image of the resource
+     * @param center center position of the resource
+     * @param id id of the resource
+     * @param name of the resource
+     * @param imageName of the resource
+     * @param amount of the resource
+     */
+    public void addResource(Pixmap image, Location3D center , int id, 
+                            String name , String imageName, int amount) {
+        addResource(new EditableResource(image, center, id, name, imageName, amount));
     }
     
-    public void addResource(Pixmap image, int x, int y , int z, int id, String name , String imageName , int walkAbility) {
-        addResource(image, new Location3D(x, y ,z), id, name , imageName ,walkAbility);
+    /**
+     * add a resource to the map based on different parameters
+     * @param image image of the resource
+     * @param x x position
+     * @param y y position 
+     * @param z z position
+     * @param id id of the resource
+     * @param name name of the resource
+     * @param imageName of the resource
+     * @param walkAbility of the resource
+     */
+    public void addResource(Pixmap image, int x, int y , int z,
+                            int id, String name , String imageName , int walkAbility) {
+        addResource(image, new Location3D(x, y , z), id, name, imageName, walkAbility);
     }
     
-    public void addResource(Pixmap image, int x, int y, int layerCount, int layerHeight, int id , String name , String imageName, int walkAbility) {
-        addResource(image,x,y,layerCount*layerHeight,id,name,imageName,walkAbility);
+    /**
+     * add a resource based on differnet parameters
+     * @param image image of resource
+     * @param x x position
+     * @param y y position
+     * @param layerCount number of layers
+     * @param layerHeight height of layer
+     * @param id id of the resource
+     * @param name name of the resource
+     * @param imageName image name of the resource
+     * @param amount amount of the resource
+     */
+    public void addResource(Pixmap image, int x, int y, int layerCount, 
+                            int layerHeight, int id , String name , String imageName, int amount) {
+        addResource(image, x, y, layerCount * layerHeight, id, name, imageName, amount);
     }
     
+    /**
+     *return the x size 
+     * @return int
+     */
     public int getMyXsize() {
         return myTileMap.getMyHeight();
     }
-    
+    /**
+     * return the y size
+     * @return int
+     */
     public int getMyYsize() {
         return myTileMap.getMyWidth();
     }
-    
+    /**
+     * get the width of tile
+     * @return int
+     */
     public int getMyTileWidth() {
         return (int)myTileMap.getMyTileSize().getWidth();
     }
     
+    /**
+     * get the height of tile 
+     * @return int
+     */
     public int getMyTileHeight() {
         return (int)myTileMap.getMyTileSize().getHeight();
     }
     
+    /**
+     * return the terrain size
+     * @return int
+     */
     public int getTerrainSize() {
         return getTerrain().getSize();
     }
     
+    /**
+     * return the resource number
+     * @return int
+     */
     public int getResourceSize() {
         return getResources().getSize();
     }
     
+    /**
+     * return the map name
+     * @return String
+     */
     public String getMyMapName () {
         return myMapName;
     }
     
+    /**
+     * get the number of all players
+     * @return
+     */
     public int getMyPlayerNumber() {
         return myPlayerSet.getMyPlayerNumber();
     }
     
+    /**
+     * get a certain tile based on position
+     * @param i ith 
+     * @param j jth
+     * @return
+     */
     public EditableTile getMyTile(int i , int j) {
         return myTileMap.getTile(i, j);
     }
-    
+    /**
+     * return a certain terrain in this map
+     * @param index the index of the terrain
+     * @return EditableTerrain
+     */
     public EditableTerrain getTerrain(int index) {
-        return (EditableTerrain)getTerrain().getMySprites().get(index);
+        return (EditableTerrain)getTerrain().getContents().get(index);
     }
-    
+    /**
+     * return a certain resource in this map
+     * @param index the index of the resource
+     * @return EditableResource
+     */
     public EditableResource getResource(int index) {
-        return (EditableResource)getResources().getMySprites().get(index);
+        return (EditableResource)getResources().getContents().get(index);
     }
 
-    public void setMyMapName (String myMapName) {
-        this.myMapName = myMapName;
+    /**
+     * set the map name 
+     * @param name the name of this map
+     */
+    public void setMyMapName (String name) {
+        this.myMapName = name;
     }
-
+    /**
+     * get the description of that map
+     * @return the description of current map
+     */
     public String getMyDescription () {
         return myDescription;
     }
-
-    public void setMyDescription (String myDescription) {
-        this.myDescription = myDescription;
+    /**
+     * set the description of the map
+     * @param des the description
+     */
+    public void setMyDescription (String des) {
+        this.myDescription = des;
     }
-    
-    public Map<Integer,Location> getAllPlayers() {
+    /**
+     * return all players
+     * @return the whole player set
+     */
+    public Map<Integer, Location> getAllPlayers() {
         return myPlayerSet.getAllPlayers();
     }
     
-    
-    public static void main (String[] args) {
-        EditableMap test = new EditableMap("TestMap", "This is a test map", 10, 10, 50, 50);
-        
-        String imagePath = System.getProperty("user.dir") + "./src/vooga/rts/leveleditor/resource/";
-        
-        BufferedImage terrain1 = null;
-        BufferedImage terrain2 = null;
-        
-        BufferedImage tile1 = null;
-        BufferedImage tile2 = null;
-        BufferedImage tile3 = null;
-        
-        BufferedImage resource1 = null;
-        BufferedImage resource2 = null;
-    
-        
-        try {
-            terrain1 = ImageIO.read(new File(imagePath+"Terrain1.jpg"));
-            terrain2 = ImageIO.read(new File(imagePath+"Terrain2.jpg"));
-            
-            tile1 = ImageIO.read(new File(imagePath+"Bricks1.jpg"));
-            tile2 = ImageIO.read(new File(imagePath+"Brush1.jpg"));
-            tile3 = ImageIO.read(new File(imagePath+"Concrete1.jpg"));
-            
-            resource1 = ImageIO.read(new File(imagePath + "gas1.png"));
-            resource2 = ImageIO.read(new File(imagePath + "mineral1.png"));
-        }  catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        
-        
-        
-        test.addPlayer(10, 10);
-        test.addPlayer(20, 20);
-        
-        test.addTile(new Location3D(25,25,0), 1, "bricks", "Bricks1.jpg", new Pixmap(tile1));
-        test.addTile(new Location3D(75, 75,0), 1, "bricks", "Bricks1.jpg", new Pixmap(tile1));
-        test.addTile(3, 3, 1, "bricks", "Bricks1.jpg", new Pixmap(tile1));
-        test.addTile(4, 4, 1, "bricks", "Bricks1.jpg", new Pixmap(tile1));
-        
-        test.addTile(5, 5, 2, "brush", "Brush1.jpg", new Pixmap(tile2));
-        test.addTile(6, 6, 2, "brush", "Brush1.jpg", new Pixmap(tile2));
-        test.addTile(7, 7, 2, "brush", "Brush1.jpg", new Pixmap(tile2));
-        test.addTile(8, 8, 2, "brush", "Brush1.jpg", new Pixmap(tile2));
-        
-        test.addTile(5, 7, 3, "concrete", "Concrete1.jpg", new Pixmap(tile3));
-        test.addTile(6, 8, 3, "concrete", "Concrete1.jpg", new Pixmap(tile3));
-        test.addTile(3, 7, 3, "concrete", "Concrete1.jpg", new Pixmap(tile3));
-        test.addTile(2, 8, 3, "concrete", "Concrete1.jpg", new Pixmap(tile3));
-        
-        
-        
-        test.addTerrain(new Pixmap(terrain1), 20, 20, 0, 1, "ter1", "Terrain1.jpg", 2);
-        test.addTerrain(new Pixmap(terrain1), 40, 40, 0, 1, "ter1", "Terrain1.jpg", 2);
-        test.addTerrain(new Pixmap(terrain2), 60, 60, 0, 2, "ter2", "Terrain2.jpg", 4);
-        test.addTerrain(new Pixmap(terrain2), 80, 80, 0, 2, "ter2", "Terrain2.jpg", 4);
-        
-        test.addResource(new Pixmap(resource1), 80, 20,0,1, "gas", "gas1.png", 1000);
-        test.addResource(new Pixmap(resource2), 50, 10,0,2, "mineral", "mineral1.png", 1000);
-        
-        test.printMatrix();
-        System.out.println(test.getTerrainSize());
-        System.out.println(test.getResourceSize());
-        
-        System.out.println(test.getMyTile(2, 2).getWorldLocation().getX());
-        System.out.println(test.getMyTile(2, 2).getWorldLocation().getY());
-                
-        MapSaver saver = null;
-        try {
-            saver = new MapSaver(test);
-        }
-        catch (ParserConfigurationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        try {
-            saver.generateMapFile(new File(System.getProperty("user.dir") + "./turtleRock"));
-        }
-        catch (TransformerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
+    /**
+     * return the player set 
+     * @return
+     */
+    public PlayerSet  getPlayerSet() {
+        return myPlayerSet;
     }
+    
+        
 }
+

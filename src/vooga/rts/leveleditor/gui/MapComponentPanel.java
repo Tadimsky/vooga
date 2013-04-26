@@ -18,6 +18,7 @@ import javax.swing.JPanel;
  *
  */
 
+@SuppressWarnings("serial")
 public abstract class MapComponentPanel extends JPanel {
     
     public static final String USER_DIR = "user.dir";
@@ -42,6 +43,10 @@ public abstract class MapComponentPanel extends JPanel {
 
     }
     
+    /**
+     * create the import button for this panel
+     */
+    
     public JPanel importButtonPanel() {
         JPanel p = new JPanel();
         JButton b = new JButton("Import");
@@ -62,10 +67,18 @@ public abstract class MapComponentPanel extends JPanel {
         p.add(b);
         return p;
     }
+    
+    /**
+     * 
+     * @return the canvas that holds the panel
+     */
 
     public Canvas getCanvas() {
         return myCanvas;
      }
-
+    
+    /**
+     * abstract method that to be overwritten by subclasses
+     */
     public abstract void addButton(); 
 }

@@ -1,7 +1,6 @@
 package vooga.fighter.model.objects;
 
 import vooga.fighter.model.loaders.MapLoader;
-import vooga.fighter.model.utils.State;
 import vooga.fighter.model.utils.UpdatableLocation;
 import vooga.fighter.util.*;
 import java.util.*;
@@ -12,7 +11,7 @@ import java.util.*;
  * particular map. Also contains the background image, music, and player start
  * locations.
  * 
- * @author James Wei, mp
+ * @author James Wei, matthewparides, David Le
  * 
  */
 
@@ -22,17 +21,19 @@ public class MapObject extends GameObject {
     private List<UpdatableLocation> myStartingPositions;
     private Map<String,Sound> mySounds;
     private Sound myCurrentSound;
+    private String myName;
 
     /**
      * Constructor for a new Map object.
      */
-    public MapObject(String mapName) {
+    public MapObject(String mapName, String pathHierarchy) {
         super();
         myEnviroObjects = new ArrayList<EnvironmentObject>();
         myStartingPositions = new ArrayList<UpdatableLocation>();
         mySounds = new HashMap<String,Sound>();
         myCurrentSound = null;
-        setLoader(new MapLoader(mapName, this));
+        myName = mapName;
+        setLoader(new MapLoader(mapName, this, pathHierarchy));
         setCurrentState("background");
         setImageData();
     }
@@ -43,6 +44,29 @@ public class MapObject extends GameObject {
     public void addEnviroObject(EnvironmentObject object) {
         myEnviroObjects.add(object);
         object.setImageData();
+    }
+    
+    /**
+     * removes an environment object from the map object
+     * @param object - object to be removed
+     */
+    public void removeEnviroObject(EnvironmentObject object) {
+    	myEnviroObjects.remove(object);
+    }
+    
+    /**
+     * returns the name of this map.
+     * @return myName - this map's name.
+     */
+    public String getName() {
+    	return myName;
+    }
+    
+    /**
+     * sets the name of this map. used by map editor
+     */
+    public void setName(String newName) {
+    	myName = newName;
     }
 
     /**
@@ -64,6 +88,13 @@ public class MapObject extends GameObject {
      */
     public void addStartPosition(UpdatableLocation position) {
         myStartingPositions.add(position);
+    }
+    
+    /**
+     * sets a starting position to the map object.
+     */
+    public void setStartPosition(int index, UpdatableLocation position) {
+        myStartingPositions.set(index, position);
     }
     
     /**
@@ -110,13 +141,11 @@ public class MapObject extends GameObject {
     public void playCurrentSound() {
         myCurrentSound.play();
     }
-
+    
     /**
      * Updates all environmental objects in the map object.
      */
-    public void update() {        
-        setCurrentState("background");
-        super.update();
+    public void completeUpdate() {                        
         if (getCurrentState().hasCompleted()) {
             getCurrentState().resetState();
         }
@@ -124,37 +153,11 @@ public class MapObject extends GameObject {
 
         }
     }
-
-    /**
-     * Nothing for now, will refactor GameObject to remove this method.
-     */
-    public void applyCollideEffect(GameObject o) {
-        
-    }
-
+    
     /**
      * Nothing for now, just return false. Never need to remove map.
      */
     public boolean shouldBeRemoved() {
         return false;
     }
-
-
-    public void dispatchCollision (GameObject other) {
-        
-    }
-
-    public void handleCollision (CharacterObject other) {
-        
-    }
-
-
-    public void handleCollision (AttackObject other) {
-        
-    }
-
-    public void handleCollision (EnvironmentObject other) {
-        
-    }
-    
 }

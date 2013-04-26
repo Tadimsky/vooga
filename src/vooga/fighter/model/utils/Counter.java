@@ -19,11 +19,12 @@ public class Counter {
      * that has set its value.
      */
     private boolean myStatus;
+    
 
     /**
      * Construct counter with initial count set to my count
      */
-    public Counter (int count) {
+    public Counter(int count) {
         myCount = count;
         myStatus = true;
     }
@@ -31,8 +32,15 @@ public class Counter {
     /**
      * Construct counter with no initial count. The counter will be inactive.
      */
-    public Counter () {
+    public Counter() {
         myStatus = false;
+    }
+    
+    /**
+     * Construct counter with identical count to another counter.
+     */
+    public Counter(Counter other) {
+        this(other.getCount());
     }
 
     /**
@@ -43,6 +51,7 @@ public class Counter {
         myCount = count;
         myStatus = true;
     }
+
 
     /**
      * Reduces the counter by one, if it is active. If the counter is already

@@ -12,22 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import util.BackgroundPanel;
+import arcade.controller.Controller;
 import arcade.exceptions.UndefinedFormException;
-import arcade.model.Model;
 import arcade.view.TextKeywords;
 
 
@@ -39,27 +36,25 @@ import arcade.view.TextKeywords;
 @SuppressWarnings("serial")
 public abstract class Form extends JFrame {
     private static final String FORMS_DIRECTORY = System.getProperty("user.dir") + "/src/arcade/resources/forms/";
-    public static final String BACKGROUND_FILENAME =
-            "arcade/resources/images/LoginBackGround.jpg";
+    public static final String BACKGROUND_FILENAME = "arcade/resources/images/LoginBackGround.jpg";
     private static final int TEXT_FIELD_HEIGHT = 25;
     private static final int TEXT_FIELD_SIZE = 10;
     private static final int LABEL_WIDTH = 80;
     private static final int MESSAGE_WIDTH = 140;
-    private static final int CHECKBOX_TRAILING_WIDTH = 35;
 
-    private Model myModel;
+    private Controller myController;
     private ResourceBundle myResources;
     private JLabel myWarningMessage = new JLabel();
 
     /**
-     * Constructs the form view with a Model and ResourceBundle. It adds a
+     * Constructs the form view with a Controller and ResourceBundle. It adds a
      * background and adds all the components from makeComponents().
      * 
-     * @param model
+     * @param controller
      * @param resources
      */
-    public Form (Model model, ResourceBundle resources) {
-        myModel = model;
+    public Form (Controller controller, ResourceBundle resources) {
+        myController = controller;
         myResources = resources;
 
         BackgroundPanel background = new BackgroundPanel(BACKGROUND_FILENAME);
@@ -215,6 +210,26 @@ public abstract class Form extends JFrame {
     protected JComponent createImageSelector (String descriptionKeyword,
                                               String buttonKeyword,
                                               final FileChooserAction action) {
+        FileFilter filter = new FileNameExtensionFilter(getResources().getString(TextKeywords.IMAGE),
+                                                        "jpg", "gif", "png");
+        return createFileSelector(descriptionKeyword, buttonKeyword, action, filter);
+    }
+    
+    
+    /**
+     * Create a panel with a description of an instruction, and a button to
+     * select a file.
+     * 
+     * @param descriptionKeyword is the ResourceBundle keyword for the description
+     * @param buttonKeyword is the ResourceBundle keyword for the button label
+     * @param action is the FileChooserAction with the method defined for what
+     *        to do on approval
+     * @param filter is the Filter on the file chooser.
+     */
+    protected JComponent createFileSelector (String descriptionKeyword,
+                                             String buttonKeyword,
+                                             final FileChooserAction action,
+                                             final FileFilter filter) {
         JPanel panel = new JPanel();
         JLabel description = new JLabel(getResources().getString(descriptionKeyword));
         panel.add(description);
@@ -223,9 +238,6 @@ public abstract class Form extends JFrame {
             @Override
             public void actionPerformed (ActionEvent arg0) {
                 JFileChooser chooser = new JFileChooser();
-                FileFilter filter =
-                        new FileNameExtensionFilter(getResources().getString(TextKeywords.IMAGE),
-                                                    "jpg", "gif", "png");
                 chooser.setFileFilter(filter);
 
                 int returnVal = chooser.showOpenDialog(null);
@@ -237,47 +249,7 @@ public abstract class Form extends JFrame {
         panel.add(button);
         return panel;
     }
-
-    /**
-     * Creates the checkbox for the user to enter if the checkBoxMessage is true,
-     * and if so, pops up a file chooser to select what is specified by
-     * instructionKeyword. The result from the file chooser is dealt with by
-     * the provided FileChooserAction.
-     * 
-     * There will be the specified width between the checkbox and the checkbox message.
-     * 
-     * @return
-     */
-    protected JComponent createCheckBox (String checkBoxMessageKeyword,
-                                         final String instructionKeyword,
-                                         int width,
-                                         final FileChooserAction action) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        JLabel label = new JLabel(getResources().getString(checkBoxMessageKeyword));
-        panel.add(label);
-        panel.add(Box.createHorizontalStrut(width));
-        JCheckBox box = new JCheckBox();
-        box.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent arg0) {
-                JOptionPane.showMessageDialog(null,
-                                              getResources().getString(instructionKeyword),
-                                              getResources().getString(TextKeywords.POPUP_TITLE),
-                                              JOptionPane.INFORMATION_MESSAGE);
-                JFileChooser chooser = new JFileChooser();
-                int returnVal = chooser.showOpenDialog(null);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    action.approve(chooser);
-                }
-            }
-        });
-        box.setOpaque(false);
-        panel.add(box);
-        panel.add(Box.createHorizontalStrut(CHECKBOX_TRAILING_WIDTH));
-        return panel;
-    }
-
+    
     /**
      * Create a label where an error message can be displayed.
      * 
@@ -306,12 +278,12 @@ public abstract class Form extends JFrame {
     }
 
     /**
-     * Access to the model for subclasses.
+     * Access to the controller for subclasses.
      * 
      * @return
      */
-    protected Model getModel () {
-        return myModel;
+    protected Controller getController () {
+        return myController;
     }
 
     /**
@@ -322,5 +294,4 @@ public abstract class Form extends JFrame {
     protected ResourceBundle getResources () {
         return myResources;
     }
-
 }

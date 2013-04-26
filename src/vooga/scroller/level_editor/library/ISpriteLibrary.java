@@ -1,7 +1,7 @@
 package vooga.scroller.level_editor.library;
 
 
-import vooga.scroller.util.Sprite;
+import vooga.scroller.sprites.Sprite;
 
 
 /**

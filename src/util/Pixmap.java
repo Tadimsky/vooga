@@ -14,11 +14,13 @@ import javax.swing.ImageIcon;
  * 
  * Note, Java only supports the formats: png, jpg, gif.
  * 
- * @author Robert C. Duvall, Dagbedji F, edited by Elder M. Yoshida and Xu Rui.
+ * @author Robert C. Duvall, Dagbedji F, edited by @author Yoshida, @author Xu Rui, @author
+ *         Bill Muensterman and @author Wayne You added paintReverse
  */
 public class Pixmap {
     private java.awt.Image myImage;
-    private String myFilePath;
+    private String myFileName;
+    private static final String RESOURCE_LOCATION = "/vooga/";
     
     /**
      * Create an image from the given path including filename.
@@ -26,11 +28,11 @@ public class Pixmap {
      * If filePath = "/"+pictureFileNameIncludingFileType, this object will look for a
      * .png/.jpg/.gif file inside src.
      * 
-     * @param filePath Relative resource location including its fileName.
+     * @param fileName Relative resource location including its fileName.
      *        Example: filePath = "/" + "car.png" will look for an image car.png in the src folder.
      */
-    public Pixmap (String filePath) {
-        setImage(filePath);
+    public Pixmap(String fileName) {
+        setImage(fileName);
     }
     
     /**
@@ -38,8 +40,8 @@ public class Pixmap {
      * 
      * @param other A <code>Pixmap</code> to be copied.
      */
-    public Pixmap (Pixmap other) {
-        this(other.myFilePath);
+    public Pixmap(Pixmap other) {
+        this(other.myFileName);
     }
     
     /**
@@ -48,9 +50,9 @@ public class Pixmap {
      * @param filePath Relative resource location including its fileName.
      *        Example: filePath = "/" + "car.png" will look for an image car.png in the src folder.
      */
-    public void setImage (String filePath) {
-        myImage = new ImageIcon(getClass().getResource(filePath)).getImage();
-        myFilePath = filePath;
+    public void setImage (String fileName) {
+        myImage = new ImageIcon(getClass().getResource(RESOURCE_LOCATION + fileName)).getImage();
+        myFileName = fileName;
     }
     
     /**
@@ -83,6 +85,25 @@ public class Pixmap {
         pen.drawImage(myImage, -size.width / 2, -size.height / 2, size.width, size.height, null);
         // restore graphics area to its old state, so our changes have no lasting effects
         pen.setTransform(old);
+    }
+    
+    /**
+     * Describes how to draw the image on the screen reversed horizontally.
+     * 
+     * @param pen A {@link Graphics2D} object that allows the picture to be painted.
+     * @param center A {@link Point2D} for the location of the center of the picture to be painted.
+     * @param size The size (width, length) of the image.
+     */
+    public void paintReverse (Graphics2D pen, Point2D center, Dimension size) {
+        // Get the current transform
+        AffineTransform saveAT = pen.getTransform();
+        // Perform transformation
+        pen.transform(AffineTransform.getScaleInstance(-1, 1));
+        // Render
+        // g2d.draw(...);
+        paint(pen, center, size);
+        // Restore original transform
+        pen.setTransform(saveAT);
     }
     
     /**

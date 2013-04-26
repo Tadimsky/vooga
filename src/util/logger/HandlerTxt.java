@@ -21,30 +21,60 @@ public class HandlerTxt implements IVoogaHandler {
     private static final String EXTENSION_ERROR =
             "Not a valid extension";
     private String myFileName;
-    private String myExtension = TXT_EXT;
+    private String myExtension;
 
     /**
      * Constructor
      * Sets the file output name to a default value
      */
     public HandlerTxt () {
-        myFileName = NetworkLogger.DEFAULT_FILE_NAME;
+        this(LoggerManager.DEFAULT_FILE_NAME, TXT_EXT);
     }
     
+    /**
+     * Constructor
+     * @param fileName Sets the file output name to the string given
+     */
+    public HandlerTxt (String fileName) {
+    	this(fileName, TXT_EXT);
+    }
+    
+    /**
+     * Constructor
+     * @param fileName Sets the file output name to the string given
+     */
+    public HandlerTxt (String fileName, String ext) {
+        myFileName = fileName;
+        myExtension = ext;
+    }
+    
+    /**
+     * 
+     * @return Name of the file this handler is writing to
+     */
     public String getFileName() {
     	return myFileName;
     }
     
+    /**
+     * 
+     * @param file Name of the file (without spaces) to write log
+     * records to
+     */
     public void setFileName(String file) {
     	myFileName = file.replace("\\s+", "");
     }
     
+    /**
+     * 
+     * @param ext Extension for this file
+     */
     public void setExtension (String ext) {
     	if (ext.charAt(0) == '.') {
     		myExtension = ext;
     	}
     	else {
-    		NetworkLogger.getLogger().log(Level.INFO, EXTENSION_ERROR);
+    		LoggerManager.DEFAULT_LOGGER.log(Level.INFO, EXTENSION_ERROR);
     	}
     }
 
@@ -56,7 +86,7 @@ public class HandlerTxt implements IVoogaHandler {
             handler.setFormatter(new SimpleFormatter());
         }
         catch (Exception e) {
-            NetworkLogger.LOGGER.severe(ERROR_MESSAGE);
+            LoggerManager.DEFAULT_LOGGER.severe(ERROR_MESSAGE);
         }
         return handler;
     }

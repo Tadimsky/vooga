@@ -1,7 +1,5 @@
 package util.inputExample;
 
-
-//import game.Model;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -16,8 +14,7 @@ import javax.swing.Timer;
  * Creates an area of the screen in which the game will be drawn that supports:
  * <UL>
  *   <LI>animation via the Timer
- *   <LI>mouse input via the MouseListener
- *   <LI>keyboard input via the KeyListener
+ *   <LI>mouse and keyboard input via the Input class
  * </UL>
  * 
  * @author Robert C Duvall
@@ -34,7 +31,7 @@ public class Canvas extends JComponent {
     public static final int NO_KEY_PRESSED = -1;
 
     private Timer myTimer;
-    private Game1 myGame;
+    private Game1 myGame = new Game1(this);
     private int myLastKeyPressed;
     private Point myLastMousePosition;
     boolean mouseDown = false;
@@ -43,9 +40,11 @@ public class Canvas extends JComponent {
     
     /**
      * Create a panel so that it knows its size
+     * @param size
+     * @param frame
      */
     public Canvas (Dimension size, JFrame frame) {
-    	myFrame = frame;
+        myFrame = frame;
         setPreferredSize(size);
         setSize(size);
         setFocusable(true);
@@ -100,7 +99,6 @@ public class Canvas extends JComponent {
                 }
             });
         // start animation
-        myGame = new Game1(this);
         timer.start();
     }
 
@@ -139,24 +137,24 @@ public class Canvas extends JComponent {
         //sets the current mouse click state
         mouseDown = false;
         addMouseListener(new MouseListener() {
-        	@Override
-			public void mouseClicked(MouseEvent arg0) {}
+            @Override
+            public void mouseClicked(MouseEvent arg0) {}
 
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}
+            @Override
+            public void mouseEntered(MouseEvent arg0) {}
 
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
+            @Override
+            public void mouseExited(MouseEvent arg0) {}
 
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				mouseDown = true;
-			}
+            @Override
+            public void mousePressed(MouseEvent arg0) {
+                mouseDown = true;
+            }
 
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				mouseDown = false;
-			}
+            @Override
+            public void mouseReleased(MouseEvent arg0) {
+                mouseDown = false;
+            }
         });
     }
     
@@ -166,6 +164,6 @@ public class Canvas extends JComponent {
      * @return mouse click state
      */
     public boolean getMouseDown(){
-    	return mouseDown;
+        return mouseDown;
     }
 }

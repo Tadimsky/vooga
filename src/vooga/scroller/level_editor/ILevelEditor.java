@@ -4,8 +4,9 @@ package vooga.scroller.level_editor;
 import java.awt.Image;
 import java.util.Map;
 import javax.swing.Icon;
+import vooga.scroller.sprites.Sprite;
 import vooga.scroller.util.Editable;
-import vooga.scroller.util.Sprite;
+import vooga.scroller.util.IBackgroundView;
 
 /**
  * Interface between a LevelEditor model and a Level Editor view.
@@ -21,9 +22,7 @@ import vooga.scroller.util.Sprite;
 public interface ILevelEditor {
     
 
-    public static final int START_ID = -1;
-    
-    public static final int END_ID = -2;
+    public static final int START_ID = 0;
 
     /**
      * This is the generalized method call for a client to send a LevelEditor
@@ -39,6 +38,6 @@ public interface ILevelEditor {
      */
     public void setSpriteMap (Map<Integer, Sprite> spriteMap);
 
-    void setBackgroundMap (Map<Integer, Image> map);
+    void setBackgroundMap (Map<Integer, IBackgroundView> map);
     
 }

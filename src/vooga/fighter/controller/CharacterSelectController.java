@@ -21,61 +21,75 @@ import java.util.ResourceBundle;
 
 
 /**
- * 
- * @author Jerry Li and Jack Matteucci
+ * A Controller that handles choosing the character
+ * @author Jerry Li
+ * @author Jack Matteucci
  */
 
-@InputClassTarget
+
 public class CharacterSelectController extends MenuController {
 
-	private int myCharLimit;
-	private int myCharIndex;
-	private Input myInput;
+    private int myCharLimit;
+    private int myCharIndex;
+    private Input myInput;
 
-    public CharacterSelectController (String name, Canvas frame) {
-        super(name, frame);
+    /**
+     * Initial Constructor
+     */
+    public CharacterSelectController () {
+        super();
     }
-        
+    
+    /**
+     * Concrete Constructor, two constructors used for reflection purposes
+     * @param name      Name of controller
+     * @param frame     Canvas
+     * @param manager   ControllerManager
+     * @param gameinfo  GameInfo
+     */
     public CharacterSelectController(String name, Canvas frame, ControllerDelegate manager, 
-                GameInfo gameinfo) {
+                                     GameInfo gameinfo) {
         super(name, frame, manager, gameinfo);
         myCharLimit = getGameInfo().getNumCharacters();
         myCharIndex = 0;
     }
-
-    @Override
-    public Controller getController (ControllerDelegate delegate, GameInfo gameinfo) {
-        return new CharacterSelectController(super.getName(), super.getView(),
-                                   delegate, gameinfo);
-    }
-
+    
     /**
-     * Checks this controller's end conditions
+     * returns concrete controller
      */
-    public void notifyCharacterSelection(String character) {
-        //myGameInfo.addCharacters(character);
+    public Controller getController(String name, Canvas frame, ControllerDelegate manager, GameInfo gameinfo) {
+        Controller controller = new CharacterSelectController(name, frame, manager, gameinfo);
+        return controller;
     }
+
     /**
-     * Checks this controller's end conditions
+     * Notifies the ControllerDelegate of a condition
      */
     public void notifyEndCondition(String choice) {
-
-    	getGameInfo().addCharacters(choice);
-    	myCharIndex ++;
-    	if(myCharIndex >= myCharLimit){
-    	removeListener();
-        getManager().notifyEndCondition(NEXT);
-    	}
+        getGameInfo().addCharacters(choice);
+        getMode().resetChoice();
+        myCharIndex ++;
+        System.out.println("character selected");
+        if(myCharIndex >= myCharLimit){
+            removeListener();
+            getManager().notifyEndCondition(getMode().getMenusNext(choice));
+        }
     } 
     
-    @InputMethodTarget(name = "continue")
-    public void mouseclick(PositionObject pos)  {
-        super.getMode().addObject(new MouseClickObject(pos.getPoint2D()));
-        notifyEndCondition(getMode().getMenuNames().get(0));
-    }
+    /**
+     * Removes input listener
+     */
     public void removeListener(){
-    	super.removeListener();
-    	getInput().removeListener(this);
+        super.removeListener();
+        getInput().removeListener(this);
+    }
+    
+    /**
+     * Checks conditions
+     */
+    public void checkConditions(){
+        for(ModeCondition condition: getConditions())
+            if(condition.checkCondition(getMode())) notifyEndCondition(getMode().peekChoice());
     }
 
 }

@@ -2,19 +2,31 @@ package vooga.rts.leveleditor.gui;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 import vooga.rts.leveleditor.components.EditableTile;
 import vooga.rts.util.Pixmap;
 
+/**This class represents for the tile panel for the level editor
+ * 
+ * @author Ziqiang Huang
+ *
+ */
+@SuppressWarnings("serial")
 public class TilePanel extends MapComponentPanel {
     
+    /**
+     * Constructor for this class
+     * 
+     * @param canvas the canvas that holds the panel
+     */
     public TilePanel(Canvas canvas) {
         super(canvas);
     }    
     
+    /**
+     * add the tile button on the panel
+     */
     @Override
     public void addButton() {
         for(int i=0; i<myFiles.length; ++i) {
@@ -27,6 +39,11 @@ public class TilePanel extends MapComponentPanel {
             }
         }
     }
+    
+    /**
+     * set the current select tile for the canvas
+     * @param myTile
+     */
 
     public void setCurrentSelectTile(EditableTile myTile) {
         myCanvas.setCurrentSelectTile(myTile);        

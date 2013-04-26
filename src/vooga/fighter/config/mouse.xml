@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <objects>
-    <mouseclickobject >
+    <mouseobject >
     	<state name="still">
-            <frame image="fighter/images/ryu_stand1.png" width="30" height="30" />
+            <frame mouseimage="fighter/images/ball.gif" mouseclickimage="fighter/images/fire.png" width="30" height="30" />
         </state>
-    </mouseclickobject>
+    </mouseobject>
 </objects>

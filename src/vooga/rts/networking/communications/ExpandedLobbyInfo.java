@@ -19,7 +19,7 @@ public class ExpandedLobbyInfo extends LobbyInfo {
      * Inner list represents a team, outer list represents all the teams
      */
     private int myMaxTeams;
-    private Player[] myPlayers;
+    private PlayerInfo[] myPlayers;
     private int myNextSlot = 0;
 
     /**
@@ -36,7 +36,7 @@ public class ExpandedLobbyInfo extends LobbyInfo {
                               int id) {
         super(lobbyName, mapName, maxPlayers, id);
         myMaxTeams = maxPlayers;
-        myPlayers = new Player[maxPlayers];
+        myPlayers = new PlayerInfo[maxPlayers];
     }
 
     /**
@@ -65,7 +65,7 @@ public class ExpandedLobbyInfo extends LobbyInfo {
      * 
      * @param player player to add
      */
-    public void addPlayer (Player player) {
+    public void addPlayer (PlayerInfo player) {
         if (myNextSlot != getMaxPlayers()) {
             addPlayer();
             myPlayers[myNextSlot] = player;
@@ -84,7 +84,7 @@ public class ExpandedLobbyInfo extends LobbyInfo {
      * 
      * @param player to remove
      */
-    public void removePlayer (Player player) {
+    public void removePlayer (PlayerInfo player) {
         for (int i = 0; i < myPlayers.length; i++) {
             if (myPlayers[i] != null && myPlayers[i].equals(player)) {
                 myPlayers[i] = null;
@@ -100,7 +100,7 @@ public class ExpandedLobbyInfo extends LobbyInfo {
      * 
      * @param player to change
      */
-    public void changePlayer (Player player) {
+    public void changePlayer (PlayerInfo player) {
         for (int i = 0; i < myPlayers.length; i++) {
             if (myPlayers[i] != null && myPlayers[i].equals(player)) {
                 myPlayers[i] = player;
@@ -114,7 +114,7 @@ public class ExpandedLobbyInfo extends LobbyInfo {
      * @param position of player
      * @return player
      */
-    public Player getPlayerAtPosition (int position) {
+    public PlayerInfo getPlayerAtPosition (int position) {
         return myPlayers[position];
     }
 
@@ -132,7 +132,7 @@ public class ExpandedLobbyInfo extends LobbyInfo {
      * 
      * @return copy of player array
      */
-    public Player[] getPlayers () {
+    public PlayerInfo[] getPlayers () {
         return Arrays.copyOf(myPlayers, myPlayers.length);
     }
 
@@ -151,6 +151,20 @@ public class ExpandedLobbyInfo extends LobbyInfo {
             if (myPlayers[i].getTeam() != team1) { return true; }
         }
         return false;
+    }
+    
+    /**
+     * Gets a player with the given id
+     * @param id of player
+     * @return player
+     */
+    public PlayerInfo getPlayer (int id) {
+        for (int i = 0; i < myPlayers.length; i++) {
+            if (myPlayers[i].getId() == id) {
+                return myPlayers[i];
+            }
+        }
+        return null;
     }
 
 }

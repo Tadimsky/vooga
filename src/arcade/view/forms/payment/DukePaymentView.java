@@ -3,9 +3,10 @@ package arcade.view.forms.payment;
 import java.util.ResourceBundle;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
+
+import arcade.controller.Controller;
 import arcade.exceptions.InvalidPaymentException;
 import arcade.games.GameInfo;
-import arcade.model.Model;
 import arcade.view.TextKeywords;
 
 
@@ -23,15 +24,15 @@ public class DukePaymentView extends PaymentView {
     private JTextField myDukeCardTextField;
 
     /**
-     * Constructs the DukePaymentView with a Model, ResourceBundle, 
+     * Constructs the DukePaymentView with a Controller, ResourceBundle, 
      * and a GameInfo for the game to be bought.
      * 
-     * @param model
+     * @param controller
      * @param resources
      * @param info
      */
-    public DukePaymentView (Model model, ResourceBundle resources, GameInfo info) {
-       super(model, resources, info, PAYMENT_MANAGER_CLASS);
+    public DukePaymentView (Controller controller, ResourceBundle resources, GameInfo info) {
+       super(controller, resources, info, PAYMENT_MANAGER_CLASS);
     }
     
     /**
@@ -61,7 +62,8 @@ public class DukePaymentView extends PaymentView {
 
     @Override
     protected String[] getPaymentInfo () {
-        String[] paymentInfo = {myNameTextField.getText(),
+        String[] paymentInfo = {getGame().getPrice() + "",
+                                myNameTextField.getText(),
                                 myDukeCardTextField.getText()};
         return paymentInfo;
     }

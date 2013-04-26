@@ -10,31 +10,30 @@ import java.util.List;
  * here in subclassed UserGameDatas.
  * @author Will Nance
  */
-public class UserGameData implements Serializable {
+public  class UserGameData implements Serializable {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    private List<Double> myScores;
+    private int myLastScore = 0;
     
     public UserGameData() {
-        myScores = new ArrayList<Double>();
     }
     
     /**
      * Represents something like a score or a win/loss ratio or any number
      * that is relevant to how a user is performing.
      */
-    public List<Double> getScores () {
-        return myScores;
+    public int getLastScore() {
+        return myLastScore;
     }
 
     /**
      * Lets the game update the user's statistic.
      */
-    public void setScore (double score) {
-        myScores.add(score);
+    public void setScore (int score) {
+        myLastScore = score;
     }
 
   

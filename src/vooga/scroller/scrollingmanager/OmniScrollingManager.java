@@ -15,8 +15,8 @@ public class OmniScrollingManager extends ScrollingManager {
 
     protected int upperpaintbound() {
         if (getModel() != null & getView() != null) {
-            int vertical = (int) (((int) getModel().getLowerBoundary() 
-                    + getView().getHeight() * levelLowerBoundary()) % getView().getHeight());
+            int vertical = (int) (((int) getModel().getUpperBoundary() 
+                    + getView().getHeight() * levelLowerBoundary()) % getBackground().getHeight(null));
             return 0 - vertical;
         }
         return 0;
@@ -25,7 +25,7 @@ public class OmniScrollingManager extends ScrollingManager {
     protected int lowerpaintbound() { 
         if (getModel() != null & getView() != null) {
             int vertical = (int) (((int) getModel().getLowerBoundary() 
-                    + getView().getHeight() * levelLowerBoundary()) % getView().getHeight());
+                    + getView().getHeight() * levelLowerBoundary()) % getBackground().getHeight(null));
             return getView().getHeight() - vertical;
         }
         return 0;
@@ -34,8 +34,8 @@ public class OmniScrollingManager extends ScrollingManager {
 
     protected int leftpaintbound() {
         if (getModel() != null && getView() != null) {
-            int horizontal = (int) (((int) getModel().getRightBoundary() 
-                    + getView().getWidth() * levelRightBoundary()) % getView().getWidth());
+            int horizontal = (int) (((int) getModel().getLeftBoundary() 
+                    + getView().getWidth() * levelRightBoundary()) % getBackground().getWidth(null));
             return 0 - horizontal;
         }
         return 0;
@@ -44,7 +44,7 @@ public class OmniScrollingManager extends ScrollingManager {
     protected int rightpaintbound() {
         if (getModel() != null & getView() != null) {
             int horizontal = (int) (((int) getModel().getRightBoundary() 
-                    + getView().getWidth() * levelRightBoundary()) % getView().getWidth());
+                    + getView().getWidth() * levelRightBoundary()) % getBackground().getWidth(null));
             return getView().getWidth() - horizontal;
         }
         return 0;
@@ -62,25 +62,23 @@ public class OmniScrollingManager extends ScrollingManager {
         
         if (getModel().getLeftBoundary() < levelLeftBoundary()) {
             leftpaintbound = (int) levelLeftBoundary();
-            rightpaintbound = (int) levelRightBoundary();
+            rightpaintbound = leftpaintbound + getBackground().getWidth(null);
         }
         
         if (getModel().getRightBoundary() > levelRightBoundary()) {
-            leftpaintbound =  -((int) levelRightBoundary() 
-                    % getModel().getBackground().getWidth(null));
             rightpaintbound = getView().getWidth()  - ((int) levelRightBoundary() 
                     % getModel().getBackground().getWidth(null));
+            leftpaintbound = rightpaintbound - getBackground().getWidth(null);
             
         }
         if (getModel().getLowerBoundary() > levelLowerBoundary()) {
-            upperpaintbound = -((int) levelLowerBoundary() 
-                    % getModel().getBackground().getHeight(null));
             lowerpaintbound = getView().getHeight()  - ((int) levelLowerBoundary() 
                     % getModel().getBackground().getHeight(null));
+            upperpaintbound = lowerpaintbound - getBackground().getHeight(null);
         }
         if (getModel().getUpperBoundary() < levelUpperBoundary()) {
             upperpaintbound = (int) levelUpperBoundary();
-            lowerpaintbound = (int) levelLowerBoundary();
+            lowerpaintbound = upperpaintbound + getBackground().getHeight(null);
         }
         scrollerDrawImage(pen, leftpaintbound, upperpaintbound, rightpaintbound, lowerpaintbound);
 
@@ -93,6 +91,13 @@ public class OmniScrollingManager extends ScrollingManager {
         Image img = getBackground();
         int imgwidth = img.getWidth(null);
         int imgheight = img.getHeight(null);
+        
+//        System.out.println("Left : " + leftpaintbound);
+//        System.out.println("Right : " + rightpaintbound);
+//        System.out.println("Upper : " + upperpaintbound);
+//        System.out.println("Lower : " + lowerpaintbound);
+//        System.out.println("Width : " + imgwidth);
+//        System.out.println("Height : " + imgheight);
         
         pen.drawImage(img, leftpaintbound, upperpaintbound, imgwidth, imgheight, null);
         pen.drawImage(img, rightpaintbound, upperpaintbound, imgwidth, imgheight, null);

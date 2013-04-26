@@ -9,7 +9,7 @@ import vooga.fighter.view.Canvas;
 /**
  * Creates window that can be moved, resized, and closed by the user.
  *
- * @author Robert C. Duvall
+ * @author Jack Matteucci
  */
 public class Main extends JFrame
 {

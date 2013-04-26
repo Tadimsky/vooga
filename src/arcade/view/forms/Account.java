@@ -5,10 +5,10 @@ import java.util.ResourceBundle;
 import javax.swing.JComponent;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import arcade.model.Model;
+
+import arcade.controller.Controller;
 import arcade.view.TextKeywords;
 
-@SuppressWarnings("serial")
 /**
  * Represents a form that a user has to fill out that also contains fields for
  * username and password 
@@ -16,6 +16,7 @@ import arcade.view.TextKeywords;
  * @author Ellango
  *
  */
+@SuppressWarnings("serial")
 public abstract class Account extends Form {
     private JTextField myUserNameTextField;
     private JPasswordField myPasswordTextField;
@@ -24,11 +25,11 @@ public abstract class Account extends Form {
     /**
      * Create an AccountView with text fields for username and password.
      * 
-     * @param model
+     * @param controller
      * @param resources
      */
-    public Account (Model model, ResourceBundle resources) {
-        super(model, resources);
+    public Account (Controller controller, ResourceBundle resources) {
+        super(controller, resources);
     }
 
     /**

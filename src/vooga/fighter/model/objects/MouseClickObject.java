@@ -1,58 +1,18 @@
 package vooga.fighter.model.objects;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-import util.Location;
-import util.Pixmap;
-import vooga.fighter.model.loaders.MouseClickLoader;
-import vooga.fighter.model.utils.State;
-import vooga.fighter.model.utils.UpdatableLocation;
+
+import vooga.fighter.model.ModelConstants;
 
 
-public class MouseClickObject extends GameObject {
+public class MouseClickObject extends MouseObject {
 
-    private int myTicks;
-
-    public MouseClickObject (Point2D loc) {
-        setLocation(new UpdatableLocation(loc.getX(), loc.getY()));
-        setLoader(new MouseClickLoader(this));
-        System.out.println();
-        myTicks = 0;
-        setImageData();
+    public MouseClickObject (Point2D loc, String pathHierarchy) {
+    	super(loc, pathHierarchy);
     }
-
+    
     @Override
-    public boolean shouldBeRemoved () {
-        return (myTicks > 30);
-    }
-
-    @Override
-    public void update () {
-        myTicks++;
-    }
-
-    @Override
-    public void dispatchCollision (GameObject other) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void handleCollision (CharacterObject other) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void handleCollision (AttackObject other) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void handleCollision (EnvironmentObject other) {
-        // TODO Auto-generated method stub
-
+    public String getImageTag(){
+    	return ModelConstants.MOUSE_CLICK_IMAGE_TAG;
     }
 }

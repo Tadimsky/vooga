@@ -1,107 +1,102 @@
 <?xml version="1.0"?>
-<objects>
-    <character charID="Ken" charName="Ken" charIcon="ryuicon.png" maxHealth="100" movespeed="15">
+<characters>
+    <character charID="Ryu" charName="Ryu" charIcon="ryuicon.png" maxHealth="100" mass="20" default="stand">
         <state stateName="stand">
-            <frame image="fighter/images/ryu_stand1.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ryu_stand1.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ryu_stand2.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ryu_stand2.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ryu_stand3.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ryu_stand3.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ryu_stand4.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ryu_stand4.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
         </state>
         <state stateName="moveRight">
-            <frame image="fighter/images/ryu_stand1.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ryu_stand1.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ryu_stand2.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ryu_stand2.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ryu_stand3.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ryu_stand3.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ryu_stand4.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ryu_stand4.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
         </state>
         <state stateName="weakPunch">
-            <frame image="fighter/images/ryu_punch1.png">
-                <hitbox cornerX="10" cornerY="3" rectX="35" rectY="78"/>
+            <frame image="fighter/images/ryu_punch1.gif">
+                <hitbox cornerX="10" cornerY="3" width="35" height="78"/>
             </frame>
-            <frame image="fighter/images/ryu_punch2.png">
-                <hitbox cornerX="10" cornerY="3" rectX="35" rectY="78"/>
+            <frame image="fighter/images/ryu_punch2.gif">
+                <hitbox cornerX="10" cornerY="3" width="35" height="78"/>
             </frame>
-            <frame image="fighter/images/ryu_punch3.png">
-                <hitbox cornerX="10" cornerY="3" rectX="35" rectY="78"/>
+            <frame image="fighter/images/ryu_punch3.gif">
+                <hitbox cornerX="10" cornerY="3" width="35" height="78"/>
             </frame>
         </state>
-        <attack attackName="weakPunch" damage="5">
-            <frame>
-                <hitbox cornerX="35" cornerY="14" rectX="10" rectY="10"/>
-            </frame>
-            <frame>
-                <hitbox cornerX="35" cornerY="14" rectX="26" rectY="10"/>
-            </frame>
-            <frame>
-                <hitbox cornerX="35" cornerY="14" rectX="10" rectY="10"/>
-            </frame>
-        </attack>
+        <attack attackName = "weakPunch" />
     </character>
-    <character charID="Ryu" charName="Ryu" charIcon="kenicon.png" maxHealth="100" movespeed="15">
+    <character charID="Ken" charName="Ken" charIcon="kenicon.png" maxHealth="100" movespeed="15" mass="20" default="stand">
         <state stateName="stand">
-            <frame image="fighter/images/ken_stand1.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ken_stand1.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ken_stand2.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ken_stand2.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ken_stand3.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ken_stand3.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ken_stand4.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ken_stand4.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
         </state>
         <state stateName="moveRight">
-            <frame image="fighter/images/ken_stand1.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ken_stand1.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ken_stand2.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ken_stand2.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ken_stand3.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ken_stand3.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
-            <frame image="fighter/images/ken_stand4.png">
-                <hitbox cornerX="10" cornerY="3" rectX="28" rectY="78"/>
+            <frame image="fighter/images/ken_stand4.gif">
+                <hitbox cornerX="10" cornerY="3" width="28" height="78"/>
             </frame>
         </state>
         <state stateName="weakPunch">
-            <frame image="fighter/images/ken_punch1.png">
-                <hitbox cornerX="10" cornerY="3" rectX="35" rectY="78"/>
+            <frame image="fighter/images/ken_punch1.gif">
+                <hitbox cornerX="10" cornerY="3" width="35" height="78"/>
             </frame>
-            <frame image="fighter/images/ken_punch2.png">
-                <hitbox cornerX="10" cornerY="3" rectX="35" rectY="78"/>
+            <frame image="fighter/images/ken_punch2.gif">
+                <hitbox cornerX="10" cornerY="3" width="35" height="78"/>
             </frame>
-            <frame image="fighter/images/ken_punch3.png">
-                <hitbox cornerX="10" cornerY="3" rectX="35" rectY="78"/>
+            <frame image="fighter/images/ken_punch3.gif">
+                <hitbox cornerX="10" cornerY="3" width="35" height="78"/>
             </frame>
         </state>
-        <attack attackName="weakPunch" damage="5">
-            <frame image="fighter/images/ken_punch1.png">
-                <hitbox cornerX="35" cornerY="14" rectX="10" rectY="10"/>
-            </frame>
-            <frame>
-                <hitbox cornerX="35" cornerY="14" rectX="26" rectY="10"/>
-            </frame>
-            <frame>
-                <hitbox cornerX="35" cornerY="14" rectX="10" rectY="10"/>
-            </frame>
+        <attack attackName="weakPunch" damage="5" duration="50" attackspeed="50">
+            <state stateName="weakPunchAttack">
+	            <frame image="fighter/images/ball.gif">
+	                <hitbox cornerX="35" cornerY="14" width="10" height="10"/>
+	            </frame>
+	            <frame image="fighter/images/ken_punch1.png">
+	                <hitbox cornerX="35" cornerY="14" width="26" height="10"/>
+	            </frame>
+	            <frame image="fighter/images/ken_punch1.png">
+	                <hitbox cornerX="35" cornerY="14" width="10" height="10"/>
+	            </frame>
+	             <frame image="fighter/images/ken_punch1.png">
+	                <hitbox cornerX="35" cornerY="14" width="10" height="10"/>
+	            </frame>
+            </state>
         </attack>
     </character>
-</objects>
+</characters>

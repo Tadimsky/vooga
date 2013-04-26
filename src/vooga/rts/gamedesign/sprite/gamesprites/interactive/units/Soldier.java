@@ -25,12 +25,13 @@ public class Soldier extends Unit {
      */
 
     //default values
-    public static Pixmap DEFAULT_IMAGE = new Pixmap("sprites/soldier.png");
+    public static Pixmap DEFAULT_IMAGE = new Pixmap("images/sprites/soldier.png");
     public static Location3D DEFAULT_LOCATION = new Location3D();
     public static Dimension DEFAULT_SIZE = new Dimension(90,90);
     public static Sound DEFAULT_SOUND = null;
     public static int DEFAULT_PLAYERID = 2;
     public static int DEFAULT_HEALTH = 100;
+    public static int DEFAULT_SPEED = 100;
 
     // private int myHealth; //TESTING PURPOSE
     public Soldier() {
@@ -40,25 +41,16 @@ public class Soldier extends Unit {
         setInfo(i);
     }
     
-    public Soldier(Location3D location, int teamID) {
-        this(DEFAULT_IMAGE, location, DEFAULT_SIZE, DEFAULT_SOUND, teamID, DEFAULT_HEALTH, InteractiveEntity.DEFAULT_BUILD_TIME);
+    public Soldier(Location3D location, int playerID) {
+        this(DEFAULT_IMAGE, location, DEFAULT_SIZE, DEFAULT_SOUND, playerID, DEFAULT_HEALTH, InteractiveEntity.DEFAULT_BUILD_TIME);
     }
     
     public Soldier(Pixmap image, Location3D center, Dimension size, Sound sound, int playerID, int health, double buildTime) {
-        super(image, center, size, sound, playerID, health, buildTime);
-        setAttackStrategy(new CanAttack(getWorldLocation(), DEFAULT_PLAYERID));
+        super(image, center, size, sound, playerID, health, buildTime, DEFAULT_SPEED);
+        setAttackStrategy(new CanAttack(getWorldLocation(), playerID));
     }
 
     public void upgradeHealth (int armor) { // TESTING PURPOSE
         setHealth(getHealth() + armor);
-    }
-    /*
-     * Returns a copy of the default soldier. 
-     */
-    public Soldier copy() {
-        //System.out.println("soldier's copy method called");
-        //return null;
-        return new Soldier();
-    }
-    
+    }    
 }

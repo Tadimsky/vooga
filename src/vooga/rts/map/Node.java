@@ -11,16 +11,20 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
+import vooga.rts.gamedesign.sprite.map.Terrain;
+import vooga.rts.gamedesign.state.OccupyState;
+import vooga.rts.state.GameState;
 import vooga.rts.util.Camera;
 import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 
 
 /**
- * The Node class represents the smallest thing that the game needs to know about.
- * This will be used for generating a path for units to follow and also be responsible
- * for painting all game entities in their correct location.
+ * The Node class represents the smallest thing that the game needs to know
+ * about. This will be used for generating a path for units to follow and also
+ * be responsible for painting all game entities in their correct location.
  * 
  * @author Jonathan Schmidt
  * @author Challen Herzberg-Brovold
@@ -36,14 +40,16 @@ public class Node {
     private Location3D myCenter;
 
     private List<GameSprite> myContents;
-    //private Set<GameSprite> myContents;
 
     /**
      * Creates a Node at the specified index and in the specified tier.
      * 
-     * @param x The X index
-     * @param y The Y index
-     * @param tier The level that the node is at
+     * @param x
+     *        The X index
+     * @param y
+     *        The Y index
+     * @param tier
+     *        The level that the node is at
      */
     public Node (int x, int y, int tier) {
         myX = x;
@@ -51,13 +57,12 @@ public class Node {
         myTier = tier;
         myBounds = new Rectangle(myX * NODE_SIZE, myY * NODE_SIZE, NODE_SIZE, NODE_SIZE);
         /*
-        myContents = new TreeSet<GameSprite>(new Comparator<GameSprite>() {
-            @Override
-            public int compare (GameSprite o1, GameSprite o2) {
-                return (int) (o1.getWorldLocation().getZ() - o2.getWorldLocation().getZ());
-            }
-        });
-        */
+         * myContents = new TreeSet<GameSprite>(new Comparator<GameSprite>() {
+         * 
+         * @Override public int compare (GameSprite o1, GameSprite o2) { return
+         * (int) (o1.getWorldLocation().getZ() - o2.getWorldLocation().getZ());
+         * } });
+         */
         myContents = new ArrayList<GameSprite>();
         myCenter =
                 new Location3D(myX * NODE_SIZE + NODE_SIZE / 2, myY * NODE_SIZE + NODE_SIZE / 2,
@@ -65,11 +70,12 @@ public class Node {
     }
 
     /**
-     * Creates a Node at a specified index.
-     * The level is set to 0.
+     * Creates a Node at a specified index. The level is set to 0.
      * 
-     * @param x The X index
-     * @param y The Y index
+     * @param x
+     *        The X index
+     * @param y
+     *        The Y index
      */
     public Node (int x, int y) {
         this(x, y, 0);
@@ -87,15 +93,12 @@ public class Node {
         return myY;
     }
 
-    // public void addObstruction (IObstruction obstruct) {
-    // myHeight = obstruct.getHeight();
-    // }
-
     public double getTier () {
         return myTier;
     }
 
-    // This return statement could potentially be cleaned up, but still will wait for patter to
+    // This return statement could potentially be cleaned up, but still will
+    // wait for patter to
     // clear up.
     public boolean connectsTo (Node other) {
         return getTier() == other.getTier() || other.getTier() < 0;
@@ -103,7 +106,8 @@ public class Node {
 
     /**
      * 
-     * @return the height of the node based on anything inside of it (ie. IObstructions)
+     * @return the height of the node based on anything inside of it (ie.
+     *         IObstructions)
      */
     public int getHeight () {
         return myHeight;
@@ -112,7 +116,8 @@ public class Node {
     /**
      * Returns whether a location is contained within this node.
      * 
-     * @param world The location to check
+     * @param world
+     *        The location to check
      * @return Whether it is in the node or not
      */
     public boolean contains (Location3D world) {
@@ -123,12 +128,18 @@ public class Node {
     public void addSprite (GameSprite sprite) {
         if (!myContents.contains(sprite)) {
             myContents.add(sprite);
+            if (sprite instanceof Terrain) {
+                myTier++;
+            }
         }
     }
 
     public void removeSprite (GameSprite sprite) {
         if (myContents.contains(sprite)) {
             myContents.remove(sprite);
+            if (sprite instanceof Terrain) {
+                myTier--;
+            }
         }
     }
 
@@ -140,26 +151,32 @@ public class Node {
         return myContents.contains(sprite);
     }
 
-    public <T extends GameSprite> List<T> filterGameSprites (List<GameSprite> fullList,
-                                                             GameSprite gsType,
+    public <T extends GameEntity> List<T> filterGameSprites (List<GameSprite> fullList,
+                                                             GameSprite other,
                                                              int teamID,
                                                              boolean same) {
         List<T> resultList = new ArrayList<T>();
         for (GameSprite item : fullList) {
-            /*
-             * if (item instanceof ) {
-             * 
-             * Determine whether these things are the same.
-             * 
-             * }
-             */
-            if (same) {
-
+            if (!(item instanceof GameEntity)) {
+                continue;
             }
-            else {
-
+            GameEntity ge = (GameEntity) item;
+            if (ge.getState().getOccupyState() == OccupyState.OCCUPYING) {
+                continue;
             }
-            resultList.add((T) item);
+
+            if (ge.getClass().isInstance(other)) {
+                if (same) {
+                    if (GameState.getPlayers().getTeamID(ge.getPlayerID()) == teamID) {
+                        resultList.add((T) ge);
+                    }
+                }
+                else {
+                    if (GameState.getPlayers().getTeamID(ge.getPlayerID()) != teamID) {
+                        resultList.add((T) ge);
+                    }
+                }
+            }
         }
         return resultList;
     }
@@ -171,11 +188,14 @@ public class Node {
     }
 
     /**
-     * Paints the Node with a ellipse surrounding it. This is used for testing purposes.
-     * Also prints the index of the node which can be the order that the node was painted.
+     * Paints the Node with a ellipse surrounding it. This is used for testing
+     * purposes. Also prints the index of the node which can be the order that
+     * the node was painted.
      * 
-     * @param pen The Graphics 2D to paint with
-     * @param index The index of the node
+     * @param pen
+     *        The Graphics 2D to paint with
+     * @param index
+     *        The index of the node
      */
     public void paint (Graphics2D pen, int index) {
         Point2D screen =

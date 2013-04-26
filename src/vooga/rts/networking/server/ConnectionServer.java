@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
-import util.logger.NetworkLogger;
+import java.util.logging.Logger;
+
+import util.logger.LoggerManager;
 import vooga.rts.networking.NetworkBundle;
 
 
@@ -21,6 +23,7 @@ public class ConnectionServer extends Thread {
     private int myConnectionID = 0;
     private MatchmakerServer myMatchServer;
     private boolean myIsServerAcceptingConnections = false;
+    private Logger myLogger;
 
     /**
      * Creates a connection server that sends connections to the MatchmakerServer specified.
@@ -29,6 +32,8 @@ public class ConnectionServer extends Thread {
      */
     public ConnectionServer (MatchmakerServer matchServer) {
         myMatchServer = matchServer;
+        LoggerManager log = new LoggerManager();
+        myLogger = log.getLogger();
     }
 
     /**
@@ -41,7 +46,7 @@ public class ConnectionServer extends Thread {
 
         while (myIsServerAcceptingConnections) {
         	try {
-        		serverSocket = new ServerSocket(PORT + myConnectionID);
+        		serverSocket = new ServerSocket(PORT);
 
         		Socket socket = serverSocket.accept();
         		ConnectionThread thread =
@@ -49,12 +54,12 @@ public class ConnectionServer extends Thread {
         		myConnectionID++;
         		thread.start();
         		myMatchServer.addConnection(thread);
-        		NetworkLogger.getLogger().log(Level.INFO, NetworkBundle.getString("NewConnection") +
+        		myLogger.log(Level.INFO, NetworkBundle.getString("NewConnection") +
         				": " + thread.getID());
         		serverSocket.close();
         	}
         	catch (IOException e) {
-        		NetworkLogger.getLogger().log(Level.SEVERE,
+        		myLogger.log(Level.SEVERE,
         				NetworkBundle.getString("ConnectionFailed"));
         		myIsServerAcceptingConnections = false;
         	}
@@ -65,7 +70,7 @@ public class ConnectionServer extends Thread {
         		serverSocket.close();
         	}
         	catch (IOException e) {
-        		NetworkLogger.getLogger().log(Level.SEVERE,
+        		myLogger.log(Level.SEVERE,
         				NetworkBundle.getString("ConnectionSocketFailed"));
         	}
         }

@@ -1,40 +1,45 @@
 /level
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-         a                                                  
-                                                            
-                                                            
- b                                                          
-                                                            
-                                                            
-           c                                                
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+           a     b            
+               a              
+                              
+                              
+                              
+                              
+                              
+         a   a                
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
 /lib
 vooga.scroller.marioGame.spritesDefinitions.MarioLib
 /key
-b=MovingPlatformTwo
-a=Platform
-c=LevelTwoBlockOne
+b=StarPortal
+a=LevelTwoBlockOne
 /settings
-StartPoint=0 0
-EndPoint=100 100
+StartPoint=400 272
+Background=/vooga/scroller/images/backgrounds/background.png

@@ -1,0 +1,13 @@
+save = Keyboard_S_Down
+select = Mouse_Left_Click
+startselect = Mouse_Left_Click|Keyboard_Shift_Down
+nextPlayer = Keyboard_C_Down
+prevPlayer = Keyboard_Z_Down
+nextObject = Keyboard_D_Down
+prevObject = Keyboard_A_Down
+quit = Keyboard_Q_Down
+load = Keyboard_L_Down
+setBackground = Keyboard_B_Down
+addBackground = Keyboard_N_Down
+setSound = Keyboard_S_Down
+setName = Keyboard_P_Down

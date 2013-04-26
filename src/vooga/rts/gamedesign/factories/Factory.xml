@@ -3,52 +3,55 @@
 
 <GameElements>
 <Upgrade>
-	<type>
-		<name>Health</name>
-		<upgradeNode>
-			<parent>Health</parent>
-			<nodeName>Boost1</nodeName>
-			<object>Health</object>
-			<value>50</value>
-			<resourceCostType>Resource</resourceCostType>
-			<resourceAmount>30</resourceAmount>
-		</upgradeNode>
-		<upgradeNode>
-			<parent>Boost1</parent>
-			<nodeName>Boost2</nodeName>
-			<object>Health</object>
-			<value>100</value>
-			<resourceCostType>Resource</resourceCostType>
-			<resourceAmount>30</resourceAmount>
-		</upgradeNode>
-	</type>
-	<type>
-		<name>Attack</name>
-		<upgradeNode>
-			<parent>Attack</parent>
-			<nodeName>CanAttack</nodeName>
-			<object>AttackStrategy</object>
-			<value>0</value>
-			<resourceCostType>Resource</resourceCostType>
-			<resourceAmount>30</resourceAmount>
-		</upgradeNode>
-		<upgradeNode>
-			<parent>CanAttack</parent>
-			<nodeName>RangeBoost1</nodeName>
-			<object>Range</object>
-			<value>100</value>
-			<resourceCostType>Resource</resourceCostType>
-			<resourceAmount>30</resourceAmount>
-		</upgradeNode>
-		<upgradeNode>
-			<parent>CanAttack</parent>
-			<nodeName>DamageBoost1</nodeName>
-			<object>Damage</object>
-			<value>100</value>
-			<resourceCostType>Resource</resourceCostType>
-			<resourceAmount>30</resourceAmount>
-		</upgradeNode>
-	</type>
+	<tree>
+		<treeName>SoldierUpgrade</treeName>
+		<type>
+			<name>Health</name>
+			<upgradeNode>
+				<parent>Health</parent>
+				<nodeName>Boost1</nodeName>
+				<object>Health</object>
+				<value>50</value>
+				<resourceCostType>Resource</resourceCostType>
+				<resourceAmount>30</resourceAmount>
+			</upgradeNode>
+			<upgradeNode>
+				<parent>Boost1</parent>
+				<nodeName>Boost2</nodeName>
+				<object>Health</object>
+				<value>100</value>
+				<resourceCostType>Resource</resourceCostType>
+				<resourceAmount>30</resourceAmount>
+			</upgradeNode>
+		</type>
+		<type>
+			<name>Attack</name>
+			<upgradeNode>
+				<parent>Attack</parent>
+				<nodeName>CanAttack</nodeName>
+				<object>AttackStrategy</object>
+				<value>0</value>
+				<resourceCostType>Resource</resourceCostType>
+				<resourceAmount>30</resourceAmount>
+			</upgradeNode>
+			<upgradeNode>
+				<parent>CanAttack</parent>
+				<nodeName>RangeBoost1</nodeName>
+				<object>Range</object>
+				<value>100</value>
+				<resourceCostType>Resource</resourceCostType>
+				<resourceAmount>30</resourceAmount>
+			</upgradeNode>
+			<upgradeNode>
+				<parent>CanAttack</parent>
+				<nodeName>DamageBoost1</nodeName>
+				<object>Damage</object>
+				<value>100</value>
+				<resourceCostType>Resource</resourceCostType>
+				<resourceAmount>30</resourceAmount>
+			</upgradeNode>
+		</type>
+	</tree>
 </Upgrade>
 	<resources src = "vooga.rts.gamedesign.sprite.gamesprites.Resource">
 		<resource>
@@ -75,6 +78,10 @@
 			<cangather src = "vooga.rts.gamedesign.strategy.gatherstrategy.CanGather"/>
 			<cannotgather src = "vooga.rts.gamedesign.strategy.gatherstrategy.CannotGather"/>
 		</gathers>
+		<upgrades>
+			<canupgrade src = "vooga.rts.gamedesign.strategy.upgradestrategy.CanUpgrade"/>
+			<cannotupgrade src = "vooga.rts.gamedesign.strategy.upgradestrategy.CannotUpgrade"/>
+		</upgrades>
 	</strategies>
 	<buildings src = "vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building">
 		<building>
@@ -83,9 +90,12 @@
 			<sound>pikachu.wav</sound>
 			<health>1000</health>
 			<buildtime>100</buildtime>
-			<attack>cannotattack</attack>
 			<occupy>cannotbeoccupied</occupy>
+			<upgrade>canupgrade</upgrade>
+			<upgradeTreeName>SoldierUpgrade</upgradeTreeName>
 			<produce>worker soldier</produce>
+			<myweapons></myweapons>
+			
 		</building>
 		<custombuilding src = "vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Tower">
 			<name>tower</name>
@@ -98,10 +108,13 @@
 			<sound>pikachu.wav</sound>
 			<health>100</health>
 			<buildtime>100</buildtime>
-			<attack>canattack</attack>
+			<speed>180</speed>
 			<gather>cannotgather</gather>
 			<occupy>cannotbeoccupied</occupy>
+			<upgrade>canupgrade</upgrade>
+			<upgradeTreeName>SoldierUpgrade</upgradeTreeName>
 			<produce></produce>
+			<myweapons>gun</myweapons>
 		</unit>
 		<unit>
 			<name>worker</name>
@@ -109,15 +122,48 @@
 			<sound>pikachu.wav</sound>
 			<health>100</health>
 			<buildtime>100</buildtime>
-			<attack>cannotattack</attack>
+			<speed>140</speed>
 			<gather>cangather</gather>
 			<occupy>cannotbeoccupied</occupy>
+			<upgrade>canupgrade</upgrade>
+			<upgradeTreeName>SoldierUpgrade</upgradeTreeName>
 			<produce>home</produce>
+			<myweapons></myweapons>
 		</unit>
 		<customunit src = "vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Soldier">
 			<name>soldier</name>
 		</customunit>
 	</units>
+	<weapons src = "vooga.rts.gamedesign.weapon.Weapon">
+			<weapon>
+				<name>gun</name>
+				<myprojectile>bullet</myprojectile>
+				<range>500</range>
+				<cooldown>1</cooldown>
+			</weapon>
+			<weapon>
+				<name>sniper</name>
+				<myprojectile>sniperbullet</myprojectile>
+				<range>800</range>
+				<cooldown>1</cooldown>
+			</weapon>
+	</weapons>
+	<projectiles src = "vooga.rts.gamedesign.sprite.gamesprites.Projectile">
+		<projectile>
+			<name>bullet</name>
+			<img>bullet.png</img>
+			<damage>10</damage>
+			<lifespan>100</lifespan>
+			<speed>200</speed>
+		</projectile>
+		<projectile>
+			<name>sniperbullet</name>
+			<img>bullet.png</img>
+			<damage>10</damage>
+			<lifespan>100</lifespan>
+			<speed>400</speed>
+		</projectile>
+	</projectiles>
 </GameElements>
 
 

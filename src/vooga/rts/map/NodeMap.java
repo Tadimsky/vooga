@@ -159,6 +159,33 @@ public class NodeMap {
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Adds a Sprite to a Node.
+     * 
+     * @param sprite The sprite to be added to the node.
+     * @param node The node to add the sprite to.
+     */
+    private void addToNode (GameSprite sprite, Node node) {
+        myLookupMap.put(sprite, node);
+        node.addSprite(sprite);
+    }
+
+    /**
+     * Removes a Sprite from its current Node.
+     * 
+     * @param sprite The sprite to be added to the node.
+     * @param node The node to add the sprite to.
+     */
+    private void removeFromNode (GameSprite sprite) {
+        Node node = myLookupMap.get(sprite);
+        if (node != null) {
+            node.removeSprite(sprite);
+        }
+    }
+
+    /**
+>>>>>>> f8d8d7c99dbd899b9790f3b7c738b28dc8e6d982
      * Finds a node that a location should correspond to.
      * 
      * @param world The world location.
@@ -188,7 +215,7 @@ public class NodeMap {
 
         List<Node> nodeList = new ArrayList<Node>();
         for (int x = nodeX - numTiles; x < nodeX + numTiles; x++) {
-            for (int y = nodeY - numTiles; x < nodeY + numTiles; y++) {
+            for (int y = nodeY - numTiles; y < nodeY + numTiles; y++) {
                 Node cur = get(x, y);
                 if (cur != null) {
                     if (cur.contains(new Location3D(x * Node.NODE_SIZE, y * Node.NODE_SIZE, center
@@ -212,4 +239,51 @@ public class NodeMap {
         int y = (int) Math.floor(location.getY() / Node.NODE_SIZE);
         return get(x, y);
     }
+<<<<<<< HEAD
+=======
+
+    @Override
+    public void update (Observable arg0, Object arg1) {
+        // Map only worries about Game Sprite observables
+        if (!(arg0 instanceof GameSprite)) {
+            return;
+        }
+        GameSprite item = (GameSprite) arg0;
+        Node cur = myLookupMap.get(item);
+        // If the map doesn't know about it yet
+        if (cur == null) {
+            Node newNode = findContainingNode(item.getWorldLocation());
+            if (newNode != null) {
+                addToNode(item, newNode);
+                cur = newNode;
+            }
+        }
+
+        // if it's updating with its new location
+        if (arg1 instanceof Location3D) {
+            // hasn't moved outside of the current node
+            if (cur.contains(item.getWorldLocation())) {
+                return;
+            }
+            else {
+                Node newNode = findContainingNode(item.getWorldLocation());
+                if (newNode != null) {
+                    removeFromNode(item);
+                    addToNode(item, newNode);
+                }
+            }
+        }
+        if (item instanceof InteractiveEntity) {
+            InteractiveEntity ie = (InteractiveEntity) item;
+            if (ie.isDead()) {
+                if (cur != null) {
+                    removeFromNode(item);
+                }
+            }
+        }
+        if (arg1 instanceof String && ((String)arg1).equals("remove")) {
+            removeFromNode(item);
+        }
+    }
+>>>>>>> f8d8d7c99dbd899b9790f3b7c738b28dc8e6d982
 }

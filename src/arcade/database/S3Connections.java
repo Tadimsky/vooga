@@ -1,4 +1,16 @@
 package arcade.database;
+import arcade.games.GameData;
+import arcade.games.UserGameData;
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 /*
  * Copyright 2010-2013 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
@@ -13,10 +25,6 @@ package arcade.database;
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-import java.awt.Image;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -25,32 +33,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.UUID;
-import util.Pixmap;
-
-import arcade.games.GameData;
-import arcade.games.UserGameData;
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.Bucket;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 /**
  * This sample demonstrates how to make basic requests to Amazon S3 using
@@ -64,103 +48,171 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
  *                   AwsCredentials.properties file before you try to run this
  *                   sample.
  * http://aws.amazon.com/security-credentials
+ * @author Amazon SDK and modified by Natalia Carvalho
  */
 public class S3Connections {
     
+    private static final String USER_DIR = System.getProperty("user.dir");
+    private static final String SRC = "/src";
+    private static final String FILENAME = "/filename";
+    private static final String TEMPORARY_PNG = "/temporary";
+    private static final String GAMEDATA = "gamedata";
+    private static final String USERGAMEDATA = "usergamedata";
+    private static final String AVATAR = "avatar";
+    private static final String THUMBNAIL = "thumbnail";
+    private static final String ADSCREEN = "adscreen";
     private static final String BUCKET_NAME = "mycs308database";  
+    private static final String RELATIVE_PATH = "/arcade/amazondownloads";
+
 
 
     private AmazonS3 myS3Instance;
     
+    /**
+     * Constructor that connects to S3Instance
+     */
     public S3Connections() {
-        myS3Instance = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider("AwsCredentials.properties"));
+        myS3Instance = new AmazonS3Client(
+                        new ClasspathPropertiesFileCredentialsProvider("AwsCredentials.properties"));
         Region usWest2 = Region.getRegion(Regions.US_WEST_2);
         myS3Instance.setRegion(usWest2);
     }
     
-    public void listAllBuckets() {
-        System.out.println("Listing buckets");
-        for (Bucket bucket : myS3Instance.listBuckets()) {
-            System.out.println(" - " + bucket.getName());
-        }
-    }
-    
+    /**
+     * Places avatar into a bucket
+     * @param username is user
+     * @param filepath is path of avatar
+     */
     public void putAvatarIntoBucket(String username, String filepath) {
-        putFileIntoBucket("avatar" + username, filepath);
+        putFileIntoBucket(AVATAR + username, filepath);
     }
     
+    /**
+     * Places game thumbnail into a bucket
+     * @param gameName is gamename
+     * @param filepath is path of thumbnail
+     */
     public void putGameThumbnailIntoBucket(String gameName, String filepath) {
-        putFileIntoBucket("thumbnail" + gameName, filepath);
+        putFileIntoBucket(THUMBNAIL + gameName, filepath);
     }
     
+    /**
+     * Places game adscreen into a bucket
+     * @param gameName is gamename
+     * @param filepath is path of adscreen
+     */
     public void putAdScreenIntoBucket (String gameName, String filepath) {
-        putFileIntoBucket("adscreen" + gameName, filepath);
-        
+        putFileIntoBucket(ADSCREEN + gameName, filepath); 
     }
     
+    /**
+     * Retrieves avatar
+     * @param username is username
+     */
     public String getAvatar(String username) {
-         return downloadObjectToFile("avatar" + username);
+        return downloadObjectToFile(AVATAR + username);
     }
     
+    /**
+     * Retrieves thumbnail
+     * @param gameName is game name
+     */
     public String getThumbnail(String gameName) {
-        return downloadObjectToFile("thumbnail" + gameName);
+        return downloadObjectToFile(THUMBNAIL + gameName);
     }
     
+    /**
+     * Retrieves ad screen
+     * @param gameName is game name
+     */
     public String getAdScreen(String gameName) {
-        return downloadObjectToFile("adscreen" + gameName);
+        return downloadObjectToFile(ADSCREEN + gameName);
     }
     
+    /**
+     * Places usergamedata into bucket
+     * @param username is user name
+     * @param gameName is game name
+     * @param usd is user game data to be placed
+     */
     public void putUserGameDataIntoBucket(String username, String gameName, UserGameData usd) {
-        putFileIntoBucket("usergamedata" + username + gameName, createFileFromByteArray(serializeObject(usd)));
+        putFileIntoBucket(USERGAMEDATA + username + gameName, 
+                          createFileFromByteArray(serializeObject(usd)));
     }
     
+    /**
+     * Returns given user game data
+     * @param username is user name
+     * @param gameName is game name
+     */
     public UserGameData getUserGameDataFromBucket(String username, String gameName) {
-        String tempFilePath = downloadObjectToFile("usergamedata" + username + gameName);
+        String tempFilePath = downloadObjectToFile(USERGAMEDATA + username + gameName);
         byte[] data = read(createFileFromFilePath(tempFilePath));
         return (UserGameData) deserialize(data);
     }
     
+    /**
+     * Places gamedata into bucket
+     * @param gameName is game name
+     * @param gd is gameData to be placed
+     */
     public void putGameDataIntoBucket(String gameName, GameData gd) {
-        putFileIntoBucket("gamedata" + gameName, createFileFromByteArray(serializeObject(gd)));
+        putFileIntoBucket(GAMEDATA + gameName, createFileFromByteArray(serializeObject(gd)));
     }
     
+    /**
+     * Returns given GameData
+     * @param gameName is game name
+     */
     public GameData getGameDataFromBucket(String gameName) {
-        String tempFilePath = downloadObjectToFile("gamedata" + gameName);
+        String tempFilePath = downloadObjectToFile(GAMEDATA + gameName);
         byte[] data = read(createFileFromFilePath(tempFilePath));
         return (GameData) deserialize(data);
     }
     
+    
+    /**
+     * Returns given GameData
+     * @param filepath is the filepath to create file from
+     */
     public File createFileFromFilePath(String filepath) {
         return new File(filepath);
     }
     
+    /**
+     * Reads a file into a byte array
+     * @param file is the file
+     */
     public byte[] read(File file) {
-        byte []buffer = new byte[(int) file.length()];
+        byte [] buffer = new byte[(int) file.length()];
         InputStream ios = null;
         try {
             ios = new FileInputStream(file);     
         }
         catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         finally { 
             try {
-                if ( ios != null ) 
+                if (ios != null) {
                     ios.close();
-            } catch ( IOException e) {
+                }
+            } 
+            catch (IOException e) {
+                e.printStackTrace();
             }
         }
-
         return buffer;
     }
 
+    /**
+     * Creates file from byte array
+     * @param bytes is array of bytes
+     */
     public String createFileFromByteArray(byte[] bytes) {
-        
         FileOutputStream out;
-        String tempFilePath = getTempFilePath();
         try {
-            out = new FileOutputStream(tempFilePath);
+            out = new FileOutputStream(USER_DIR + SRC + RELATIVE_PATH + FILENAME);
             out.write(bytes);
         }
         catch (FileNotFoundException e) {
@@ -169,9 +221,13 @@ public class S3Connections {
         catch (IOException e) {
             e.printStackTrace();
         }
-        return tempFilePath;
+        return USER_DIR + SRC + RELATIVE_PATH + FILENAME;
     }
     
+    /**
+     * Serializes an object
+     * @param obj is object to be serialized
+     */
     public byte[] serializeObject(Object obj) {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         ObjectOutputStream o;
@@ -185,6 +241,10 @@ public class S3Connections {
         return b.toByteArray();
     }
     
+    /**
+     * Deserializes an object
+     * @param bytes are byte to be read in
+     */
     public Object deserialize(byte[] bytes) {
         ByteArrayInputStream b = new ByteArrayInputStream(bytes);
         ObjectInputStream o;
@@ -201,6 +261,12 @@ public class S3Connections {
         return null;
     }
     
+    
+    /**
+     * Places an object into amazon bucket
+     * @param key (name) of file
+     * @param filepath of file
+     */
     public void putFileIntoBucket(String key, String filepath) {
         File file = new File(filepath);
         try {
@@ -223,41 +289,24 @@ public class S3Connections {
         }
     }
     
-    
+    /**
+     * Downloads an object to AmazonDownloads folder
+     * @param key (name) of file
+     */
     public String downloadObjectToFile(String key) {
-        File tempFile;
-        try {
-            tempFile = File.createTempFile("tempFileCS308", ".png");
-            String absolutePath = tempFile.getAbsolutePath();
-            System.out.println(absolutePath);
-//            String tempFilePath = absolutePath.
-//                substring(0,absolutePath.lastIndexOf(File.separator));
-//            System.out.println(tempFilePath);
-            ObjectMetadata object = myS3Instance.getObject(new GetObjectRequest(BUCKET_NAME, key), tempFile);
-            return absolutePath;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        String pathOfImage = SRC + RELATIVE_PATH + TEMPORARY_PNG + key + ".png";
+        File tempFile = new File(USER_DIR + pathOfImage);
+        @SuppressWarnings("unused")
+        ObjectMetadata object = myS3Instance.getObject(
+                                            new GetObjectRequest(BUCKET_NAME, key), tempFile);
+        return pathOfImage;
     }
     
-    public String getTempFilePath() {
-        File tempFile;
-        try {
-            tempFile = File.createTempFile("myTemp", ".png");
-            String absolutePath = tempFile.getAbsolutePath();
-            String tempFilePath = absolutePath.
-                    substring(0,absolutePath.lastIndexOf(File.separator));
-            return tempFilePath;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
+    /**
+     * Deletes an object from bucket
+     * @param key (name) of file
+     */
     public void deleteObject(String key) {
-      myS3Instance.deleteObject(BUCKET_NAME, key);
+        myS3Instance.deleteObject(BUCKET_NAME, key);
     }
 }

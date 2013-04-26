@@ -7,7 +7,11 @@
 This package is part of the CompSci 308 VOOGA Game Engine Project.
 
 <p>
-This package contains the engine for fighting style games.
+Entry points into code:  Subclassing Controller, which deals with almost all running code
+or subclassing GameManager, which is encompassed the entire code framework, above the scope of an individual controller. ÊMost changes are made via subclassing the first class, as we will describe below.
+<p>
+To use our framework to create a game, a Game Developer would only need to subclass a controller, add that controller to the FightingManifesto file. Inside the subclassed controller, the developer would define his/her winning conditions, special conditions, and inputs. Of course, if the developer wanted to add inputs, he would add the inputs in the input file mapping. 
+
 
 <!-- Fill this in with your high-level design and API examples -->
 

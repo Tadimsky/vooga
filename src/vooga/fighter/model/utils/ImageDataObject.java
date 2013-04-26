@@ -1,6 +1,8 @@
 package vooga.fighter.model.utils;
 
 import java.awt.Dimension;
+import java.util.List;
+
 import util.Location;
 import util.Pixmap;
 
@@ -16,23 +18,29 @@ public class ImageDataObject {
     private Pixmap myImage;
     private Location myLocation;
     private Dimension mySize;
+    private List<Integer> myImageEffects;
+
     
-    public ImageDataObject(Pixmap image, Location location, Dimension size) {
+    public ImageDataObject(Pixmap image, Location location, Dimension size, List<Integer> imageEffects) {
         myImage = image;
         myLocation = location;
         mySize = size;
+        myImageEffects = imageEffects;
     }
     
-    public Pixmap getMyImage () {
+    public Pixmap getImage () {
         return myImage;
     }
     
-    public Location getMyLocation () {
+    public Location getLocation () {
         return myLocation;
     }    
     
-    public Dimension getMySize () {
+    public Dimension getSize () {
         return mySize;
     }        
     
+    public List<Integer> getImageEffect () {
+        return myImageEffects;
+    }        
 }

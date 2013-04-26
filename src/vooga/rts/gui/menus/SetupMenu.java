@@ -25,6 +25,7 @@ public class SetupMenu extends Menu {
         pen.setFont(new Font("Helvetica", Font.BOLD, 50));
         pen.setColor(Color.white);
         pen.drawString("This is the setup page. Click to start game.", 150, 150);
+        pen.drawString("Eric needs to finish this :)", 150, 300);
 
     }
     

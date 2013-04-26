@@ -6,28 +6,36 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 import util.Location;
+import vooga.scroller.level_editor.controllerSuite.LEController;
 import vooga.scroller.level_editor.controllerSuite.LEGrid;
-import vooga.scroller.util.Sprite;
+import vooga.scroller.sprites.Sprite;
+import vooga.scroller.sprites.interfaces.IDoor;
+import vooga.scroller.util.IBackgroundView;
+import vooga.scroller.util.Pixmap;
 
 
+/**
+ * LevelParser parses a saved level file and creates an LEGrid.
+ * 
+ * @author Danny Goodman, Deo Fagnisse
+ */
 public class LevelParser {
 
-    private static final String NEW_LINE = System.getProperty("line.seperator");
-    private static final String BEGIN_LEVEL = "/level";
-    private static final String BEGIN_KEY = "/key";
-    private static final String BEGIN_LIB_PATH = "/lib";
-    private static final String BEGIN_SETTINGS = "/settings";
+    private static final String RESOURCE_PATH = "vooga.scroller.level_editor.model.SaveLoad";
+
     private static final char SPACE = ' ';
-    private static final String START_POINT = "StartPoint";
+    private static final String NEW_LINE = System.getProperty("line.seperator");
+    private ResourceBundle myResources = ResourceBundle.getBundle(RESOURCE_PATH);
     private Scanner myScanner;
     private Map<Character, String> myCharacterMap;
     private List<String> myLevelStrings;
     private Location myStartPoint;
-    private static final String END_POINT = "EndPoint";
-    private Location myEndPoint;
     private String myLibPath;
+    private IBackgroundView myBackground;
+
     /**
      * Initialize instances variables.
      */
@@ -36,6 +44,12 @@ public class LevelParser {
         myCharacterMap = new HashMap<Character, String>();
     }
 
+    /**
+     * Creates an LEGrid from a save file.
+     * 
+     * @param file
+     * @return LEGrid
+     */
     public LEGrid makeGridFromFile (File file) {
         myLevelStrings = new ArrayList<String>();
         myCharacterMap = new HashMap<Character, String>();
@@ -43,44 +57,40 @@ public class LevelParser {
             myScanner = new Scanner(file);
         }
         catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LEController.showErrorMsg(myResources.getString("FILE_ERROR"));
         }
         parseLevel();
         myLibPath = parseLibPath();
         myCharacterMap = parseKey();
         myStartPoint = parseStartPoint();
-        myEndPoint = parseEndPoint();
+        myBackground = parseBackground();
         return createGrid();
     }
 
-
     private String parseLibPath () {
-        String result="";
+        String result = "";
         String line = myScanner.nextLine();
-        while (!line.equals(BEGIN_KEY)) {
-            result=line;
+        while (!line.equals(myResources.getString("BEGIN_KEY"))) {
+            result = line;
             line = myScanner.nextLine();
         }
         return result;
     }
 
     private void parseLevel () {
-        myScanner.findWithinHorizon(BEGIN_LEVEL + NEW_LINE, 0);
+        myScanner.findWithinHorizon(myResources.getString("BEGIN_LEVEL") +
+                                    NEW_LINE, 0);
         String line = myScanner.nextLine();
-        System.out.println(line);
-        while (!line.equals(BEGIN_LIB_PATH)) {
+        while (!line.equals(myResources.getString("BEGIN_LIB_PATH"))) {
             myLevelStrings.add(line);
-            System.out.println("----------------");
             line = myScanner.nextLine();
-            System.out.println(line);
         }
     }
 
     private Map<Character, String> parseKey () {
         Map<Character, String> result = new HashMap<Character, String>();
         String line = myScanner.nextLine();
-        while (!line.equals(BEGIN_SETTINGS)) {
+        while (!line.equals(myResources.getString("BEGIN_SETTINGS"))) {
             result.put(line.charAt(0), line.substring(2));
             line = myScanner.nextLine();
         }
@@ -89,55 +99,54 @@ public class LevelParser {
 
     private Location parseStartPoint () {
         String line = myScanner.nextLine();
-        line = line.substring(START_POINT.length() + 1);
-        String[] splitLine = line.split(String.valueOf(SPACE));
-        return new Location(Integer.parseInt(splitLine[0]),
-                            Integer.parseInt(splitLine[1]));
-    }
-    
-    private Location parseEndPoint () {
-        String line = myScanner.nextLine();
-        line = line.substring(END_POINT.length() + 1);
+        line = line.substring(myResources.getString("START_POINT").length() + 1);
         String[] splitLine = line.split(String.valueOf(SPACE));
         return new Location(Integer.parseInt(splitLine[0]),
                             Integer.parseInt(splitLine[1]));
     }
 
+    private IBackgroundView parseBackground () {
+        String line = myScanner.nextLine();
+        line = line.substring(myResources.getString("BACKGROUND").length() + 1);
+        return new Pixmap(line);
+    }
+
     private LEGrid createGrid () {
         if (myLevelStrings.isEmpty()) { return null; }
-        System.out.println("" + myLevelStrings.size() + " " + myLevelStrings.get(1).length());
         LEGrid grid = new LEGrid(myLevelStrings.get(1).length(), myLevelStrings.size());
         for (int i = 1; i < myLevelStrings.size(); i++) {
             for (int j = 0; j < myLevelStrings.get(1).length(); j++) {
                 char c = myLevelStrings.get(i).charAt(j);
-                System.out.println(c);
                 if (c != SPACE) {
                     String name = myCharacterMap.get(c);
-                    
+
                     Sprite spr;
                     try {
-                        spr = (Sprite) Class.forName(myLibPath+"$"+name).newInstance();
-                        System.out.println(name);
-                        System.out.println(spr);
-                        grid.addSpriteToBox(j, i-1, spr);
+                        spr =
+                                (Sprite) Class.forName(myLibPath +
+                                                       myResources.getString("SEPARATOR") +
+                                                       name).newInstance();
+                        if (IDoor.class.isAssignableFrom(spr.getClass())) {
+                            grid.addDoorWithCoor(j, i - 1, spr);
+                        }
+                        else {
+                            grid.addSpriteWithCoor(j, i - 1, spr);
+                        }
                     }
                     catch (InstantiationException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        LEController.showErrorMsg(myResources.getString("PARSING_ERROR"));
                     }
                     catch (IllegalAccessException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        LEController.showErrorMsg(myResources.getString("PARSING_ERROR"));
                     }
                     catch (ClassNotFoundException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }//myNameMap.get(name).copy();
+                        LEController.showErrorMsg(myResources.getString("PARSING_ERROR"));
+                    }
                 }
             }
         }
         grid.addStartPoint((int) myStartPoint.getX(), (int) myStartPoint.getY());
-        grid.addDoor((int) myEndPoint.getX(), (int) myEndPoint.getY());
+        grid.changeBackground(myBackground);
         return grid;
     }
 }

@@ -49,7 +49,7 @@ public class HandlerStream implements IVoogaHandler {
             handler = new StreamHandler(myOutputStream, new SimpleFormatter());
         }
         catch (Exception e) {
-            NetworkLogger.LOGGER.severe(ERROR_MESSAGE);
+            LoggerManager.DEFAULT_LOGGER.severe(ERROR_MESSAGE);
         }
         return handler;
     }

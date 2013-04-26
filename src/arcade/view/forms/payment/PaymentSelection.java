@@ -10,9 +10,10 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+
+import arcade.controller.Controller;
 import arcade.exceptions.UndefinedPaymentException;
 import arcade.games.GameInfo;
-import arcade.model.Model;
 import arcade.view.TextKeywords;
 import arcade.view.forms.Form;
 import arcade.view.forms.payment.factory.PaymentViewMapFactory;
@@ -37,13 +38,13 @@ public class PaymentSelection extends Form {
     private Map<String, Constructor<?>> myPaymentOptions;
     
     /**
-     * Constructs the payment selection view with a Model, ResourceBundle, and 
+     * Constructs the payment selection view with a Controller, ResourceBundle, and 
      * the game about to be bought.
-     * @param model
+     * @param controller
      * @param resources
      */
-    public PaymentSelection (Model model, ResourceBundle resources, GameInfo game) {
-        super(model, resources);
+    public PaymentSelection (Controller controller, ResourceBundle resources, GameInfo game) {
+        super(controller, resources);
         myGame = game;
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
@@ -73,7 +74,7 @@ public class PaymentSelection extends Form {
                 public void actionPerformed (ActionEvent arg0) {
                         try {
                             Constructor<?> constructor = myPaymentOptions.get(paymentOption);
-                            constructor.newInstance(getModel(), getResources(), myGame);
+                            constructor.newInstance(getController(), getResources(), myGame);
                             dispose();
                         }
                         catch (InstantiationException e) {

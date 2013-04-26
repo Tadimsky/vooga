@@ -1,71 +1,107 @@
 package vooga.fighter.model;
 
 import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.List;
-import vooga.fighter.controller.ModelDelegate;
-import vooga.fighter.model.objects.CharacterObject;
 import vooga.fighter.model.objects.GameObject;
 import vooga.fighter.model.objects.MenuObject;
-import vooga.fighter.model.objects.MouseClickObject;
-import vooga.fighter.model.utils.State;
+import vooga.fighter.util.CollisionManager;
 
 
+/**
+ * Mode implementation for a menu.
+ * 
+ * @author Jack Matteucci
+ * @modified Jerry Li
+ * 
+ */
 public class MenuMode extends Mode {
-    private String myMenuId;
+    private String myMenuName;
     private List<MenuObject> myMenuObjects;
-    private MouseClickObject myMouseClick;
     private MenuGrid myMenuGrid;
-    private ModelDelegate myDelegate;
-    private MenuCollisionManager myCollisionManager = new MenuCollisionManager();
+    private String myChoice;
+    private int myInputTicks;
 
-    public MenuMode (ModelDelegate delegate, String menuId) {
-        super(delegate);
-        myDelegate = delegate;
-        myMenuId = menuId;
+    public MenuMode (CollisionManager manager, String menuName) {
+        super(manager);
+        myMenuName = menuName;
+        myChoice = "";
+        myInputTicks = 0;
     }
 
     @Override
-    public void update (double stepTime, Dimension bounds) {
+    public void update () {
+        removeAppropriateObjects();
         List<GameObject> myObjects = getMyObjects();
-        handleCollisions();
-        for (int i = 0; i < myObjects.size(); i++) {
-            GameObject object = myObjects.get(i);
+        for (GameObject object : myObjects) {
             object.update();
-            if (object.shouldBeRemoved()) {
-                myObjects.remove(object);
-                i--;
-            }
         }
+        for (GameObject object : myObjects) {
+            object.updateState();
+        }
+        handleCollisions();
+        myInputTicks++;
     }
 
-    @Override
-    public void initializeMode () {
-        myMenuGrid = new MenuGrid(myMenuId, myDelegate);
-        myMenuObjects = myMenuGrid.getMenuObjects();
-        for (MenuObject menu : myMenuObjects) {
+    public void setMenuGrid (MenuGrid grid) {
+        myMenuGrid = grid;
+    }
+
+    public String getName () {
+        return myMenuName;
+    }
+
+    public void setMenuObjects (List<MenuObject> menus) {
+        myMenuObjects = menus;
+        for (MenuObject menu : menus) {
             addObject(menu);
         }
     }
 
-    public void handleCollisions() {
-        //myCollisionManager.checkCollisions(getMyObjects());
-    }
-
-    public List<String> getMenuNames(){
-    	List list = new ArrayList<String>();
-    	for(MenuObject menu : myMenuObjects){
-    		list.add(menu.getChoice());
-    	}
-    	return list;
-    }
-
-    @Override
-    public void addObject (GameObject object) {
-        super.addObject(object);
-        if (object instanceof MouseClickObject) {
-            myMouseClick = (MouseClickObject) object;
+    public String getMenusNext (String value) {
+        for (MenuObject menu : myMenuObjects) {
+            if (menu.getValue().equals(value)) return menu.getNext();
         }
+        return "";
+    }
+
+    public void setChoice (String choice) {
+        myChoice = choice;
+    }
+
+    public void left () {
+        myMenuGrid.left();
+    }
+
+    public void up () {
+        myMenuGrid.up();
+    }
+
+    public void down () {
+        myMenuGrid.down();
+    }
+
+    public void right () {
+        myMenuGrid.right();
+    }
+
+    public void resetChoice () {
+        myChoice = "";
+    }
+
+    public String peekChoice () {
+        return myChoice;
+    }
+
+    public MenuObject getCurrentMenu () {
+        return myMenuGrid.getCurrentObject();
+    }
+
+    public boolean inputReady () {
+        if (myInputTicks > 3) {
+            myInputTicks = 0;
+            return true;
+        }
+        return false;
     }
 
 }

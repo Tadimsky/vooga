@@ -5,7 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.HashMap;
+=======
+import java.util.Collections;
+import java.util.Comparator;
+>>>>>>> f8d8d7c99dbd899b9790f3b7c738b28dc8e6d982
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -58,19 +63,22 @@ public class GameMap implements IGameLoop, Observer {
      */
     public GameMap (Dimension size) {
         mySize = size;
-<<<<<<< HEAD
         //Dimension dou = new Dimension((int)size.getWidth(), (int)(size.getHeight() * 2));
         NodeFactory factory = new NodeFactory();
-=======
-        NodeFactory factory = new NodeFactory();
-        Dimension dou = new Dimension((int) size.getWidth(), (int) (size.getHeight() * 2));
->>>>>>> origin
         myNodeMap = factory.makeMap(Node.NODE_SIZE, size);
         myTerrain = new GameSpriteManager<Terrain>();
         myResources = new GameSpriteManager<Resource>();
+<<<<<<< HEAD
         myEntities = new HashMap<GameSprite, Node>();
         myMoving = new HashMap<GameEntity, Path>();
+=======
+>>>>>>> f8d8d7c99dbd899b9790f3b7c738b28dc8e6d982
         Camera.instance().setMapSize(size);
+    }
+
+    public GameMap (Dimension size, boolean random) {
+        this(size);
+        Dimension dou = new Dimension((int) size.getWidth(), (int) (size.getHeight() * 2));
         randomGenMap(dou);
     }
 
@@ -114,7 +122,7 @@ public class GameMap implements IGameLoop, Observer {
      * @param same Whether to search for things of the same player ID or different one.
      * @return
      */
-    public <T extends GameSprite> List<T> getInArea (Location3D loc,
+    public <T extends GameEntity> List<T> getInArea (Location3D loc,
                                                      double radius,
                                                      T type,
                                                      int teamID,
@@ -124,24 +132,26 @@ public class GameMap implements IGameLoop, Observer {
         for (Node n : nodesinArea) {
             // TODO: team id
             // TODO: whether same or different
-            inRange.addAll(n.<T> filterGameSprites(n.getContents(), type, 0, true));
+            inRange.addAll(n.<T> filterGameSprites(n.getContents(), type, teamID, same));
         }
+
+        final Location3D loca = loc;
+        Collections.sort(inRange, new Comparator<T>() {
+            @Override
+            public int compare (T o1, T o2) {
+                double value1 = o1.getWorldLocation().getDistance(loca);
+                double value2 = o2.getWorldLocation().getDistance(loca);
+                return (int) (value1 - value2);
+            }
+        });
         return inRange;
     }
 
-    /*
-     * public <T extends GameSprite> List<T> getInArea (Location3D loc, double radius, T type, int
-     * teamID, boolean same) {
-     * 
-     * }
-     */
-
     @Override
     public void update (double elapsedTime) {
-        // myTiles.update(elapsedTime);
-        //Updates myMoving
+        myTiles.update(elapsedTime);
         for (GameEntity ie: myMoving.keySet()) {
-            Vector v = ie.getWorldLocation().difference(myEntities.get(ie).getCenter().to2D());
+            Vector v = ie.getWorldLocation().difference(myMoving.get(ie).getNext().to2D());
             if(v.getMagnitude() < Location3D.APPROX_EQUAL) {
                 if(myMoving.get(ie).size() == 0) {
                     myMoving.remove(ie);
@@ -150,6 +160,7 @@ public class GameMap implements IGameLoop, Observer {
                     continue;
                 }
                 else {
+                    myMoving.get(ie).setNext();
                     ie.setVelocity(v.getAngle(), ie.getSpeed());
                     ie.getState().setMovementState(MovementState.MOVING);
                 }
@@ -157,6 +168,8 @@ public class GameMap implements IGameLoop, Observer {
             Vector velocity = new Vector(ie.getVelocity());
             velocity.scale(elapsedTime);
             ie.translate(velocity);
+            System.out.println("holla");
+            System.out.println(myMoving.size());
             ie.stopMoving();
             ie.getEntityState().update(elapsedTime);
         }
@@ -165,8 +178,12 @@ public class GameMap implements IGameLoop, Observer {
     @Override
     public void paint (Graphics2D pen) {
         myTiles.paint(pen);
-        myNodeMap.paint(pen);// going to paint the nodes by getting the ones we want using getVisible method -> returns list of visible nodes
-        
+        for (GameEntity g: myMoving.keySet()) {
+            g.paint(pen);
+        }
+        for (Node n : myNodeMap.getVisible()) {
+            n.paint(pen);
+        }       
     }
 
     public void setTileMap(TileMap map) {
@@ -177,12 +194,13 @@ public class GameMap implements IGameLoop, Observer {
         return mySize;
     }
 
-<<<<<<< HEAD
     @Override
     public void update (Observable arg0, Object arg1) {
         if(arg1 instanceof Location3D) {
             InteractiveEntity ie = (InteractiveEntity) arg0;
             myMoving.put(ie, getPath(ie, (Location3D) arg1));
+            Vector v = ie.getWorldLocation().difference(myMoving.get(ie).getNext().to2D());
+            ie.setVelocity(v.getAngle(), ie.getSpeed());
             myEntities.get(ie).removeSprite(ie);
             myEntities.remove(ie);
         }    
@@ -192,26 +210,6 @@ public class GameMap implements IGameLoop, Observer {
         myEntities.remove(ie);
     }
     
-=======
-    /**
-     * Returns an Interactive Entity that is at the specified location.
-     * 
-     * @param loc The location to search for an interactive entity.
-     * @return The Interactive Entity if it exists, otherwise null.
-     */
-    public InteractiveEntity getEntity (Location3D loc) {
-        Node n = myNodeMap.getNode(loc);
-        for (GameSprite gs : n.getContents()) {
-            if (gs instanceof InteractiveEntity) {
-                if (gs.intersects(loc)) {
-                    return (InteractiveEntity) gs;
-                }
-            }
-        }
-        return null;
-    }
-
->>>>>>> origin
     private void randomGenMap (Dimension size) {
         int tileWidth = 64;
         int tileHeight = 64;
@@ -240,15 +238,9 @@ public class GameMap implements IGameLoop, Observer {
         }
         Camera.instance().setMapSize(size);
     }
-<<<<<<< HEAD
-=======
-
-    public void setTileMap (TileMap map) {
-        myTiles = map;
+    
+    public void add (GameEntity ge) {
+        myEntities.put(ge, myNodeMap.getNode(ge.getWorldLocation()));
+        myEntities.get(ge).addSprite(ge);
     }
-
-    public Dimension getSize () {
-        return mySize;
-    }
->>>>>>> origin
 }

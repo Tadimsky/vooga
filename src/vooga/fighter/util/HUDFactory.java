@@ -11,7 +11,7 @@ import vooga.fighter.view.HUDElement;
 public class HUDFactory {
     /**
      * Generate a list of HUDElements based off of annotations of member variables in the
-     *  given Observable object.
+     *  given Observable object. Assumes vooga.fighter.view package.
      * 
      * @param gameObject The Observable object with potentially annotated member variables.
      * @return A List of HUDElements
@@ -20,6 +20,24 @@ public class HUDFactory {
      * @throws ClassNotFoundException
      */
     public static List<HUDElement> getHUDElements (Observable gameObject)
+                                                                         throws InstantiationException,
+                                                                         IllegalAccessException,
+                                                                         ClassNotFoundException {
+        return getHUDElements(gameObject, "vooga.fighter.view");
+    }
+    
+    /**
+     * Generate a list of HUDElements based off of annotations of member variables in the
+     *  given Observable object.
+     * 
+     * @param gameObject The Observable object with potentially annotated member variables.
+     * @param packageName The name of the package with the HUDElements in use.
+     * @return A List of HUDElements
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws ClassNotFoundException
+     */
+    public static List<HUDElement> getHUDElements (Observable gameObject, String packageName)
                                                                          throws InstantiationException,
                                                                          IllegalAccessException,
                                                                          ClassNotFoundException {
@@ -32,15 +50,17 @@ public class HUDFactory {
             for (Annotation a : member.getAnnotations()) {
                 if (a instanceof HUDVariable) {
                     HUDVariable varAnnotation = (HUDVariable) a;
+                    member.setAccessible(true);
                     if (member.get(gameObject) == null) {
                         continue;
                     }
-                    String subclass = "HUD" + varAnnotation.HUDElementClass();
+                    String subclass = packageName + ".HUD" + varAnnotation.HUDElementClass();
                     HUDElement newElement = (HUDElement) Class.forName(subclass).newInstance();
                     newElement.setName(varAnnotation.name());
                     newElement.setObservedValue(member.getName());
                     gameObject.addObserver(newElement);
                     elements.add(newElement);
+                    newElement.update(gameObject, null);
                 }
             }
         }

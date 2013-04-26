@@ -1,52 +1,102 @@
 package vooga.fighter.controller;
 
-import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
-import util.Location;
-import util.Pixmap;
-import vooga.fighter.model.LevelMode;
-import vooga.fighter.model.MenuMode;
 import vooga.fighter.model.Mode;
-import vooga.fighter.model.utils.Health;
 import vooga.fighter.model.utils.ImageDataObject;
-import vooga.fighter.util.Paintable;
+import vooga.fighter.util.HUDFactory;
+
+import vooga.fighter.view.HUDElement;
+
+/**
+ * Display loop info for menus
+ * Extends DisplayInfo and implements
+ * ViewDataSource
+ * 
+ * @author Jack Matteucci
+ * @author Wayne You
+ * @author Jerry Li
+ *
+ */
 
 public class DisplayLoopInfo extends DisplayInfo implements ViewDataSource{
-	private Mode myMode;
+    private Mode myMode;
     private List<ImageDataObject> myImageData;
-
-	public DisplayLoopInfo(Mode mode) {
-		super();
-		myMode = mode;
+    
+    /**
+     * Constructor
+     */
+    public DisplayLoopInfo() {
+        super();
+    }
+    
+    /**
+     * Constructor with mode, gets imagedata, from mode
+     * @param mode
+     */
+    public DisplayLoopInfo(Mode mode) {
+        myMode = mode;
     	myImageData = mode.getImageData();
         updateInfo();
-	}
-
+    }
+    
+    /**
+     * Adds HUDElements by checking the annotation and creating
+     * the HUDElements
+     */
+    protected void addHUDElements () {
+        try {
+            for (HUDElement e : HUDFactory.getHUDElements(this)) {
+                addHUDDisplay(e);
+            }
+        }
+        catch (InstantiationException e) {
+            throw new NullPointerException("Could not instantiate HUDElement: " + e.getMessage());
+        }
+        catch (IllegalAccessException e) {
+            throw new NullPointerException("Could not access member variable: " + e.getMessage());
+        }
+        catch (ClassNotFoundException e) {
+            throw new NullPointerException("Could not find class: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Updates by retrieving information from mode
+     */
     public void updateInfo(){
-    	getSpriteLocations().clear();
-    	getSprites().clear();
+    	getLocations().clear();
+    	getGameObjects().clear();
     	getImageSizes().clear();
+    	getImageEffects().clear();
     	myImageData = myMode.getImageData();
-    	setObjectNumber(myImageData.size());
     	for(ImageDataObject data : myImageData){
-    		getSprites().add(data.getMyImage());
-    		getSpriteLocations().add(data.getMyLocation());
-    		getImageSizes().add(data.getMySize());
+    		getGameObjects().add(data.getImage());
+    		getLocations().add(data.getLocation());
+    		getImageSizes().add(data.getSize());
+    		getImageEffects().add(data.getImageEffect());
     	}
     }
     
+    /**
+     * Updates information
+     */
     public void update() {
         updateInfo();
     }
     
+    /**
+     * clear imagedata
+     */
     public void clear(){
     	super.clear();
         myImageData.clear();
     }
-
+    
+    /**
+     * Returns mode
+     * @return
+     */
     public Mode getMode() {
         return myMode;
     }

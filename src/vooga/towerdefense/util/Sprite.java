@@ -5,6 +5,10 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
+import util.Location;
+import util.Pixmap;
+import util.Vector;
+
 
 /**
  * This class represents a shape that moves on its own.
@@ -55,25 +59,6 @@ public abstract class Sprite {
         resetBounds();
     }
 
-    /**
-     * Describes how to "animate" the shape by changing its state.
-     * 
-     * Currently, moves by the current velocity.
-     */
-    public void update (double elapsedTime, Dimension bounds) {
-        // do not change original velocity
-        Vector v = new Vector(myVelocity);
-        //v.scale(elapsedTime);
-        //translate(v);
-    }
-
-    /**
-     * Moves shape's center by given vector.
-     */
-    public void translate (Vector v) {
-        myCenter.translate(v);
-        resetBounds();
-    }
 
     /**
      * Resets shape's center.
@@ -214,6 +199,7 @@ public abstract class Sprite {
         return getBounds().contains(pt);
     }
 
+    //FIXME: This will break many, many things if it is ever called, so we should fix it. -Matthew 
     /**
      * Reset shape back to its original values.
      */

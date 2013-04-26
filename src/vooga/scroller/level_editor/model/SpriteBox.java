@@ -7,8 +7,8 @@ import java.awt.Rectangle;
 import java.util.HashSet;
 import java.util.Set;
 import vooga.scroller.level_editor.controllerSuite.LEGrid;
+import vooga.scroller.sprites.Sprite;
 import vooga.scroller.util.Renderable;
-import vooga.scroller.util.Sprite;
 import vooga.scroller.view.IPaintable;
 
 

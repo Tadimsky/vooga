@@ -1,0 +1,25 @@
+<game>
+     <view>
+          <ShopScreen>
+               <width>600</width>
+               <height>100</height>
+               <location>NORTH</location>
+          </ShopScreen>
+          <MapScreen>
+               <width>500</width>
+               <height>100</height>
+               <location>CENTER</location>
+          </MapScreen>
+     </view>
+     <map>
+          <map3>
+               <image>grass_tile.gif</image>
+               <width>500</width>
+               <height>100</height>
+               <tile>50</tile>
+               <grid>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 1 0 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 </grid>
+          </map3>
+     </map>
+     <gameelement/>
+     <wave/>
+</game>

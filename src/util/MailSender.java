@@ -12,7 +12,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import util.logger.NetworkLogger;
+import util.logger.LoggerManager;
 
 /**
  * Class used to send e-mails to recipients.
@@ -77,6 +77,7 @@ public class MailSender implements IMail{
 	 * Sends an e-mail according to given information
 	 */
 	public void sendMail() {
+		LoggerManager log = new LoggerManager();
 		try {
 			Properties properties = new Properties();
 			properties.put(MAIL, myServerAddress);
@@ -95,9 +96,9 @@ public class MailSender implements IMail{
 			Transport.send(mimeMsg);
 
 		} catch (AddressException e) {
-			NetworkLogger.getLogger().log(Level.WARNING,"Error in choosing e-mail address\n"+e.toString());
+			log.getLogger().log(Level.WARNING,"Error in choosing e-mail address\n"+e.toString());
 		} catch (MessagingException e) {
-			NetworkLogger.getLogger().log(Level.WARNING,"Error in creating e-mail message\n"+e.toString());
+			log.getLogger().log(Level.WARNING,"Error in creating e-mail message\n"+e.toString());
 		}
 	}
 }

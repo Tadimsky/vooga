@@ -2,62 +2,73 @@ package vooga.fighter.controller;
 
 
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.Timer;
-
-import util.Location;
+import java.util.ResourceBundle;
+import util.Vector;
 import util.input.*;
-import vooga.fighter.model.LevelMode;
-import vooga.fighter.model.Mode;
+import vooga.fighter.forces.Force;
+import vooga.fighter.forces.ForceFactory;
+import vooga.fighter.forces.Gravity;
+import vooga.fighter.model.objects.AttackObject;
 import vooga.fighter.model.objects.CharacterObject;
-import vooga.fighter.model.LevelMode;
-import vooga.fighter.model.Mode;
-import vooga.fighter.model.objects.CharacterObject;
-import vooga.fighter.util.Paintable;
+import vooga.fighter.model.objects.MouseClickObject;
+import vooga.fighter.util.Physics;
 import vooga.fighter.view.Canvas;
+import vooga.fighter.view.FourPlayerMatchGameLayout;
 
 
 /**
  * 
  * @author Jerry Li
  * 
- * @Modified by Jack Matteucci
+ * @author by Jack Matteucci
  * 
  */
 @InputClassTarget
 public class OneVOneController extends LevelController {
     private static final String INPUT_PATHWAY = "vooga.fighter.config.leveldefault";
-    private List<CharacterObject> myInputObjects;
-
-    public OneVOneController (String name, Canvas frame) {
-        super(name, frame);
-        
-    }
+    private List<Force> myForces;
+    
+    public OneVOneController () {
+        super();
+    }   
 	
     public OneVOneController(String name, Canvas frame, ControllerDelegate manager, 
     		GameInfo gameinfo) {
     	super(name, frame, manager, gameinfo);
+    	ForceFactory forcefactory = new ForceFactory();
+    	myForces = forcefactory.getForces();
+    	getMode().setForces(myForces);
+    	frame.setLayout(new FourPlayerMatchGameLayout());
+    	setSumOfForces(myForces);
     }
-
-    @Override
-    public Controller getController (ControllerDelegate delegate, GameInfo gameinfo) {
-        return new OneVOneController(super.getName(), super.getView(),
-                                   delegate, gameinfo);
+    
+    public void setSumOfForces(List<Force> forces) {
+        Vector sum = new Vector();
+        for (Force force : forces) {
+            sum.sum(force.getVector());
+        }
+        for(CharacterObject character : getInputObjects()) {
+            character.setAppliedForces(sum);
+        }
     }
+    
+    public Controller getController(String name, Canvas frame, ControllerDelegate manager, GameInfo gameinfo) {
+        Controller controller = new OneVOneController(name, frame, manager, gameinfo);
+        return controller;
+    }
+    
+   
 
-    @Override
     public void notifyEndCondition (String endCondition) {
     	removeListener();
-    	getManager().notifyEndCondition(NEXT);
+    	getManager().notifyEndCondition("ScoreScreen");
     }
     
     @InputMethodTarget(name = "player1_jump")
     public void playerOneJumpInput (AlertObject alObj)  {
-        getInputObjects().get(0).move(270);
+        getInputObjects().get(0).jump();
     }
     
     @InputMethodTarget(name = "player1_left")
@@ -103,12 +114,19 @@ public class OneVOneController extends LevelController {
     
     @InputMethodTarget(name = "player1_attack")
     public void playerOneAttackInput(AlertObject alObj) {
-        getInputObjects().get(0).attack("weakPunch");
+        AttackObject newAttack = getInputObjects().get(0).attack("weakPunch");
+        getMode().addObject(newAttack);
     }
     
     @InputMethodTarget(name = "player2_attack")
     public void playerTwoAttacknput(AlertObject alObj) {
     	getInputObjects().get(1).attack("weakPunch");
+    }
+    
+    @InputMethodTarget(name = "continue")
+    public void mouseclick(PositionObject pos)  {
+    	//This is a test
+    	getInputObjects().get(1).changeHealth(-10);
     }
     
     public void removeListener(){

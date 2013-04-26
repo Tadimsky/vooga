@@ -1,9 +1,10 @@
 package arcade.database;
+import arcade.games.Comment;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,20 +14,6 @@ import java.util.List;
  */
 public class CommentTable extends Table {
 
-    private static final String TABLE_SEPARATOR = ": ";
-    private static final String GAMEID_COLUMN_FIELD = "gameid";  
-    private static final String USERID_COLUMN_FIELD = "userid";
-    private static final String COMMENT_COLUMN_FIELD = "commentfield";
-    private static final String COMMENTID_COLUMN_FIELD = "commentid";  
-
-    
-    private static final int GAMEID_COLUMN_INDEX = 1;
-    private static final int USERID_COLUMN_INDEX = 2;
-    private static final int COMMENT_COLUMN_INDEX = 3;
-    private static final int COMMENTID_COLUMN_INDEX = 4;
-    
-    private static final String TABLE_NAME = "comments";
-
     private Connection myConnection;
     private PreparedStatement myPreparedStatement; 
     private ResultSet myResultSet;
@@ -35,28 +22,10 @@ public class CommentTable extends Table {
      * Constructor but eventually I want to make this part of the abstract class
      */
     public CommentTable() {
-        myConnection=establishConnectionToDatabase();
-        myPreparedStatement=null;
-        myResultSet=null;
-    }
-    /**
-     * Closes Connection, ResultSet, and PreparedStatements once done with database
-     */
-    public void closeConnection() {
-        try {
-            if (myPreparedStatement != null) {
-                myPreparedStatement.close();
-            }
-            if (myResultSet != null) {
-                myResultSet.close();
-            }
-            if (myConnection != null) {
-                myConnection.close();
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
+        super();
+        myConnection = getDatabaseConnection().getConnection();
+        myPreparedStatement = getDatabaseConnection().getPreparedStatement();
+        myResultSet = getDatabaseConnection().getResultSet();
     }
     
     /**
@@ -64,50 +33,78 @@ public class CommentTable extends Table {
      * @param gameid is game id
      * @param userid is user id
      * @param comment is the comment to be added
+     * @param rating of game
      */
-    public void addNewComment (String gameid, String userid, String comment) {
+    public void addNewCommentAndRating (String gameid, String userid, String comment, 
+                                        double rating) {
         
-        String stm = "INSERT INTO scores(gameid, userid, comment) VALUES (?, ?, ?)";
+        String stm = "INSERT INTO comments(gameid, userid, commentfield, rating) " +
+                "VALUES (?, ?, ?, ?)";
         try {
             myPreparedStatement = myConnection.prepareStatement(stm);
-            myPreparedStatement.setString(GAMEID_COLUMN_INDEX, gameid);
-            myPreparedStatement.setString(USERID_COLUMN_INDEX, userid);
-            myPreparedStatement.setString(COMMENT_COLUMN_INDEX, comment);
+            myPreparedStatement.setString(Keys.COM_GAMEID_COLUMN_INDEX, gameid);
+            myPreparedStatement.setString(Keys.COM_USERID_COLUMN_INDEX, userid);
+            myPreparedStatement.setString(Keys.COM_COMMENT_COLUMN_INDEX, comment);
+            myPreparedStatement.setDouble(Keys.COM_RATING_COLUMN_INDEX, rating);
             myPreparedStatement.executeUpdate();
         }
         catch (SQLException e) {
-            e.printStackTrace();
+            writeErrorMessage("Error adding new comment for this game in " +
+                    "CommentTable.java @ Line 53");
         }
     }
     
-    public List<String> getCommentByUsername(String gameid, String userid) {
-        //TODO implement method
-        return null;
-    }
-    
-    public List<String> getAllCommentsForGame(String gameid) {
-        //TODO implement method
-        return null;
-    }
-
-    @Override
-    void printEntireTable () {
-        System.out.println();
+    /**
+     * Gets all comments for a given game
+     * @param gameid is game id
+     * @param username is user
+     * @param userid is user
+     */
+    public List<Comment> getAllCommentsAndRatingsForGame(String gameid, 
+                                                         String username, String userid) {
+        String stm = "SELECT * FROM comments WHERE gameid='" + gameid + 
+                Keys.APOSTROPHE + " AND userid='" + userid + Keys.APOSTROPHE;
+        
+        List<Comment> comments = new ArrayList<Comment>();
         try {
-            myPreparedStatement = myConnection.prepareStatement("SELECT * FROM " + TABLE_NAME);
+            myPreparedStatement = myConnection.prepareStatement(stm);
             myResultSet = myPreparedStatement.executeQuery();
             while (myResultSet.next()) {
-                System.out.print(myResultSet.getString(GAMEID_COLUMN_INDEX) + TABLE_SEPARATOR);
-                System.out.print(myResultSet.getString(USERID_COLUMN_INDEX) + TABLE_SEPARATOR);                
-                System.out.print(myResultSet.getString(COMMENT_COLUMN_INDEX) + TABLE_SEPARATOR);
-                System.out.println(myResultSet.getString(COMMENTID_COLUMN_INDEX) + TABLE_SEPARATOR);
+                comments.add(new Comment(myResultSet.getDouble(Keys.COM_RATING_COLUMN_INDEX), 
+                                         username, myResultSet.getString(
+                                                   Keys.COM_COMMENT_COLUMN_INDEX)));
+            }
+            return comments;
+        }
+        catch (SQLException e) {
+            writeErrorMessage("Error getting all comments for this game in " +
+                    "CommentTable.java @ Line 72");
+        }
+        return comments;
+    }
+
+    /**
+     * Prints entire table
+     */
+    public void printEntireTable () {
+        myResultSet = selectAllRecordsFromTable(Keys.COM_TABLE_NAME);
+        try {
+            while (myResultSet.next()) {
+                System.out.print(myResultSet.getString(Keys.COM_GAMEID_COLUMN_INDEX) + 
+                                 Keys.SEPARATOR);
+                System.out.print(myResultSet.getString(Keys.COM_USERID_COLUMN_INDEX) + 
+                                 Keys.SEPARATOR);                
+                System.out.print(myResultSet.getString(Keys.COM_COMMENT_COLUMN_INDEX) + 
+                                 Keys.SEPARATOR);
+                System.out.print(myResultSet.getDouble(Keys.COM_RATING_COLUMN_INDEX) + 
+                                 Keys.SEPARATOR);
+                System.out.println(myResultSet.getString(Keys.COM_COMMENTID_COLUMN_INDEX) + 
+                                   Keys.SEPARATOR);
             }
         }
         catch (SQLException e) {
-            e.printStackTrace();
+            writeErrorMessage("Error printing entire table in CommentTable.java @ Line 91");
         }
     }
-
-  
 
 }

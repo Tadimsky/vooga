@@ -3,27 +3,27 @@ package vooga.fighter.view;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 
+import sun.awt.image.ToolkitImage;
 import util.Pixmap;
+import vooga.fighter.util.Paintable;
 
 public class PaletteSwap {
-	// palette swapping is a common practice in fighting games
-	// palette swapping can be used to create new character models by recycling
-	// old ones
-	// palette swapping can also be used to help players distinguish each other
-	// when they both
-	// select the same character
-	private Pixmap ObjectImage;
 
-	public PaletteSwap() {
+	public PaletteSwap(Image i) {
 
 	}
 
-	public void applyNewColor(Image colorImage, int width, int height) {
-		BufferedImage image = new BufferedImage(width, height,
-				BufferedImage.TYPE_BYTE_GRAY);
-		Graphics g = image.getGraphics();
-		g.drawImage(colorImage, 0, 0, null);
+	public void setImageToGreyScale(Paintable paintable) {
+		BufferedImage buffered = ((ToolkitImage) paintable).getBufferedImage();
+		BufferedImage temp = new BufferedImage(buffered.getWidth(),
+				buffered.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+		temp.getScaledInstance(buffered.getWidth(), buffered.getHeight(), 0);
+		Graphics g = temp.getGraphics();
+		g.drawImage(buffered, 0, 0, null);
+		buffered = temp;
 		g.dispose();
+		paintable = (Image) buffered;
 	}
 }

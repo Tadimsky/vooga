@@ -1,9 +1,8 @@
 package vooga.fighter.controller;
 
+import util.input.*;
 
-
-
-
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -14,48 +13,94 @@ import java.util.ResourceBundle;
 
 import vooga.fighter.view.Canvas;
 
-
+/**
+ * Uses reflection to construct controllers from a 
+ * .properties file. After subclassing a controller, a dev
+ * just needs to add the subclass class name and the name of the controller
+ * to FightingManifesto.properties. 
+ *  
+ * @author Jack Matteucci
+ * @author Jerry Li
+ *
+ */
 public class ControllerFactory {
 
-    private static final String ONE_V_ONE = "test";
-    private static final String MAIN_MENU = "MainMenu";
-    private static final String CHARACTER_SELECT = "CharacterSelectMenu";
-    private static final String MAP_SELECT = "MapSelectMenu";
-    private static final String MODE_SELECT = "ModeSelectMenu";
-    private static final String SCORE_CONTROLLER = "GameOver";
-
+    private String DEFAULT_RESOURCE_PACKAGE = "FightingManifesto";
+    private static final String PACKAGE_NAME = "controller.";
+    
     private Map<String, Controller> myControllerMap;
+    private List<Controller> myControllerList;
     private Canvas myCanvas;
-    private ResourceBundle myLevelResources;
-    private ResourceBundle myMenuResources;
-    private ResourceBundle myScoreResources;
+    private ResourceBundle myResources;
+    private String myResourceName;
+    private String myPackageName;
 
-
-    public ControllerFactory(Canvas frame) {
-        myCanvas = frame;
+    /**
+     * Constructor - retrieves the resource bundle and constructs the map of
+     * controller names (keys) and the controllers (value)
+     * @param frame
+     */
+    public ControllerFactory(Canvas frame, String pathway) {
         myControllerMap = new HashMap<String, Controller>();
-        setupControllerConfiguration(frame, myControllerMap);
+        myControllerList = new ArrayList<Controller>();
+        myResourceName = pathway +DEFAULT_RESOURCE_PACKAGE;
+        myPackageName = pathway + PACKAGE_NAME;
+        myResources = ResourceBundle.getBundle(myResourceName);
+        constructControllerMap();
     } 
-
-    public Map getMap(){
-        return myControllerMap;
-    }
-
-    protected void setupControllerConfiguration(Canvas frame,  Map<String, Controller> controllermap) {
-                Controller controller = new OneVOneController(ONE_V_ONE, frame);
-                controllermap.put(controller.getName(), controller);
-                controller = new MainMenuController(MAIN_MENU, frame);
-                controllermap.put(controller.getName(), controller);
-                controller = new CharacterSelectController(CHARACTER_SELECT, frame);
-                controllermap.put(controller.getName(), controller);
-                controller = new MapSelectController(MAP_SELECT, frame);
-                controllermap.put(controller.getName(), controller);
-                controller = new ScoreController(SCORE_CONTROLLER, frame);
-                controllermap.put(controller.getName(), controller);
-                controller = new ModeSelectMenuController(MODE_SELECT, frame);
-                controllermap.put(controller.getName(), controller);
+    
+    /**
+     * constructs the map of all controllers (value) associated with their names (key)
+     */
+    public void constructControllerMap() {
+        for (String controllerName : myResources.keySet()) {
+            Controller current = createController(controllerName);
+            myControllerMap.put(current.getName(), current);
         }
     }
+    
+    /**
+     * constructs a new controller from data in an xml file
+     * @param controllerName
+     * @return controller - the controller constructed from the xml
+     */
+    public Controller createController(String controllerName) {
+            Object controllerObject = null;
+            Controller controller = null;
+            try {
+                Class<?> controllerClass = null;
+                String filePath = myPackageName + controllerName;
+                controllerClass = Class.forName(filePath);
+                controllerObject = controllerClass.newInstance();
+                controller = (Controller) controllerObject;
+                controller.initializeName(myResources.getString(controllerName));
+                //controller.initializeName(myResources.getString(controllerName));
+                
+            }
+            catch (Exception e){
+                throw new NullPointerException("No such class");
+            }
+        return controller;
+    }
+    
+    /**
+     * returns the map of names and controllers
+     * @return myControllerMap - map of controller names (key) and controllers (value)
+     */
+    public Map<String, Controller> getMap() {
+        return myControllerMap;
+    }
+    
+    /**
+     * returns the list of all Controllers
+     * @return myControllerList - list of all controllers
+     */
+    public List getList() {
+        return myControllerList;
+    }
+
+}    
+   
 
 
 

@@ -27,7 +27,7 @@ public class RightClickAction extends ManagerAction {
     public void apply () {
         if (myLocation != null) {
             for (InteractiveEntity ie : getManager().getSelected()) {
-                ie.move(myLocation); // This should be handled by the units move action.
+                ie.move(myLocation); 
             }
         }
     }

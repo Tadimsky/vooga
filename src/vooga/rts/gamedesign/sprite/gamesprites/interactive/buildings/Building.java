@@ -4,8 +4,8 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.upgrades.UpgradeNode;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
 import vooga.rts.util.Location3D;
@@ -25,8 +25,8 @@ import vooga.rts.util.Sound;
  */
 
 public class Building extends InteractiveEntity {
-    private static int PRODUCE_TIME = 90;
-
+    public static final int PRODUCE_TIME = 90;
+    public static final Dimension DEFAULT_SIZE = new Dimension(100,100);
     public static final int MAXHEALTH = 100;
 
     private Location3D myRallyPoint;
@@ -53,6 +53,10 @@ public class Building extends InteractiveEntity {
         myRallyPoint = new Location3D(getWorldLocation().getX(), getWorldLocation().getY() + 150, 0);
 
     }
+    
+    public Building(Pixmap image, Sound sound, int health, double buildTime) {
+    	this(image, InteractiveEntity.DEFAULT_LOCATION, DEFAULT_SIZE, sound, InteractiveEntity.DEFAULT_PLAYERID, health, buildTime);
+    }
 
     @Override
     public InteractiveEntity copy () {
@@ -60,10 +64,6 @@ public class Building extends InteractiveEntity {
                             getHealth(), getBuildTime());
     }
 
-    @Override
-    public void paint (Graphics2D pen) {
-        super.paint(pen);
-    }
 
     /**
      * Returns the rally point of the production building.

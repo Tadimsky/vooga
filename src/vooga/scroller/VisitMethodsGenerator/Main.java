@@ -1,12 +1,13 @@
 package vooga.scroller.VisitMethodsGenerator;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import vooga.scroller.util.Sprite;
 
-
-
+/**
+ * This is a Main class that allows you to run the VisitMethodsGenerator. 
+ * 
+ * @author Jay Wang
+ *
+ */
 public class Main {
     
     private static final String DIRECTORY_LOCATION = "src/vooga/scroller/VisitMethodsGenerator/files/";
@@ -17,11 +18,10 @@ public class Main {
      * @throws IOException 
      */
     public static void main (String[] args) throws IOException {
-       
 
-        List<Sprite> names = Arrays.asList(); //TODO: FILL IN THE SPRITES YOU ARE USING 
+        String[] names = {"IPlayer player", "ILevelPortal levelPortal", "IEnemy enemy", "ICollectible collectible"}; //TODO: FILL IN THE SPRITES YOU ARE USING 
         VisitMethodsGenerator generator = new VisitMethodsGenerator(names, DIRECTORY_LOCATION, FILE_NAME);
-        generator.generateVisitMethods();
+        generator.generateVisitMethods(names);
         
     }
 }

@@ -12,7 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import vooga.rts.networking.NetworkBundle;
-import vooga.rts.networking.communications.Player;
+import vooga.rts.networking.communications.PlayerInfo;
 
 
 /**
@@ -34,9 +34,9 @@ public class LobbyView extends JPanel {
     private JLabel[] myUsernameLabels;
     private JComboBox[] myFactionBoxes;
     private JComboBox[] myTeamBoxes;
-    private Player[] myPlayers;
+    private PlayerInfo[] myPlayers;
     private IModel myModel;
-    private Collection<Player> myUserControlledPlayers;
+    private Collection<PlayerInfo> myUserControlledPlayers;
     private ItemListener myFactionListener;
     private ItemListener myTeamListener;
 
@@ -187,7 +187,7 @@ public class LobbyView extends JPanel {
             // set boxes not enabled
             myFactionBoxes[i].setEnabled(false);
             myTeamBoxes[i].setEnabled(false);
-            Player player = myPlayers[i];
+            PlayerInfo player = myPlayers[i];
             // if player exists
             if (player != null) {
                 // set player name
@@ -223,7 +223,7 @@ public class LobbyView extends JPanel {
      * @param userControlledPlayers new user controlled players
      * @param allPlayers all players
      */
-    public void update (Collection<Player> userControlledPlayers, Player[] allPlayers) {
+    public void update (Collection<PlayerInfo> userControlledPlayers, PlayerInfo[] allPlayers) {
         myPlayers = allPlayers;
         myUserControlledPlayers = userControlledPlayers;
         updateLabelsAndButtons();

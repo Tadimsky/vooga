@@ -24,11 +24,6 @@ public class CannotBeOccupied implements OccupyStrategy{
 	public CannotBeOccupied(){
 		
 	}
-	
-	
-	public void addValidClassType(Unit u) {
-		return;
-	}
 
 	@Override
 	public void setOccupierID(int id) {

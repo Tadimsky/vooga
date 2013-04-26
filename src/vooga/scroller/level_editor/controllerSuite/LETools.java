@@ -11,12 +11,14 @@ import vooga.scroller.level_editor.StartPoint;
 import vooga.scroller.level_editor.view.LEActionLibrary;
 import vooga.scroller.level_editor.view.LEToolsView;
 import vooga.scroller.level_editor.view.LEView;
-import vooga.scroller.level_management.IDoor;
+import vooga.scroller.level_management.LevelPortal;
+import vooga.scroller.sprites.Sprite;
 import vooga.scroller.sprites.interfaces.ICollectible;
+import vooga.scroller.sprites.interfaces.IDoor;
 import vooga.scroller.sprites.interfaces.IEnemy;
 import vooga.scroller.sprites.interfaces.IPlatform;
+import vooga.scroller.util.IBackgroundView;
 import vooga.scroller.util.Renderable;
-import vooga.scroller.util.Sprite;
 import vooga.scroller.util.mvc.IView;
 import vooga.scroller.util.mvc.vcFramework.Tools;
 
@@ -85,26 +87,23 @@ public class LETools extends Tools implements Renderable<LEToolsView> {
      * @param spriteID - id for communication with the model
      */
     public void addSpriteOption (Sprite s, int spriteID) {
-        if (s instanceof IPlatform) {
+        if (IPlatform.class.isAssignableFrom(s.getClass())) {
             mySpritesOptions.get(PLATFORMS).put(getIcon(s), spriteID + "");
         }
-        else if (s instanceof IEnemy) {
+        else if (IEnemy.class.isAssignableFrom(s.getClass())) {
             mySpritesOptions.get(ENEMIES).put(getIcon(s), spriteID + "");
         }
-        else if (s instanceof ICollectible) {
+        else if (ICollectible.class.isAssignableFrom(s.getClass())) {
             mySpritesOptions.get(COLLECTIBLES).put(getIcon(s), spriteID + "");
         }
-        else if (s instanceof StartPoint || s instanceof IDoor) {
-            mySpritesOptions.get(SPECIALPOINTS).put(getIcon(s), spriteID + "");
+        else if (StartPoint.class.isAssignableFrom(s.getClass()) ||
+                IDoor.class.isAssignableFrom(s.getClass())) {
+            mySpritesOptions.get(SPECIALPOINTS).put(getIcon(s), -spriteID + "");
         }
         else {
             mySpritesOptions.get(OTHERS).put(getIcon(s), spriteID + "");
         }
     }
-
-    // public Map<Object, String> getOtherOptions() {
-    // return myOtherIcons;
-    // }
 
     /**
      * 
@@ -140,18 +139,10 @@ public class LETools extends Tools implements Renderable<LEToolsView> {
     }
 
 
-    public void addBackgrounds (Map<Integer, Image> backgrounds) {
-        for (Integer key : backgrounds.keySet()) {
-            myBackgroundImages.put(getIcon(backgrounds.get(key), DEFAULT_BG_SIZE), "" + key);
+    public void addBackgrounds (Map<Integer, IBackgroundView> map) {
+        for (Integer key : map.keySet()) {
+            myBackgroundImages.put(getIcon(map.get(key).getImage(), DEFAULT_BG_SIZE), "" + key);
         }
     }
-
-    // public void addBackgrounds (Map<Integer, Image> map) {
-    // for (Integer key : map.keySet()) {
-    // myBackgroundImages
-    // .put(new ImageIcon(map.get(key).getScaledInstance(100, 100, Image.SCALE_SMOOTH)),
-    // "" + key);
-    // }
-    // }
 
 }

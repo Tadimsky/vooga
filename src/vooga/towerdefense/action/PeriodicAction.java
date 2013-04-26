@@ -1,48 +1,38 @@
 package vooga.towerdefense.action;
 
+import vooga.towerdefense.attributes.Attribute;
+
 /**
- * super class for all actions that is periodic. Means they only apply very cooldown time
- * @author Zhen Gou
+ * @author Matthew Roy
  *
  */
-
-public abstract class PeriodicAction extends Action {
-	private double myTimer=0;
-	private double myCD=0;
-	
-/**
- * MUST be called in the update method of the subclasses of periodicAction for it to work
- * @param elapsedTime
- */
-	
-	public void updateTimer(double elapsedTime){
-		myTimer+=elapsedTime;
-		
-	}
-	/**
-	 * tells whether this action is ready e.g. more time has elapsed than the cool down since last use
-	 * @return
-	 */
-	public boolean isReady(){
-		return myTimer>=myCD;
-	}
-	
-	/**
-	 * tells the timer that this action is just used
-	 */
-	public void resetTimer(){
-		myTimer=0;
-	}
-	/**
-	 * set the cooldown
-	 * @param cd
-	 */
-	
-	public void setCoolDown(double cd){
-		myCD=cd;
-	}
-
-
-
+public class PeriodicAction extends TargetedAction {
+    private Attribute myCd;
+    private double myTimer;
+    
+    public PeriodicAction (Attribute cd) {
+        myCd    = cd;
+        myTimer = 0;
+    }
+    
+    public void update(double elapsedTime) {
+        if (isEnabled()) {
+            executeAction(elapsedTime);
+        }
+    }
+    
+    /**
+     * 
+     * @param elapsedTime 
+     */
+    @Override
+    public void executeAction (double elapsedTime) {
+        myTimer += elapsedTime;
+        if (myTimer > myCd.getValue()) {
+            updateFollowUpActions(elapsedTime);
+            myTimer -= myCd.getValue();
+        }
+        
+    }
 
 }

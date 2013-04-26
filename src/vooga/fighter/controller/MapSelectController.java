@@ -21,52 +21,67 @@ import java.util.ResourceBundle;
 
 
 /**
+ * Details a map select controller, where you can select maps
  * 
- * @author Jack Matteucci edited by Jerry Li
+ * 
+ * @author Jack Matteucci 
+ * @author Jerry Li
  */
 
-@InputClassTarget
+
 public class MapSelectController extends MenuController {
     
-    
-    public MapSelectController (String name, Canvas frame) {
-        super(name, frame);
+    /**
+     * Initial constructor
+     */
+    public MapSelectController () {
+        super();
     }
-        
+    
+    /**
+     * Concrete constructor, called when level is switched to by controllermanager
+     * @param name      name of controller
+     * @param frame     canvas
+     * @param manager   ControllerManager
+     * @param gameinfo  GameInfo
+     */
     public MapSelectController(String name, Canvas frame, ControllerDelegate manager, 
                 GameInfo gameinfo) {
         super(name, frame, manager, gameinfo);
     }
     
     /**
-     * Checks this controller's end conditions
+     * Returns concrete controller, used when level is switched to by controllermanager
+     */
+    public Controller getController(String name, Canvas frame, ControllerDelegate manager, GameInfo gameinfo) {
+        Controller controller = new MapSelectController(name, frame, manager, gameinfo);
+        return controller;
+    }
+    
+    /**
+     * Notifies the delegate when controller ends
      */
     public void notifyEndCondition(String choice) {
     	removeListener();
-    	if(BACK.equals(choice)) getManager().notifyEndCondition(BACK);
-    	else if (getMode().getMenuNames().contains(choice)){
-    		getGameInfo().setMapName(choice);
-    		getManager().notifyEndCondition(NEXT);
-    		}
+    	getMode().resetChoice();
+		getGameInfo().setMapName(choice);
+		getManager().notifyEndCondition(getMode().getMenusNext(choice));
     	}
 
-
-
-    @Override
-    public Controller getController (ControllerDelegate delegate, GameInfo gameinfo) {
-        return new MapSelectController(super.getName(), super.getView(),
-                                   delegate, gameinfo);
-    }
-    
-    
-    @InputMethodTarget(name = "continue")
-    public void mouseclick(PositionObject pos)  {
-        super.getMode().addObject(new MouseClickObject(pos.getPoint2D()));
-        notifyEndCondition(getMode().getMenuNames().get(0));
-    }
+    /**
+     * Removes input
+     */
     public void removeListener(){
     	super.removeListener();
     	getInput().removeListener(this);
+    }
+    
+    /**
+     * Checks conditions
+     */
+    public void checkConditions(){
+    	for(ModeCondition condition: getConditions())
+    		if(condition.checkCondition(getMode())) notifyEndCondition(getMode().peekChoice());
     }
 
 }

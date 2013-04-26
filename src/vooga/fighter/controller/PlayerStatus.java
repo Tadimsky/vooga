@@ -4,6 +4,12 @@ package vooga.fighter.controller;
 
 import vooga.fighter.model.utils.Health;
 
+/**
+ * 
+ * @author Jerry Li
+ * @author Jack Matteucci
+ *
+ */
 public class PlayerStatus {
     
     private static int myPlayerID = 0;
@@ -11,12 +17,13 @@ public class PlayerStatus {
     private String myCharacterName;
     private Health myHealth;
     private Double myScore;
+    private boolean winStatus;
     
     public PlayerStatus () {
         myPlayerID++;
         myCharacterName = "";
         myPlayerName = "Player " + myPlayerID;
-        myHealth = null;
+        myHealth = new Health();
         myScore = (double) 0;
     }
     

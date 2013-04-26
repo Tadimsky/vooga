@@ -42,5 +42,9 @@ public interface GatherStrategy extends Strategy {
 	 * @param elapsedTime is the amount of time that has passed
 	 */
 	public void update(double elapsedTime);
+	
+	public int getGatherAmount();
+	
+	public void setGatherAmount(int gatherAmount);
 
 }

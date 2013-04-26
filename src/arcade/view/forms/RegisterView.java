@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ResourceBundle;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -12,10 +13,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import arcade.controller.Controller;
+import arcade.controller.UserSpecificData;
 import arcade.exceptions.DOBFormatException;
 import arcade.exceptions.UsernameFormatException;
 import arcade.exceptions.UsernameTakenException;
-import arcade.model.Model;
 import arcade.view.TextKeywords;
 
 
@@ -38,32 +40,32 @@ public class RegisterView extends Account {
     private String myImagePath = DEFAULT_IMAGE;
 
     /**
-     * Constructs the register view with a Model and Resource Bundle
+     * Constructs the register view with a Controller and Resource Bundle
      * 
      * 
-     * @param model
+     * @param controller
      * @param resources
      */
-    public RegisterView (Model model, ResourceBundle resources) {
-        this(model, resources, "", "");
+    public RegisterView (Controller controller, ResourceBundle resources) {
+        this(controller, resources, "", "");
     }
 
     /**
-     * Constructs the register view with a Model, ResourceBundle, and also
+     * Constructs the register view with a Controller, ResourceBundle, and also
      * fills in the username and password fields with some initial values.
      * This might be useful if the user already typed in these values at a
      * previous point such as the login view.
      * 
-     * @param model
+     * @param controller
      * @param resources
      * @param initialUsername
      * @param initialPassword
      */
-    public RegisterView (Model model,
+    public RegisterView (Controller controller,
                          ResourceBundle resources,
                          String initialUsername,
                          String initialPassword) {
-        super(model, resources);
+        super(controller, resources);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         setLocationRelativeTo(null);
@@ -152,7 +154,12 @@ public class RegisterView extends Account {
                             new ActionListener() {
                                 @Override
                                 public void actionPerformed (ActionEvent arg0) {
-                                    registerNewUser();
+                                    try {
+										registerNewUser();
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
                                 }
                             });
     }
@@ -162,20 +169,22 @@ public class RegisterView extends Account {
      * date of birth are in the correct format.
      * 
      * If register successful, logs in to the arcade.
+     * @throws IOException 
      * 
      */
-    private void registerNewUser () {
+    private void registerNewUser () throws IOException {
         try {
             if (!isUsernameCorrectFormat(getUsername())) { throw new UsernameFormatException(); }
 
             if (!isDOBCorrectFormat(myDOBTextField.getText())) { throw new DOBFormatException(); }
 
-            getModel().createNewUserProfile(getUsername(),
-                                            getPassword(),
-                                            myFirstNameTextField.getText(),
-                                            myLastNameTextField.getText(),
-                                            myDOBTextField.getText());// ,
-            // myImagePath);
+            UserSpecificData data = new UserSpecificData(getUsername(),
+                                                         getPassword(),
+                                                         myFirstNameTextField.getText(),
+                                                         myLastNameTextField.getText(),
+                                                         myDOBTextField.getText(),
+                                                         myImagePath);
+            getController().createNewUserProfile(data);
             dispose();
 
         }
@@ -212,8 +221,7 @@ public class RegisterView extends Account {
      * @return
      */
     private boolean isDOBCorrectFormat (String dob) {
-        // TODO: USE REGULAR EXPRESSIONS
-        return true;
+        return dob.matches("[0-1][0-9]/[0-3][0-9]/[1-2][0-9][0-9][0-9]");
     }
 
 }

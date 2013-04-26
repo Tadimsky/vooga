@@ -6,6 +6,8 @@ import java.awt.image.BufferedImage;
 import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -60,13 +62,17 @@ public class GameMap implements IGameLoop, Observer {
         mySize = size;
         //Dimension dou = new Dimension((int)size.getWidth(), (int)(size.getHeight() * 2));
         NodeFactory factory = new NodeFactory();
-        Dimension dou = new Dimension((int) size.getWidth(), (int) (size.getHeight() * 2));
         myNodeMap = factory.makeMap(Node.NODE_SIZE, size);
         myTerrain = new GameSpriteManager<Terrain>();
         myResources = new GameSpriteManager<Resource>();
         myEntities = new HashMap<GameSprite, Node>();
         myMoving = new HashMap<GameEntity, Path>();
         Camera.instance().setMapSize(size);
+    }
+
+    public GameMap (Dimension size, boolean random) {
+        this(size);
+        Dimension dou = new Dimension((int) size.getWidth(), (int) (size.getHeight() * 2));
         randomGenMap(dou);
     }
 
@@ -110,7 +116,7 @@ public class GameMap implements IGameLoop, Observer {
      * @param same Whether to search for things of the same player ID or different one.
      * @return
      */
-    public <T extends GameSprite> List<T> getInArea (Location3D loc,
+    public <T extends GameEntity> List<T> getInArea (Location3D loc,
                                                      double radius,
                                                      T type,
                                                      int teamID,
@@ -120,17 +126,20 @@ public class GameMap implements IGameLoop, Observer {
         for (Node n : nodesinArea) {
             // TODO: team id
             // TODO: whether same or different
-            inRange.addAll(n.<T> filterGameSprites(n.getContents(), type, 0, true));
+            inRange.addAll(n.<T> filterGameSprites(n.getContents(), type, teamID, same));
         }
+
+        final Location3D loca = loc;
+        Collections.sort(inRange, new Comparator<T>() {
+            @Override
+            public int compare (T o1, T o2) {
+                double value1 = o1.getWorldLocation().getDistance(loca);
+                double value2 = o2.getWorldLocation().getDistance(loca);
+                return (int) (value1 - value2);
+            }
+        });
         return inRange;
     }
-
-    /*
-     * public <T extends GameSprite> List<T> getInArea (Location3D loc, double radius, T type, int
-     * teamID, boolean same) {
-     * 
-     * }
-     */
 
     @Override
     public void update (double elapsedTime) {

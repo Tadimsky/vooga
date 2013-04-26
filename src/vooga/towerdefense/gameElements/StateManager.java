@@ -5,23 +5,23 @@ import java.util.List;
 
 
 /**
- * manages states of a unit, need to be subclassed
+ * manages animations of a gameElement, need to be subclassed
  * 
- * @author gouzhen-1
+ * @author Zhen Gou
  * 
  */
 
 public abstract class StateManager {
-    private Unit myUnit;
+    private GameElement myGameElement;
 
-    public StateManager (Unit unit) {
-        myUnit = unit;
+    public StateManager (GameElement unit) {
+        myGameElement = unit;
     }
 
     public abstract void updateAndPaint (Graphics2D pen);
 
-    public Unit getUnit () {
-        return myUnit;
+    public GameElement getGameElement () {
+        return myGameElement;
     }
 
 }

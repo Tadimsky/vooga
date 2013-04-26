@@ -7,8 +7,10 @@ import vooga.fighter.model.utils.ImageDataObject;
 import vooga.fighter.model.utils.State;
 import vooga.fighter.model.utils.UpdatableLocation;
 import java.awt.Dimension;
-import java.util.Collection;
+import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -24,21 +26,36 @@ public abstract class GameObject {
     private ObjectLoader myLoader;
     private UpdatableLocation myCenter;
     private State myCurrentState;
+    private String myCurrentStateKey;
+    private State myDefaultState;
+    private String myDefaultStateKey;
     private ImageDataObject myImageData;
     private Map<String,State> myStates;
     private Map<String,Integer> myProperties;
-
+    private List<Integer> myImageEffects;
+    private boolean myRemoveState;
+    
     /**
      * Constructs a new GameObject. All fields are initially empty, and must be
      * populated with an ObjectLoader.
      */
     public GameObject() {
-//        myInstanceId = System.currentTimeMillis();
+        myInstanceId = System.currentTimeMillis();
+    	myImageEffects = new ArrayList<Integer>();
         myStates = new HashMap<String,State>();
         myProperties = new HashMap<String,Integer>();
         myLoader = null;
         myCurrentState = null;
+        myCurrentStateKey = null;
+        myDefaultState = null;
+        myDefaultStateKey = null;
         myImageData = null;
+        myRemoveState = false;
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            
+        }
     }
     
     /**
@@ -63,6 +80,7 @@ public abstract class GameObject {
         return myCenter;
     }
 
+    
     /**
      * Adds a property for this object. Overwrites any existing value.
      */
@@ -112,7 +130,37 @@ public abstract class GameObject {
      */
     public void setCurrentState(String key) {
         myCurrentState = getState(key);
+        myCurrentStateKey = key;
         myCurrentState.resetState();
+    }
+    
+    /**
+     * Sets the current state to the default state.
+     */
+    public void setToDefaultState() {
+    	setCurrentState(getDefaultStateKey());
+    }
+    
+    /**
+     * Sets the default state for this object.
+     */
+    public void defineDefaultState(String key) {
+        myDefaultState = getState(key);
+        myDefaultStateKey = key;
+    }
+    
+    /**
+     * Gets the String key of the default state.
+     */
+    public String getDefaultStateKey() {
+        return myDefaultStateKey;
+    }
+    
+    /**
+     * Gets the String key of the current state.
+     */
+    public String getCurrentStateKey() {
+        return myCurrentStateKey;
     }
     
     /**
@@ -153,8 +201,15 @@ public abstract class GameObject {
         Dimension myCurrentSize = myCurrentState.getCurrentSize();
         Location myCurrentLocation = myCenter.getLocation();
         if (!(myCurrentSize == null || myCurrentImage == null || myCenter == null)) {
-            myImageData = new ImageDataObject(myCurrentImage, myCurrentLocation, myCurrentSize);
+        	myImageData = new ImageDataObject(myCurrentImage, myCurrentLocation, myCurrentSize, myImageEffects);
         }
+    }
+    
+    /**
+     * Sets image data to the information from an ImageDataObject
+     */
+    public void setImageData(ImageDataObject image){
+    	myImageData= new ImageDataObject(image.getImage(), image.getLocation(),image.getSize(), image.getImageEffect() );
     }
     
     /**
@@ -173,6 +228,7 @@ public abstract class GameObject {
         if (myCenter != null) {
             myCenter.update();
         }
+        completeUpdate();
     }
     
     /**
@@ -184,37 +240,81 @@ public abstract class GameObject {
         if (myCurrentState != null) {
             myCurrentState.update();
         }
+        if (myCurrentState.hasCompleted()) {
+            stateCompleteUpdate();
+        }
     }
     
     /**
-     * Second dispatch for collision management. Key part of the visitor pattern.
+     * Determines behavior to be taken if the state has completed. Note that looping
+     * states will automatically reset. By default this method sets the current state
+     * to the default state.
      */
-    public abstract void dispatchCollision(GameObject other);
-    
-    /**
-     * Handles a collision with another game object. Key part of the visitor pattern.
-     */
-    public abstract void handleCollision(CharacterObject other);
-
-    /**
-     * Handles a collision with another game object. Key part of the visitor pattern.
-     */
-    public abstract void handleCollision(AttackObject other);
-    
-    /**
-     * Handles a collision with another game object. Key part of the visitor pattern.
-     */
-    public abstract void handleCollision(EnvironmentObject other);
-    
-    /**
-     * Returns collection of states
-     */
-    protected Collection getStates(){
-    	return myStates.values();
+    public void stateCompleteUpdate() {
+        myCurrentState = myDefaultState;
+        myCurrentStateKey = myDefaultStateKey;
+        myCurrentState.resetState();
     }
+    
+    /**
+     * Returns true if this object is colliding with another.
+     */
+    public boolean checkCollision(GameObject other) {
+        Rectangle thisRect = getCurrentState().getCurrentRectangle(); 
+        Rectangle otherRect = other.getCurrentState().getCurrentRectangle();
+        return thisRect.intersects(otherRect);
+    }
+    
+    /**
+     * Returns the map of states for this object.
+     */
+    public Map<String,State> getStates(){
+        return myStates;
+    }
+    
     /**
      * Indicates whether or not the object is ready to be removed.
      */
-    public abstract boolean shouldBeRemoved();
+    public boolean shouldBeRemoved() {
+    	return myRemoveState;
+    }
+    
+    /**
+     * Sets the removeState of this object
+     */
+    public void setRemoveState(boolean bool) {
+    	myRemoveState = bool;
+    }
+    
+    /**
+     * Checks if this object is equal to another by using the instance id.
+     */
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        GameObject other;
+        if (o instanceof GameObject) {
+            other = (GameObject) o;
+        } else {
+            return false;
+        }        
+        return myInstanceId == other.getInstanceId();
+    }
+    
+    /**
+     * Returns hashcode for the game object by casting instance id to int.
+     */
+    public int hashcode() {
+        return (int) myInstanceId;
+    }
+    
+    /**
+     * Handles additional update logic outside of resolving movement on the object
+     * and setting image data.
+     */
+    public abstract void completeUpdate();
+    
+    
     
 }
