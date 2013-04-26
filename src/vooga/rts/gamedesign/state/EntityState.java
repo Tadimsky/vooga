@@ -74,9 +74,9 @@ public class EntityState {
 	public void setOccupyState(OccupyState occupyState) {
 		myOccupyState = occupyState;
 	}
-	
+
 	public OccupyState getOccupyState() {
-	    return myOccupyState;
+		return myOccupyState;
 	}
 
 	/**
@@ -138,34 +138,38 @@ public class EntityState {
 	public boolean canMove() {
 		return myMovementState == MovementState.MOVING;
 	}
+
 	/**
 	 * Returns whether or not the entity can be selected.
+	 * 
 	 * @return true if the entity can be selected and false if it can not be
-	 * selected
+	 *         selected
 	 */
 	public boolean canSelect() {
 		return myOccupyState == OccupyState.NOT_OCCUPYING;
 	}
-	
+
 	/**
-	 * Sets the state of an entity to producing.  When an entity produces,
-	 * it does not move attack, move, or occupy.
+	 * Sets the state of an entity to producing. When an entity produces, it
+	 * does not move attack, move, or occupy.
 	 */
 	public void produce() {
 		myProducingState = ProducingState.PRODUCING;
 		myMovementState = MovementState.STATIONARY;
 		myAttackingState = AttackingState.NOT_ATTACKING;
-		myOccupyState = OccupyState.NOT_OCCUPYING; 
+		myOccupyState = OccupyState.NOT_OCCUPYING;
 		myUnitState = UnitState.PRODUCE;
 	}
-	
+
 	/**
 	 * Returns whether or not an entity can produce other entities
-	 * @return true if the entity can produce other entities and false if it 
-	 * cannot produce other entities 
+	 * 
+	 * @return true if the entity can produce other entities and false if it
+	 *         cannot produce other entities
 	 */
 	public boolean canProduce() {
-		return myProducingState == ProducingState.PRODUCING && myUnitState == UnitState.PRODUCE;
+		return myProducingState == ProducingState.PRODUCING
+				&& myUnitState == UnitState.PRODUCE;
 	}
 
 	/**
@@ -176,8 +180,18 @@ public class EntityState {
 	 *         if the entity cannot attack
 	 */
 	public boolean canAttack() {
-		return myAttackingState == AttackingState.ATTACKING
-				&& myUnitState == UnitState.ATTACK;
+		return myAttackingState == AttackingState.ATTACKING;
+	}
+
+	/**
+	 * Checks to see whether an entity has an attacking state other than not
+	 * attacking.
+	 * 
+	 * @return true if the entity state is either attacking or waiting and false
+	 *         if the entity is not attacking
+	 */
+	public boolean isAttacking() {
+		return myAttackingState != AttackingState.NOT_ATTACKING;
 	}
 
 	/**
@@ -202,7 +216,7 @@ public class EntityState {
 	 */
 	public void attack() {
 		myAttackingState = AttackingState.WAITING;
-		myUnitState = UnitState.ATTACK;
+		// myUnitState = UnitState.ATTACK;
 		myAttackingDelay = new DelayedTask(myAttackingCooldown, new Runnable() {
 			@Override
 			public void run() {

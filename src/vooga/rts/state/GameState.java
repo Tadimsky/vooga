@@ -18,6 +18,7 @@ import vooga.rts.gamedesign.sprite.gamesprites.Resource;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
+import vooga.rts.gamedesign.state.UnitState;
 import vooga.rts.gamedesign.strategy.attackstrategy.CanAttack;
 import vooga.rts.gamedesign.strategy.gatherstrategy.CanGather;
 import vooga.rts.gamedesign.strategy.occupystrategy.CanBeOccupied;
@@ -131,6 +132,7 @@ public class GameState extends SubState implements Controller {
         getPlayers().getHuman().add(worker);
         Unit a = new Unit();
         a.setAttackStrategy(new CanAttack(a.getWorldLocation(), a.getPlayerID()));
+        a.getEntityState().setUnitState(UnitState.ATTACK);
         Projectile proj =
                 new Projectile(new Pixmap(ResourceManager.getInstance()
                         .<BufferedImage> getFile("images/bullet.png", BufferedImage.class)),

@@ -258,7 +258,7 @@ public class GameEntity extends GameSprite {
     public void stopMoving () {
         if (!myEntityState.canMove()) {
             setVelocity(getVelocity().getAngle(), 0);
-            getEntityState().stop();
+            myGoal = new Location3D(getWorldLocation());
         }
     }
 }
