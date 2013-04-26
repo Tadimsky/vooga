@@ -264,4 +264,10 @@ public class GameState extends SubState implements Controller {
     public static void setMap (GameMap map) {
         myMap = map;
     }
+
+    @Override
+    public void activate () {
+        // TODO Auto-generated method stub
+        
+    }
 }

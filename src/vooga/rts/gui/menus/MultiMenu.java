@@ -35,8 +35,7 @@ public class MultiMenu extends Menu implements Observer {
         List<Integer> maxPlayers = new ArrayList<Integer>();
         maxPlayers.add(4);
         maxPlayers.add(6);
-        myClientModel =
-                new ClientModel(null, "Test Game", "User 1", factions, maps, maxPlayers);
+        // myClientModel = new ClientModel(null, "Test Game", "User 1", factions, maps, maxPlayers);
 
     }
 

@@ -2,16 +2,18 @@ package vooga.rts.state;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 import util.input.Input;
-import vooga.rts.Game;
 import vooga.rts.commands.Command;
 import vooga.rts.controller.InputController;
+import vooga.rts.game.RTSGame;
 import vooga.rts.gui.Window;
 import vooga.rts.gui.menus.MultiMenu;
 
@@ -28,7 +30,8 @@ public class MainState implements State, Observer {
 
     private final static String DEFAULT_INPUT_LOCATION = "vooga.rts.resources.properties.Input";
     private Window myWindow;
-    // private Queue<SubState> myStates; // This isn't ideal, but for now it will do the trick
+    private Map<SubState, SubState> myStates;
+    
     private SubState myActiveState;
     private Timer myTimer;
     private InputController myController;
@@ -36,39 +39,23 @@ public class MainState implements State, Observer {
 
     public MainState () {
         myReady = false;
-
+        myStates = new HashMap<SubState, SubState>();       
+        
         myWindow = new Window();
         myWindow.setFullscreen(true);
-        // myStates = new LinkedList<SubState>();
-        // myStates.add(new LoadingState(this));
-        setActiveState(new LoadingState(this));
+        LoadingState loader = new LoadingState(this);        
+        setActiveState(loader);
         render();
+        
+        MenuState menu = new MenuState(this, getWindow().getJFrame());        
+        myStates.put(loader, menu);
+        GameState game = new GameState(this);
+        myStates.put(menu, game);
+        myStates.put(game, menu);        
 
         Input input = new Input(DEFAULT_INPUT_LOCATION, myWindow.getCanvas());
         myController = new InputController(this);
         input.addListenerTo(myController);
-        // myStates.add(new MenuState(this));
-        // myStates.add(new GameState(this));
-
-        myTimer = new Timer();
-        myTimer.scheduleAtFixedRate(new TimerTask() {
-            private long lastNano = System.nanoTime();
-
-            @Override
-            public void run () {
-                long curNano = System.nanoTime();
-                double change = curNano - lastNano;
-                change /= 1000000000;
-                // System.out.println(change);
-                update(change);
-                if (myWindow.hasFocus()) {
-                    render();
-                }
-                lastNano = curNano;
-
-            }
-        }, 500, (long) (Game.TIME_PER_FRAME() * 1000));
-        myReady = true;
     }
 
     @Override
@@ -83,21 +70,13 @@ public class MainState implements State, Observer {
 
     @Override
     public void paint (Graphics2D pen) {
-        
         myActiveState.paint(pen);
-
     }
 
     @Override
     public void update (Observable o, Object arg) {
-        if (o instanceof LoadingState) {
-            MenuState m = new MenuState(this, myWindow.getJFrame());
-            setActiveState(m);
-            m.setMenu(0);
-            
-        }
-        else if (o instanceof MenuState) {
-            setActiveState(new GameState(this));
+        if (arg == null) {
+            setActiveState(myStates.get(o));
         }
     }
 
@@ -113,7 +92,6 @@ public class MainState implements State, Observer {
         Graphics2D graphics = myWindow.getCanvas().getGraphics();
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0, 0, myWindow.getCanvas().getWidth(), myWindow.getCanvas().getHeight());
-        // long preRender = System.nanoTime();
         if (myActiveState instanceof MenuState) {
             MenuState m = (MenuState) myActiveState;
             if (m.getCurrentMenu() instanceof MultiMenu) {
@@ -122,8 +100,6 @@ public class MainState implements State, Observer {
             }
         }
         paint(graphics);
-        // System.out.println("Render Time = " + (System.nanoTime() - preRender) / 1000000 +
-        // " ms.");
         myWindow.getCanvas().render();
     }
 
@@ -143,5 +119,31 @@ public class MainState implements State, Observer {
      */
     public Window getWindow () {
         return myWindow;
+    }
+
+    public void start () {
+        myTimer = new Timer();
+        myTimer.scheduleAtFixedRate(new TimerTask() {
+            private long lastNano = System.nanoTime();
+
+            @Override
+            public void run () {
+                long curNano = System.nanoTime();
+                double change = curNano - lastNano;
+                change /= 1000000000;
+                // System.out.println(change);
+                update(change);
+                if (myWindow.hasFocus()) {
+                    render();
+                }
+                lastNano = curNano;
+
+            }
+        }, 500, (long) (RTSGame.TIME_PER_FRAME() * 1000));
+        myReady = true;
+    }
+
+    public void stop () {
+        myTimer.cancel();
     }
 }
