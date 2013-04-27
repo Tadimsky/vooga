@@ -11,6 +11,7 @@ import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.state.DetectableState;
 import vooga.rts.gamedesign.state.MovementState;
 import vooga.rts.gamedesign.state.OccupyState;
+import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.util.Location3D;
 
 
@@ -117,4 +118,10 @@ public class CanBeOccupied implements OccupyStrategy {
     public int getMaxOccupiers () {
         return myMaxOccupiers;
     }
+
+	public void affect(InteractiveEntity entity) {
+		OccupyStrategy newOccupy = new CanBeOccupied();
+		newOccupy.createOccupyActions(entity);
+		entity.setOccupyStrategy(newOccupy);
+	}
 }

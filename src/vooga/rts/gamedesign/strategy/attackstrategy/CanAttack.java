@@ -5,6 +5,7 @@ import java.util.List;
 import vooga.rts.gamedesign.sprite.gamesprites.IAttackable;
 import vooga.rts.gamedesign.sprite.gamesprites.Projectile;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.gamedesign.weapon.Weapon;
 import vooga.rts.util.Location3D;
 
@@ -90,7 +91,15 @@ public class CanAttack implements AttackStrategy {
     public List<Weapon> getWeapons () {
         return myWeapons;
     }
-
+    
+    /**
+     * Sets myWeapons to the new list of weapons. 
+     */
+    public void setWeapons(List<Weapon> newWeapons){
+    	myWeapons = newWeapons;
+    }
+    
+    
     /**
      * Returns the index of the Weapon that's currently been activated in the
      * list of Weapons belonged to this CanAttack object.
@@ -129,4 +138,13 @@ public class CanAttack implements AttackStrategy {
     public boolean hasWeapon(){
     	return true;
     }
+
+
+	public void affect(InteractiveEntity other) {
+		CanAttack toAdd = new CanAttack();
+		toAdd.setWeaponIndex(0);
+		toAdd.setWeapons(this.getWeapons());
+		other.setAttackStrategy(toAdd);
+	}
+
 }

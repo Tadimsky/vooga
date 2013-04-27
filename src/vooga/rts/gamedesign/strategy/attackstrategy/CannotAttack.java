@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vooga.rts.gamedesign.sprite.gamesprites.IAttackable;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.gamedesign.weapon.Weapon;
 import vooga.rts.util.Location3D;
 
@@ -68,4 +70,10 @@ public class CannotAttack implements AttackStrategy {
     public boolean hasWeapon(){
     	return false;
     }
+    
+	public void affect(InteractiveEntity other) {
+		other.setAttackStrategy(this);
+		
+	}
+
 }

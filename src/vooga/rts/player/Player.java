@@ -8,6 +8,7 @@ import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.manager.IndividualResourceManager;
 import vooga.rts.manager.Manager;
 import vooga.rts.resourcemanager.ResourceManager;
+import vooga.rts.util.Location3D;
 
 
 /**
@@ -31,7 +32,22 @@ public class Player implements Controller, IGameLoop {
         myTeamID = teamID;
         myResources = new IndividualResourceManager();
     }
-
+    
+    /*
+     * METHOD TO BE WRITTEN!
+     * @return
+     */
+    public Location3D getBase() {
+    	return new Location3D();
+    }
+    
+    /*
+     * JUST TO RETURN A VALUE
+     */
+    public Location3D getEnemyBase() {
+    	return new Location3D(700, 700, 0);
+    }
+    
     /**
      * @return the resources of the player
      */
@@ -76,5 +92,4 @@ public class Player implements Controller, IGameLoop {
     public int getTeamID () {
         return myTeamID;
     }
-
 }

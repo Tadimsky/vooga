@@ -36,7 +36,7 @@ public class TestUpgrade {
 		Factory factory = new Factory();
 		factory.loadXMLFile("Factory.xml");
 
-		Unit soldier = (Unit) factory.getInteractiveEntity("combat");
+		Unit soldier = (Unit) factory.getInteractiveEntity("combat").copy();
 		soldier.setAttackStrategy(new CannotAttack()); //sets soldier to cannot attack to test upgrade
 		
 		try {

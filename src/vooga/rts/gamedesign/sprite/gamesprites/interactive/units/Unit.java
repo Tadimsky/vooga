@@ -15,10 +15,16 @@ import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
 import vooga.rts.gamedesign.sprite.gamesprites.Resource;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
+import vooga.rts.gamedesign.strategy.Strategy;
+import vooga.rts.gamedesign.strategy.attackstrategy.CanAttack;
 import vooga.rts.gamedesign.strategy.gatherstrategy.CanGather;
 import vooga.rts.gamedesign.strategy.gatherstrategy.CannotGather;
 import vooga.rts.gamedesign.strategy.gatherstrategy.GatherStrategy;
+import vooga.rts.gamedesign.strategy.occupystrategy.CanBeOccupied;
 import vooga.rts.gamedesign.strategy.occupystrategy.OccupyStrategy;
+import vooga.rts.gamedesign.strategy.production.CanProduce;
+import vooga.rts.gamedesign.strategy.upgradestrategy.CanUpgrade;
 import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Camera;
 import vooga.rts.util.Information;
@@ -48,10 +54,7 @@ public class Unit extends InteractiveEntity {
     public static Sound DEFAULT_SOUND = null;
     public static int DEFAULT_PLAYERID = 1;
     public static int DEFAULT_HEALTH = 100;
-    
-
-    private GatherStrategy myGatherStrategy;
-    
+        
     public Unit () {
         this(DEFAULT_IMAGE, DEFAULT_LOCATION, DEFAULT_SIZE, DEFAULT_SOUND, DEFAULT_PLAYERID, DEFAULT_HEALTH, InteractiveEntity.DEFAULT_BUILD_TIME, InteractiveEntity.DEFAULT_SPEED);
         Information i = new Information("Marine", "I fear no darkness. I was born in it", null, "buttons/marine.png");
@@ -85,7 +88,6 @@ public class Unit extends InteractiveEntity {
                  double buildTime,
                  int speed) {
         super(image, center, size, sound, playerID, health, buildTime);
-        myGatherStrategy = new CannotGather();
         setSpeed(speed);
         addActions();
     }
@@ -98,7 +100,7 @@ public class Unit extends InteractiveEntity {
 
     @Override
     public void addActions () {
-        put(ClickCommand.LEFT_CLICK, new InteractiveAction(this) {
+        addAction(ClickCommand.LEFT_CLICK, new InteractiveAction(this) {
             private Location3D myLocation;
 
             @Override
@@ -120,47 +122,18 @@ public class Unit extends InteractiveEntity {
 
     @Override
     public InteractiveEntity copy () {
-        return new Unit(getImage(), getWorldLocation(), getSize(), getSound(), getPlayerID(),
-                        getHealth(), getBuildTime(), getSpeed());
+    	Unit copyUnit = new Unit(getImage(), getWorldLocation(), getSize(), getSound(), getPlayerID(),
+                getHealth(), getBuildTime(), getSpeed());
+    	transmitProperties(copyUnit);
+    	return copyUnit;
     }
 
-	/**
-	 * Sets the amount that the worker can gather at a time.
-	 * 
-	 * @param gatherAmount
-	 *            is the amount that the worker can gather
-	 */
-	public void setGatherAmount(int gatherAmount) {
-		myGatherStrategy.setGatherAmount(gatherAmount);
-		myGatherStrategy = new CanGather(CanGather.DEFAULTCOOL,
-				myGatherStrategy.getGatherAmount());
-	}
-	
-	public void setGatherStrategy(GatherStrategy gatherStrategy) {
-		myGatherStrategy = gatherStrategy;
-	}
-	
-	//OLD WORKER METHODS. Put here just in case
-	
-	/**
-	 * Another recognize method specific for workers as they can gather
-	 * resources which are not InteractiveEntities
-	 */
-	public void recognize(Resource resource) {
-		gather(resource);
-	}
+    @Override
+    public void updateAction (Command command) {
+        // TODO Auto-generated method stub
+        
+    }
 
-	/**
-	 * The worker gathers the resource if it can and then resets its gather
-	 * cooldown.
-	 * 
-	 * @param gatherable
-	 *            is the resource being gathered.
-	 */
-	public void gather(IGatherable gatherable) {
-		// shouldnt the cast be to a type Resource?
-		if (this.collidesWith((GameEntity) gatherable)) {
-			myGatherStrategy.gatherResource(getPlayerID(), gatherable);
-		}
-	}
+	
+	
 }

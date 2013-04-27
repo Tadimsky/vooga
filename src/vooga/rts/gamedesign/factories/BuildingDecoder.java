@@ -1,6 +1,7 @@
 package vooga.rts.gamedesign.factories;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -10,7 +11,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
+import vooga.rts.gamedesign.strategy.production.CanProduce;
+import vooga.rts.gamedesign.strategy.production.CannotProduce;
+import vooga.rts.gamedesign.strategy.production.ProductionStrategy;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
+import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.ReflectionHelper;
@@ -51,17 +56,21 @@ public class BuildingDecoder extends Decoder{
 			int health = Integer.parseInt(getElement(nElement, HEALTH_TAG));
 			double buildTime = Double.parseDouble(getElement(nElement, TIME_TAG));
 			Building building = (Building) ReflectionHelper.makeInstance(path, 
-																			new Pixmap(img),
+					new Pixmap(ResourceManager.getInstance()
+		                    .<BufferedImage> getFile(img, BufferedImage.class)),
 																			 new Sound(sound),
 																			 health,
 																			 buildTime);
 			
-			myFactory.put(name, building);
 			//Load Production Dependencies now
 			String [] nameCanProduce = getElement(nElement, PRODUCE_TAG).split("\\s+");
 			if(nameCanProduce[0] != ""){
+				//building.setProductionStrategy(new CanProduce(building));
 				myFactory.putProductionDependency(name, nameCanProduce);
+			} else {
+				//building.setProductionStrategy(new CannotProduce());
 			}
+			myFactory.put(name, building);
 			//Load Strategy Dependencies now
 			String[] strategies = new String[5];
 			strategies[0] = CANNOT_ATTACK;

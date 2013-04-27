@@ -1,12 +1,14 @@
 package vooga.rts.gamedesign.factories;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
+import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.ReflectionHelper;
@@ -50,7 +52,8 @@ public class UnitDecoder extends Decoder {
 			double buildTime = Double.parseDouble(getElement(nElement, TIME_TAG));
 			int speed = Integer.parseInt(getElement(nElement, SPEED_TAG));
 			
-			Unit unit = (Unit) ReflectionHelper.makeInstance(path, new Pixmap(img), 
+			Unit unit = (Unit) ReflectionHelper.makeInstance(path, new Pixmap(ResourceManager.getInstance()
+                    .<BufferedImage> getFile(img, BufferedImage.class)), 
 																		new Sound(sound),
 																		health,
 																		buildTime,

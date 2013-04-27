@@ -43,8 +43,16 @@ public interface GatherStrategy extends Strategy {
 	 */
 	public void update(double elapsedTime);
 	
+	/**
+	 * Returns the amount of resource that this strategy can gather. 
+	 * @return int gatheramount. 
+	 */
 	public int getGatherAmount();
 	
+	/**
+	 * Sets the gather amount to a new gather amount. 
+	 * @param gatherAmount
+	 */
 	public void setGatherAmount(int gatherAmount);
 
 }
