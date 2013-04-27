@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.Rectangle2D.Double;
 import java.util.Observable;
 import vooga.rts.IGameLoop;
 import vooga.rts.util.Camera;
@@ -79,9 +81,25 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 		mySize.setSize(width, height);
 		resetBounds();
 	}
-
+	/**
+	 * 
+	 */
 	private void setBase() {
 
+		Location3D temp = Camera.instance().deltaviewtoWorld(
+				new Point2D.Double((myWorldDimension.getDepth() / 2), 0));
+		temp.add(myWorldLocation);
+		int height = (int)(Math.sqrt(Math.pow(myWorldDimension.getDepth()/2, 2) + Math.pow(myWorldDimension.getWidth()/2, 2)));
+
+		myBase = new Rectangle((int)temp.getX(),(int) temp.getY(), height, height);
+	}
+
+	/**
+	 * returns the base rectangle of the Sprite
+	 * 
+	 */
+	public Rectangle getBase() {
+		return myBase;
 	}
 
 	/**
@@ -90,7 +108,11 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 	public Dimension getSize() {
 		return mySize;
 	}
-	
+
+	/**
+	 * returns the 3D dimension of the Sprite.
+	 * 
+	 */
 	public Dimension3D getWorldSize() {
 		return myWorldDimension;
 	}
