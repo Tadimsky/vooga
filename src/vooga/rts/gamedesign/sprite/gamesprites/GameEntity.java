@@ -251,7 +251,7 @@ public class GameEntity extends GameSprite {
     public EntityState getEntityState () {
         return myEntityState;
     }
-
+    
     /**
      * If the entity is in a stationary state, it stops moving.
      */

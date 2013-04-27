@@ -369,8 +369,7 @@ public class Factory {
             System.out.println(key);
             String[] produces = myProductionDependencies.get(key);
             mySprites.get(key)
-                    .setProductionStrategy((ProductionStrategy) new CanProduce((Building) mySprites
-                                                   .get(key)));
+                    .setProductionStrategy((ProductionStrategy) new CanProduce(mySprites.get(key)));
             for (String baby : produces) {
                 InteractiveEntity producable = mySprites.get(baby);
                 // this should not be new unit

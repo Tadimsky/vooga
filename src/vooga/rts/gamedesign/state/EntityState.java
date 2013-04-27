@@ -40,7 +40,7 @@ public class EntityState {
 		myMovementState = MovementState.STATIONARY;
 		myDetectableState = DetectableState.DETECTABLE;
 		myAttackingCooldown = DEFAULT_ATTACKING_INTERVAL;
-		myUnitState = UnitState.NOTHING;
+		myUnitState = UnitState.NO_STATE;
 	}
 
 	/**
@@ -193,6 +193,17 @@ public class EntityState {
 	public boolean isAttacking() {
 		return myAttackingState != AttackingState.NOT_ATTACKING;
 	}
+	
+	/**
+	 * Checks to see if an entity has been set to be in attack mode.
+	 * 
+	 * @return true if the unit state of the entity is set to attack and false
+	 * if the unit state of the entity is set to anything else
+	 */
+    public boolean inAttackMode() {
+    	return myUnitState == UnitState.ATTACK;
+    }
+
 
 	/**
 	 * Stops the movement of the entity. This means that the entity's movement

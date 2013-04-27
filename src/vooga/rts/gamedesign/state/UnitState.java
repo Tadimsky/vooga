@@ -8,5 +8,5 @@ package vooga.rts.gamedesign.state;
  *
  */
 public enum UnitState {
-	ATTACK, GATHER, OCCUPY, PRODUCE, NOTHING;
+	ATTACK, GATHER, OCCUPY, PRODUCE, NO_STATE;
 }
