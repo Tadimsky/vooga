@@ -51,6 +51,7 @@ public class ServerBrowserTableAdapter extends AbstractTableModel {
     /**
      * Use the lobbies array as a way of getting the value at a point, with the first column being
      * lobby names, second being map names, and third being current players and max players.
+     * 
      * @param arg0 row
      * @param arg1 column
      */

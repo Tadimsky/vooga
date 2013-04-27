@@ -11,7 +11,7 @@ import vooga.rts.networking.communications.LobbyInfo;
  * @author Sean Wareham
  * 
  */
-public interface IClientModel {
+public interface IClientModel extends IMessageReceiver {
     /**
      * Closes the client-side connection to the server.
      */
