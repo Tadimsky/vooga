@@ -1,156 +1,106 @@
 package vooga.rts.util;
 
+import java.awt.Dimension;
 import java.awt.geom.Point2D;
 
 
 /**
- * This class represents a point in 3D space.
+ * This class represents a dimension in 3D space.
  * It provides helper methods to return values,
- * perform calculations and manipulate the location.
+ * perform calculations and manipulate the dimension.
  * 
  * @author Jonathan Schmidt
  * 
  */
 public class Dimension3D {
 
-    private double myX;
-    private double myY;
-    private double myZ;
+    private double myWidth;
+    private double myDepth;
+    private double myHeight;
 
     /**
-     * Create a Location3D at the origin.
+     * Create a Dimension3D with no size.
      */
     public Dimension3D () {
         this(0.0, 0.0, 0.0);
     }
 
     /**
-     * Creates a Location3D with the specified coordinates.
+     * Creates a Dimension 3D with the specified sizes.
      * 
-     * @param x The X value
-     * @param y The Y value
-     * @param z The Z value
+     * @param width The width of the dimension (X axis)
+     * @param depth The depth of the dimension (Y axis)
+     * @param height The height of the dimension (Z axis)
      */
-    public Dimension3D (double x, double y, double z) {
-        myX = x;
-        myY = y;
-        myZ = z;
+    public Dimension3D (double width, double depth, double height) {
+        myWidth = width;
+        myDepth = depth;
+        myHeight = height;
     }
 
     /**
-     * Creates a Location3D with the specified Point 2D and
-     * sets the Z value to 0.
+     * Creates a Dimension3D with the same values as the specified parameter.
      * 
-     * @param source The Point2D to copy from.
-     */
-    public Dimension3D (Point2D source) {
-        this(source.getX(), source.getY(), 0);
-    }
-
-    /**
-     * Creates a Location3D with the same values as the specified parameter.
-     * 
-     * @param source The Location3D to copy from.
+     * @param source The Dimension3D to copy from.
      */
     public Dimension3D (Dimension3D source) {
-        this(source.getX(), source.getY(), 0);
+        this(source.getWidth(), source.getDepth(), source.getHeight());
     }
 
     /**
-     * Reset this location to origin.
-     */
-    public void reset () {
-        setLocation(0, 0, 0);
-    }
-
-    /**
-     * Moves this Location by the specified 2D Vector.
-     * Ignores the Z component of the vector.
+     * Sets the values of an existing Dimension3D
      * 
-     * @param amount The vector to translate by.
+     * @param width The new width of the dimension.
+     * @param depth The new depth of the dimension.
+     * @param height The new height of the dimension.
      */
-    public void translate (Vector amount) {
-        this.add(amount.getXChange(), amount.getYChange(), 0);
+    public void setDimension (double width, double depth, double height) {
+        myWidth = width;
+        myDepth = depth;
+        myHeight = height;
     }
 
     /**
-     * Returns a vector that represents the difference between the
-     * current location and another 2D location.
-     * Ignores the Z value of the two locations.
+     * Adds the values in the provided Dimension3D to the current Dimension3D
      * 
-     * @param other The other position.
-     * @return The vector
+     * @param add The dimension to add to the current dimension
      */
-    public Vector difference (Point2D other) {
-        return new Vector(new Point2D.Double(getX(), getY()), new Point2D.Double(other.getX(),
-                                                                                 other.getY()));
-    }
-
-    // TODO: Translate by Vector Amount
-    // TODO: Return the difference between two points as a vector.
-
-    public void setLocation (double X, double Y, double Z) {
-        myX = X;
-        myY = Y;
-        myZ = Z;
-    }
-
     public void add (Dimension3D add) {
-        this.add(add.getX(), add.getY(), add.getZ());
-    }
-
-    public void add (double x, double y, double z) {
-        myX += x;
-        myY += y;
-        myZ += z;
+        this.add(add.getWidth(), add.getDepth(), add.getHeight());
     }
 
     /**
-     * @return the X Coordinate
-     */
-    public double getX () {
-        return myX;
-    }
-
-    /**
-     * @return the Y Coordinate
-     */
-    public double getY () {
-        return myY;
-    }
-
-    /**
-     * @return the Z Coordinate
-     */
-    public double getZ () {
-        return myZ;
-    }
-
-    /**
-     * Returns the Euclidean distance between two points.
+     * Adds the values to the current dimension.
      * 
-     * @param x The X value of the other point
-     * @param y The Y value of the other point
-     * @param z They Z value of the other point
-     * @return
+     * @param width The width to add
+     * @param depth The depth to add
+     * @param height The height to add
      */
-    public double getDistance (double x, double y, double z) {
-        return Math.sqrt(Math.pow(x - myX, 2) + Math.pow(y - myY, 2) + Math.pow(z - myZ, 2));
+    public void add (double width, double depth, double height) {
+        myWidth += width;
+        myDepth += depth;
+        myHeight += height;
     }
 
     /**
-     * Returns the Euclidean distance between two points.
-     * 
-     * @param other The other point
-     * @return
+     * @return the width of the dimension (X axis)
      */
-    public double getDistance (Dimension3D other) {
-        return getDistance(other.getX(), other.getY(), other.getZ());
+    public double getWidth () {
+        return myWidth;
+    }
+
+    /**
+     * @return the depth of the dimension (Y axis)
+     */
+    public double getDepth () {
+        return myDepth;
+    }
+
+    /**
+     * @return the height of the dimension (Z axis)
+     */
+    public double getHeight () {
+        return myHeight;
     }
     
-    public void negate() {
-        myX *= -1;
-        myY *= -1;
-        myZ *= -1;
-    }
 }
