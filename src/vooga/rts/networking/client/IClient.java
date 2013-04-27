@@ -22,7 +22,7 @@ public interface IClient {
     /**
      * Sets this as the message receiver.
      * 
-     * @param messageReceiver 
+     * @param messageReceiver
      */
     public void setMessageReceiver (IMessageReceiver messageReceiver);
 

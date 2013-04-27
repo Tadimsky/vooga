@@ -54,8 +54,9 @@ public class NetworkBundle {
      * @param path The relative path to the desired file
      */
     public static void setRelativePath (String path) {
-        if (path.charAt(path.length() - 1) != '.')
+        if (path.charAt(path.length() - 1) != '.') {
             path = path + '.';
+        }
         myRelativePath = path;
     }
 }

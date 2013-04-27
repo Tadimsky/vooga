@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import vooga.rts.networking.client.ClientModel;
 import vooga.rts.networking.client.IClient;
@@ -108,6 +109,17 @@ public class ExampleChat implements NetworkedGame, IChatModel, IMessageReceiver 
                                                             (System.nanoTime() - myStartTime) /
                                                                     ONE_MILLISECOND),
                                           message, myPlayer.getId()));
+    }
+
+    @Override
+    public void connectionClosed () {
+        JOptionPane.showMessageDialog(new JFrame(), "Connection Closed.");
+        System.exit(0);
+    }
+
+    @Override
+    public void serverBrowserClosed () {
+        System.exit(0);
     }
 
 }
