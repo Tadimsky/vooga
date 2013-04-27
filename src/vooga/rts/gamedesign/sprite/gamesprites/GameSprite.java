@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Observable;
 import vooga.rts.IGameLoop;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.util.Camera;
 import vooga.rts.util.Dimension3D;
 import vooga.rts.util.IsometricConverter;
@@ -134,12 +137,19 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 		if (Camera.instance().issVisible(getWorldLocation())) {
 			Location3D paintLocation = IsometricConverter
 					.calculatePaintLocation(myWorldLocation, myWorldDimension);
+			if (this instanceof InteractiveEntity) {
+			    System.out.println(paintLocation);
+			}
+					
 			myScreenLocation = Camera.instance().worldToView(paintLocation);
-
+			
 			//System.out.println("screen location: " + myScreenLocation + " paint location: " + paintLocation);
 			// if (Camera.instance().isVisible(myScreenLocation)) {
 			myPixmap.paint(pen, myScreenLocation, mySize);
 
+			pen.setColor(Color.RED);
+                        pen.fill(new Ellipse2D.Double(myScreenLocation.getX() - 3, myScreenLocation.getY() - 3, 6, 6));
+                        pen.setColor(Color.BLACK);
 			//pen.setColor(Color.RED);
 			//pen.drawRect(myBase.x, myBase.y, myBase.width, myBase.height);
 			// }
