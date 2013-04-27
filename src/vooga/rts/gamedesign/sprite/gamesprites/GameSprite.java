@@ -6,8 +6,8 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.Observable;
 import vooga.rts.IGameLoop;
-import vooga.rts.state.GameState;
 import vooga.rts.util.Camera;
+import vooga.rts.util.Dimension3D;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 
@@ -16,15 +16,17 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 
     // private ThreeDimension mySize;
     private Dimension mySize;
+    private Dimension myOriginalSize;
     // store myWorldLocation
 
     // private ThreeDimension myOriginalSize;
-    private Dimension myOriginalSize;
+    private Dimension3D myWorldDimension;
 
     private Location3D myWorldLocation;
     private Point2D myScreenLocation;
     private Rectangle myWorldBounds;
-
+    private Rectangle myBase;
+    private Location3D myBaseCenter;
     private Pixmap myPixmap;
 
     private boolean myVisible;
@@ -33,9 +35,9 @@ public abstract class GameSprite extends Observable implements IGameLoop {
         myPixmap = new Pixmap(image);
         mySize = new Dimension(size);
         myOriginalSize = mySize;
+        myVisible = true;
         myWorldLocation = new Location3D(center);
         resetBounds();
-        myVisible = true;
     }
 
     /**
