@@ -16,7 +16,7 @@ public class IsometricConverter {
     public static Dimension3D toIsometric (Dimension view) {
         double width = view.getWidth();
         double depth = width * 1 / 2;
-        double height = view.getHeight() - depth;
+        double height = view.getHeight() - (depth / 2);
         return new Dimension3D(width, depth, height);
     }
     
