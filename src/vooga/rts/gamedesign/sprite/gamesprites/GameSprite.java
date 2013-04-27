@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Double;
 import java.util.Observable;
 import vooga.rts.IGameLoop;
 import vooga.rts.util.Camera;
@@ -138,6 +136,8 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 			myScreenLocation = Camera.instance().worldToView(paintLocation);
 			// if (Camera.instance().isVisible(myScreenLocation)) {
 			myPixmap.paint(pen, myScreenLocation, mySize);
+			pen.drawRect((int) getLeft(),
+				(int) getUp(), getSize().width, getSize().height);
 			// }
 		}
 		// pen.draw(myWorldBounds);
@@ -191,11 +191,11 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 	 * Sets the bounds of the world location.
 	 */
 	public void setWorldBounds() {
-		Point2D leftMostPoint = Camera.instance().worldToView(
-				IsometricConverter.calculatePaintLocation(myWorldLocation,
-						myWorldDimension));
-		myWorldBounds = new Rectangle((int) leftMostPoint.getX(),
-				(int) leftMostPoint.getY(), getSize().width, getSize().height);
+//		Point2D leftMostPoint = Camera.instance().worldToView(
+//				IsometricConverter.calculatePaintLocation(myWorldLocation,
+//						myWorldDimension));
+		myWorldBounds = new Rectangle((int) getLeft(),
+				(int) getUp(), getSize().width, getSize().height);
 
 	}
 
