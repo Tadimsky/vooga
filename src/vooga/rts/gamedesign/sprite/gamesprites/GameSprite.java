@@ -45,51 +45,31 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 	 * Returns shape's left-most coordinate in pixels.
 	 */
 	public double getLeft() {
-		Camera.instance().deltaviewtoWorld(new Point2D.Double(myWorldDimension.getWidth() / 2, 0));
-		Point2D aPoint = new Point2D(Camera.instance().deltaviewtoWorld(getWidth() / 2)myWorldLocation.getX()
-		return ;
+		return Camera.instance().worldToView(myWorldLocation).getX()
+				- myWorldDimension.getWidth() / 2;
 	}
 
 	/**
 	 * Returns shape's up-most coordinate in pixels.
 	 */
 	public double getUp() {
-		return myWorldLocation.getZ() + getHeight() / 2;
+		return Camera.instance().worldToView(myWorldLocation).getY()
+				- myWorldDimension.getHeight() / 2;
 	}
 
 	/**
 	 * Returns shape's right-most coordinate in pixels.
 	 */
 	public double getRight() {
-		return myWorldLocation.getX() + getWidth()/ 2;
+		return Camera.instance().worldToView(myWorldLocation).getX()
+				+ myWorldDimension.getWidth() / 2;
 	}
 
 	/**
 	 * Returns shape's bottom-most coordinate in pixels.
 	 */
 	public double getBottom() {
-		return myWorldLocation.getZ();
-	}
-
-	/**
-	 * Returns shape's x-axis length in pixels.
-	 */
-	public double getWidth() {
-		return myWorldDimension.getWidth();
-	}
-
-	/**
-	 * Returns shape's y-axis length in pixels.
-	 */
-	public double getDepth() {
-		return myWorldDimension.getHeight();
-	}
-
-	/**
-	 * Return shape's z-axis length in pixels. need to implement!
-	 */
-	public double getHeight() {
-		return myWorldDimension.getHeight();
+		return Camera.instance().worldToView(myWorldLocation).getY();
 	}
 
 	/**
@@ -99,14 +79,20 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 		mySize.setSize(width, height);
 		resetBounds();
 	}
+
 	private void setBase() {
-		
+
 	}
+
 	/**
 	 * Returns shape's size.
 	 */
 	public Dimension getSize() {
 		return mySize;
+	}
+	
+	public Dimension3D getWorldSize() {
+		return myWorldDimension;
 	}
 
 	/**
