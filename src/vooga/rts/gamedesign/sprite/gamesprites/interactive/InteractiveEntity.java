@@ -373,17 +373,6 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
     }
 
     /**
-     * Sets the amount that the worker can gather at a time.
-     * 
-     * @param gatherAmount
-     *        is the amount that the worker can gather
-     */
-    public void setGatherAmount (int gatherAmount) {
-        myGatherStrategy.setGatherAmount(gatherAmount);
-        myGatherStrategy = new CanGather(CanGather.DEFAULTCOOL, myGatherStrategy.getGatherAmount());
-    }
-
-    /**
      * The worker gathers the resource if it can and then resets its gather
      * cooldown.
      * 

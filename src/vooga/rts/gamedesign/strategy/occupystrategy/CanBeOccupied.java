@@ -26,16 +26,15 @@ import vooga.rts.util.Location3D;
 public class CanBeOccupied implements OccupyStrategy {
     public static final int DEFAULT_MAX_OCCUPIERS = 10;
 
-    //TODO: another way to verify different types of Units? Probably names in xml?
     private List<Integer> myOccupierHashCodes;
     private int myMaxOccupiers;
     private int myOccupierID;
 
     /**
      * Creates a new occupy strategy that represents an entity that can be
-     * occupied. It is created with a list of what entities can occupy it,
-     * what entities are occupying it, and the max number of entities that can
-     * occupy it.
+     * occupied. It is created with a list of the entities that are occupying
+     * it, the player ID that is currently occupying it, and the max number of
+     * entities that can occupy it.
      */
     public CanBeOccupied () {
         myOccupierHashCodes = new ArrayList<Integer>();
@@ -43,21 +42,33 @@ public class CanBeOccupied implements OccupyStrategy {
         myOccupierID = 0;
     }
 
-    public void getOccupied (InteractiveEntity entity, Unit u) {
+    /**
+     * Gets occupied by the Unit that's passed in. First checks if the unit
+     * is valid to occupy. Then updates the status of the CanBeOccupied
+     * strategy and the unit.
+     * 
+     * @param entity the InteractiveEntity that owns the CanBeOccupied
+     * strategy and will be occupied by the Unit
+     * @param occupier the Unit that wishes to occupy
+     */
+    public void getOccupied (InteractiveEntity entity, Unit occupier) {
         if (myOccupierHashCodes.size() < myMaxOccupiers) {
             if (myOccupierID == 0) {
-                myOccupierID = u.getPlayerID();
+                myOccupierID = occupier.getPlayerID();
             }
-            myOccupierHashCodes.add(u.hashCode());
+            myOccupierHashCodes.add(occupier.hashCode());
             entity.setChanged();
-            u.getEntityState().setOccupyState(OccupyState.OCCUPYING);
-            u.setVisible(false);
-            entity.notifyObservers(u);
+            occupier.getEntityState().setOccupyState(OccupyState.OCCUPYING);
+            occupier.setVisible(false);
+            entity.notifyObservers(occupier);
         }
     }
 
     /**
-     * Creates and adds occupy strategy specific actions to entity
+     * Creates and adds occupy strategy specific actions to the
+     * InteractiveEntity that owns the strategy.
+     * 
+     * @param entity the InteractiveEntity that owns this strategy
      */
     public void createOccupyActions (final InteractiveEntity entity) {
         addDeoccupyAction(entity);
@@ -90,22 +101,6 @@ public class CanBeOccupied implements OccupyStrategy {
     }
 
     /**
-     * Sets the entity's current occupier id, which represents the player id
-     * that is currently occupying the entity.
-     */
-    public void setOccupierID (int id) {
-        myOccupierID = id;
-    }
-
-    /**
-     * Returns the entity's current occupier id, which represents the player id
-     * that is currently occupying the entity.
-     */
-    public int getOccupierID () {
-        return myOccupierID;
-    }
-
-    /**
      * Returns the hash code of the list of occupiers.
      */
     public List<Integer> getOccupiers () {
@@ -113,15 +108,16 @@ public class CanBeOccupied implements OccupyStrategy {
     }
 
     /**
-     * Returns the max number of occupiers this entity can take.
+     * Applies this CanBeOccupied strategy to the InteractiveEntity passed in
+     * by setting the strategy for the InteractiveEntity, and recreating the
+     * actions.
+     * 
+     * @param other the InteractiveEntity that will receive the effect of
+     * this OccupyStrategy
      */
-    public int getMaxOccupiers () {
-        return myMaxOccupiers;
-    }
-
-	public void affect(InteractiveEntity entity) {
+	public void affect(InteractiveEntity other) {
 		OccupyStrategy newOccupy = new CanBeOccupied();
-		newOccupy.createOccupyActions(entity);
-		entity.setOccupyStrategy(newOccupy);
+		newOccupy.createOccupyActions(other);
+		other.setOccupyStrategy(newOccupy);
 	}
 }

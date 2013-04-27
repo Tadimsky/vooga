@@ -13,7 +13,7 @@ import vooga.rts.gamedesign.strategy.Strategy;
 /**
  * 
  * This class implements OccupyStrategy and is used as an instance in 
- * interactives for objects that are not able to occupy IOccupiables.
+ * interactives for objects that are not able to be occupied.
  * 
  * @author Ryan Fishel
  * @author Kevin Oh
@@ -23,31 +23,12 @@ import vooga.rts.gamedesign.strategy.Strategy;
  */
 public class CannotBeOccupied implements OccupyStrategy{
 
-	public CannotBeOccupied(){
-		
-	}
-
-	public void setOccupierID(int id) {
-		
-	}
-
 	public List<Integer> getOccupiers() {
-		return new ArrayList<Integer>();
+		return null;
 	}
 
-	@Override
-	public int getMaxOccupiers() {
-		return 0;
-	}
-
-	@Override
-	public int getOccupierID() {
-		return 0;
-	}
-
-	@Override
 	public void createOccupyActions(InteractiveEntity entity) {
-		
+		return;
 	}
 
 	public void getOccupied(InteractiveEntity entity, Unit u) {

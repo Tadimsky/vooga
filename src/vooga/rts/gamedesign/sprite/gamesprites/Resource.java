@@ -47,7 +47,6 @@ public class Resource extends GameEntity implements IGatherable {
     public void getGathered (int playerID, int gatherAmount) {
         changeHealth(gatherAmount);
         System.out.println("resource health: " + getHealth());
-        // TODO: Remove resource properly
         if (isDead()) {
             setVisible(false);
         }

@@ -17,30 +17,19 @@ import vooga.rts.gamedesign.strategy.Strategy;
  */
 
 public class CannotGather implements GatherStrategy {
-	
-	/**
-	 * Creates a new gather strategy that represents a unit that cannot 
-	 * gather resources.
-	 */
-	public CannotGather() {
-		
-	}
 
-	@Override
 	public void gatherResource(int playerID, IGatherable gatherable) {
+		return;
 	}
 
-
-	@Override
 	public void update(double elapsedTime) {
+		return;
 	}
 
-	@Override
 	public int getGatherAmount() {
 		return 0;
 	}
 
-	@Override
 	public void setGatherAmount(int gatherAmount) {
 		return;
 	}

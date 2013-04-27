@@ -32,9 +32,6 @@ public interface GatherStrategy extends Strategy {
 	 */
 
 	public void gatherResource (int playerID, IGatherable gatherable);
-	
-
-	
 
 	/**
 	 * Updates the gather strategies so that the CanGather can update its 
@@ -42,17 +39,5 @@ public interface GatherStrategy extends Strategy {
 	 * @param elapsedTime is the amount of time that has passed
 	 */
 	public void update(double elapsedTime);
-	
-	/**
-	 * Returns the amount of resource that this strategy can gather. 
-	 * @return int gatheramount. 
-	 */
-	public int getGatherAmount();
-	
-	/**
-	 * Sets the gather amount to a new gather amount. 
-	 * @param gatherAmount
-	 */
-	public void setGatherAmount(int gatherAmount);
 
 }
