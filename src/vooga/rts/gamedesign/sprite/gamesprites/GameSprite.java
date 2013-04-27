@@ -1,5 +1,6 @@
 package vooga.rts.gamedesign.sprite.gamesprites;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -54,7 +55,7 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 	 */
 	public double getUp() {
 		return Camera.instance().worldToView(myWorldLocation).getY()
-				- myWorldDimension.getHeight() / 2;
+				- myWorldDimension.getHeight();
 	}
 
 	/**
@@ -134,10 +135,13 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 			Location3D paintLocation = IsometricConverter
 					.calculatePaintLocation(myWorldLocation, myWorldDimension);
 			myScreenLocation = Camera.instance().worldToView(paintLocation);
+
+			//System.out.println("screen location: " + myScreenLocation + " paint location: " + paintLocation);
 			// if (Camera.instance().isVisible(myScreenLocation)) {
 			myPixmap.paint(pen, myScreenLocation, mySize);
-			pen.drawRect((int) getLeft(),
-				(int) getUp(), getSize().width, getSize().height);
+
+			//pen.setColor(Color.RED);
+			//pen.drawRect(myBase.x, myBase.y, myBase.width, myBase.height);
 			// }
 		}
 		// pen.draw(myWorldBounds);
@@ -194,7 +198,7 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 //		Point2D leftMostPoint = Camera.instance().worldToView(
 //				IsometricConverter.calculatePaintLocation(myWorldLocation,
 //						myWorldDimension));
-		myWorldBounds = new Rectangle((int) getLeft(),
+		myWorldBounds = new Rectangle((int) getLeft() + mySize.height,
 				(int) getUp(), getSize().width, getSize().height);
 
 	}

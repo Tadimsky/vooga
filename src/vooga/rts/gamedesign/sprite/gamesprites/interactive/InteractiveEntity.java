@@ -352,6 +352,8 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
                     new Ellipse2D.Double(selectLocation.getX() - LOCATION_OFFSET,
                                          selectLocation.getY() + LOCATION_OFFSET, 50, 30);
             pen.fill(selectedCircle);
+			pen.drawRect((int) getLeft()+getSize().height,
+					(int) getUp(), getSize().width, getSize().height);
         }
         super.paint(pen);
         if (myAttackStrategy.hasWeapon()) {
