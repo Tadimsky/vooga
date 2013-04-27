@@ -1,6 +1,7 @@
 package vooga.rts.util;
 
 import java.awt.Dimension;
+import java.awt.geom.Point2D;
 
 
 public class IsometricConverter {
@@ -19,11 +20,16 @@ public class IsometricConverter {
         return new Dimension3D(width, depth, height);
     }
     
-    public static Location3D calculateBaseCenter(Location3D center, Dimension3D worldsize) {
-        double z = 0;
-        double x = center.getX();
+    public static Location3D calculatePaintLocation(Location3D basecenter, Dimension3D worldsize) {
+        // How much to move to get to the left most position in view        
+        Location3D change = Camera.instance().deltaviewtoWorld(new Point2D.Double(-worldsize.getWidth() / 2, 0));
+        // add the existing world location
+        change.add(basecenter);
+        // add the height of the entity
+        change.add(0, 0, worldsize.getHeight()); 
         
-        return null;
+        // the top left coordinate of the item
+        return change;
     }
 
 }

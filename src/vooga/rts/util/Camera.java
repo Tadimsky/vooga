@@ -118,7 +118,15 @@ public class Camera {
         return world;
     }
 
-    private Location3D deltaviewtoWorld (Point2D delta) {
+    /**
+     * Converts a change in view coordinates to a change in world coordinates.
+     * This is basically a simple version of the viewtoWorld function that does
+     * not take into account the view size or camera position.
+     * 
+     * @param delta The amount to move by
+     * @return The world location that represents that change.
+     */
+    public Location3D deltaviewtoWorld (Point2D delta) {
         double Zvalue = 0;
         double x = (ISO_WIDTH * delta.getX()) + delta.getY() + Zvalue;
         double y = delta.getY() + Zvalue - delta.getX() * ISO_HEIGHT;
