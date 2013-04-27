@@ -15,14 +15,14 @@ public class IsometricConverter {
      */
     public static Dimension3D toIsometric (Dimension view) {
         double width = view.getWidth();
-        double depth = width * 1 / 2;
-        double height = view.getHeight() - (depth / 2);
+        double depth = width * Camera.ISO_HEIGHT;
+        double height = view.getHeight() - (depth * Camera.ISO_HEIGHT);
         return new Dimension3D(width, depth, height);
     }
     
     public static Location3D calculatePaintLocation(Location3D basecenter, Dimension3D worldsize) {
         // How much to move to get to the left most position in view        
-        Location3D change = Camera.instance().deltaviewtoWorld(new Point2D.Double(-worldsize.getWidth() / 2, 0));
+        Location3D change = Camera.instance().deltaviewtoWorld(new Point2D.Double(-worldsize.getWidth() * Camera.ISO_HEIGHT, 0));
         // add the existing world location
         change.add(basecenter);
         // add the height of the entity
