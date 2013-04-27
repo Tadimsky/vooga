@@ -102,5 +102,11 @@ public class Dimension3D {
     public double getHeight () {
         return myHeight;
     }
-    
+
+    @Override
+    public String toString () {
+        return "Dimension3D [Width=" + myWidth + ", Depth=" + myDepth + ", Height=" + myHeight +
+               "]";
+    }
+
 }
