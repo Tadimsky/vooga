@@ -17,7 +17,6 @@ public class LogoutMessage extends Message implements ClientInfoMessage {
 
     @Override
     public void affectServer (ConnectionThread thread, IThreadContainer server) {
-        server.removeConnection(thread);
         thread.close();
     }
 

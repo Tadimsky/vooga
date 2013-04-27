@@ -1,5 +1,6 @@
 package vooga.rts.networking.server;
 
+import java.util.logging.Logger;
 import vooga.rts.networking.communications.ExpandedLobbyInfo;
 import vooga.rts.networking.communications.LobbyInfo;
 
@@ -22,7 +23,8 @@ public class Room extends AbstractThreadContainer {
      * @param container GameContainer
      * @param lobbyInfo lobby info
      */
-    public Room (int id, GameContainer container, LobbyInfo lobbyInfo) {
+    public Room (int id, GameContainer container, LobbyInfo lobbyInfo, Logger logger) {
+        super(logger);
         setIDandContainer(id, container);
         myLobbyModel = new ExpandedLobbyInfo(lobbyInfo, id);
     }
@@ -37,8 +39,8 @@ public class Room extends AbstractThreadContainer {
      * @param container GameContainer
      * @param room room to replace
      */
-    public Room (int id, GameContainer container, Room room) {
-        super(room);
+    public Room (int id, GameContainer container, Room room, Logger logger) {
+        super(room, logger);
         setIDandContainer(id, container);
         myLobbyModel = room.getLobbyInfo();
         room.removeAllConnections();
@@ -50,7 +52,7 @@ public class Room extends AbstractThreadContainer {
         myID = id;
         myGameContainer = container;
     }
-    
+
     protected void setLobbyInfo (ExpandedLobbyInfo lobbyInfo) {
         myLobbyModel = lobbyInfo;
     }
@@ -66,7 +68,7 @@ public class Room extends AbstractThreadContainer {
     protected ExpandedLobbyInfo getLobbyInfo () {
         return myLobbyModel;
     }
-    
+
     protected int getMaxConnections () {
         return myLobbyModel.getMaxPlayers();
     }

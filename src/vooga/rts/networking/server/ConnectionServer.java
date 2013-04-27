@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import util.logger.LoggerManager;
 import vooga.rts.networking.NetworkBundle;
 
@@ -33,6 +32,8 @@ public class ConnectionServer extends Thread {
     public ConnectionServer (MatchmakerServer matchServer) {
         myMatchServer = matchServer;
         LoggerManager log = new LoggerManager();
+        //log.addHandler(AbstractThreadContainer.EMAIL_HANDLER);
+        //log.addTxtHandler(getClass().getSimpleName() + PORT);
         myLogger = log.getLogger();
     }
 
@@ -44,35 +45,36 @@ public class ConnectionServer extends Thread {
         myIsServerAcceptingConnections = true;
         ServerSocket serverSocket = null;
 
+        myLogger.log(Level.INFO, NetworkBundle.getString("ConnectionServerStarted") + PORT);
         while (myIsServerAcceptingConnections) {
-        	try {
-        		serverSocket = new ServerSocket(PORT);
+            try {
+                serverSocket = new ServerSocket(PORT);
 
-        		Socket socket = serverSocket.accept();
-        		ConnectionThread thread =
-        				new ConnectionThread(socket, myMatchServer, myConnectionID);
-        		myConnectionID++;
-        		thread.start();
-        		myMatchServer.addConnection(thread);
-        		myLogger.log(Level.INFO, NetworkBundle.getString("NewConnection") +
-        				": " + thread.getID());
-        		serverSocket.close();
-        	}
-        	catch (IOException e) {
-        		myLogger.log(Level.SEVERE,
-        				NetworkBundle.getString("ConnectionFailed"));
-        		myIsServerAcceptingConnections = false;
-        	}
+                Socket socket = serverSocket.accept();
+                ConnectionThread thread =
+                        new ConnectionThread(socket, myMatchServer, myConnectionID, myLogger);
+                myConnectionID++;
+                thread.start();
+                myMatchServer.addConnection(thread);
+                myLogger.log(Level.INFO, NetworkBundle.getString("NewConnection") +
+                                         ": " + thread.getID());
+                serverSocket.close();
+            }
+            catch (IOException e) {
+                myLogger.log(Level.SEVERE,
+                             NetworkBundle.getString("ConnectionFailed"));
+                myIsServerAcceptingConnections = false;
+            }
         }
 
         if (serverSocket != null) {
-        	try {
-        		serverSocket.close();
-        	}
-        	catch (IOException e) {
-        		myLogger.log(Level.SEVERE,
-        				NetworkBundle.getString("ConnectionSocketFailed"));
-        	}
+            try {
+                serverSocket.close();
+            }
+            catch (IOException e) {
+                myLogger.log(Level.SEVERE,
+                             NetworkBundle.getString("ConnectionSocketFailed"));
+            }
         }
     }
 

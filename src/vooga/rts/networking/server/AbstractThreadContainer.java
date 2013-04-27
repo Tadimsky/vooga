@@ -3,7 +3,10 @@ package vooga.rts.networking.server;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-
+import java.util.logging.Logger;
+import util.logger.HandlerMail;
+import util.logger.HandlerMemory;
+import util.logger.IVoogaHandler;
 import util.logger.LoggerManager;
 import vooga.rts.networking.NetworkBundle;
 import vooga.rts.networking.communications.ExpandedLobbyInfo;
@@ -25,23 +28,53 @@ public abstract class AbstractThreadContainer implements IThreadContainer, IMess
 
     private Map<Integer, ConnectionThread> myConnectionThreads =
             new HashMap<Integer, ConnectionThread>();
+    private Logger myLogger;
+    public static final IVoogaHandler EMAIL_HANDLER =
+            new HandlerMemory(new HandlerMail("vooga-networking-logger@duke.edu",
+                                              new String[] { "david.s.winegar@gmail.com" },
+                                              "mail.smtp.host", "Log update",
+                                              "New log item received: \n"), 1, Level.SEVERE);
 
     /**
-     * Default empty constructor, initializes state.
+     * Default empty constructor, initializes state and logger.
      */
     public AbstractThreadContainer () {
+        LoggerManager log = new LoggerManager();
+        //log.addHandler(EMAIL_HANDLER);
+        myLogger = log.getLogger();
     }
 
     /**
-     * Constructor that copies all current threads from the AbstractThreadContainer passed in.
+     * Initializes state and uses the passed in logger.
+     * 
+     * @param logger to use
+     */
+    public AbstractThreadContainer (Logger logger) {
+        myLogger = logger;
+    }
+
+    /**
+     * Constructor that copies all current threads from the AbstractThreadContainer passed in and
+     * uses the logger passed in.
      * 
      * @param container AbstractThreadContainer
+     * @param logger to use
      */
-    public AbstractThreadContainer (AbstractThreadContainer container) {
+    public AbstractThreadContainer (AbstractThreadContainer container, Logger logger) {
+        this(logger);
         myConnectionThreads = new HashMap<Integer, ConnectionThread>(container.myConnectionThreads);
-        for (ConnectionThread thread  : myConnectionThreads.values()) {
+        for (ConnectionThread thread : myConnectionThreads.values()) {
             thread.switchMessageServer(this);
         }
+    }
+
+    /**
+     * This method returns the logger for the class.
+     * 
+     * @return logger
+     */
+    protected Logger getLogger () {
+        return myLogger;
     }
 
     @Override
@@ -92,7 +125,7 @@ public abstract class AbstractThreadContainer implements IThreadContainer, IMess
     @Override
     public void receiveMessageFromClient (Message message, ConnectionThread thread) {
         LoggerManager.DEFAULT_LOGGER.log(Level.FINEST, NetworkBundle.getString("MessageReceived") +
-                                                    thread.getID());
+                                                       thread.getID());
         stampMessage(message);
         if (message instanceof ClientInfoMessage) {
             ClientInfoMessage systemMessage = (ClientInfoMessage) message;

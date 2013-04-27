@@ -3,8 +3,7 @@ package vooga.rts.networking.server;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-
-import util.logger.LoggerManager;
+import util.logger.HandlerTxt;
 import vooga.rts.networking.NetworkBundle;
 import vooga.rts.networking.communications.LobbyInfo;
 import vooga.rts.networking.communications.servermessages.LobbyListMessage;
@@ -23,6 +22,12 @@ public class GameContainer extends AbstractThreadContainer {
     private Map<Integer, Room> myRooms = new HashMap<Integer, Room>();
     private Map<Integer, LobbyInfo> myLobbyInfos = new HashMap<Integer, LobbyInfo>();
     private int myRoomNumber = 0;
+    private String myGameName;
+
+    public GameContainer (String gameName) {
+        myGameName = gameName;
+        //getLogger().addHandler(new HandlerTxt(myGameName).getHandler());
+    }
 
     /**
      * Removes the room from the game container.
@@ -66,19 +71,19 @@ public class GameContainer extends AbstractThreadContainer {
                     .getMaxConnections()) {
             removeConnection(thread);
             myRooms.get(lobbyNumber).addConnection(thread);
-            LoggerManager.DEFAULT_LOGGER.log(Level.INFO, NetworkBundle.getString("LobbyJoined"));
+            getLogger().log(Level.INFO, NetworkBundle.getString("LobbyJoined"));
         }
     }
 
     @Override
     public void startLobby (ConnectionThread thread, LobbyInfo lobbyInfo) {
         LobbyInfo newLobby = new LobbyInfo(lobbyInfo, myRoomNumber);
-        Room lobby = new Lobby(myRoomNumber, this, newLobby);
+        Room lobby = new Lobby(myRoomNumber, this, newLobby, getLogger());
         myLobbyInfos.put(myRoomNumber, newLobby);
         myRoomNumber++;
         lobby.addConnection(thread);
         addRoom(lobby);
-        LoggerManager.DEFAULT_LOGGER.log(Level.INFO, NetworkBundle.getString("LobbyStarted"));
+        getLogger().log(Level.INFO, NetworkBundle.getString("LobbyStarted"));
     }
 
     @Override
