@@ -41,11 +41,8 @@ public class ProjectileDecoder extends Decoder {
 			int damage = Integer.parseInt(getElement(pElement, DAMAGE_TAG));
 			int lifespan = Integer.parseInt(getElement(pElement, LIFESPAN_TAG));
 			int speed = Integer.parseInt(getElement(pElement, SPEED_TAG));
-			Projectile weapon = (Projectile) ReflectionHelper.makeInstance(path, new Pixmap(image),
-																		damage,
-																		lifespan,
-																		speed);
-			
+			Projectile weapon = (Projectile) ReflectionHelper.
+					makeInstance(path, new Pixmap(image), damage, lifespan, speed);
 			myFactory.put(name, weapon);
 		}
 	}

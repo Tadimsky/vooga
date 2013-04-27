@@ -27,12 +27,10 @@ public class CannotBeOccupied implements OccupyStrategy{
 		
 	}
 
-	@Override
 	public void setOccupierID(int id) {
 		
 	}
 
-	@Override
 	public List<Integer> getOccupiers() {
 		return new ArrayList<Integer>();
 	}

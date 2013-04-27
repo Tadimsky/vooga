@@ -7,16 +7,36 @@ import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.gamedesign.upgrades.UpgradeNode;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
 
-
+/**
+ * 
+ * This class implements UpgradeStrategy and is used as an instance in
+ * InteractiveEntity for objects that receive upgrades. This class also
+ * contains the UpgradeTree that indicates the sequences of upgrades available
+ * for the InteractiveEntity that owns the class.
+ * 
+ * @author Wenshun Liu
+ * 
+ */
 public class CanUpgrade implements UpgradeStrategy {
     private UpgradeTree myUpgradeTree;
 
+    /**
+     * Sets the UpgradeTree of this CanUpgrade strategy. Creates actions for
+     * the owner of the UpgradeTree.
+     * 
+     * @param upgradeTree the UpgradeTree of this CanUpgrade
+     * @param owner the InteractiveEntity that owns the UpgradeTree
+     */
     public void setUpgradeTree (UpgradeTree upgradeTree, InteractiveEntity owner) {
         myUpgradeTree = upgradeTree;
         createUpgradeActions(owner);
     }
 
-    public void createUpgradeActions (final InteractiveEntity entity) {
+    /**
+     * Creates the upgrade actions for the InteractiveEntity passed in
+     * given the current upgrades available in the UpgradeTree.
+     */
+    private void createUpgradeActions (final InteractiveEntity entity) {
         for (final UpgradeNode upgrade : myUpgradeTree.getCurrentUpgrades()) {
             entity.addAction(upgrade.getUpgradeName(), new InteractiveAction(entity) {
                 @Override
@@ -31,10 +51,23 @@ public class CanUpgrade implements UpgradeStrategy {
         }
     }
 
+    /**
+     * Returns the UpgradeTree ties to this CanUpgrade
+     * 
+     * @return the UpgradeTree ties to this class.
+     */
     public UpgradeTree getUpgradeTree () {
         return myUpgradeTree;
     }
 
+    /**
+     * Applies this CanUpgrade strategy to the InteractiveEntity passed in by
+     * setting the strategy and the UpgradeTree for the InteractiveEntity,
+     * and recreating the actions.
+     * 
+     * @param other the InteractiveEntity that will receive the effect of
+     * this UpgradeStrategy
+     */
     public void affect (InteractiveEntity other) {
         UpgradeStrategy newUpgrade = new CanUpgrade();
         newUpgrade.setUpgradeTree(getUpgradeTree(), other);
