@@ -75,7 +75,7 @@ public class GameEntity extends GameSprite {
         if (reachedGoal(elapsedTime)) {
             setVelocity(v.getAngle(), 0);
             myEntityState.stop();
-            myGoal = new Location3D(getWorldLocation());
+            getWorldLocation().setLocation(myGoal.getX(), myGoal.getY(), myGoal.getZ());
         }
         else {
             setVelocity(v.getAngle(), getSpeed());
