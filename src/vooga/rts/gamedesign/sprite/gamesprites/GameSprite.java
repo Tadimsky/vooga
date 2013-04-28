@@ -134,9 +134,6 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 		if (Camera.instance().issVisible(getWorldLocation())) {
 			Location3D paintLocation = IsometricConverter
 					.calculatePaintLocation(myWorldLocation, myWorldDimension);
-			if (this instanceof InteractiveEntity) {
-			    System.out.println(paintLocation);
-			}
 					
 			myScreenLocation = Camera.instance().worldToView(paintLocation);
 			

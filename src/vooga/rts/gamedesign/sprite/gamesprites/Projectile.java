@@ -2,12 +2,12 @@ package vooga.rts.gamedesign.sprite.gamesprites;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.DelayedTask;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
+
 
 /**
  * This class is the generic abstract class for all types of projectiles that
@@ -22,121 +22,128 @@ import vooga.rts.util.Pixmap;
  * 
  */
 public class Projectile extends GameEntity {
-	// Default speed
-	public static int DEFAULT_PROJECTILE_SPEED = 800;
-	public static Pixmap DEFAULT_PIC = new Pixmap("images/bullet.png");
-	public static Dimension DEFAULT_DIMENSION = new Dimension(20, 20);
-	public static int DEFAULT_DAMAGE = 10;
-	public static int DEFAULT_HEALTH = 6;
-	public static Location3D DEFAULTLOCATION = new Location3D(0,0,0);
-	public static int DEFAULT_PLAYERID = 0;
-	
-	
-	private int myDamage;
-	private InteractiveEntity myTarget;
-	
-	private DelayedTask myTimer;
+    // Default speed
+    public static int DEFAULT_PROJECTILE_SPEED = 800;
+    public static Pixmap DEFAULT_PIC = new Pixmap("images/bullet.png");
+    public static Dimension DEFAULT_DIMENSION = new Dimension(20, 20);
+    public static int DEFAULT_DAMAGE = 10;
+    public static int DEFAULT_HEALTH = 6;
+    public static Location3D DEFAULTLOCATION = new Location3D(0, 0, 0);
+    public static int DEFAULT_PLAYERID = 0;
 
-	/**
-	 * Creates a new projectile.
-	 * 
-	 * @param pixmap
-	 *            is the image of the projectile
-	 * @param loc
-	 *            is the location where the projectile is created
-	 * @param size
-	 *            is the size of the projectile
-	 * @param playerID
-	 *            is the team the projectile is on
-	 * @param damage
-	 *            is the damage that the projectile will infilict on its target
-	 * @param health
-	 *            is the amount of time a projectile will travel for if it does
-	 *            not hit an enemy
-	 */
-	public Projectile(Pixmap pixmap, Location3D loc, Dimension size,
-			int playerID, int damage, int health, int speed) {
-		super(pixmap, loc, size, playerID, health);
-		setSpeed(speed);
-		myDamage = damage;
-		final Projectile toDestroy = this;
-		myTimer = new DelayedTask(getHealth(), new Runnable() {
-			Projectile p = toDestroy;
+    private int myDamage;
+    private InteractiveEntity myTarget;
 
-			public void run() {
-				p.die();
-			}
-		});
-	}
-	
-	public Projectile(Pixmap pixmap, int damage, int lifespan, int speed) {
-		this(pixmap, DEFAULTLOCATION, DEFAULT_DIMENSION, DEFAULT_PLAYERID, damage, lifespan, speed);
-	}
+    private DelayedTask myTimer;
 
-	/**
-	 * Sets the enemy that the pojectile is attempting to hit.
-	 * 
-	 * @param enemy
-	 *            is the enemy that is being targeted
-	 */
-	public void setEnemy(InteractiveEntity enemy) {
-		myTarget = enemy;
-	}
+    /**
+     * Creates a new projectile.
+     * 
+     * @param pixmap
+     *        is the image of the projectile
+     * @param loc
+     *        is the location where the projectile is created
+     * @param size
+     *        is the size of the projectile
+     * @param playerID
+     *        is the team the projectile is on
+     * @param damage
+     *        is the damage that the projectile will infilict on its target
+     * @param health
+     *        is the amount of time a projectile will travel for if it does
+     *        not hit an enemy
+     */
+    public Projectile (Pixmap pixmap,
+                       Location3D loc,
+                       Dimension size,
+                       int playerID,
+                       int damage,
+                       int health,
+                       int speed) {
+        super(pixmap, loc, size, playerID, health);
+        setSpeed(speed);
+        myDamage = damage;
+        final Projectile toDestroy = this;
+        myTimer = new DelayedTask(getHealth(), new Runnable() {
+            Projectile p = toDestroy;
 
-	/**
-	 * Returns the damage done by the projectile.
-	 * 
-	 * @return the amount of damage done by the projectile.
-	 */
-	public int getDamage() {
-		return myDamage;
-	}
+            public void run () {
+                p.die();
+            }
+        });
+    }
 
-	/**
-	 * Increases the amount of damage that a projectile does.
-	 * 
-	 * @param damage
-	 *            is the amount of additional damage a projectile will do
-	 */
-	public void addDamage(int damage) {
-		myDamage += damage;
-	}
+    public Projectile (Pixmap pixmap, int damage, int lifespan, int speed) {
+        this(pixmap, DEFAULTLOCATION, DEFAULT_DIMENSION, DEFAULT_PLAYERID, damage, lifespan, speed);
+    }
 
-	@Override
-	public void update(double elapsedTime) {
-		super.update(elapsedTime);
-		this.move(myTarget.getWorldLocation());
-		myTimer.update(elapsedTime);
-		if (this.intersects(myTarget.getWorldLocation())) {
-			attack(myTarget);
-			this.die();
-		}
+    /**
+     * Sets the enemy that the pojectile is attempting to hit.
+     * 
+     * @param enemy
+     *        is the enemy that is being targeted
+     */
+    public void setEnemy (InteractiveEntity enemy) {
+        myTarget = enemy;
+    }
 
-	}
+    /**
+     * Returns the damage done by the projectile.
+     * 
+     * @return the amount of damage done by the projectile.
+     */
+    public int getDamage () {
+        return myDamage;
+    }
 
-	/**
-	 * This method is called when the projectile hits its target and it inflicts
-	 * damage on its target.
-	 * 
-	 * @param interactiveEntity
-	 *            is the target of the projectile
-	 */
-	public void attack(InteractiveEntity interactiveEntity) {
-		interactiveEntity.changeHealth(myDamage);
-	}
+    /**
+     * Increases the amount of damage that a projectile does.
+     * 
+     * @param damage
+     *        is the amount of additional damage a projectile will do
+     */
+    public void addDamage (int damage) {
+        myDamage += damage;
+    }
 
-	/**
-	 * Makes a clone of the projectile.
-	 * 
-	 * @param other
-	 *            is another projectile
-	 * @param shootFrom
-	 *            is the location that the projectile is being shot from
-	 * @return a new clone of the projectile
-	 */
-	public Projectile copy(Projectile other, Location3D shootFrom) {
-		return new Projectile(new Pixmap(other.getImage()), new Location3D(
-				shootFrom), new Dimension(other.getSize()),
-				other.getPlayerID(), other.getDamage(), other.getHealth(), other.getSpeed());
-	}
+    @Override
+    public void update (double elapsedTime) {
+        super.update(elapsedTime);
+        this.move(myTarget.getWorldLocation());
+        myTimer.update(elapsedTime);
+        if (this.intersects(myTarget.getWorldLocation())) {
+            attack(myTarget);
+        }
+        if (myTarget.isDead()){
+            this.die();
+        }
+
+    }
+
+    /**
+     * This method is called when the projectile hits its target and it inflicts
+     * damage on its target.
+     * 
+     * @param interactiveEntity
+     *        is the target of the projectile
+     */
+    public void attack (InteractiveEntity interactiveEntity) {
+        interactiveEntity.changeHealth(myDamage);        
+        this.die();
+    }
+
+    /**
+     * Makes a clone of the projectile.
+     * 
+     * @param other
+     *        is another projectile
+     * @param shootFrom
+     *        is the location that the projectile is being shot from
+     * @return a new clone of the projectile
+     */
+    public Projectile copy (Projectile other, Location3D shootFrom) {
+        return new Projectile(new Pixmap(other.getImage()), new Location3D(shootFrom),
+                              new Dimension(other.getSize()), other.getPlayerID(),
+                              other.getDamage(), other.getHealth(), other.getSpeed());
+    }
 }
