@@ -3,7 +3,6 @@ package vooga.rts.networking.server;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import vooga.rts.networking.NetworkBundle;
-import vooga.rts.networking.communications.GameMessage;
 import vooga.rts.networking.communications.Message;
 import vooga.rts.networking.communications.clientmessages.ClientInfoMessage;
 import vooga.rts.networking.communications.servermessages.AlertClientMessage;
