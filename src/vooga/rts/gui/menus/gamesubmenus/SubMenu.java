@@ -5,10 +5,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Observable;
 import java.util.Observer;
+import util.Location;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gui.Window;
 import vooga.rts.resourcemanager.ResourceManager;
-import vooga.rts.util.Location;
 
 
 public abstract class SubMenu extends Observable implements Observer {

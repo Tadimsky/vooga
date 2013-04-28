@@ -3,8 +3,8 @@ package vooga.rts.leveleditor.components;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import util.Location;
 import vooga.rts.map.TileMap;
-import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 

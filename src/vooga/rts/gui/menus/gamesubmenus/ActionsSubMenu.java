@@ -6,13 +6,13 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
+import util.Location;
 import vooga.rts.commands.InformationCommand;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gui.Button;
 import vooga.rts.gui.buttons.ActionButton;
 import vooga.rts.gui.buttons.ImageButton;
 import vooga.rts.util.Information;
-import vooga.rts.util.Location;
 
 public class ActionsSubMenu extends SubMenu {
     

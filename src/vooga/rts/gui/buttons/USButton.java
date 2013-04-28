@@ -1,8 +1,8 @@
 package vooga.rts.gui.buttons;
 
 import java.awt.Dimension;
+import util.Location;
 import vooga.rts.gui.Button;
-import vooga.rts.util.Location;
 
 public class USButton extends Button {
 

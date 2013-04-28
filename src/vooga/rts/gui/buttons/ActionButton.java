@@ -8,10 +8,10 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import util.Location;
 import vooga.rts.commands.InformationCommand;
 import vooga.rts.gui.Button;
 import vooga.rts.util.Information;
-import vooga.rts.util.Location;
 
 
 public class ActionButton extends ImageButton {

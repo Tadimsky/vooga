@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import util.Location;
 import vooga.rts.gui.Button;
-import vooga.rts.util.Location;
 
 
 public class MainMenuButton extends Button {

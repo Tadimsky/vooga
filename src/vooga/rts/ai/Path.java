@@ -3,8 +3,8 @@ package vooga.rts.ai;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import util.Location;
 import vooga.rts.map.*;
-import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 
 /**

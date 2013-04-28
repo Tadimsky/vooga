@@ -2,7 +2,7 @@ package vooga.rts.leveleditor.components;
 
 import java.util.HashMap;
 import java.util.Map;
-import vooga.rts.util.Location;
+import util.Location;
 /**
  * this class contains all players in this game
  * @author Richard Yang

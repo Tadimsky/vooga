@@ -4,9 +4,9 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Observable;
+import util.Location;
 import vooga.rts.IGameLoop;
 import vooga.rts.resourcemanager.ResourceManager;
-import vooga.rts.util.Location;
 
 
 public abstract class Button extends Observable implements IGameLoop {

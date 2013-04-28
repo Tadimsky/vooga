@@ -2,6 +2,7 @@ package vooga.rts.gamedesign.sprite.gamesprites;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import vooga.rts.gamedesign.state.EntityState;
 import vooga.rts.gamedesign.state.MovementState;
 import vooga.rts.util.Location3D;
@@ -50,7 +51,18 @@ public class GameEntity extends GameSprite {
 
     public boolean reachedGoal () {
         Vector v = getWorldLocation().difference(myGoal.to2D());
-        return (v.getMagnitude() < Location3D.APPROX_EQUAL);
+        if (v.getMagnitude() < Location3D.APPROX_EQUAL) {
+            return true;
+        }
+        
+        Location3D future = new Location3D(getWorldLocation());
+        
+        future.translate(v);
+        Line2D lineTest = new Line2D.Double(getWorldLocation().to2D(), future.to2D());
+        if (lineTest.intersects(myGoal.getX(), myGoal.getY(), 5, 5)){
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -19,7 +19,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import vooga.rts.util.Location;
+import util.Location;
 import vooga.rts.util.Pixmap;
 
 /**

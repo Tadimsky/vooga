@@ -2,9 +2,9 @@ package vooga.rts.gui.menus.gamesubmenus;
 
 import java.awt.Dimension;
 import java.util.Observable;
+import util.Location;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gui.Button;
-import vooga.rts.util.Location;
 
 public class MiniMapSubMenu extends SubMenu {
     

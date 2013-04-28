@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.TreeMap;
+import util.Location;
 import vooga.rts.IGameLoop;
 import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
 import vooga.rts.gamedesign.sprite.map.Terrain;
 import vooga.rts.state.GameState;
 import vooga.rts.state.MainState;
-import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 
 

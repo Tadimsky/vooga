@@ -4,9 +4,9 @@ import java.awt.Dimension;
 import java.io.File;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
+import util.Location;
 import vooga.rts.map.GameMap;
 import vooga.rts.state.GameState;
-import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 

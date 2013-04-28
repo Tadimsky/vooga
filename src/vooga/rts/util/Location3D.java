@@ -1,6 +1,7 @@
 package vooga.rts.util;
 
 import java.awt.geom.Point2D;
+import util.Location;
 
 
 /**

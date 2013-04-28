@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import util.Location;
 import vooga.rts.IGameLoop;
 import vooga.rts.commands.ClickCommand;
 import vooga.rts.commands.Command;
 import vooga.rts.commands.PositionCommand;
-import vooga.rts.util.Location;
 
 
 public abstract class Menu extends Observable implements IGameLoop, Observer {

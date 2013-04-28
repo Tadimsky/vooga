@@ -5,10 +5,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.Observable;
+import util.Location;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gui.Button;
 import vooga.rts.gui.Window;
-import vooga.rts.util.Location;
 
 
 public class InfoSubMenu extends SubMenu {

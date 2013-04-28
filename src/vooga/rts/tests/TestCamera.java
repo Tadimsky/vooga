@@ -6,8 +6,8 @@ import static org.junit.Assert.fail;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import org.junit.Test;
+import util.Location;
 import vooga.rts.util.Camera;
-import vooga.rts.util.Location;
 import vooga.rts.util.Location3D;
 
 

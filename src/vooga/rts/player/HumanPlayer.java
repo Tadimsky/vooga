@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import util.Location;
 import vooga.rts.action.*;
 import vooga.rts.commands.ClickCommand;
 import vooga.rts.commands.Command;
@@ -18,7 +19,6 @@ import vooga.rts.controller.Controller;
 import vooga.rts.gui.Window;
 import vooga.rts.gui.menus.GameMenu;
 import vooga.rts.util.Camera;
-import vooga.rts.util.Location;
 
 
 /**
