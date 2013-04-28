@@ -247,11 +247,9 @@ public class Factory {
     }
 
     /**
-     * Creates decoders by loading the input file that specifies the path of
-     * each Decoder and the type of class it is in charge of. Puts the decoders
-     * and their corresponding types into a map.
-     * 
-     * This method will be called when the Factory class is created.
+     * Loads information from the input file that specifies the path of
+     * the related objects and what related class it is in charge of. Puts the
+     * information into a map.
      * 
      * @param fileName the name of the XML file that specifies decoder paths.
      * @throws ClassNotFoundException
@@ -266,14 +264,10 @@ public class Factory {
      * @throws IOException
      */
     public void loadMappingInfo (String fileName, Map map) throws ClassNotFoundException,
-                                                          IllegalArgumentException,
-                                                          SecurityException,
-                                                          InstantiationException,
-                                                          IllegalAccessException,
-                                                          InvocationTargetException,
-                                                          NoSuchMethodException,
-                                                          ParserConfigurationException,
-                                                          SAXException, IOException {
+           IllegalArgumentException, SecurityException, InstantiationException,
+           IllegalAccessException, InvocationTargetException,
+           NoSuchMethodException, ParserConfigurationException, SAXException,
+           IOException {
         URI f = null;
         try {
             f = getClass().getResource(fileName).toURI();
@@ -304,6 +298,17 @@ public class Factory {
         }
     }
 
+    /**
+     * Generates all the decoders from the map that indicates their paths.
+     * 
+     * @throws IllegalArgumentException
+     * @throws SecurityException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws NoSuchMethodException
+     * @throws ClassNotFoundException
+     */
     private void createDecoders () throws IllegalArgumentException, SecurityException,
                                   InstantiationException, IllegalAccessException,
                                   InvocationTargetException, NoSuchMethodException,
@@ -348,7 +353,6 @@ public class Factory {
                     myDecoders.get(type).create(doc, type);
                 }
             }
-
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -357,7 +361,6 @@ public class Factory {
         initializeWeapons();
         initializeStrategies();
         initializeProducables();
-
     }
 
     /**
@@ -373,9 +376,7 @@ public class Factory {
                 InteractiveEntity producable = mySprites.get(baby);
                 
                 producer.addProducable(producable.copy());
-        
             }
-           
         }
     }
 
@@ -433,7 +434,6 @@ public class Factory {
             Projectile toAdd = myProjectiles.get(projectile);
             holder.setProjectile(toAdd);
         }
-
     }
 
     public static void main (String[] args) {

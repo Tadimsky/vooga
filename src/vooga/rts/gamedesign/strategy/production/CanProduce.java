@@ -15,15 +15,17 @@ import java.util.List;
 
 /**
  * This class implements ProductionStrategy and is used as an instance in
- * interactives for objects that are able to produce other interactives. The
- * produce method in this class will specify how the interactive will produce
- * other units.
+ * InteractiveEntity for objects that are able to produce other
+ * InteractiveEntity. The produce method in this class will specify how the
+ * interactive will produce other units.
  * 
  * @author Kevin Oh
  * 
  */
 public class CanProduce implements ProductionStrategy {
-
+	private static final Location3D DEFAULT_RELATIVE_RALLY_POINT =
+			new Location3D(50, 50, 0);
+	
     private List<InteractiveEntity> myProducables;
     private Location3D myRallyPoint;
 
@@ -50,9 +52,14 @@ public class CanProduce implements ProductionStrategy {
         myRallyPoint = rallyPoint;
     }
 
+    /**
+     * Sets the rally point based on the position of the entity.
+     */
     public void setRallyPoint (InteractiveEntity entity) {
-        myRallyPoint = new Location3D(entity.getWorldLocation().getX(),
-                                      entity.getWorldLocation().getY() + 50, 0);
+        setRallyPoint(new Location3D(entity.getWorldLocation().getX() +
+        		DEFAULT_RELATIVE_RALLY_POINT.getX(),
+                entity.getWorldLocation().getY() +
+                DEFAULT_RELATIVE_RALLY_POINT.getY(), 0));
     }
 
     /**
@@ -66,8 +73,11 @@ public class CanProduce implements ProductionStrategy {
 
     }
 
-    @Override
-    public void createProductionActions (final InteractiveEntity producer) {
+    /**
+     * Creates production related actions to the InteractiveEntity passed in
+     * for each type of InteractiveEntity that it is able to produce.
+     */
+    private void createProductionActions (final InteractiveEntity producer) {
         for (final InteractiveEntity producable : myProducables) {
             String commandName = "make " + producable.getInfo().getName();
             producer.addAction(commandName, new InteractiveAction(producer) {
@@ -78,7 +88,6 @@ public class CanProduce implements ProductionStrategy {
 
                 @Override
                 public void apply () {
-                    // check for resources
                     final InteractiveEntity unit = producable;
                     DelayedTask dt = new DelayedTask(unit.getBuildTime(), new Runnable() {
                         @Override
@@ -88,7 +97,6 @@ public class CanProduce implements ProductionStrategy {
                             producer.setChanged();
                             producer.notifyObservers(f);
                             f.move(myRallyPoint);
-
                         }
                     });
                     producer.addTask(dt);
@@ -118,10 +126,17 @@ public class CanProduce implements ProductionStrategy {
         myProducables = producables;
     }
 
+    /**
+     * Applies this CanProduce strategy to another InteractiveEntity that is
+     * passed in, by setting it as the InteractiveEntity's strategy and
+     * recreating the actions.
+     * 
+     * @param other the InteractiveEntity that will receive the strategy.
+     */
     public void affect (InteractiveEntity entity) {
         ProductionStrategy newProduction = new CanProduce(entity);
         newProduction.setProducables(getProducables());
-        newProduction.createProductionActions(entity);
+        ((CanProduce)newProduction).createProductionActions(entity);
         entity.setProductionStrategy(newProduction);
     }
 }

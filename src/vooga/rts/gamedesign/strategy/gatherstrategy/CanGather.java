@@ -72,24 +72,28 @@ public class CanGather implements GatherStrategy {
 
 	}
 
-	@Override
 	public void update(double elapsedTime) {
 		if(myGatherDelay != null) {
 			myGatherDelay.update(elapsedTime);
 		}
 	}
 
-	@Override
 	public int getGatherAmount() {
 		return myGatherAmount;
 	}
 
-	@Override
 	public void setGatherAmount(int gatherAmount) {
 		myGatherAmount = gatherAmount;
 	}
-
-	@Override
+	
+	/**
+    *
+    * Applies this CanGather strategy to another InteractiveEntity that is
+    * passed in, by setting it as the InteractiveEntity's strategy and
+    * recreating the actions.
+    * 
+    * @param other the InteractiveEntity that will receive the strategy.
+    */
 	public void affect(InteractiveEntity other) {
 		other.setGatherStrategy(this);
 	}

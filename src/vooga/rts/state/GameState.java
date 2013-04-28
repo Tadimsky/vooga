@@ -19,6 +19,7 @@ import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.sprite.map.Terrain;
+import vooga.rts.gamedesign.strategy.occupystrategy.CanBeOccupied;
 import vooga.rts.leveleditor.components.MapLoader;
 import vooga.rts.manager.PlayerManager;
 import vooga.rts.map.GameMap;
@@ -196,7 +197,7 @@ public class GameState extends SubState implements Controller {
         myTasks.add(new DelayedTask(10, new Runnable() {
             @Override
             public void run () {
-                if (testGarrison.getOccupyStrategy().getOccupiers().size() > 0) {
+                if (((CanBeOccupied) testGarrison.getOccupyStrategy()).getOccupiers().size() > 0) {
                     System.out.println("will puke!");
                     testGarrison.getAction(new Command("deoccupy")).apply();
                 }

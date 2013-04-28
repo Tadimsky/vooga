@@ -38,28 +38,4 @@ public interface OccupyStrategy extends Strategy {
      */
     public void createOccupyActions (final InteractiveEntity entity);
 
-    /**
-     * Sets the current occupier to the one specified by the id. 
-     * @param id
-     */
-    public void setOccupierID (int id);
-    
-    /**
-     * Returns the list of occupiers. 
-     * @return
-     */
-    public List<Integer> getOccupiers ();
-
-    /**
-     * Returns the maximum amount of entities this strategy can hold. 
-     * @return
-     */
-    public int getMaxOccupiers ();
-
-    /**
-     * Returns the id of this occupier. 
-     * @return
-     */
-    public int getOccupierID ();
-
 }

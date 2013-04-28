@@ -68,6 +68,13 @@ public class UpgradeDecoder extends Decoder {
 		}
 	}
 	
+	/**
+	 * Creates a single upgrade tree.
+	 * 
+	 * @param treeName the name of the tree
+	 * @param treeElmnt the Element that stores the information of the tree
+	 * @param upgradeTree the UpgradeTree that will be generated
+	 */
 	private void createSingleTree(String treeName, Element treeElmnt, UpgradeTree upgradeTree) {
 		NodeList nodeLst = treeElmnt.getElementsByTagName(UPGRADE_CATEGORY_TAG);
 
@@ -82,12 +89,12 @@ public class UpgradeDecoder extends Decoder {
 			for (int j=0; j<upgradeNodeList.getLength(); ++j) {
 				Element upgradeNodeElement = (Element) upgradeNodeList.item(j);
 
-				String parent = loadSingleLine(upgradeNodeElement, PARENT_UPGRADE_TAG);
-				String nodeName = loadSingleLine(upgradeNodeElement, TITLE_TAG);
-				String object = loadSingleLine(upgradeNodeElement, AFFECTING_OBJECT_TAG);
-				String value = loadSingleLine(upgradeNodeElement, AFFECTING_VALUE_TAG);
-				String costedResource = loadSingleLine(upgradeNodeElement, COSTING_RESOURCE_TYPE_TAG);
-				String costedResourceAmount = loadSingleLine(upgradeNodeElement, COSTING_RESOURCE_AMOUNT_TAG);
+				String parent = getElement(upgradeNodeElement, PARENT_UPGRADE_TAG);
+				String nodeName = getElement(upgradeNodeElement, TITLE_TAG);
+				String object = getElement(upgradeNodeElement, AFFECTING_OBJECT_TAG);
+				String value = getElement(upgradeNodeElement, AFFECTING_VALUE_TAG);
+				String costedResource = getElement(upgradeNodeElement, COSTING_RESOURCE_TYPE_TAG);
+				String costedResourceAmount = getElement(upgradeNodeElement, COSTING_RESOURCE_AMOUNT_TAG);
 
 				UpgradeNode newUpgrade = (UpgradeNode) ReflectionHelper.makeInstance(myUpgradeNodeType.get(object), upgradeTree, nodeName, Integer.parseInt(value), Integer.parseInt(costedResourceAmount));
 				UpgradeNode current = upgradeTree.findNode(parent);
@@ -98,14 +105,7 @@ public class UpgradeDecoder extends Decoder {
 		System.out.println(treeName);
 		myFactory.put(treeName, upgradeTree);
 	}
-	
-	private String loadSingleLine(Element element, String tag) {
-		NodeList nodeElmntLst = element.getElementsByTagName(tag);
-		Element nodeElmnt = (Element) nodeElmntLst.item(0);
-		String result = ((Node)nodeElmnt.getChildNodes().item(0)).getNodeValue();
-		return result;
-	}
-	
+
 	/**
 	 * TESTING PURPOSE. PRINTS TREE.
 	 * @param upgradeTree
@@ -119,7 +119,6 @@ public class UpgradeDecoder extends Decoder {
 							" Parent Name " + current.getUpgradeName());
 				}
 				current = current.getChildren().get(0);
-						//should recurse if really want to print the whole tree
 			}
 		}
 		for (UpgradeNode u: upgradeTree.getCurrentUpgrades()) {

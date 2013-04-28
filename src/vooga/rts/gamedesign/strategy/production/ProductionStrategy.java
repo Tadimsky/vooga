@@ -32,19 +32,13 @@ public interface ProductionStrategy extends Strategy{
 	 *  sets the rally point of this producer to rallypoint. 
 	 */
 	public void setRallyPoint(Location3D rallyPoint);
-	
+
 	/**
-	 * Sets the rally point to be the location of the interactive entity. 
+	 * Sets the rally point based on the location of the entity.
 	 * @param entity
 	 */
-	public void setRallyPoint(InteractiveEntity entity);
+	public void setRallyPoint (InteractiveEntity entity);
 	
-	/**
-	 * Creates all the actions that this strategy can accomplish. 
-	 * @param producer
-	 */
-	public void createProductionActions(InteractiveEntity producer);
-
 	/**
 	 * Adds a producable entity to the list of producables this producer can make. 
 	 */

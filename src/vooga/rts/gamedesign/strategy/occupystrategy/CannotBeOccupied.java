@@ -23,33 +23,8 @@ import vooga.rts.gamedesign.strategy.Strategy;
  */
 public class CannotBeOccupied implements OccupyStrategy{
 
-	public CannotBeOccupied(){
-		
-	}
-
-	@Override
-	public void setOccupierID(int id) {
-		
-	}
-
-	@Override
-	public List<Integer> getOccupiers() {
-		return new ArrayList<Integer>();
-	}
-
-	@Override
-	public int getMaxOccupiers() {
-		return 0;
-	}
-
-	@Override
-	public int getOccupierID() {
-		return 0;
-	}
-
-	@Override
 	public void createOccupyActions(InteractiveEntity entity) {
-		
+		return;
 	}
 
 	public void getOccupied(InteractiveEntity entity, Unit u) {
@@ -59,6 +34,4 @@ public class CannotBeOccupied implements OccupyStrategy{
 	public void affect(InteractiveEntity entity) {
 		entity.setOccupyStrategy(this);
 	}
-
-
 }

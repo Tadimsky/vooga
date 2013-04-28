@@ -111,7 +111,7 @@
 			<occupy>canbeoccupied</occupy>
 			<upgrade>canupgrade</upgrade>
 			<upgradeTreeName>SoldierUpgrade</upgradeTreeName>
-			<produce>Marine</produce>
+			<produce></produce>
 			<myweapons></myweapons>
 			<information>
 				<description>I am a garrison</description>
