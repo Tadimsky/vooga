@@ -147,9 +147,6 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 			// if (Camera.instance().isVisible(myScreenLocation)) {
 			myPixmap.paint(pen, myScreenLocation, mySize);
 
-			pen.setColor(Color.RED);
-                        pen.fill(new Ellipse2D.Double(myScreenLocation.getX() - 3, myScreenLocation.getY() - 3, 6, 6));
-                        pen.setColor(Color.BLACK);
 			//pen.setColor(Color.RED);
 			//pen.drawRect(myBase.x, myBase.y, myBase.width, myBase.height);
 			// }
@@ -208,8 +205,9 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 //		Point2D leftMostPoint = Camera.instance().worldToView(
 //				IsometricConverter.calculatePaintLocation(myWorldLocation,
 //						myWorldDimension));
-		myWorldBounds = new Rectangle((int) getLeft() + mySize.height,
-				(int) getUp(), getSize().width, getSize().height);
+		
+		myWorldBounds = new Rectangle((int) (getLeft()), (int) (getUp() - myWorldDimension.getHeight()),
+				(int) myWorldDimension.getWidth(), (int) myWorldDimension.getHeight());
 
 	}
 
@@ -267,7 +265,7 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 	}
 
 	public void update(double elapsedTime) {
-
+		resetBounds();
 	}
 
 	/**

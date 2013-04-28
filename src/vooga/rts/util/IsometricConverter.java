@@ -22,11 +22,12 @@ public class IsometricConverter {
     
     public static Location3D calculatePaintLocation(Location3D basecenter, Dimension3D worldsize) {
         // How much to move to get to the left most position in view        
-        Location3D change = Camera.instance().deltaviewtoWorld(new Point2D.Double(-worldsize.getWidth() * Camera.ISO_HEIGHT, 0));
+        //Location3D change = Camera.instance().deltaviewtoWorld(new Point2D.Double(-worldsize.getHeight() * Camera.ISO_HEIGHT, 0));
+    	Location3D change = new Location3D(basecenter);
         // add the existing world location
-        change.add(basecenter);
+        change.add(new Location3D(0,0,worldsize.getHeight()/2));
         // add the height of the entity
-        change.add(0, 0, worldsize.getHeight()); 
+        //change.add(0, 0, worldsize.getHeight()); 
         
         // the top left coordinate of the item
         return change;
