@@ -1,11 +1,16 @@
 package vooga.rts.gamedesign.sprite.gamesprites.interactive.units;
 
 import java.awt.Dimension;
+import java.util.List;
 import vooga.rts.action.InteractiveAction;
 import vooga.rts.commands.ClickCommand;
 import vooga.rts.commands.Command;
+import vooga.rts.gamedesign.sprite.gamesprites.Resource;
+import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.state.UnitState;
+import vooga.rts.gamedesign.strategy.gatherstrategy.CanGather;
+import vooga.rts.state.GameState;
 import vooga.rts.util.Camera;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
@@ -26,12 +31,15 @@ import vooga.rts.util.Sound;
  */
 public class Unit extends InteractiveEntity {
 
-    public static Pixmap DEFAULT_IMAGE = new Pixmap("images/sprites/soldier.png");
-    public static Location3D DEFAULT_LOCATION = new Location3D();
-    public static Dimension DEFAULT_SIZE = new Dimension(90, 90);
-    public static Sound DEFAULT_SOUND = null;
-    public static int DEFAULT_PLAYERID = 1;
-    public static int DEFAULT_HEALTH = 100;
+    // default values
+    public static final Pixmap DEFAULT_IMAGE = new Pixmap(
+            "images/sprites/soldier.png");
+    public static final Location3D DEFAULT_LOCATION = new Location3D();
+    public static final Dimension DEFAULT_SIZE = new Dimension(90, 90);
+    public static final Sound DEFAULT_SOUND = null;
+    public static final int DEFAULT_PLAYERID = 1;
+    public static final int DEFAULT_HEALTH = 100;
+    public static final int DEFUALT_GATHER_RADIUS = 500;
 
     public Unit () {
         this(DEFAULT_IMAGE, DEFAULT_LOCATION, DEFAULT_SIZE, DEFAULT_SOUND, DEFAULT_PLAYERID,
@@ -121,9 +129,23 @@ public class Unit extends InteractiveEntity {
     @Override
     public void update (double elapsedTime) {
         if (getEntityState().getUnitState() == UnitState.OCCUPY) {
-            this.occupy(getTargetEntity());
+            this.occupy((InteractiveEntity) getTargetEntity());
+        }
+        if(getGatherStrategy() instanceof CanGather) {
+            if (getEntityState().getUnitState() == UnitState.GATHER) {
+                this.gather((IGatherable) getTargetEntity());
+                if(getTargetEntity().isDead()) {
+                    List<Resource> resources = GameState.getMap().getResources()
+                            .getInArea(getWorldLocation(), DEFUALT_GATHER_RADIUS);
+                    if (!resources.isEmpty()) {
+                        System.out.println("yayayayyaya");
+                        Resource resource = resources.get(0);
+                        setGoalLocation(resource.getWorldLocation());
+                        setTargetEntity(resource);
+                    }
+                }
+            }
         }
         super.update(elapsedTime);
     }
-
 }

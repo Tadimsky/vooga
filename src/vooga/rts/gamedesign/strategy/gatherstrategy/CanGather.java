@@ -21,7 +21,7 @@ import vooga.rts.util.DelayedTask;
  */
 public class CanGather implements GatherStrategy {
 	
-	public static final double DEFAULTCOOL = 10;
+	public static final double DEFAULTCOOL = 2;
 	public static final int DEFAULTAMOUNT = 10;
 
 	private DelayedTask myGatherDelay;
@@ -59,9 +59,8 @@ public class CanGather implements GatherStrategy {
 		final int id = playerID;
 		if(myGatherState == GatherState.WAITING) {
 			myGatherState = GatherState.GATHERING;
-			System.out.println("I gathered!!!");
+			//System.out.println("I gathered!!!");
 			myGatherDelay = new DelayedTask(myCooldown, new Runnable() {
-
 				@Override
 				public void run() {
 					toBeGathered.getGathered(id, myGatherAmount);
@@ -69,7 +68,6 @@ public class CanGather implements GatherStrategy {
 				}
 			});
 		}
-
 	}
 
 	@Override

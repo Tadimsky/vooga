@@ -110,6 +110,9 @@ public class GameSpriteManager<T extends GameSprite> implements IGameLoop, Obser
     public List<T> getInArea (Location3D center, double radius) {
         Map<Double, T> sortedItems = new TreeMap<Double, T>();
         for (T single : myGameSprites) {
+            if (!single.isVisible()) {
+                continue;
+            }
             // Do basic test first
             if (single.getWorldLocation().getManhattanDistance(center) < radius) {
                 // Do accurate test second

@@ -30,13 +30,19 @@ public class RightClickAction extends ManagerAction {
     @Override
     public void apply () {
         if (myLocation != null) {
-            for (InteractiveEntity ie : getManager().getSelected()) {
+            for (final InteractiveEntity ie : getManager().getSelected()) {
                 GameEntity enemy = GameState.getMap().getEntity(myLocation);
                 if (enemy != null) {
-                    // ie.recognize(enemy);
+                    ie.recognize(enemy);
                 }
                 else {
-                    ie.move(myLocation);
+                    Thread t = new Thread(new Runnable() {            
+                        @Override
+                        public void run () {
+                            ie.move(myLocation);                
+                        }
+                    });
+                    t.start();
                 }
             }
         }

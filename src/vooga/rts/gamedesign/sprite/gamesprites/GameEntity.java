@@ -255,7 +255,7 @@ public class GameEntity extends GameSprite {
     public EntityState getEntityState () {
         return myEntityState;
     }
-    
+
     /**
      * If the entity is in a stationary state, it stops moving.
      */
@@ -264,5 +264,14 @@ public class GameEntity extends GameSprite {
             setVelocity(getVelocity().getAngle(), 0);
             myGoal = new Location3D(getWorldLocation());
         }
+    }
+
+    /**
+     * Sets the goal location that the entity will move to.
+     * 
+     * @param goal is the location that the entity wants to move to
+     */
+    public void setGoalLocation (Location3D goal) {
+        myGoal = goal;
     }
 }

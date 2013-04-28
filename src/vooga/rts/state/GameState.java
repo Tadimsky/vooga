@@ -41,7 +41,6 @@ import vooga.rts.util.TimeIt;
  * @author Challen Herzberg-Brovold
  * 
  */
-
 public class GameState extends SubState implements Controller, Observer {
     private static final Location3D DEFAULT_SOLDIER_ONE_RELATIVE_LOCATION = new Location3D(300,
                                                                                            300, 0);
@@ -106,9 +105,7 @@ public class GameState extends SubState implements Controller, Observer {
 
         for (DelayedTask dt : myTasks) {
             dt.update(elapsedTime);
-        }
-
-        yuckyUnitUpdate(elapsedTime);
+        }        
         myFrames.update(elapsedTime);
     }
 
@@ -134,7 +131,9 @@ public class GameState extends SubState implements Controller, Observer {
         // If it's a drag, we need to do some extra checking.
         if (command instanceof DragCommand) {
             myDrag = ((DragCommand) command).getScreenRectangle();
-            if (myDrag == null) { return; }
+            if (myDrag == null) {
+                return;
+            }
         }
         sendCommand(command);
     }
@@ -160,15 +159,14 @@ public class GameState extends SubState implements Controller, Observer {
         Unit worker = (Unit) RTSGame.getFactory().getEntitiesMap().get("worker").copy();
         worker =
 
-                (Unit) setLocation(worker, baseLocation, DEFAULT_WORKER_RELATIVE_LOCATION);
+        (Unit) setLocation(worker, baseLocation, DEFAULT_WORKER_RELATIVE_LOCATION);
 
         getPlayers().getPlayer(playerID).add(worker);
 
         Unit soldierOne = (Unit) RTSGame.getFactory().getEntitiesMap().get("Marine").copy();
         soldierOne =
 
-                (Unit) setLocation(soldierOne, baseLocation,
-                                   DEFAULT_SOLDIER_ONE_RELATIVE_LOCATION);
+        (Unit) setLocation(soldierOne, baseLocation, DEFAULT_SOLDIER_ONE_RELATIVE_LOCATION);
 
         getPlayers().getPlayer(playerID).add(soldierOne);
 
@@ -181,8 +179,8 @@ public class GameState extends SubState implements Controller, Observer {
 
         Building startOccupy =
                 (Building) RTSGame.getFactory().getEntitiesMap().get("garrison").copy();
-        startOccupy = (Building) setLocation(startOccupy, baseLocation,
-                                             DEFAULT_OCCUPY_RELATIVE_LOCATION);
+        startOccupy =
+                (Building) setLocation(startOccupy, baseLocation, DEFAULT_OCCUPY_RELATIVE_LOCATION);
         getPlayers().getPlayer(playerID).add(startOccupy);
 
     }
@@ -203,25 +201,10 @@ public class GameState extends SubState implements Controller, Observer {
                                                      new Location3D(600 + j * 30, 600 - j * 20, 0),
                                                      new Dimension(50, 50), 0, 200, "mineral"));
         }
-
-        for (int j = 0; j < 4; j++) {
-            for (int k = 0; k < 8; k++) {
-                getMap().getTerrain().add(new Terrain(new Pixmap("images/gold.png"),
-                                                      new Location3D(100 + k * 25, 100, j * 25),
-                                                      new Dimension(50, 50)));
-            }
-        }
     }
 
     public void initializeGameOver () {
         isGameOver = true;
-    }
-
-    private void yuckyUnitUpdate (double elapsedTime) {
-
-        List<InteractiveEntity> p1 = getPlayers().getTeam(1).getUnits();
-        List<InteractiveEntity> p2 = getPlayers().getTeam(2).getUnits();
-
     }
 
     public static PlayerManager getPlayers () {
