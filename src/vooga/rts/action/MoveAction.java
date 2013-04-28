@@ -24,6 +24,7 @@ public class MoveAction extends InteractiveAction {
 
     @Override
     public void update (Command command) {
+        System.out.println("is this thing on?");
         ClickCommand click = (ClickCommand) command;
         myLocation = Camera.instance().viewtoWorld(click.getPosition());
         if (myLocation.getX() < 0 || myLocation.getY() < 0) {

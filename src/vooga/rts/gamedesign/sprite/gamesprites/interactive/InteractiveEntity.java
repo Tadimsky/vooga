@@ -131,8 +131,8 @@ public abstract class InteractiveEntity extends GameEntity implements IAttackabl
         setSpeed(DEFAULT_INTERACTIVEENTITY_SPEED);
     }
 
-    public void addAction (String command, InteractiveAction action) {
-        myActions.put(command, action);
+    public void addAction (String command,Action action) {
+        myActions.put(command, (InteractiveAction) action);
     }
 
     public void removeAction (String command) {

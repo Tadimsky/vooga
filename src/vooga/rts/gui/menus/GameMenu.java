@@ -122,10 +122,6 @@ public class GameMenu extends Menu {
                 return true;
             }
         }
-        for (Button b : myButtons) {
-            if (b.checkWithinBounds(l)) { return true; }
-        }
-
         return false;
     }
 

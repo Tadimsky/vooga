@@ -1,6 +1,7 @@
 package vooga.rts.manager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +12,13 @@ import vooga.rts.player.Team;
 
 
 public class PlayerManager {
-    private List<Player> myPlayers;
+    private Map<Integer, Player> myPlayers;
     private Map<Integer, Team> myTeams;
     private HumanPlayer myHuman;
 
     public PlayerManager () {
         myTeams = new HashMap<Integer, Team>();
-        myPlayers = new ArrayList<Player>();
+        myPlayers = new HashMap<Integer, Player>();
     }
 
     /**
@@ -27,7 +28,7 @@ public class PlayerManager {
      * @param teamID of the player.
      */
     public void addPlayer (Player player, int teamID) {
-        myPlayers.add(player);
+        myPlayers.put(player.getPlayerID(), player);
         if (myTeams.get(teamID) == null) {
             addTeam(teamID);
         }
@@ -81,8 +82,8 @@ public class PlayerManager {
         return myHuman;
     }
 
-    public List<Player> getAll () {
-        return myPlayers;
+    public Collection<Player> getAll () {
+        return myPlayers.values();
     }
 
     public void update (double elapsedTime) {

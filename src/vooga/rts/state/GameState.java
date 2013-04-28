@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observer;
@@ -12,24 +13,29 @@ import util.Location;
 import vooga.rts.commands.Command;
 import vooga.rts.commands.DragCommand;
 import vooga.rts.controller.Controller;
-import vooga.rts.game.RTSGame;
-import vooga.rts.gamedesign.factories.Factory;
 import vooga.rts.gamedesign.sprite.gamesprites.Resource;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.sprite.map.Terrain;
+import vooga.rts.gamedesign.strategy.gatherstrategy.CanGather;
 import vooga.rts.leveleditor.components.MapLoader;
 import vooga.rts.manager.PlayerManager;
 import vooga.rts.map.GameMap;
 import vooga.rts.map.MiniMap;
+import vooga.rts.networking.communications.ExpandedLobbyInfo;
+import vooga.rts.networking.communications.IMessage;
+import vooga.rts.networking.communications.Message;
+import vooga.rts.networking.communications.PlayerInfo;
+import vooga.rts.networking.communications.gamemessage.GameMessage;
+import vooga.rts.networking.communications.servermessages.CloseConnectionMessage;
+import vooga.rts.networking.client.IMessageReceiver;
+import vooga.rts.resourcemanager.ResourceManager;
 import vooga.rts.util.Camera;
 import vooga.rts.util.DelayedTask;
 import vooga.rts.util.FrameCounter;
 import vooga.rts.util.Information;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
-import vooga.rts.util.TimeIt;
 
 
 /**
@@ -268,10 +274,6 @@ public class GameState extends SubState implements Controller, IMessageReceiver 
         return myPlayers;
     }
 
-    public static GameMap getMap () {
-        return myMap;
-    }
-
     private InteractiveEntity setLocation (InteractiveEntity subject,
                                            Location3D base,
                                            Location3D reference) {
@@ -293,9 +295,11 @@ public class GameState extends SubState implements Controller, IMessageReceiver 
             for (int k = 0; k < 8; k++) {
                 getMap().getTerrain().add(new Terrain(new Pixmap("images/gold.png"),
                                                       new Location3D(100 + k * 25, 100, j * 25),
-                                                      new Dimension(50, 50)));
+                                                      new Dimension(50, 50)));}
+
+        }
     }
-    
+
     public void setUp (ExpandedLobbyInfo info, PlayerInfo userInfo) {
         Unit worker =
                 new Unit(new Pixmap(ResourceManager.getInstance()
@@ -304,8 +308,8 @@ public class GameState extends SubState implements Controller, IMessageReceiver 
         worker.setGatherStrategy(new CanGather());
         Information i1 =
                 new Information("Worker",
-                                "I am a worker. I am sent down from Denethor, son of Ecthelion ",
-                                null, "images/scv.png");
+                                "I am a worker. I am sent down from Denethor, son of Ecthelion ", "images/scv.png",
+                                null);
         worker.setInfo(i1);
         myPlayers.addHuman(userInfo); 
         myPlayers.getHuman().add(worker);
@@ -317,18 +321,9 @@ public class GameState extends SubState implements Controller, IMessageReceiver 
     }
 
     @Override
-    public void getMessage (Message message) {
-        if(message instanceof CloseConnectionMessage) {
-            connectionClosed();
-            System.out.println("whasssup");
-        }
-        System.out.println("receivedmessage");
+    public void getMessage (IMessage message) {
         GameMessage gMessage = (GameMessage) message;
         myPlayers.getPlayer(gMessage.getPlayerID()).getManager().getMessage(gMessage);
-    }
-
-    public void initializeGameOver () {
-        isGameOver = true;
     }
 
     public static GameMap getMap () {
@@ -341,6 +336,12 @@ public class GameState extends SubState implements Controller, IMessageReceiver 
 
     @Override
     public void connectionClosed () {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void activate () {
         // TODO Auto-generated method stub
         
     }

@@ -65,14 +65,8 @@ public class HumanPlayer extends Player implements Observer {
         if (myGameMenu.withinBoundary(command)) {
             myGameMenu.receiveCommand(command);
         }
-<<<<<<< HEAD
         else {
-            System.out.println("Going through human");
             getManager().receiveCommand(command);
-=======
-        else {            
-            getManager().receiveCommand(command);            
->>>>>>> origin/networking-refactoring
         }
     }
 

@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import vooga.rts.action.InteractiveAction;
 import vooga.rts.commands.ClickCommand;
 import vooga.rts.commands.Command;
-<<<<<<< HEAD
 import vooga.rts.commands.DragCommand;
 import vooga.rts.commands.PositionCommand;
 import vooga.rts.action.Action;
@@ -14,8 +13,6 @@ import vooga.rts.gamedesign.sprite.gamesprites.GameEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.GameSprite;
 import vooga.rts.gamedesign.sprite.gamesprites.Resource;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.IGatherable;
-=======
->>>>>>> origin/networking-refactoring
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.state.UnitState;
 import vooga.rts.util.Camera;
@@ -112,28 +109,10 @@ public class Unit extends InteractiveEntity {
     }
 
     @Override
-    public void updateAction (Command command) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void update (double elapsedTime) {
         if (getEntityState().getUnitState() == UnitState.OCCUPY) {
             this.occupy(getTargetEntity());
         }
         super.update(elapsedTime);
     }
-
-<<<<<<< HEAD
-    @Override
-    public void addAction (String input, Action action) {
-        // TODO Auto-generated method stub
-        
-    }
-
-	
-	
-=======
->>>>>>> origin/networking-refactoring
 }

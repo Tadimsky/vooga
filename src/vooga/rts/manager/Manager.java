@@ -88,10 +88,6 @@ public class Manager extends Observable implements State, IActOn, Observer {
 
     @Override
     public void receiveCommand (Command command) {
-<<<<<<< HEAD
-        //updateAction(command);
-        if(myActions.containsKey(command.getMethodName())) {
-=======
         updateAction(command);
     }
 
@@ -102,7 +98,6 @@ public class Manager extends Observable implements State, IActOn, Observer {
     @Override
     public void updateAction (Command command) {
         if (myActions.containsKey(command.getMethodName())) {                        
->>>>>>> origin/networking-refactoring
             Action current = myActions.get(command.getMethodName());
             current.update(command);            
             current.apply();
@@ -112,7 +107,7 @@ public class Manager extends Observable implements State, IActOn, Observer {
                 if(ie.containsInput(command)) {
                     ie.updateAction(command);
                     RTSMessage message = new RTSMessage(command, myPlayerID, ie.getId());
-                    MainState.getClient().sendData(message);
+                    MainState.getClient().sendMessage(message);
                 }
             }
         }
@@ -148,7 +143,6 @@ public class Manager extends Observable implements State, IActOn, Observer {
      *        The entity that is to be added.
      */
     public void add (InteractiveEntity entity) {
-    	entity.setPlayerID(myPlayerID);
         entity.addObserver(GameState.getMap().getNodeMap());
         entity.addObserver(this);
         entity.setChanged();
@@ -388,14 +382,13 @@ public class Manager extends Observable implements State, IActOn, Observer {
     }
     
     public void getMessage(Message m) {
+        System.out.println("Receiving message 0");
         RTSMessage message = (RTSMessage) m;
+        System.out.println("Receiving message 1");
+        System.out.println(message.getCommand().getMethodName());
         myEntities.get(message.getUnitId()).updateAction(message.getCommand());
+        System.out.println("Receiving message 2");
         myEntities.get(message.getUnitId()).getAction(message.getCommand()).apply();
-    }
-
-    @Override
-    public void updateAction (Command command) {
-        // TODO Auto-generated method stub
-        
+        System.out.println("Receiving message 3");
     }
 }
