@@ -11,7 +11,8 @@ import vooga.rts.util.Location3D;
 
 /**
  * This class implements ProductionStrategy and is used as an instance in 
- * interactives for objects that are not able to produce other interactives.  
+ * InteractiveEntity for objects that are not able to produce other
+ * InteractiveEntity.  
  * 
  * @author Ryan Fishel
  * @author Kevin Oh
@@ -20,20 +21,13 @@ import vooga.rts.util.Location3D;
  *
  */
 public class CannotProduce implements ProductionStrategy{
-
-    @Override
-    public void createProductionActions (InteractiveEntity producer) {
-        //this will do nothing. 
-    }
-
+	
 	public void addProducable(InteractiveEntity producable) {
 		return;
 	}
-
-	@Override
+	
 	public void update(double elapsedTime) {
-		// TODO Auto-generated method stub
-		
+		return;
 	}
 
 	public void paint(Graphics2D pen) {
@@ -44,25 +38,20 @@ public class CannotProduce implements ProductionStrategy{
 		return;
 	}
 
-	public void setRallyPoint(InteractiveEntity entity) {
-		return;
-	}
-
-	@Override
 	public List<InteractiveEntity> getProducables() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void setProducables(List<InteractiveEntity> producables) {
-		// TODO Auto-generated method stub
-		
+		return;
 	}
 
-	@Override
 	public void affect(InteractiveEntity entity) {
 		entity.setProductionStrategy(this);
+	}
+
+	public void setRallyPoint(InteractiveEntity entity) {
+		return;
 	}
 
 	@Override

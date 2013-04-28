@@ -13,7 +13,9 @@ import vooga.rts.util.ReflectionHelper;
 *
 */
 public class RangeUpgradeNode extends UpgradeNode {
-    public RangeUpgradeNode (UpgradeTree upgradeTree,
+	private static final String DEFAULT_TYPE = "range";
+	
+	public RangeUpgradeNode (UpgradeTree upgradeTree,
                              String upgradeType,
                              int upgradeValue,
                              int costedResourceAmount) {
@@ -28,7 +30,11 @@ public class RangeUpgradeNode extends UpgradeNode {
     public void upgrade (InteractiveEntity requester) {
     	ReflectionHelper.changeValue("myRange",
     			requester.getAttackStrategy().getCurrentWeapon(),
-    			getUpgradeValue());
-    	
+    			getUpgradeValue());	
+    }
+    
+    @Override
+    public String getType() {
+    	return DEFAULT_TYPE;
     }
 }

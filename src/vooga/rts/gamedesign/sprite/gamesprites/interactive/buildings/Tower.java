@@ -35,9 +35,5 @@ public class Tower extends Building {
         this(NOTEAM);
     }
 
-    @Override
-    public void getOccupied (Unit unit) {
-
-    }
 
 }

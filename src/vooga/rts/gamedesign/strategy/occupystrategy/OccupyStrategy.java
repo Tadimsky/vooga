@@ -1,11 +1,7 @@
 package vooga.rts.gamedesign.strategy.occupystrategy;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
-import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
 import vooga.rts.gamedesign.strategy.Strategy;
 
 
@@ -37,29 +33,5 @@ public interface OccupyStrategy extends Strategy {
      * @param entity
      */
     public void createOccupyActions (final InteractiveEntity entity);
-
-    /**
-     * Sets the current occupier to the one specified by the id. 
-     * @param id
-     */
-    public void setOccupierID (int id);
-    
-    /**
-     * Returns the list of occupiers. 
-     * @return
-     */
-    public List<Integer> getOccupiers ();
-
-    /**
-     * Returns the maximum amount of entities this strategy can hold. 
-     * @return
-     */
-    public int getMaxOccupiers ();
-
-    /**
-     * Returns the id of this occupier. 
-     * @return
-     */
-    public int getOccupierID ();
 
 }

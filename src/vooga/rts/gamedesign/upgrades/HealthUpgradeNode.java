@@ -12,7 +12,8 @@ import vooga.rts.util.ReflectionHelper;
 *
 */
 public class HealthUpgradeNode extends UpgradeNode {
-
+	private static final String DEFAULT_TYPE = "health";
+	
     public HealthUpgradeNode (UpgradeTree upgradeTree,
                               String upgradeType,
                               int upgradeValue,
@@ -30,4 +31,8 @@ public class HealthUpgradeNode extends UpgradeNode {
     			getUpgradeValue());
     }
 
+    @Override
+    public String getType() {
+    	return DEFAULT_TYPE;
+    }
 }

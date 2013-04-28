@@ -14,7 +14,6 @@ import vooga.rts.util.Pixmap;
 
 public abstract class GameSprite extends Observable implements IGameLoop {
 
-    // private ThreeDimension mySize;
     private Dimension mySize;
     // store myWorldLocation
 

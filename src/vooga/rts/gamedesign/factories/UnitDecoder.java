@@ -23,7 +23,6 @@ import vooga.rts.util.Sound;
  *
  */
 public class UnitDecoder extends Decoder {
-
 	private static String HEAD_TAG = "units";
 	private static String TYPE_TAG = "unit";
 	
@@ -36,7 +35,12 @@ public class UnitDecoder extends Decoder {
 		myCustomHandler = new CustomHandler(factory);
 	}
 	
-	
+	/**
+	 * Loads and creates Units based on information from the xml file, and
+	 * loads other related information such as the strategies, weapons and
+	 * types of InteractiveEntity that the Unit is able to produce into maps
+	 * in Factory.
+	 */
 	@Override
 	public void create(Document doc, String type) {
 		String path = doc.getElementsByTagName(type).item(0).getAttributes().getNamedItem(SOURCE_TAG).getTextContent();	
@@ -54,36 +58,39 @@ public class UnitDecoder extends Decoder {
 			
 			Unit unit = (Unit) ReflectionHelper.makeInstance(path, new Pixmap(ResourceManager.getInstance()
                     .<BufferedImage> getFile(img, BufferedImage.class)), 
-																		new Sound(sound),
-																		health,
-																		buildTime,
-																		speed);
-			
+					new Sound(sound), health, buildTime, speed);
 			unit.setInfo(getInformation(name, nElement));
 			myFactory.put(name, unit);
 			
-			//Load Production Dependencies now
-			String [] nameCanProduce = getElement(nElement, PRODUCE_TAG).split("\\s+");
-			if(nameCanProduce[0] != ""){
-				myFactory.putProductionDependency(name, nameCanProduce);
-			}
-			//Load Strategy Dependencies now
-			String[] strategies = new String[5];
-			strategies[0] = CANNOT_ATTACK;
-			strategies[1] = getElement(nElement, OCCUPY_TAG);
-			strategies[2] = getElement(nElement, GATHER_TAG);
-			strategies[3] = getElement(nElement, UPGRADE_TAG);
-			strategies[4] = getElement(nElement, UPGRADE_TREE_NAME_TAG);
-			
-			//Load Weapon Dependency
-			String[] weapons = getElement(nElement, MYWEAPONS_TAG).split("\\s+");
-			if(weapons[0] != ""){
-				myFactory.putWeaponDependency(name, weapons);
-				strategies[0] = CAN_ATTACK;
-			}
-			myFactory.putStrategyDependency(name, strategies);
+			loadProductionDependency(nElement, name);
+			String[] strategies = loadStrategyDependency(nElement);
+			loadWeaponDependency(nElement, name, strategies);
 		}
-
 	}
-
+	
+	private void loadProductionDependency(Element element, String name) {
+		String [] nameCanProduce = getElement(element, PRODUCE_TAG).split("\\s+");
+		if(nameCanProduce[0] != ""){
+			myFactory.putProductionDependency(name, nameCanProduce);
+		}
+	}
+	
+	private String[] loadStrategyDependency(Element element) {
+		String[] strategies = new String[5];
+		strategies[0] = CANNOT_ATTACK;
+		strategies[1] = getElement(element, OCCUPY_TAG);
+		strategies[2] = getElement(element, GATHER_TAG);
+		strategies[3] = getElement(element, UPGRADE_TAG);
+		strategies[4] = getElement(element, UPGRADE_TREE_NAME_TAG);
+		return strategies;
+	}
+	
+	private void loadWeaponDependency(Element element, String name, String[] strategy) {
+		String[] weapons = getElement(element, MYWEAPONS_TAG).split("\\s+");
+		if(weapons[0] != ""){
+			myFactory.putWeaponDependency(name, weapons);
+			strategy[0] = CAN_ATTACK;
+		}
+		myFactory.putStrategyDependency(name, strategy);
+	}
 }

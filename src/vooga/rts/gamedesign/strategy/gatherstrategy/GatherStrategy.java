@@ -33,9 +33,6 @@ public interface GatherStrategy extends Strategy {
 
 	public void gatherResource (int playerID, IGatherable gatherable);
 	
-
-	
-
 	/**
 	 * Updates the gather strategies so that the CanGather can update its 
 	 * cooldown.

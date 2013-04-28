@@ -13,7 +13,8 @@ import vooga.rts.util.ReflectionHelper;
 *
 */
 public class SpeedUpgradeNode extends UpgradeNode {
-    
+	private static final String DEFAULT_TYPE = "speed";
+	
 	public SpeedUpgradeNode (UpgradeTree upgradeTree,
                              String upgradeType,
                              int upgradeValue,
@@ -30,6 +31,10 @@ public class SpeedUpgradeNode extends UpgradeNode {
     	ReflectionHelper.changeValue("mySpeed",
     			requester,
     			getUpgradeValue());
-    	
+    }
+    
+    @Override
+    public String getType() {
+    	return DEFAULT_TYPE;
     }
 }

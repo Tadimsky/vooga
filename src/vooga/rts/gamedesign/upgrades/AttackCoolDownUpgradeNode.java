@@ -13,7 +13,9 @@ import vooga.rts.util.ReflectionHelper;
 *
 */
 public class AttackCoolDownUpgradeNode extends UpgradeNode {
-    public AttackCoolDownUpgradeNode (UpgradeTree upgradeTree,
+	private static final String DEFAULT_TYPE = "cool down";
+	
+	public AttackCoolDownUpgradeNode (UpgradeTree upgradeTree,
                              String upgradeType,
                              int upgradeValue,
                              int costedResourceAmount) {
@@ -30,6 +32,11 @@ public class AttackCoolDownUpgradeNode extends UpgradeNode {
     			requester.getAttackStrategy().getCurrentWeapon(),
     			getUpgradeValue());
     	
+    }
+    
+    @Override
+    public String getType() {
+    	return DEFAULT_TYPE;
     }
 }
 

@@ -13,7 +13,8 @@ import vooga.rts.util.ReflectionHelper;
  *
  */
 public class DamageUpgradeNode extends UpgradeNode {
-
+	private static final String DEFAULT_TYPE = "damage";
+	
     public DamageUpgradeNode (UpgradeTree upgradeTree,
                               String upgradeType,
                               int upgradeValue,
@@ -30,5 +31,10 @@ public class DamageUpgradeNode extends UpgradeNode {
     	ReflectionHelper.changeValue("myDamage",
     			requester.getAttackStrategy().getCurrentWeapon().getProjectile(),
     			getUpgradeValue());
+    }
+    
+    @Override
+    public String getType() {
+    	return DEFAULT_TYPE;
     }
 }

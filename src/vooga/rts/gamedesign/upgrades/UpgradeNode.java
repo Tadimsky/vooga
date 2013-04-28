@@ -148,4 +148,11 @@ public class UpgradeNode {
     public Map<String, Integer> getCost () {
         return myCost;
     }
+    
+    /**
+     * Returns the type of upgrade.
+     */
+    public String getType() {
+    	return "";
+    }
 }

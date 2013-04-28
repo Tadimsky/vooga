@@ -20,6 +20,7 @@ import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Building;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Unit;
 import vooga.rts.gamedesign.sprite.map.Terrain;
+import vooga.rts.gamedesign.strategy.occupystrategy.CanBeOccupied;
 import vooga.rts.leveleditor.components.MapLoader;
 import vooga.rts.manager.PlayerManager;
 import vooga.rts.map.GameMap;
@@ -55,9 +56,7 @@ public class GameState extends SubState implements Controller, Observer {
     private static final Location3D DEFAULT_PRODUCTION_RELATIVE_LOCATION = new Location3D(000, 500,
                                                                                           0);
 
-
     private static final Location3D DEFAULT_OCCUPY_RELATIVE_LOCATION = new Location3D(300, 300, 0);
-
 
     private static GameMap myMap;
     private static PlayerManager myPlayers;
@@ -118,8 +117,8 @@ public class GameState extends SubState implements Controller, Observer {
     public void paint (Graphics2D pen) {
         Scale.unscalePen(pen);
         pen.setBackground(Color.BLACK);
-        myMap.paint(pen);                
-        myMiniMap.paint(pen);        
+        myMap.paint(pen);
+        myMiniMap.paint(pen);
 
         if (myDrag != null) {
             pen.draw(myDrag);
@@ -136,7 +135,9 @@ public class GameState extends SubState implements Controller, Observer {
         // If it's a drag, we need to do some extra checking.
         if (command instanceof DragCommand) {
             myDrag = ((DragCommand) command).getScreenRectangle();
-            if (myDrag == null) { return; }
+            if (myDrag == null) {
+                return;
+            }
         }
         sendCommand(command);
     }
@@ -162,29 +163,29 @@ public class GameState extends SubState implements Controller, Observer {
         Unit worker = (Unit) RTSGame.getFactory().getEntitiesMap().get("worker").copy();
         worker =
 
-                (Unit) setLocation(worker, baseLocation, DEFAULT_WORKER_RELATIVE_LOCATION);
+        (Unit) setLocation(worker, baseLocation, DEFAULT_WORKER_RELATIVE_LOCATION);
 
         getPlayers().getPlayer(playerID).add(worker);
 
         Unit soldierOne = (Unit) RTSGame.getFactory().getEntitiesMap().get("Marine").copy();
         soldierOne =
 
-                (Unit) setLocation(soldierOne, baseLocation,
-                                   DEFAULT_SOLDIER_ONE_RELATIVE_LOCATION);
+        (Unit) setLocation(soldierOne, baseLocation, DEFAULT_SOLDIER_ONE_RELATIVE_LOCATION);
 
         getPlayers().getPlayer(playerID).add(soldierOne);
 
-        Building startProduction = (Building) RTSGame.getFactory().getEntitiesMap().get("home").copy();
+        Building startProduction =
+                (Building) RTSGame.getFactory().getEntitiesMap().get("home").copy();
         startProduction =
                 (Building) setLocation(startProduction, baseLocation,
                                        DEFAULT_PRODUCTION_RELATIVE_LOCATION);
         getPlayers().getPlayer(playerID).add(startProduction);
 
-        Building startOccupy = (Building) RTSGame.getFactory().getEntitiesMap().get("garrison").copy();
-        startOccupy = (Building) setLocation(startOccupy, baseLocation,
-                                       DEFAULT_OCCUPY_RELATIVE_LOCATION);
+        Building startOccupy =
+                (Building) RTSGame.getFactory().getEntitiesMap().get("garrison").copy();
+        startOccupy =
+                (Building) setLocation(startOccupy, baseLocation, DEFAULT_OCCUPY_RELATIVE_LOCATION);
         getPlayers().getPlayer(playerID).add(startOccupy);
-
     }
 
     private InteractiveEntity setLocation (InteractiveEntity subject,

@@ -13,7 +13,8 @@ import vooga.rts.util.ReflectionHelper;
  *
  */
 public class AttackUpgradeNode extends UpgradeNode {
-
+	private static final String DEFAULT_TYPE = "attack";
+	
     public AttackUpgradeNode (UpgradeTree upgradeTree,
                               String upgradeType,
                               int upgradeValue,
@@ -31,5 +32,9 @@ public class AttackUpgradeNode extends UpgradeNode {
     			new CanAttack(requester.getWorldLocation(),
     					requester.getPlayerID()));
     }
-
+    
+    @Override
+    public String getType() {
+    	return DEFAULT_TYPE;
+    }
 }

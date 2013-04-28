@@ -48,6 +48,11 @@ public class GameEntity extends GameSprite {
         mySpeed = DEFAULT_SPEED;
     }
 
+    /**
+     * Determines whether the GameEntity has reached to the goal location.
+     * 
+     * @return whether the GameEntity has reached to the goal location
+     */
     public boolean reachedGoal () {
         Vector v = getWorldLocation().difference(myGoal.to2D());
         return (v.getMagnitude() < Location3D.APPROX_EQUAL);
@@ -56,7 +61,6 @@ public class GameEntity extends GameSprite {
     /**
      * Updates the shape's location.
      */
-    // TODO: make Velocity three dimensional...
     public void update (double elapsedTime) {
         if (isDead()) {
             setChanged();
