@@ -19,7 +19,7 @@ import vooga.rts.networking.communications.servermessages.SwitchToLobbyMessage;
  */
 public class Lobby extends Room {
 
-    private int numberOfClientsReady = 0;
+    private int myNumberOfClientsReady = 0;
 
     /**
      * Instantiates the Lobby.
@@ -27,6 +27,7 @@ public class Lobby extends Room {
      * @param myRoomNumber number of room
      * @param gameContainer game container
      * @param lobbyInfo lobby info
+     * @param logger log this
      */
     public Lobby (int myRoomNumber, GameContainer gameContainer, LobbyInfo lobbyInfo, Logger logger) {
         super(myRoomNumber, gameContainer, lobbyInfo, logger);
@@ -35,15 +36,7 @@ public class Lobby extends Room {
     @Override
     public void leaveLobby (ConnectionThread thread, ExpandedLobbyInfo lobbyInfo) {
         setLobbyInfo(lobbyInfo);
-        removeConnection(thread);
         getGameContainer().addConnection(thread);
-        getGameContainer().decrementLobbyInfoSize(getID());
-        if (haveNoConnections()) {
-            getGameContainer().removeRoom(this);
-        }
-        else {
-            sendMessageToAllConnections(new SendLobbyInfoUpdatesMessage(lobbyInfo));
-        }
         getLogger().log(Level.INFO,
                         NetworkBundle.getString("LobbyLeft") + ": " +
                                 lobbyInfo.getLobbyName());
@@ -59,8 +52,8 @@ public class Lobby extends Room {
 
     @Override
     public void clientIsReadyToStart (ConnectionThread thread) {
-        numberOfClientsReady++;
-        if (numberOfClientsReady == getNumberOfConnections()) {
+        myNumberOfClientsReady++;
+        if (myNumberOfClientsReady == getNumberOfConnections()) {
             sendMessageToAllConnections(new StartGameMessage());
             new GameServer(getID(), getGameContainer(), this, getLogger());
         }
@@ -77,6 +70,30 @@ public class Lobby extends Room {
     public void updateLobbyInfo (ConnectionThread thread, ExpandedLobbyInfo lobbyInfo) {
         setLobbyInfo(lobbyInfo);
         sendMessageToAllConnections(new SendLobbyInfoUpdatesMessage(lobbyInfo));
+    }
+
+    @Override
+    public void removeConnection (ConnectionThread thread) {
+        getLobbyInfo().removePlayer(thread.getID());
+        removeConnectionAndUpdateInfo(thread);
+
+    }
+
+    /**
+     * Removes the connection from the threads, decrements the lobby size, and if there are no more
+     * connections, removes the lobby. If not it sends a message to all connections.
+     * 
+     * @param thread to remove
+     */
+    private void removeConnectionAndUpdateInfo (ConnectionThread thread) {
+        super.removeConnection(thread);
+        getGameContainer().decrementLobbyInfoSize(getID());
+        if (haveNoConnections()) {
+            getGameContainer().removeRoom(this);
+        }
+        else {
+            sendMessageToAllConnections(new SendLobbyInfoUpdatesMessage(getLobbyInfo()));
+        }
     }
 
 }

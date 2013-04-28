@@ -23,7 +23,7 @@ public class MatchmakerServer extends AbstractThreadContainer {
      * Initializes overall server hierarchy.
      */
     public MatchmakerServer () {
-        //getLogger().addHandler(new HandlerTxt(getClass().getSimpleName()).getHandler());
+        // getLogger().addHandler(new HandlerTxt(getClass().getSimpleName()).getHandler());
         getLogger().log(Level.INFO, NetworkBundle.getString("ServerStarted"));
     }
 

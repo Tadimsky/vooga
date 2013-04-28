@@ -11,7 +11,7 @@ import vooga.rts.networking.client.IClient;
 import vooga.rts.networking.client.IMessageReceiver;
 import vooga.rts.networking.client.NetworkedGame;
 import vooga.rts.networking.communications.ExpandedLobbyInfo;
-import vooga.rts.networking.communications.Message;
+import vooga.rts.networking.communications.IMessage;
 import vooga.rts.networking.communications.PlayerInfo;
 import vooga.rts.networking.communications.UserTimeStamp;
 
@@ -91,7 +91,7 @@ public class ExampleChat implements NetworkedGame, IChatModel, IMessageReceiver 
     }
 
     @Override
-    public void getMessage (Message message) {
+    public void getMessage (IMessage message) {
         if (message instanceof ChatMessage) {
             ChatMessage chat = (ChatMessage) message;
             myChatPanel.appendMessage(
@@ -104,7 +104,7 @@ public class ExampleChat implements NetworkedGame, IChatModel, IMessageReceiver 
 
     @Override
     public void messageEntered (String message) {
-        myClient.sendData(new ChatMessage(
+        myClient.sendMessage(new ChatMessage(
                                           new UserTimeStamp(
                                                             (System.nanoTime() - myStartTime) /
                                                                     ONE_MILLISECOND),

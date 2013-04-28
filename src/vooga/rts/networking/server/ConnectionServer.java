@@ -32,8 +32,8 @@ public class ConnectionServer extends Thread {
     public ConnectionServer (MatchmakerServer matchServer) {
         myMatchServer = matchServer;
         LoggerManager log = new LoggerManager();
-        //log.addHandler(AbstractThreadContainer.EMAIL_HANDLER);
-        //log.addTxtHandler(getClass().getSimpleName() + PORT);
+        // log.addHandler(AbstractThreadContainer.EMAIL_HANDLER);
+        // log.addTxtHandler(getClass().getSimpleName() + PORT);
         myLogger = log.getLogger();
     }
 

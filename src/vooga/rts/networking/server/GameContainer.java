@@ -24,9 +24,14 @@ public class GameContainer extends AbstractThreadContainer {
     private int myRoomNumber = 0;
     private String myGameName;
 
+    /**
+     * Constructor that stores the game name and starts the logger.
+     * 
+     * @param gameName
+     */
     public GameContainer (String gameName) {
         myGameName = gameName;
-        //getLogger().addHandler(new HandlerTxt(myGameName).getHandler());
+        // getLogger().addHandler(new HandlerTxt(myGameName).getHandler());
     }
 
     /**

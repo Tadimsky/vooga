@@ -1,6 +1,6 @@
 package vooga.rts.networking.client;
 
-import vooga.rts.networking.communications.Message;
+import vooga.rts.networking.communications.IMessage;
 
 
 /**
@@ -17,12 +17,12 @@ public interface IClient {
      * 
      * @param message to send
      */
-    public void sendData (Message message);
+    public void sendMessage (IMessage message);
 
     /**
      * Sets this as the message receiver.
      * 
-     * @param messageReceiver
+     * @param messageReceiver new object that receives messages
      */
     public void setMessageReceiver (IMessageReceiver messageReceiver);
 

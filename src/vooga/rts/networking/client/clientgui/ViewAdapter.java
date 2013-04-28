@@ -1,23 +1,32 @@
 package vooga.rts.networking.client.clientgui;
 
-import javax.swing.JPanel;
 import vooga.rts.networking.client.ClientModel;
 
-
+/**
+ * Provides an abstract view adapter for the client GUI.
+ * @author Sean Wareham
+ * @author Henrique Moraes
+ *
+ */
 public abstract class ViewAdapter {
-    protected ViewContainerPanel myContainerPanel;
-    protected ClientModel myModel;
+    private ViewContainerPanel myContainerPanel;
+    private ClientModel myModel;
 
-    public ViewAdapter (IModel model, String gameName) {
-        myModel = (ClientModel) model;
+    /**
+     * Instantiates the class with the given model and game name.
+     * @param model model given
+     * @param gameName name of game
+     */
+    public ViewAdapter (ClientModel model, String gameName) {
+        myModel = model;
         myContainerPanel = new ViewContainerPanel(gameName);
     }
 
     /**
-     * 
+     * returns view.
      * @return the view used by all networking functions
      */
-    public JPanel getView () {
+    public ViewContainerPanel getView () {
         return myContainerPanel;
     }
 
@@ -30,9 +39,13 @@ public abstract class ViewAdapter {
     public void alertClient (String title, String message) {
         myContainerPanel.showMessageDialog(title, message);
     }
-    
-    public void destroyPanel () {
-        myContainerPanel.removeAll();
+
+    /**
+     * returns model
+     * @return the model
+     */
+    protected ClientModel getMyModel () {
+        return myModel;
     }
 
 }

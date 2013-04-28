@@ -96,6 +96,22 @@ public class ExpandedLobbyInfo extends LobbyInfo {
     }
 
     /**
+     * Removes the given player from the lobby
+     * 
+     * @param playerID id of player to remove
+     */
+    public void removePlayer (int playerID) {
+        for (int i = 0; i < myPlayers.length; i++) {
+            if (myPlayers[i] != null && myPlayers[i].getId() == playerID) {
+                myPlayers[i] = null;
+                if (myNextSlot > i) {
+                    myNextSlot = i;
+                }
+            }
+        }
+    }
+
+    /**
      * Swaps out the player with a newer version.
      * 
      * @param player to change
@@ -145,6 +161,7 @@ public class ExpandedLobbyInfo extends LobbyInfo {
         for (int i = 0; i < myPlayers.length; i++) {
             if (myPlayers[i] == null) { return false; }
         }
+        if (getMaxPlayers() == 1) return true;
 
         int team1 = myPlayers[0].getTeam();
         for (int i = 0; i < myPlayers.length; i++) {
@@ -152,17 +169,16 @@ public class ExpandedLobbyInfo extends LobbyInfo {
         }
         return false;
     }
-    
+
     /**
      * Gets a player with the given id
+     * 
      * @param id of player
      * @return player
      */
     public PlayerInfo getPlayer (int id) {
         for (int i = 0; i < myPlayers.length; i++) {
-            if (myPlayers[i].getId() == id) {
-                return myPlayers[i];
-            }
+            if (myPlayers[i].getId() == id) { return myPlayers[i]; }
         }
         return null;
     }

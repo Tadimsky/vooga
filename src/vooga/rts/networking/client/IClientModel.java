@@ -20,22 +20,22 @@ public interface IClientModel extends IMessageReceiver {
     /**
      * Adds a lobby to the server's collection of lobbies.
      * 
-     * @param lobbies
+     * @param lobbies list of lobbies to display
      */
     public void addLobbies (LobbyInfo[] lobbies);
 
     /**
      * Switches the clients visual elements to that of the Lobby.
      * 
-     * @param lobbyInfo
-     * @param id
+     * @param lobbyInfo info
+     * @param id id of client
      */
     public void switchToLobby (ExpandedLobbyInfo lobbyInfo, int id);
 
     /**
      * Updates the client held Lobby information with that passed down from the server.
      * 
-     * @param lobbyInfo
+     * @param lobbyInfo info of lobby
      */
     public void updateLobby (ExpandedLobbyInfo lobbyInfo);
 
@@ -43,15 +43,15 @@ public interface IClientModel extends IMessageReceiver {
      * Immediately alerts the client to an important message.
      * Such as an error in client behavior (clicking prematurely on a start button, for example)
      * 
-     * @param title
-     * @param message
+     * @param title of error
+     * @param message message of error
      */
     public void alertClient (String title, String message);
 
     /**
      * Loads the game and waits for the start.
      * 
-     * @param lobbyInfo
+     * @param lobbyInfo info of lobby
      */
     public void loadGame (ExpandedLobbyInfo lobbyInfo);
 

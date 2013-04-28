@@ -7,8 +7,8 @@ import javax.swing.JPanel;
 import vooga.rts.networking.client.clientgui.ClientViewAdapter;
 import vooga.rts.networking.client.clientgui.IModel;
 import vooga.rts.networking.communications.ExpandedLobbyInfo;
+import vooga.rts.networking.communications.IMessage;
 import vooga.rts.networking.communications.LobbyInfo;
-import vooga.rts.networking.communications.Message;
 import vooga.rts.networking.communications.PlayerInfo;
 import vooga.rts.networking.communications.clientmessages.InitialConnectionMessage;
 import vooga.rts.networking.communications.clientmessages.JoinLobbyMessage;
@@ -44,29 +44,32 @@ public class ClientModel extends Observable implements IClientModel, IModel {
      * This is the handler of information needed by all of the views in the process of connecting to
      * / creating a server, creating a game, waiting in a lobby.
      * 
-     * @param gameName
-     * @param userName
-     * @param factions
-     * @param maps
-     * @param maxPlayerArray
+     * @param game game that called us
+     * @param gameName name of the game
+     * @param userName name of the user
+     * @param factionNameList a list of all faction choices, in string form
+     * @param mapNameList a list of all map names
+     * @param maxPlayerList a list of all max players. Should be the same length as the mapNameList
+     *        and contain an Integer value for the max players corresponding to the position that
+     *        the mapNameList.
      */
     public ClientModel (NetworkedGame game,
                         String gameName,
                         String userName,
-                        List<String> factions,
-                        List<String> maps,
-                        List<Integer> maxPlayerArray) {
+                        List<String> factionNameList,
+                        List<String> mapNameList,
+                        List<Integer> maxPlayerList) {
         myGame = game;
-        myFactions = factions;
+        myFactions = factionNameList;
         myUserName = userName;
         myClient = new Client(this);
-        Message initialConnection = new InitialConnectionMessage(gameName, userName);
-        myClient.sendData(initialConnection);
-        myViewAdapter = new ClientViewAdapter(this, gameName, maps, maxPlayerArray);
+        IMessage initialConnection = new InitialConnectionMessage(gameName, userName);
+        myClient.sendMessage(initialConnection);
+        myViewAdapter = new ClientViewAdapter(this, gameName, mapNameList, maxPlayerList);
     }
 
     @Override
-    public void getMessage (Message message) {
+    public void getMessage (IMessage message) {
         if (message instanceof ServerInfoMessage) {
             ((ServerInfoMessage) message).affectClient(this);
         }
@@ -81,7 +84,7 @@ public class ClientModel extends Observable implements IClientModel, IModel {
      * Request currently available lobbies from the server
      */
     public void requestLobbies () {
-        myClient.sendData(new RequestServerListMessage());
+        myClient.sendMessage(new RequestServerListMessage());
     }
 
     /**
@@ -90,14 +93,15 @@ public class ClientModel extends Observable implements IClientModel, IModel {
      * @param id ID of the lobby to join
      */
     public void requestJoinLobby (int id) {
-        myClient.sendData(new JoinLobbyMessage(id));
+        myClient.sendMessage(new JoinLobbyMessage(id));
     }
 
     /**
      * Request to leave a lobby on the server
      */
     public void leaveLobby () {
-        myClient.sendData(new LeaveLobbyMessage(myLobbyInfo));
+        myLobbyInfo.removePlayer(myPlayer);
+        myClient.sendMessage(new LeaveLobbyMessage(myLobbyInfo));
     }
 
     /**
@@ -106,14 +110,14 @@ public class ClientModel extends Observable implements IClientModel, IModel {
      * @param lobbyInfo Lobby containing information to host a game
      */
     public void startLobby (LobbyInfo lobbyInfo) {
-        myClient.sendData(new StartLobbyMessage(lobbyInfo));
+        myClient.sendMessage(new StartLobbyMessage(lobbyInfo));
     }
 
     /**
      * Request to initiate the game in this lobby
      */
     public void requestStartGame () {
-        myClient.sendData(new RequestStartGameMessage());
+        myClient.sendMessage(new RequestStartGameMessage());
     }
 
     /**
@@ -121,11 +125,11 @@ public class ClientModel extends Observable implements IClientModel, IModel {
      * the lobby has changed
      */
     public void sendUpdatedLobbyInfo () {
-        myClient.sendData(new UpdateLobbyInfoMessage(myLobbyInfo));
+        myClient.sendMessage(new UpdateLobbyInfoMessage(myLobbyInfo));
     }
 
     /**
-     * 
+     * Gets the panel that this model's view uses.
      * @return the view used by all networking functions
      */
     public JPanel getView () {
@@ -172,7 +176,7 @@ public class ClientModel extends Observable implements IClientModel, IModel {
     @Override
     public void loadGame (ExpandedLobbyInfo lobbyInfo) {
         myGame.loadGame(lobbyInfo, myPlayer);
-        myClient.sendData(new ReadyToStartGameMessage());
+        myClient.sendMessage(new ReadyToStartGameMessage());
     }
 
     @Override
@@ -206,7 +210,7 @@ public class ClientModel extends Observable implements IClientModel, IModel {
 
     @Override
     public void connectionClosed () {
-        myViewAdapter.destroyPanel();
+        getView().removeAll();
         myGame.serverBrowserClosed();
     }
 }

@@ -22,6 +22,7 @@ public class Room extends AbstractThreadContainer {
      * @param id room number
      * @param container GameContainer
      * @param lobbyInfo lobby info
+     * @param logger logger to use
      */
     public Room (int id, GameContainer container, LobbyInfo lobbyInfo, Logger logger) {
         super(logger);
@@ -38,6 +39,7 @@ public class Room extends AbstractThreadContainer {
      * @param id room number
      * @param container GameContainer
      * @param room room to replace
+     * @param logger logger to use
      */
     public Room (int id, GameContainer container, Room room, Logger logger) {
         super(room, logger);
