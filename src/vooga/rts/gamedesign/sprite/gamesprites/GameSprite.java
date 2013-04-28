@@ -54,8 +54,8 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 	 * Returns shape's up-most coordinate in pixels.
 	 */
 	public double getUp() {
-		return myWorldLocation.getZ()
-				+ myWorldDimension.getHeight();
+		return myWorldLocation.getY()
+				- myWorldDimension.getHeight();
 	}
 
 	/**
@@ -204,7 +204,7 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 //				IsometricConverter.calculatePaintLocation(myWorldLocation,
 //						myWorldDimension));
 		
-		myWorldBounds = new Rectangle((int) (getLeft()), (int) (getUp() - myWorldDimension.getHeight()),
+		myWorldBounds = new Rectangle((int) (getLeft()), (int) (getUp() ) ,
 				(int) myWorldDimension.getWidth(), (int) myWorldDimension.getHeight());
 
 	}
