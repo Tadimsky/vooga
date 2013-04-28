@@ -475,6 +475,7 @@ public abstract class InteractiveEntity extends GameEntity implements
 	 *            - the other InteractiveEntity
 	 */
 	public void recognize(InteractiveEntity other) {
+		myTargetEntity = other;
 		if (isEnemy(other)) {
 			getEntityState().setUnitState(UnitState.ATTACK);
 		} else if (other instanceof Building) {
@@ -678,6 +679,17 @@ public abstract class InteractiveEntity extends GameEntity implements
 
 	public void setUpgradeStrategy(UpgradeStrategy upgradeStrategy) {
 		myUpgradeStrategy = upgradeStrategy;
+	}
+	
+	/**
+	 * Returns the target entity of this entity.  In other words, if an entity
+	 * is right clicked on, that entity becomes the target entity which is
+	 * returned from this method.
+	 * 
+	 * @return the target interactive entity
+	 */
+	public InteractiveEntity getTargetEntity() {
+		return myTargetEntity;
 	}
 
 }

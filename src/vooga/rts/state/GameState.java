@@ -239,14 +239,6 @@ public class GameState extends SubState implements Controller {
         List<InteractiveEntity> p1 = getPlayers().getTeam(1).getUnits();
         List<InteractiveEntity> p2 = getPlayers().getTeam(2).getUnits();
 
-        // now even yuckier
-        for (int i = 0; i < p1.size(); ++i) {
-            if (p1.get(i) instanceof Unit) {
-                for (int j = i + 1; j < p1.size(); ++j) {
-                    ((Unit) p1.get(i)).occupy(p1.get(j));
-                }
-            }
-        }
     }
 
     public static PlayerManager getPlayers () {
