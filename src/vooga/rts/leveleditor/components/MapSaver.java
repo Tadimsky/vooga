@@ -330,7 +330,7 @@ public class MapSaver {
      * append the tile index
      * @param tileIndex root element
      */
-    public void appendTileIndex(Element tileIndex) {
+    private void appendTileIndex(Element tileIndex) {
         Set<Integer> myTileIndex = new HashSet<Integer>();
         for (int i = 0; i < mySavingMap.getMyXsize(); i++) {
             for (int j = 0; j < mySavingMap.getMyYsize(); j++) {
@@ -352,7 +352,7 @@ public class MapSaver {
      * append the terrain index
      * @param terrainIndex root element
      */
-    public void appendTerrainIndex(Element terrainIndex) {
+    private void appendTerrainIndex(Element terrainIndex) {
         Set<Integer> myTerrainIndex = new HashSet<Integer>();
         for (int i = 0; i < mySavingMap.getTerrainSize(); i++) {    
             EditableTerrain currentTerrain = mySavingMap.getTerrain(i);
@@ -374,7 +374,7 @@ public class MapSaver {
      * append resource index
      * @param resourceIndex root element
      */
-    public void appendResourceIndex(Element resourceIndex) {
+    private void appendResourceIndex(Element resourceIndex) {
         Set<Integer> myResourceIndex = new HashSet<Integer>();
         for (int i = 0; i < mySavingMap.getResourceSize(); i++) {    
             EditableResource currentResource = mySavingMap.getResource(i);

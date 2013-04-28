@@ -87,12 +87,9 @@ public class MapLoader {
      */
     public void loadMapFile(File resourceFile) throws Exception {
         
-        System.out.println("start loading");
-        
         String xmlPath = resourceFile.getPath();
         String xmlFileName = resourceFile.getName();
         String path = xmlPath.substring(0, xmlPath.indexOf(xmlFileName));
-        System.out.println("path created");
         
         
         myDocument = myBuilder.parse(resourceFile);
@@ -105,7 +102,6 @@ public class MapLoader {
         loadTerrains(root);
         loadResources(root, path);
         
-        //printEverything();
     }
 
     /**

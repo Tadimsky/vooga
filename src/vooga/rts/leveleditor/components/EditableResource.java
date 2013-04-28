@@ -35,7 +35,7 @@ public class EditableResource extends Resource {
         myAmount = amount;
     }
     /**
-     * construtor for editableResource
+     * constructor for editableResource
      * @param image image for this resource
      * @param x x position 
      * @param y y position
