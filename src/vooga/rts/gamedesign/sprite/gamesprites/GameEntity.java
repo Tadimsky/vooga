@@ -56,10 +56,8 @@ public class GameEntity extends GameSprite {
         }
         v.scale(elapsedTime);
         Location3D future = new Location3D(getWorldLocation());        
-        future.translate(v);
-        
-        Line2D lineTest = new Line2D.Double(getWorldLocation().to2D(), future.to2D());
-        System.out.println(lineTest);
+        future.translate(v);        
+        Line2D lineTest = new Line2D.Double(getWorldLocation().to2D(), future.to2D());        
         if (lineTest.intersects(myGoal.getX(), myGoal.getY(), 5, 5)){
             return true;
         }
@@ -87,6 +85,9 @@ public class GameEntity extends GameSprite {
         translate(velocity);
         stopMoving();
         myEntityState.update(elapsedTime);
+        if (isDead()) {
+            setVisible(false);
+        }
         super.update(elapsedTime);
     }
 
@@ -185,8 +186,8 @@ public class GameEntity extends GameSprite {
      * 
      * @param gameEntity
      *        is the entity that is being checked for a collision
-     * @return true if the bounds of the two entites intersect and false if the
-     *         bounds of the entities do not interesct
+     * @return true if the bounds of the two entities intersect and false if the
+     *         bounds of the entities do not intersect
      */
     public boolean collidesWith (GameEntity gameEntity) {
         return getBounds().intersects(gameEntity.getBounds());

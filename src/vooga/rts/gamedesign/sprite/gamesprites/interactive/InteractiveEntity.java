@@ -328,8 +328,7 @@ public abstract class InteractiveEntity extends GameEntity implements
         // pen.rotate(getVelocity().getAngle());
 
         // should probably use the getBottom, getHeight etc...implement them
-        Point2D selectLocation = Camera.instance().worldToView(
-                                                               getWorldLocation());
+        Point2D selectLocation = Camera.instance().worldToView(getWorldLocation());
 
         pen.drawRect((int) (selectLocation.getX() - getWorldSize().getWidth() * Camera.ISO_HEIGHT),
                      (int) (selectLocation.getY() - getWorldSize().getHeight() - LOCATION_OFFSET),
