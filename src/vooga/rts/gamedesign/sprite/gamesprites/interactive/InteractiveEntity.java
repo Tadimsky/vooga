@@ -331,14 +331,15 @@ public abstract class InteractiveEntity extends GameEntity implements
         Point2D selectLocation = Camera.instance().worldToView(
                                                                getWorldLocation());
 
-        pen.drawRect((int) selectLocation.getX() - LOCATION_OFFSET,
-                     (int) (selectLocation.getY() - 5 * LOCATION_OFFSET), 50, 5);
+        pen.drawRect((int) (selectLocation.getX() - getWorldSize().getWidth() * Camera.ISO_HEIGHT),
+                     (int) (selectLocation.getY() - getWorldSize().getHeight() - LOCATION_OFFSET),
+                     getMaxHealth(), 5);
         Rectangle2D healthBar =
                 new Rectangle2D.Double(
-                                       (int) selectLocation.getX() - LOCATION_OFFSET,
-                                       (int) (selectLocation.getY() - 5 * LOCATION_OFFSET),
-                                       50
-                                               * getHealth() / getMaxHealth(), 5);
+                                       (int) (selectLocation.getX() - getWorldSize().getWidth() *
+                                                                      Camera.ISO_HEIGHT),
+                                       (int) (selectLocation.getY() - getWorldSize().getHeight() - LOCATION_OFFSET),
+                                       getHealth(), 5);
         float width = (float) (healthBar.getWidth() * (getHealth() / getMaxHealth()));
         pen.setPaint(new GradientPaint((float) healthBar.getX() - width,
                                        (float) healthBar.getMaxY(), Color.RED, (float) healthBar
@@ -349,15 +350,11 @@ public abstract class InteractiveEntity extends GameEntity implements
         if (isSelected) {
             Ellipse2D.Double selectedCircle =
                     new Ellipse2D.Double(
-                                         selectLocation.getX() - LOCATION_OFFSET,
-                                         selectLocation.getY() + LOCATION_OFFSET, 50, 30);
+                                         selectLocation.getX() - getSize().width * Math.pow(Camera.ISO_HEIGHT,2),
+                                         selectLocation.getY(), 50, 30);
             pen.fill(selectedCircle);
 
-            Rectangle boundTest =
-                    new Rectangle((int) (selectLocation.getX() - getWorldSize().getWidth()/2), (int) selectLocation.getY() -
-                                                               (int) getWorldSize().getHeight(),
-                                  getBounds().width, getBounds().height);
-            pen.draw(boundTest);
+            pen.draw(getBase());
         }
         super.paint(pen);
         if (myAttackStrategy.hasWeapon()) {
