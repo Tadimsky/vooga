@@ -1,12 +1,9 @@
 package vooga.rts.gamedesign.sprite.gamesprites;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.Observable;
 import vooga.rts.IGameLoop;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
@@ -49,7 +46,7 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 	 * Returns shape's left-most coordinate in pixels.
 	 */
 	public double getLeft() {
-		return Camera.instance().worldToView(myWorldLocation).getX()
+		return myWorldLocation.getX()
 				- myWorldDimension.getWidth() / 2;
 	}
 
@@ -57,8 +54,8 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 	 * Returns shape's up-most coordinate in pixels.
 	 */
 	public double getUp() {
-		return Camera.instance().worldToView(myWorldLocation).getY()
-				- myWorldDimension.getHeight();
+		return myWorldLocation.getZ()
+				+ myWorldDimension.getHeight();
 	}
 
 	/**
@@ -183,10 +180,11 @@ public abstract class GameSprite extends Observable implements IGameLoop {
 	}
 
 	/**
-	 * Returns rectangle that encloses this shape.
+	 *  that encloses this shape.
 	 */
 	protected void resetBounds() {
 		setWorldBounds();
+		setBase();
 	}
 
 	/**
