@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.logger.LoggerManager;
 import vooga.rts.networking.NetworkBundle;
-import vooga.rts.networking.communications.Message;
+import vooga.rts.networking.communications.IMessage;
 
 
 /**
@@ -67,8 +67,8 @@ public class Client extends Thread implements IClient {
         while (myRunning) {
             try {
                 Object object = myInput.readObject();
-                if (object instanceof Message) {
-                    myReceiver.getMessage((Message) object);
+                if (object instanceof IMessage) {
+                    myReceiver.getMessage((IMessage) object);
                 }
             }
             catch (ClassNotFoundException e) {
@@ -84,7 +84,7 @@ public class Client extends Thread implements IClient {
     }
 
     @Override
-    public void sendData (Message message) {
+    public void sendMessage (IMessage message) {
         try {
             myOutput.writeObject(message);
         }
@@ -111,6 +111,7 @@ public class Client extends Thread implements IClient {
             myLogger.log(Level.WARNING,
                          NetworkBundle.getString("ClosingConnectionsFailed"));
         }
+        myLogger.log(Level.INFO, NetworkBundle.getString("ClosedConnection"));
     }
 
 }

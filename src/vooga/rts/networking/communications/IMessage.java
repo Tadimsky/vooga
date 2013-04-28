@@ -1,5 +1,8 @@
 package vooga.rts.networking.communications;
 
+import java.io.Serializable;
+
+
 /**
  * A Message is the object sent between the server and the client.
  * A Designer may subclass Message to send whatever form of data they wish.
@@ -7,12 +10,14 @@ package vooga.rts.networking.communications;
  * between the server for managerial tasks; the developer likely will not need
  * to worry about these.
  * 
+ * @author Henrique Morales
  * @author David Winegar
  * 
  */
-public interface IMessage {
+public interface IMessage extends Serializable, Comparable<Message> {
 
     /**
+     * gets the current time stamp.
      * 
      * @return this message's timestamp
      */
@@ -37,12 +42,14 @@ public interface IMessage {
     public void stampTime (long time);
 
     /**
+     * gets the initial time.
      * 
      * @return time message was created or reset in milliseconds
      */
     public long getInitialTime ();
 
     /**
+     * Gets the final time.
      * 
      * @return time this message was stamped in milliseconds
      */
@@ -53,13 +60,5 @@ public interface IMessage {
 
     @Override
     public int hashCode ();
-
-    /**
-     * Compares based on timestamps
-     * 
-     * @param message to compare
-     */
-
-    public int compareTo (Message message);
 
 }

@@ -18,7 +18,7 @@ import vooga.rts.networking.NetworkBundle;
  */
 public class ConnectionServer extends Thread {
 
-    private static final int PORT = 55308;
+    private static final int PORT = Integer.valueOf(NetworkBundle.getConfigurationItem("port"));
     private int myConnectionID = 0;
     private MatchmakerServer myMatchServer;
     private boolean myIsServerAcceptingConnections = false;
@@ -32,8 +32,8 @@ public class ConnectionServer extends Thread {
     public ConnectionServer (MatchmakerServer matchServer) {
         myMatchServer = matchServer;
         LoggerManager log = new LoggerManager();
-        //log.addHandler(AbstractThreadContainer.EMAIL_HANDLER);
-        //log.addTxtHandler(getClass().getSimpleName() + PORT);
+        log.addHandler(AbstractThreadContainer.EMAIL_HANDLER);
+        log.addTxtHandler(getClass().getSimpleName() + PORT);
         myLogger = log.getLogger();
     }
 

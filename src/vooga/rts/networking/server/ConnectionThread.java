@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import vooga.rts.networking.NetworkBundle;
+import vooga.rts.networking.communications.IMessage;
 import vooga.rts.networking.communications.Message;
 import vooga.rts.networking.communications.clientmessages.InitialConnectionMessage;
 import vooga.rts.networking.communications.servermessages.CloseConnectionMessage;
@@ -78,13 +79,12 @@ public class ConnectionThread extends Thread {
                 // first object is not initial connection message
                 myConnectionActive = false;
                 close();
-                sendMessage(new CloseConnectionMessage());
                 return;
             }
 
             while (myConnectionActive) {
                 obj = myInput.readObject();
-                if (obj instanceof Message) {
+                if (obj instanceof IMessage) {
                     sendToMessageServer(obj);
                 }
             }
@@ -97,7 +97,6 @@ public class ConnectionThread extends Thread {
         catch (ClassNotFoundException e) {
             myLogger.log(Level.FINER,
                          NetworkBundle.getString("ConnectionFailedClassEx"));
-            close();
         }
     }
 
@@ -131,6 +130,9 @@ public class ConnectionThread extends Thread {
             myLogger.log(Level.FINER,
                          NetworkBundle.getString("ClosingConnectionsFailed"));
         }
+        myLogger.log(Level.FINER,
+                     NetworkBundle.getString("ClosedConnection") +
+                             myID);
     }
 
     /**
@@ -138,7 +140,7 @@ public class ConnectionThread extends Thread {
      * 
      * @param m Message object to be sent
      */
-    public void sendMessage (Message m) {
+    public void sendMessage (IMessage m) {
         if (!mySocket.isConnected()) {
             close();
         }

@@ -24,9 +24,14 @@ public class GameContainer extends AbstractThreadContainer {
     private int myRoomNumber = 0;
     private String myGameName;
 
+    /**
+     * Constructor that stores the game name and starts the logger.
+     * 
+     * @param gameName
+     */
     public GameContainer (String gameName) {
         myGameName = gameName;
-        //getLogger().addHandler(new HandlerTxt(myGameName).getHandler());
+        getLogger().addHandler(new HandlerTxt(myGameName).getHandler());
     }
 
     /**
@@ -42,6 +47,20 @@ public class GameContainer extends AbstractThreadContainer {
      */
     protected void addRoom (Room room) {
         myRooms.put(room.getID(), room);
+    }
+
+    /**
+     * Returns the next room number.
+     */
+    protected int getRoomNumber () {
+        return myRoomNumber;
+    }
+
+    /**
+     * Increments the room number.
+     */
+    protected void incrementRoomNumber () {
+        myRoomNumber++;
     }
 
     /**
@@ -77,10 +96,18 @@ public class GameContainer extends AbstractThreadContainer {
 
     @Override
     public void startLobby (ConnectionThread thread, LobbyInfo lobbyInfo) {
-        LobbyInfo newLobby = new LobbyInfo(lobbyInfo, myRoomNumber);
-        Room lobby = new Lobby(myRoomNumber, this, newLobby, getLogger());
-        myLobbyInfos.put(myRoomNumber, newLobby);
-        myRoomNumber++;
+        LobbyInfo newLobby = new LobbyInfo(lobbyInfo, getRoomNumber());
+        Room lobby = new Lobby(getRoomNumber(), this, newLobby, getLogger());
+        addLobby(thread, newLobby, lobby);
+    }
+
+    /**
+     * Adds a room to the GameContainer. Separated out so that subclasses can instantiates different
+     * Rooms.
+     */
+    protected void addLobby (ConnectionThread thread, LobbyInfo newLobby, Room lobby) {
+        myLobbyInfos.put(getRoomNumber(), newLobby);
+        incrementRoomNumber();
         lobby.addConnection(thread);
         addRoom(lobby);
         getLogger().log(Level.INFO, NetworkBundle.getString("LobbyStarted"));

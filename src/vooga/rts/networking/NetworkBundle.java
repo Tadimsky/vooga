@@ -21,6 +21,8 @@ public class NetworkBundle {
     private static ResourceBundle BUNDLE = ResourceBundle.getBundle(RESOURCE_PACKAGE + LANGUAGE);
     private static String myLanguage;
     private static String myRelativePath = RESOURCE_PACKAGE;
+    private static String CONFIG = "configuration";
+    private static ResourceBundle CONFIGURATION_BUNDLE = ResourceBundle.getBundle(RESOURCE_PACKAGE + CONFIG);
 
     /**
      * 
@@ -37,6 +39,24 @@ public class NetworkBundle {
      */
     public static String getString (String key) {
         return BUNDLE.getString(key);
+    }
+    
+    /**
+     * Returns the configuration item
+     * @param key of properties value
+     * @return value associated with string
+     */
+    public static String getConfigurationItem (String key) {
+        return CONFIGURATION_BUNDLE.getString(key);
+    }
+    
+    /**
+     * Returns whether the config bundle contains the key.
+     * @param key of properties value
+     * @return whether key is contained
+     */
+    public static boolean containsConfigurationItem (String key) {
+        return CONFIGURATION_BUNDLE.containsKey(key);
     }
 
     /**
