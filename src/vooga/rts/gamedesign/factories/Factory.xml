@@ -140,7 +140,7 @@
 			<occupy>cannotbeoccupied</occupy>
 			<upgrade>canupgrade</upgrade>
 			<upgradeTreeName>SoldierUpgrade</upgradeTreeName>
-			<produce></produce>
+			<produce>garrison</produce>
 			<myweapons></myweapons>
 			<information>
 				<description>I am a big doo doo</description>

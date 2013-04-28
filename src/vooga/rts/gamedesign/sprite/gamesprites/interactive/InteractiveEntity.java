@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -51,6 +52,7 @@ import vooga.rts.util.Information;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
 import vooga.rts.util.Sound;
+import vooga.rts.util.FilterImageColor;
 
 /**
  * This class is the extension of GameEntity. It contains the strategies for
@@ -110,6 +112,7 @@ public abstract class InteractiveEntity extends GameEntity implements
 	public InteractiveEntity(Pixmap image, Location3D center, Dimension size,
 			Sound sound, int playerID, int health, double buildTime) {
 		super(image, center, size, playerID, health);
+
 		mySound = sound;
 		myAttackStrategy = new CannotAttack();
 		myProductionStrategy = new CannotProduce();
@@ -128,6 +131,15 @@ public abstract class InteractiveEntity extends GameEntity implements
 		myTargetEntity = this;
 		myArmor = DEFAULT_ARMOR;
 		setSpeed(DEFAULT_INTERACTIVEENTITY_SPEED);
+
+	}
+
+	public void changeImageColor() {
+		Image image = getImage().getMyImage();
+		if (image != null) {
+			setImage(new Pixmap(FilterImageColor.changeImageColor(image,
+					getPlayerID())));
+		}
 	}
 
 	/**

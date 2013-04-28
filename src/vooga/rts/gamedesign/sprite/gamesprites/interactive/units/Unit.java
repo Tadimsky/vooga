@@ -117,6 +117,7 @@ public class Unit extends InteractiveEntity {
                 new Unit(getImage(), getWorldLocation(), getSize(), getSound(), getPlayerID(),
                          getHealth(), getBuildTime(), getSpeed());
         transmitProperties(copyUnit);
+        copyUnit.changeImageColor();
         return copyUnit;
     }
 
