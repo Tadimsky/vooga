@@ -117,7 +117,6 @@ public class Projectile extends GameEntity {
         if (myTarget.isDead()){
             this.die();
         }
-
     }
 
     /**
