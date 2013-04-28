@@ -22,33 +22,6 @@
 				<resourceAmount>30</resourceAmount>
 			</upgradeNode>
 		</type>
-		<type>
-			<name>Attack</name>
-			<upgradeNode>
-				<parent>Attack</parent>
-				<nodeName>CanAttack</nodeName>
-				<object>AttackStrategy</object>
-				<value>0</value>
-				<resourceCostType>Resource</resourceCostType>
-				<resourceAmount>30</resourceAmount>
-			</upgradeNode>
-			<upgradeNode>
-				<parent>CanAttack</parent>
-				<nodeName>RangeBoost1</nodeName>
-				<object>Range</object>
-				<value>100</value>
-				<resourceCostType>Resource</resourceCostType>
-				<resourceAmount>30</resourceAmount>
-			</upgradeNode>
-			<upgradeNode>
-				<parent>CanAttack</parent>
-				<nodeName>DamageBoost1</nodeName>
-				<object>Damage</object>
-				<value>100</value>
-				<resourceCostType>Resource</resourceCostType>
-				<resourceAmount>30</resourceAmount>
-			</upgradeNode>
-		</type>
 	</tree>
 </upgrade>
 	<resources src = "vooga.rts.gamedesign.sprite.gamesprites.Resource">

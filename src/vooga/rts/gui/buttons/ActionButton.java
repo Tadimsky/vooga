@@ -2,8 +2,8 @@ package vooga.rts.gui.buttons;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import util.Location;
 import vooga.rts.commands.InformationCommand;
+import util.Location;
 
 
 public class ActionButton extends ImageButton {

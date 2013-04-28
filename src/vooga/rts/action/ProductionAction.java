@@ -3,6 +3,12 @@ package vooga.rts.action;
 import vooga.rts.commands.Command;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
+<<<<<<< HEAD
+import util.Location;
+import vooga.rts.action.Action;
+import vooga.rts.commands.Command;
+=======
+>>>>>>> 66a7a54004573a92d954a412bb252b7c6bc54033
 
 
 /**

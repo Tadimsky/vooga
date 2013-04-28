@@ -7,9 +7,12 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Observer;
+
 import javax.swing.ImageIcon;
+
 import vooga.rts.commands.ClickCommand;
 import vooga.rts.commands.Command;
+import vooga.rts.gui.Window;
 import vooga.rts.resourcemanager.ResourceManager;
 
 /**
@@ -54,9 +57,9 @@ public class LoadingState extends SubState {
     @Override
     public void paint (Graphics2D pen) {
         myTransform = new AffineTransform();
-        double sx = pen.getDeviceConfiguration().getBounds().getWidth();
+        double sx = Window.D_X;
         sx /= myBGImage.getWidth();
-        double sy = pen.getDeviceConfiguration().getBounds().getHeight();
+        double sy = Window.D_Y;
         sy /= myBGImage.getHeight();
         myTransform.scale(sx, sy);
         pen.drawImage(myBGImage, myTransform, null);

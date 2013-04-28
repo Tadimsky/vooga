@@ -6,6 +6,7 @@ import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.gamedesign.strategy.Strategy;
 import vooga.rts.gamedesign.upgrades.UpgradeNode;
 import vooga.rts.gamedesign.upgrades.UpgradeTree;
+import vooga.rts.util.Information;
 
 
 public class CanUpgrade implements UpgradeStrategy {
@@ -18,7 +19,8 @@ public class CanUpgrade implements UpgradeStrategy {
 
     public void createUpgradeActions (final InteractiveEntity entity) {
         for (final UpgradeNode upgrade : myUpgradeTree.getCurrentUpgrades()) {
-            entity.addAction(upgrade.getUpgradeName(), new InteractiveAction(entity) {
+        	String commandName = "upgrade " + upgrade.getUpgradeName();
+            entity.addAction(commandName, new InteractiveAction(entity) {
                 @Override
                 public void update (Command command) {
                 }
@@ -28,6 +30,8 @@ public class CanUpgrade implements UpgradeStrategy {
                     upgrade.apply(entity);
                 }
             });
+            entity.addInfo(commandName, new Information(commandName, "This upgrades " + upgrade.getUpgradeName(), "buttons/unload.gif",null));
+            
         }
     }
 

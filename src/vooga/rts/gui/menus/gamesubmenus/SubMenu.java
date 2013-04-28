@@ -7,8 +7,8 @@ import java.util.Observable;
 import java.util.Observer;
 import util.Location;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
-import vooga.rts.gui.Window;
 import vooga.rts.resourcemanager.ResourceManager;
+import vooga.rts.util.Scale;
 
 
 public abstract class SubMenu extends Observable implements Observer {
@@ -18,9 +18,6 @@ public abstract class SubMenu extends Observable implements Observer {
     private Dimension mySize;
     private Location myPos;
     private boolean isFocused;
-
-    protected static final int S_X = (int) Window.SCREEN_SIZE.getWidth();
-    protected static final int S_Y = (int) Window.SCREEN_SIZE.getHeight();
 
     public SubMenu (String image, Dimension size, Location pos) {
         myBGImage =
@@ -36,12 +33,15 @@ public abstract class SubMenu extends Observable implements Observer {
 
     public void paint (Graphics2D pen) {
         if (myBGImage != null) {
-            pen.drawImage(myBGImage, (int) myPos.x, (int) myPos.y, mySize.width, mySize.height, null);
+            pen.drawImage(myBGImage, (int) myPos.getX(), (int) myPos.getY(),
+                          (int) mySize.getWidth(), (int) mySize.getHeight(), null);
         }
     }
 
     public boolean checkWithinBounds (int x, int y) {
-        return (x > myPos.x && y > myPos.y && x < (myPos.x + mySize.width) && y < (myPos.y + mySize.height));
+        return (x > Scale.scaleX(myPos.x) && y > Scale.scaleY(myPos.y) &&
+                x < (Scale.scaleX(myPos.x) + Scale.scaleX(mySize.width)) && y < (Scale
+                .scaleY(myPos.y) + Scale.scaleY(mySize.height)));
     }
 
     public boolean checkWithinBounds (Location l) {
@@ -52,15 +52,16 @@ public abstract class SubMenu extends Observable implements Observer {
 
     public abstract void processHover (int x, int y);
 
-    public  void update (double elapsedTime) {};
+    public void update (double elapsedTime) {
+    };
 
     public void setFocused (boolean b) {
         isFocused = b;
     }
-    
+
     public void processClick () {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

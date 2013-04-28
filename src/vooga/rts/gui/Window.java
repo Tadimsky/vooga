@@ -26,6 +26,11 @@ public class Window {
     private GraphicsDevice myGraphics;
 
     private DisplayMode myPrevDispMode;
+    
+    public static final int D_X = 1366;
+    public static final int D_Y = 768;
+
+    
 
     public Window () {
         myFrame = new JFrame();
@@ -104,6 +109,7 @@ public class Window {
         SCREEN_SIZE =
                 new Dimension(myGraphics.getDisplayMode().getWidth(), myGraphics.getDisplayMode()
                         .getHeight());
+
         myFrame.repaint();
     }
 
@@ -118,4 +124,5 @@ public class Window {
     public boolean hasFocus () {
         return myFrame.hasFocus();
     }
+    
 }

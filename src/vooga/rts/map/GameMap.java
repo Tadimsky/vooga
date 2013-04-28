@@ -136,6 +136,7 @@ public class GameMap implements IGameLoop {
     }
 
     @Override
+
     public void paint (Graphics2D pen) {        
         myTiles.paint(pen);
         
