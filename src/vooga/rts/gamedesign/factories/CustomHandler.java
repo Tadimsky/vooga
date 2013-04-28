@@ -1,11 +1,8 @@
 package vooga.rts.gamedesign.factories;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 import vooga.rts.gamedesign.sprite.gamesprites.Resource;
 import vooga.rts.gamedesign.sprite.gamesprites.interactive.InteractiveEntity;
 import vooga.rts.util.ReflectionHelper;
@@ -57,10 +54,5 @@ public class CustomHandler extends Decoder{
 		}
 		
 	}
-	
-	
-	
-	
-	
 
 }

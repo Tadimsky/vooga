@@ -21,10 +21,10 @@ public class Information {
 	private BufferedImage myButtonImage;
 
 	public Information(String name, String description,
-			String buttonImagePath) {
+			String buttonImagePath, Map<String, Integer> cost) {
 		myName = name;
 		myDescription = description;
-		myCost = new HashMap<String, Integer>();
+		myCost = cost;
 		myButtonImage = ResourceManager.getInstance().<BufferedImage> getFile(buttonImagePath, BufferedImage.class);
 	}
 

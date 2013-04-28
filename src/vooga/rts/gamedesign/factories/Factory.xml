@@ -96,6 +96,10 @@
 			<information>
 				<description>Welcome home</description>
 				<button>buttons/marine.png</button>
+				<cost>
+					<gold>10</gold>
+					<wood>10</wood>
+				</cost>				
 			</information>			
 		</building>
 		<building>
@@ -112,6 +116,10 @@
 			<information>
 				<description>I am a garrison</description>
 				<button>buttons/marine.png</button>
+				<cost>
+					<gold>20</gold>
+					<wood>20</wood>
+				</cost>				
 			</information>			
 		</building>
 		<custombuilding src = "vooga.rts.gamedesign.sprite.gamesprites.interactive.buildings.Tower">
@@ -135,6 +143,10 @@
 			<information>
 				<description>I am a big doo doo</description>
 				<button>buttons/marine.png</button>
+				<cost>
+					<gold>15</gold>
+					<wood>15</wood>
+				</cost>				
 			</information>
 		</unit>
 		<unit>
@@ -153,6 +165,10 @@
 			<information>
 				<description>I am a big doo doo</description>
 				<button>images/scv.png</button>
+				<cost>
+					<gold>12</gold>
+					<wood>12</wood>
+				</cost>
 			</information>			
 		</unit>
 		<customunit src = "vooga.rts.gamedesign.sprite.gamesprites.interactive.units.Soldier">

@@ -38,7 +38,7 @@ public class Soldier extends Unit {
              DEFAULT_HEALTH, InteractiveEntity.DEFAULT_BUILD_TIME);
         // for testing.
         Information i =
-                new Information("Marine", "I fear no darkness. I was born in it", "buttons/marine.png");
+                new Information("Marine", "I fear no darkness. I was born in it", "buttons/marine.png", null);
         setInfo(i);
     }
 
