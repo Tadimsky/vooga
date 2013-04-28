@@ -49,16 +49,17 @@ public class GameEntity extends GameSprite {
         mySpeed = DEFAULT_SPEED;
     }
 
-    public boolean reachedGoal () {
+    public boolean reachedGoal (double elapsedTime) {
         Vector v = getWorldLocation().difference(myGoal.to2D());
         if (v.getMagnitude() < Location3D.APPROX_EQUAL) {
             return true;
         }
-        
-        Location3D future = new Location3D(getWorldLocation());
-        
+        v.scale(elapsedTime);
+        Location3D future = new Location3D(getWorldLocation());        
         future.translate(v);
+        
         Line2D lineTest = new Line2D.Double(getWorldLocation().to2D(), future.to2D());
+        System.out.println(lineTest);
         if (lineTest.intersects(myGoal.getX(), myGoal.getY(), 5, 5)){
             return true;
         }
@@ -71,7 +72,7 @@ public class GameEntity extends GameSprite {
     // TODO: make Velocity three dimensional...
     public void update (double elapsedTime) {
         Vector v = getWorldLocation().difference(myGoal.to2D());
-        if (reachedGoal()) {
+        if (reachedGoal(elapsedTime)) {
             setVelocity(v.getAngle(), 0);
             myEntityState.stop();
         }
