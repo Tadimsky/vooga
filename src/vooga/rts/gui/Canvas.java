@@ -33,7 +33,7 @@ public class Canvas extends JPanel {
                 ResourceManager.getInstance().<BufferedImage> getFile("cursor.png",
                                                                       BufferedImage.class);
         Cursor c = toolkit.createCustomCursor(cursor, new Point(0, 0), "img");
-        this.setCursor(c);
+        //this.setCursor(c);
         
     }
 

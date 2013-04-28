@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import java.util.Observer;
 import javax.xml.parsers.ParserConfigurationException;
 import util.Location;
@@ -28,6 +29,7 @@ import vooga.rts.util.FrameCounter;
 import vooga.rts.util.Information;
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
+import vooga.rts.util.Scale;
 import vooga.rts.util.TimeIt;
 
 
@@ -39,7 +41,7 @@ import vooga.rts.util.TimeIt;
  * 
  */
 
-public class GameState extends SubState implements Controller {
+public class GameState extends SubState implements Controller, Observer {
     private static final Location3D DEFAULT_SOLDIER_ONE_RELATIVE_LOCATION = new Location3D(300,
                                                                                            300, 0);
     private static final Location3D DEFAULT_SOLDIER_TWO_RELATIVE_LOCATION = new Location3D(0, 500,
@@ -71,8 +73,10 @@ public class GameState extends SubState implements Controller {
 
     private Rectangle2D myDrag;
     private Factory myFactory;
-    
+
     private MiniMap myMiniMap;
+
+    private boolean isGameOver;
 
     public GameState (Observer observer) {
         super(observer);
@@ -97,11 +101,17 @@ public class GameState extends SubState implements Controller {
 
         myFrames = new FrameCounter(new Location(100, 20));
         myTasks = new ArrayList<DelayedTask>();
+        isGameOver = false;
         setupGame();
     }
 
     @Override
     public void update (double elapsedTime) {
+        if (isGameOver) {
+            System.out.println("gamestate update game over");
+            setChanged();
+            notifyObservers();
+        }
         myMap.update(elapsedTime);
         getPlayers().update(elapsedTime);
 
@@ -115,6 +125,7 @@ public class GameState extends SubState implements Controller {
 
     @Override
     public void paint (Graphics2D pen) {
+        Scale.unscalePen(pen);
         pen.setBackground(Color.BLACK);
         myMap.paint(pen);                
         myMiniMap.paint(pen);        
@@ -126,6 +137,8 @@ public class GameState extends SubState implements Controller {
 
         Camera.instance().paint(pen);
         myFrames.paint(pen);
+        Scale.scalePen(pen);
+        myPlayers.getHuman().paint(pen);
     }
 
     @Override
@@ -158,13 +171,17 @@ public class GameState extends SubState implements Controller {
     private void generateInitialSprites (int playerID, Location3D baseLocation) {
         Unit worker = (Unit) myFactory.getEntitiesMap().get("worker").copy();
         worker =
+
                 (Unit) setLocation(worker, baseLocation, DEFAULT_WORKER_RELATIVE_LOCATION);
+
         getPlayers().getPlayer(playerID).add(worker);
 
         Unit soldierOne = (Unit) myFactory.getEntitiesMap().get("Marine").copy();
         soldierOne =
+
                 (Unit) setLocation(soldierOne, baseLocation,
                                    DEFAULT_SOLDIER_ONE_RELATIVE_LOCATION);
+
         getPlayers().getPlayer(playerID).add(soldierOne);
 
         Building startProduction = (Building) myFactory.getEntitiesMap().get("home").copy();
@@ -178,16 +195,6 @@ public class GameState extends SubState implements Controller {
                 (Building) setLocation(startOccupy, baseLocation,
                                        DEFAULT_OCCUPY_RELATIVE_LOCATION);
         getPlayers().getPlayer(playerID).add(startOccupy);
-
-        // this is for testing
-        final Building f = startProduction;
-        myTasks.add(new DelayedTask(2, new Runnable() {
-
-            @Override
-            public void run () {
-                f.getAction((new Command("make Marine"))).apply();
-            }
-        }, true));
 
         // This is for testing
         final Building testGarrison = startOccupy;
@@ -230,6 +237,10 @@ public class GameState extends SubState implements Controller {
         }
     }
 
+    public void initializeGameOver () {
+        isGameOver = true;
+    }
+
     private void yuckyUnitUpdate (double elapsedTime) {
 
         List<InteractiveEntity> p1 = getPlayers().getTeam(1).getUnits();
@@ -245,8 +256,13 @@ public class GameState extends SubState implements Controller {
         return myMap;
     }
 
+    @Override
+    public void update (Observable arg0, Object arg1) {
+        initializeGameOver();
+    }
+
     public static void setMap (GameMap map) {
-        myMap = map;       
+        myMap = map;
     }
 
     @Override

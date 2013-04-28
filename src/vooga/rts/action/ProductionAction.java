@@ -2,7 +2,7 @@ package vooga.rts.action;
 
 import vooga.rts.util.Location3D;
 import vooga.rts.util.Pixmap;
-import vooga.rts.util.Location;
+import util.Location;
 import vooga.rts.action.Action;
 import vooga.rts.commands.Command;
 

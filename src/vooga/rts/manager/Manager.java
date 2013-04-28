@@ -170,8 +170,8 @@ public class Manager extends Observable implements State, IActOn, Observer {
     }
 
     private void notifyDeselect () {
-        // setChanged();
-        // notifyObservers(false);
+        setChanged();
+        notifyObservers(false);
     }
 
     /**
@@ -255,8 +255,8 @@ public class Manager extends Observable implements State, IActOn, Observer {
     }
 
     public void notifySelect () {
-        // setChanged();
-        // notifyObservers(true);
+         setChanged();
+         notifyObservers(true);
     }
 
     /**

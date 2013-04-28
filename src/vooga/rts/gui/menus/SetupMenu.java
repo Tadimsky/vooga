@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.util.Observable;
 import vooga.rts.gui.Menu;
 import vooga.rts.networking.communications.ExpandedLobbyInfo;
+import vooga.rts.util.Scale;
 
 public class SetupMenu extends Menu {
 
@@ -21,11 +22,9 @@ public class SetupMenu extends Menu {
     public void paint (Graphics2D pen) {
 
         super.paint(pen);
-
         pen.setFont(new Font("Helvetica", Font.BOLD, 50));
         pen.setColor(Color.white);
-        pen.drawString("This is the setup page. Click to start game.", 150, 150);
-        pen.drawString("Eric needs to finish this :)", 150, 300);
+        pen.drawString("Click the game to start!", 150, 150);
 
     }
     

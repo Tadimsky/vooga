@@ -45,6 +45,10 @@ public class MultiMenu extends Menu implements Observer {
         myFrame.setVisible(true);
     }
     
+    public void unsetFrame() {
+        myFrame.remove(myClientModel.getView());
+    }
+    
     @Override
     public void paint (Graphics2D pen) {
 

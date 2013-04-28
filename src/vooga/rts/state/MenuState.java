@@ -110,6 +110,8 @@ public class MenuState extends SubState implements Observer {
             }
         }
         else if (o instanceof MultiMenu) {
+            MultiMenu m = (MultiMenu) o;
+            m.unsetFrame();
             setMenu(2); // take them to the setup
             ExpandedLobbyInfo e = (ExpandedLobbyInfo) a;
             ((SetupMenu) getCurrentMenu()).setLobbyInfo(e);

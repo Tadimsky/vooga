@@ -22,21 +22,21 @@ public class InfoSubMenu extends SubMenu {
         super.paint(pen);
         pen.setFont(new Font("Arial", Font.PLAIN, 24));
         try {
-        if (mySelectedEntity != null) {
-            if (mySelectedEntity.getInfo() != null) {
-                pen.setColor(Color.WHITE);
-                pen.drawString(mySelectedEntity.getInfo().getName(), (int) 280,
-                               (int) Window.SCREEN_SIZE.getHeight() - 90);
-                pen.setFont(new Font("Arial", Font.PLAIN, 20));
-                pen.setColor(Color.GRAY);
-                pen.drawString(mySelectedEntity.getInfo().getDescription(), (int) 280,
-                               (int) Window.SCREEN_SIZE.getHeight() - 65);
-                if (mySelectedEntity.getInfo().getButtonImage() != null) {
-                    pen.drawImage(mySelectedEntity.getInfo().getButtonImage(), (int) 220,
-                                  (int) Window.SCREEN_SIZE.getHeight() - 90, null);
+            if (mySelectedEntity != null) {
+                if (mySelectedEntity.getInfo() != null) {
+                    pen.setColor(Color.WHITE);
+                    pen.drawString(mySelectedEntity.getInfo().getName(), (int) 280,
+                                   (int) Window.D_Y - 90);
+                    pen.setFont(new Font("Arial", Font.PLAIN, 20));
+                    pen.setColor(Color.GRAY);
+                    pen.drawString(mySelectedEntity.getInfo().getDescription(), (int) 280,
+                                   (int) Window.D_Y - 65);
+                    if (mySelectedEntity.getInfo().getButtonImage() != null) {
+                        pen.drawImage(mySelectedEntity.getInfo().getButtonImage(), (int) 220,
+                                      (int) Window.D_Y - 90, null);
+                    }
                 }
             }
-        }
         }
         catch (NullPointerException np) {
             // catch weird error

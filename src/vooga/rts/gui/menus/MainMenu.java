@@ -55,8 +55,8 @@ public class MainMenu extends Menu {
     }
 
     public void setScaledButton (MainMenuButton b) {
-        myX = Window.SCREEN_SIZE.getWidth();
-        myY = Window.SCREEN_SIZE.getHeight();
+        myX = Window.D_X;
+        myY = Window.D_Y;
         double xFactor = myX / myBGImage.getWidth();
         double yFactor = myY / myBGImage.getHeight();
         b.setSize(new Dimension((int) (b.getSize().getWidth() * xFactor),
@@ -70,7 +70,6 @@ public class MainMenu extends Menu {
     public void paint (Graphics2D pen) {
 
         super.paint(pen);
-
         pen.setFont(new Font("Helvetica", Font.BOLD, 100));
         pen.setColor(Color.white);
         pen.drawString("The Vooga RTS Game", 150, 150);
